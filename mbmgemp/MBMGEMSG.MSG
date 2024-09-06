@@ -1,5 +1,5 @@
 Galactic Empire Standard Message File
-Version ge-next 0.09
+Version ge-next 0.1
 
 LEVEL0 {}
 
@@ -18,16 +18,11 @@ specific GAMEOP's or players as needed.
 
 SYSKEY {SYSOP} S 15 Key required for sysop powers
 
-This is the Registration Number specific to YOUR system. 
-This number will be sent to you upon receipt of your 
-registration document. Galactic Empire will function fine
-for a limited period without this number. After the 
-trial period your system will continue to function 
-properly, although GE will be temporarily suspended.
-When you place the valid number in this field the game 
-will continue where it left off.
+A registration number is not required for ge-next.
+Feel free to put any eight digit number here.
+Future versions will remove this entirely.
 
-REGNO {24887179} S 8 Registration Number
+REGNO {12345678} S 8 Registration Number
 
 LEVEL4 {}
 
@@ -130,7 +125,7 @@ unless instructed to change it by our support staff.
 2 = show diagnostic messages
 3 = show debugging messages
 
-SHOWOPT {Show on log "GE:" messages at which level? 3} N 0 5
+SHOWOPT {Show on log "GE:" messages at which level? 0} N 0 5
 
 This option turns on extended trace logging generally used
 for debugging purposes. It is recommended that it remain NO
@@ -153,8 +148,8 @@ in a seperate directory.
 
 GESHIP {MBMGESHP.DAT} S 40 GE Ship Filename
 
-This option specifies if GE uses the GE Mail system or the
-MajorBBS mail system. 
+Keep this set to YES, the option to use MBBS mail has
+been removed. Future versions will remove this entirely.
 
 USEGEMSG {Use GE mail system? YES} B
 
@@ -199,7 +194,7 @@ SYSCMDS {Allow sysop commands? YES} B
 If sysop commands are enabled are they restricted to
 players with SYSOP class only.
 
-SYSONLY {Allow sysop only to use sysop commands? NO} B
+SYSONLY {Allow sysop only to use sysop commands? YES} B
 
 This option controls the Dynamic Planet Update Feature.
 The system will monitor how long it takes to process 
@@ -1949,8 +1944,10 @@ GE-Next is an updated version of Galactic Empire, copyright M.B.
 Murdock and Associates.
 
 https://manicpop.org/ge-next/
+https://github.com/manicpop/ge-next/
 
-(Put license info and stuff here)
+Galactic Empire and ge-next are free software released under the GPLv2 license.
+https://opensource.org/license/gpl-2-0
 
 <Press ENTER>
 } T 
@@ -2043,8 +2040,6 @@ EXIWAR2 {***
 WARHUP {***
 [0;37mCommander [0;36m%s[0;37m's ship just vanished![1;37m
 } T 
-
-TPRCNT {Obsolete unreferenced message.} T
 
 HUH {
 [1;36mType [1;37m?[1;36m for help.[1;37m
@@ -2184,8 +2179,6 @@ SPEED0 {***
 NOFIREP {
 [0;37m[[1;31mERROR[0;37m] There is insufficient power to fire![1;37m
 } T 
-
-NOFIRES {Obsolete unreferenced message.} T
 
 PFIRED {
 [0;32mPhasers fired at [0;31m%d[0;32m percent power - focus [0;31m%d[0;32m![1;37m
@@ -2507,10 +2500,6 @@ MISSL2 {***
 [0;37mAn incoming missile has lost lockon and self-destructed![1;37m
 } T 
 
-NOSCANS {Obsolete unreferenced message.} T
-
-NOSCANH {Obsolete unreferenced message.} T
-
 NOSCANL {Obsolete referenced message.} T 
 
 HYSHDN {***
@@ -2546,12 +2535,6 @@ Interceptor-class vessel free of charge.[1;37m
 ENTSHP {
 [1;36mYou are being transported to your waiting ship, Commander [0;36m%s.[1;37m
 } T 
-
-NEWSHP1 {Obsolete unreferenced message.} T
-
-NEWSHP2 {Obsolete unreferenced message.} T
-
-WELBACK {Obsolete unreferenced message.} T
 
 WELCOM {
 [0;37mWelcome aboard, Commander [0;36m%s[0;37m, the con is yours...
@@ -2610,10 +2593,6 @@ LASTFLUX {
 FLUXLOAD {***
 [0;37mFlux pod loaded, neutron flux levels back to normal.[1;37m
 } T 
-
-LOWFOOD {Obsolete unreferenced message.} T
-
-OUTFOOD {Obsolete unreferenced message.} T
 
 RADSET1 {
 [0;37mCommunications channel [1;34m%c[0;37m is set to the general hailing frequency.[1;37m
@@ -2981,8 +2960,6 @@ ATTACKF7 {[1;36mYour fighters have crushed their defenses![1;37m
 ATTACKF8 {[1;36mYour fighters are being fired upon by planetary troops![1;37m
 } T 
 
-ATTACKF9 {Obsolete unreferenced message.} T
-
 ATTACK6 {***
 [0;37mIncoming distress message from [1;34m%s[0;37m in star system [1;34m%d %d[0;37m!
 They are under attack from Commander [1;34m%s[0;37m in the [1;34m%s[0;37m
@@ -3012,10 +2989,6 @@ IHIT2 {***
 [0;37m[[0;31mWARNING![0;37m] Direct hit from an ion cannon burst![1;37m
 } T 
 
-TOPTEN1 {Obsolete unreferenced message.} T
-
-TOPTEN2 {Obsolete unreferenced message.} T
-
 ROSTER1 {
 [1;36mTop %d Roster List
 [0;31m---------------------------------------
@@ -3028,8 +3001,6 @@ ROSTER2 {
 [0;31m-----------------------------------------------------------
 [1;34mPlayer                             Score Kills Pl Empire Sz[1;37m
 } T 
-
-RESET {Obsolete unreferenced message.} T
 
 BUYPAS1 {
 [1;36mThey are asking for the correct trade password.[1;37m
@@ -3156,20 +3127,6 @@ REP18 {[0;31m   Tactical scanners damaged[1;37m
 REP18A {[0;31m   Maintenance status - %d centocks[1;37m
 } T 
 
-REP19 {Obsolete unreferenced message.} T 
-
-REP20 {Obsolete unreferenced message.} T 
-
-REP20A {Obsolete unreferenced message.} T 
-
-REP21 {Obsolete unreferenced message.} T 
-
-REP22 {Obsolete unreferenced message.} T 
-
-REP22A {Obsolete unreferenced message.} T 
-
-REP22B {Obsolete unreferenced message.} T 
-
 REP23 {[1;37mPhasers (Mark-%d)...... [1;32m<operative>[1;37m
 } T 
 
@@ -3190,8 +3147,6 @@ REP27 {[1;37mPlanets established... %d
 
 REP28 {[1;37mCash on hand.......... [0;33m%s[1;37m
 } T 
-
-REP29 {Obsolete unreferenced message.} T 
 
 REP30 {[1;37mScore................. %s
 } T 
@@ -3286,22 +3241,6 @@ SCAN15 {[1;37mVery Good
 
 SCAN16 {[0;37mResources: } T 
 
-SCAN17 {Obsolete unreferenced message.} T 
-
-SCAN17A {Obsolete unreferenced message.} T 
-
-SCAN18 {Obsolete unreferenced message.} T 
-
-SCAN19 {Obsolete unreferenced message.} T 
-
-SCAN20 {Obsolete unreferenced message.} T 
-
-SCAN21 {Obsolete unreferenced message.} T 
-
-SCAN22 {Obsolete unreferenced message.} T 
-
-SCAN23 {Obsolete unreferenced message.} T 
-
 SCAN24 {[1;37m   Range Scan Dist:%s (s:%d %d)
 } T 
 
@@ -3309,8 +3248,6 @@ SCAN25 {[1;37m   Sector Scan mag:1x (s:%d %d)
 } T 
 
 SCAN26 {Obsolete referenced message.} T 
-
-SCAN27 {Obsolete unreferenced message.} T 
 
 SCAN28 {[0;37m%s populated.
 } T 
@@ -3333,10 +3270,6 @@ SCAN33 {[0;37m%s stockpile of flux pods.
 SCAN34 {[0;37m%s stockpile of food.
 } T 
 
-SCAN35 {Obsolete unreferenced message.} T 
-
-SCAN36 {Obsolete unreferenced message.} T 
-
 SCANWRM {
 [0;37mScanning wormhole:
 } T 
@@ -3350,14 +3283,6 @@ PLUSDASH { [1;37m  +------------------------------+
 
 PLUSFULL { [1;37m  +------------------------------+  Shp Distance Bearing Heading Speed
 } T 
-
-USER01 {Obsolete unreferenced message.} T 
-
-USER02 {Obsolete unreferenced message.} T 
-
-USER03 {Obsolete unreferenced message.} T 
-
-USER04 {Obsolete unreferenced message.} T 
 
 ADMIN01 {Planet Accounting report for %s
 } T 
@@ -3646,8 +3571,6 @@ MAIL1 {
    You have no messages waiting...
 } T 
 
-MAIL1A {Obsolete unreferenced message.} T 
-
 MAIL2 {
 <Received: %s [%s]>} T 
 
@@ -3800,10 +3723,6 @@ CAPTDOC {
 [1;37m
 Planet name         sector planet
 } T 
-
-FLEET1 {Obsolete unreferenced message.} T 
-
-FLEET2 {Obsolete unreferenced message.} T 
 
 FLEET3 {[1;36mWhich ship do you wish to command this mission?[1;37m } T 
 
@@ -5463,8 +5382,6 @@ BEAC01 {***
 SPY0 {
 [1;36mYou own this planet, you can't spy on it.[1;37m
 } T 
-
-SPY0A {Obsolete unreferenced message.} T 
 
 SPY0B {Obsolete referenced message.} T spy Wormhole Message
 

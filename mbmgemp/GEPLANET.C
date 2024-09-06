@@ -9,6 +9,12 @@
  *                                                                         *
  *                                         M. Murdock     03/17/92         *
  *                                                                         *
+ *   ge-next                                                               *
+ *                                                                         *
+ *   Copyright (C) 2024 Anthony Schmidt, anthony@manicpop.org              *
+ *                                                                         *
+ *   https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next    *
+ *                                                                         *
  ***************************************************************************/
 
  /**************************************************************************
@@ -27,23 +33,6 @@
   * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            *
   *************************************************************************/
 
- /**************************************************************************
- * Authors Note: The source code to this program is being made available   *
- *               to the general public in the hopes that it will continue  *
- *               to live on and evolve. While I cannot provide the time    *
- *               to personally participate in its development any longer,  *
- *               I am eager to assist in the design discussions, testing   *
- *               and project discussions.                                  *
- *                                                                         *
- *               To foster a community for Galactic Empire developers I    *
- *               have created a project home page at...                    *
- *               http://mbbs.sitesage.net                                  *
- *                                                                         *
- *               I may be contacted via email at mmurdock@starphire.com    *
- ***************************************************************************/
-
-/* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
-/*       your tabs to 3....    MBM                                         */
 #ifdef PHARLAP
 
 #include "gcomm.h"
