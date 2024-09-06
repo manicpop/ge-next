@@ -17,4 +17,4 @@ ge-next began in 2024 by [Anthony Schmidt](https://github.com/manicpop).
 
 ## License
 
-Galactic Empire is free software licensed under the [MIT License](https://opensource.org/licenses/MIT).
+Galactic Empire and ge-next are free software licensed under the [GPLv2 License](https://opensource.org/license/gpl-2-0).
