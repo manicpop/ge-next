@@ -1,25 +1,13 @@
-Galactic Empire 
+Galactic Empire ge-next
 Copyright (C) 1988, 89, 90, 91, 92 Michael B. Murdock
+Copyright (C) 2018 Bil Simser
+Copyright (C) 2024 Anthony Schmidt, anthony@manicpop.org
 
 This is the source for the Galactic Empire game module which is being 
 released under the terms of the GNU General Public License (see below).
 This file MUST accompany any distribution of this program, and part of this
 program, or any derivitive works of this program.
 
-Authors Note: The source code to this program is being made available   
-                to the general public in the hopes that it will continue  
-                to live on and evolve. While I cannot provide the time    
-                to personally participate in its development any longer,  
-                I am eager to assist in the design discussions, testing   
-                and project discussions.                                  
-                                                                          
-                To foster a community for Galactic Empire developers I    
-                have created a project home page at...                    
-                http://mbbs.sitesage.net                                  
-                                                                          
-                I may be contacted via email at mmurdock@starphire.com    
-
- 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This program is free software; you can redistribute it and/or modify   
