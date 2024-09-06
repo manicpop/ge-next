@@ -1,0 +1,64 @@
+ge-next RELEASE NOTES
+
+=== 0.09 === 2024-09-06:
+Version 0.09 is not for release and is the initial publication of source
+code to Github. The release version will be 0.1.
+
+=== 0.02 === 2024-09-05:
+Version 0.02 released. This fixes some color bugs in the admin
+screen. This will probably be the last release before 0.1, which will be
+the first version compiled from source.
+
+=== 0.01 ===:
+
+Welcome to the initial release of ge-next, an updated and expanded version of
+the classic MajorBBS game Galactic Empire.
+
+As of now, ge-next is simply a drop-in replacement of configuration files that
+run on a standard installation of Galactic Empire 3.2e. Future versions will
+be compiled from source and contain bugfixes, optimizations, quality of life
+improvements, and new features.
+
+Please take a look at what's new and share your feedback. Thanks to testers
+Archwiki and zaphbeeble.
+
+https://manicpop.org/ge-next/    anthony@manicpop.org
+
+What's new:
+
+A brand new collection of user ships, 16 in total. I've tried to make each ship
+unique and useful, and to have interesting options for both players who are
+starting out and players that have accumulated loads of cash. (I have not
+reworked the Cybertrons yet, but that's coming.)
+
+A complete reworking of the game messages and color codes for a more uniform
+appearance. All messages have explicitly set color codes which will prevent
+the text fading and other color bugs in the original. Spelling and
+punctuation fixes. Messages from the ship are labeled "ERROR," "CAUTION,"
+and "WARNING!" as appropriate. (The helm officer has retired.)
+
+A new game instruction screen and backstory, setting this game 30 years beyond
+the original. Future versions of ge-next will expand the backstory a bit.
+
+Reformatted and updated all the help screens, including the HELP CLASS xx
+screens for each user ship type. A lot of the help screens in 3.2e had
+outdated information that changed during the game's development, so I did a bit
+of rewriting but tried not to stray too much from the original.
+
+Slightly lowered shield and phaser prices so they would all fit under the
+200m limit, and updated HELP NEWPRICE to match.
+
+Other little tweaks ;)
+
+No changes are set in stone so please contact me with your thoughts.
+
+Installation:
+
+== 0.02 does not require a game reset if you were running 0.01 ==
+
+Simply replace Galactic Empire 3.2e's MBMGEHLP.MSG, MBMGEMNU.TXT,
+MBMGEMSG.MSG, and MBMGESHP.MSG with the versions in this zip file. If you have
+an existing installation that has been running, reset the game by copying all
+*.NEW files over the *.DAT files in the directory (and delete *.DB files if
+running on MBBSEmu). Back up the old files if you wish first. Make sure to
+set REGNO in MBMGEMSG.MSG to the same REGNO as your exisiting installation.
