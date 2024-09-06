@@ -3,14 +3,11 @@
 ###############################################################################
 
 .autodepend
-.silent
-.path.c=\bbsv6\src
-.path.h=\bbsv6\src
-.path.dll=\bbsv6
-.path.msg=\bbsv6
-.path.obj=\bbsv6\phobj
-.path.exe=\bbsv6
-
+.path.c=c:\wgserv\src
+.path.h=c:\wgserv\src
+.path.dll=c:\wgserv
+.path.msg=c:\wgserv\src
+.path.obj=c:\wgserv\phobj
 
 ###############################################################################
 #####                           Build DLL's                               #####
@@ -18,9 +15,9 @@
 mbmgemp.dll: \
      mbmgemsg.h    mbmgehlp.h                                         \
      gemain.obj     gefuncs.obj   gecmds.obj    gecybs.obj   geplanet.obj \
-     gelib.obj \
-     \bbsv6\dlib\galimp.lib        \bbsv6\dlib\gsblimp.lib                 \
-     \run286\bc3\lib\phapi.lib     \bbsv6\dlib\nodef.def
+     gelib.obj      gedroids.obj \
+     \wgserv\dlib\galimp.lib        \wgserv\dlib\gsblimp.lib                 \
+     \run286\bc3\lib\phapi.lib     \wgserv\dlib\nodef.def
      ltdll mbmgemp
 
 
@@ -40,19 +37,16 @@ geplanet.obj: geplanet.c
      ctdll geplanet
 gelib.obj: gelib.c
      ctdll gelib
+gedroids.obj: gedroids.c
+     ctdll gedroids
 
 ###############################################################################
 #####               Generate Headers for Compilation                      #####
 ###############################################################################
 
 mbmgemsg.h: mbmgemsg.msg
-     cd \bbsv6
-     bbsmsx mbmgemsg -osrc
-     cd \bbsv6\src
+     ..\wgsmsx mbmgemsg
 mbmgehlp.h: mbmgehlp.msg
-     cd \bbsv6
-     bbsmsx mbmgehlp -osrc
-     cd \bbsv6\src
-
-
-
+     ..\wgsmsx mbmgehlp
+mbmgeshp.h: mbmgeshp.msg
+     ..\wgsmsx mbmgeshp

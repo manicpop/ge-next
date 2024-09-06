@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 
@@ -179,7 +179,7 @@ warsptr->status = GESTAT_USER;
 ** Initialize all the ship data                                          **
 ** NOTE: waruptr MUST be set to this channel first
 **************************************************************************/
-	
+
 int  FUNC initshp(userid,type)
 
 char    *userid;
@@ -195,7 +195,7 @@ strncpy(tmpshp.shipname," <NO NAME> ",20);
 
 tmpshp.coord.xcoord     = NEUTRAL_X + rndm(.9999);
 tmpshp.coord.ycoord     = NEUTRAL_Y + rndm(.9999);
-	
+
 getsector(&tmpshp.coord);
 flag = 1;
 
@@ -386,7 +386,7 @@ outprfge(ALWAYS,usrnum);
 /**************************************************************************
 ** Repair the ship                                                       **
 **************************************************************************/
-	
+
 void  FUNC repairship(ptr,usrn)
 
 WARSHP *ptr;
@@ -475,7 +475,6 @@ int i,flag,usage;
 double absol();
 double  accelrate,decelrate;
 
-
 if (ptr->speed < ptr->speed2b)
 	{
 	accelrate = (double)shipclass[ptr->shpclass].max_accel;
@@ -484,7 +483,7 @@ if (ptr->speed < ptr->speed2b)
 	if (absol(ptr->speed - ptr->speed2b) <= accelrate)
 		{
 		ptr->speed = ptr->speed2b;
-		
+
 		prfmsg(SPEEDIS, showarp(ptr->speed));
 		outprfge(FILTER,usrn);
 		}
@@ -599,7 +598,7 @@ if (flag == 1)
 		}
 	prfmsg(HYPERIN);
 	outprfge(FILTER,usrn);
-	
+
 	ptr->where = 1;
 
 	prfmsg(HYPERIN2,ptr->shipname);
@@ -615,7 +614,7 @@ else
 	{
 	prfmsg(HYPEROUT);
 	outprfge(FILTER,usrn);
-	
+
 	ptr->where = 0;
 
 	prfmsg(HYPEROU2,ptr->shipname);
@@ -743,7 +742,7 @@ if (ptr->speed > 0)
 			diff = intspeed - ptr->topspeed;
 			diff = (diff*100)/intspeed;
 			diff = 60 - diff;
-			if (diff < 0) 
+			if (diff < 0)
 				diff = 5;
 
 			if (gernd()%diff==0)
@@ -763,7 +762,7 @@ if (ptr->speed > 0)
 					outprfge(FILTER,usrn);
 					ptr->warncntr++;
 					}
-				}			
+				}
 
 			}
 		else
@@ -975,7 +974,7 @@ int           usrn;
 {
 
 double  preload;
-logthis(spr("GE:Chn %d checkdam %s",usrn,ptr->userid)); 
+logthis(spr("GE:Chn %d checkdam %s",usrn,ptr->userid));
 
 if (ptr->damage >= 100.0)
 	{
@@ -1010,7 +1009,7 @@ if (ptr->damage > 0.0)
 	ptr->damage = ptr->damage - repairrate;
 else
 	ptr->damage = 0.0;
-	
+
 
 /* repair & recharge phasers */
 if (ptr->phasr < 0)
@@ -1029,7 +1028,7 @@ if (ptr->phasr < 100)
 		{
 		/* If phasers get to minimum fire power tell captain */
 		preload = (double)(ptr->phasrtype * PRELOAD);
-		/* if inteceptor class double phaser recharge speed 
+		/* if inteceptor class double phaser recharge speed
 		if (ptr->shpclass == 2)
 			preload *=2; */
 		if ((ptr->phasr < PMINFIRE) && (ptr->phasr + preload >= PMINFIRE))
@@ -1037,7 +1036,7 @@ if (ptr->phasr < 100)
 			prfmsg(PHSRUP);
 			outprfge(ALWAYS,usrn);
 			}
-		
+
 		ptr->phasr = ptr->phasr + preload;
 
 		/* if phasers get to 100% tell captain, and set to 100% */
@@ -1118,7 +1117,7 @@ if (who >= 0 && who < nships && who != usrn)
 	++(wuptr->kills);
 
 	prfmsg(KILLGOT1,ptr->shipname);
-	
+
 	/* no men or troops can be collected */
 	for (i=1;i<NUMITEMS;++i)
 		{
@@ -1195,8 +1194,8 @@ if (who >= 0 && who < nships && who != usrn)
 
 	outprfge(ALWAYS,who);
 
-	if (chgloser > 0 
-		&& ptr->status == GESTAT_USER 
+	if (chgloser > 0
+		&& ptr->status == GESTAT_USER
 		&& wptr->status == GESTAT_USER)
 		{
 		amt = (waruptr->cash/100L)*(long)chgloser;
@@ -1214,7 +1213,7 @@ if (who >= 0 && who < nships && who != usrn)
 			prfmsg(CHGLSR2,gechrbuf,ptr->userid);
 			outprfge(ALWAYS,who);
 			}
-		
+
 		}
 
 	/* if the clown just killed was the last to fire on me clean out
@@ -1223,7 +1222,7 @@ if (who >= 0 && who < nships && who != usrn)
 
 	if (wptr->lastfired == usrn)
 		wptr->lastfired = -1;
-	
+
 #ifdef SHOWDOC
 	if (gernd()%RNDDOC == 0)
 		{
@@ -1568,7 +1567,7 @@ for (i=0,tptr=ptr->ltorps;i<MAXTORPS;++i,++tptr)
 				outprfge(ALWAYS,usrn);
 				damfact = rndm(.5)+.5;
 				damfact = tdammax * damfact;
-				
+
 				damfact = ton_fact(ptr,damfact); /* adjust for weight */
 
 				ptr->damage += damfact;
@@ -1644,7 +1643,7 @@ for (i=0,mptr=ptr->lmissl;i<MAXMISSL;++i,++mptr)
 				prfmsg(MHIT1,tmpbuf);
 				outprfge(ALWAYS,usrn);
 				acctm(ptr,usrn,1,mptr->channel);
-				
+
 				power = mptr->energy/999;
 				power = power * (rndm(.5)+.5);
 				shieldhit(ptr,usrn,power);
@@ -2203,11 +2202,11 @@ setmem(gemsg,FIXEDMSGSIZ,0);
 if (qeqbtv(&mailkey,1))
 	{
 	gcrbtv(gemsg,1);
-	prf(".[1;34m------------------------------------------------------------------------------.[1;36m\r");
+	prf("\33[1;34m------------------------------------------------------------------------------\33[1;36m\r");
 	prf(gemsg->text);
-	prf(".[1;34m------------------------------------------------------------------------------.[1;0m");
+	prf("\33[1;34m------------------------------------------------------------------------------\33[1;0m");
 	outprfge(ALWAYS,usrnum);
-	
+
 	delbtv();
 
 	return(TRUE);
@@ -2263,7 +2262,7 @@ switch (mail.type)
 		prfmsg(mail.type,mail.name1,mail.int1,mail.int2,gechrbuf);
 		sendit();
 		break;
-	
+
 	case MESG08:
 	case MESG09:
 	case MESG10:
@@ -2284,18 +2283,18 @@ switch (mail.type)
 		prfmsg(mail.type,mail.name1,mail.int1,mail.int2,gechrbuf);
 		sendit();
 		break;
-	
+
 	case MESG20:
 
 		strcpy(mail.topic,"Production Report");
 		memcpy(&tmpstat,&mail,sizeof(MAILSTAT));
 		prfmsg(tmpstat.type,tmpstat.name1,tmpstat.int1,tmpstat.int2);
 		sprintf(gechrbuf2,"%ld",tmpstat.cash);
-		prf("Cash %s  ",gechrbuf2);			
+		prf("Cash %s  ",gechrbuf2);
 		sprintf(gechrbuf2,"%ld",tmpstat.debt);
-		prf("Debt %s  ",gechrbuf2);			
+		prf("Debt %s  ",gechrbuf2);
 		sprintf(gechrbuf2,"%ld",tmpstat.tax);
-		prf("Tax %s  \r",gechrbuf2);			
+		prf("Tax %s  \r",gechrbuf2);
 		for(i=0;i<NUMITEMS;++i)
 			{
 			setmem(gechrbuf,20,'.');
@@ -2310,7 +2309,7 @@ switch (mail.type)
 		prfmsg(MAIL3,mail.type);
 		sendit();
 		break;
-	
+
 	}
 
 rstmbk();
@@ -2326,11 +2325,12 @@ if (mail.userid[0] == '*')
 
 setmem(gemsg,FIXEDMSGSIZ,0);
 
-/* only increment if using MBBS Mail */
+/* only increment if using MBBS Mail
 if (!usegemsg)
 	gemsg->msgno=++sv.msgtot;
-else
-	gemsg->msgno = 0;
+else */
+
+gemsg->msgno = 0;
 
 strcpy(gemsg->userto,mail.userid);
 strcpy(gemsg->from,"** Galactic Empire **");
@@ -2338,30 +2338,36 @@ strcpy(gemsg->to,mail.userid);
 strcpy(gemsg->topic,mail.topic);
 gemsg->auxtpc[0] = 0;
 
-if (usegemsg)
-	gemsg->flags = mail.class;
-else
-	gemsg->flags=0;
+/*if (usegemsg)*/
+
+gemsg->flags = mail.class;
+
+/*else
+	gemsg->flags=0;*/
 
 gemsg->crdate=today();
 gemsg->crtime=now();
 
-/* robbed nreply for time stamp */
-if (usegemsg)
-	gemsg->nreply = cofdat(today());
-else
-	gemsg->nreply=0;
+/* robbed nreply for time stamp
+if (usegemsg)*/
+
+gemsg->nreply = cofdat(today());
+
+/*else
+	gemsg->nreply=0;*/
 
 prf2tx();
 
 /*if user has selected to use the GE mail system*/
 
-if (usegemsg)
-	{
-	return(sendgemsg(gemsg,mail.userid));
-	}
+/*if (usegemsg)
+	{*/
 
-return(sendmsg(gemsg,mail.userid));
+return(sendgemsg(gemsg,mail.userid));
+
+/*	}
+
+return(sendmsg(gemsg,mail.userid));*/
 
 }
 
@@ -2370,13 +2376,13 @@ void	FUNC prf2tx(void)                /* xfer prfbuf contents to message text ar
 char *cp;
 
 stpans(prfbuf);
-if (strlen(prfbuf) >= GEMSGSIZ) 
+if (strlen(prfbuf) >= GEMSGSIZ)
 	{
 	prfbuf[GEMSGSIZ-1]='\0';
 	}
-for (cp=prfbuf ; *cp != '\0' ; cp++) 
+for (cp=prfbuf ; *cp != '\0' ; cp++)
 	{
-	if (*cp == '\n') 
+	if (*cp == '\n')
 		{
 		*cp='\r';
 		}
@@ -2443,7 +2449,7 @@ usrn = usrn; /* avoid the warning */
 dmax = (double)( 80 - ((int)wptr->shieldtype * SHIELD_FACTOR));
 
 if (wptr->shieldtype == 20)
-	dmax = 0;		
+	dmax = 0;
 
 if (dmax < 0) dmax = 0;
 

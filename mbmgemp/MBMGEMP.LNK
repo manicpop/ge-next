@@ -1,20 +1,19 @@
 \run286\bc3\lib\c0phdll  +
 \run286\bc3\lib\fpdmy +
-\bbsv6\phobj\gemain +
-\bbsv6\phobj\gefuncs +
-\bbsv6\phobj\gecmds +
-\bbsv6\phobj\gecybs +
-\bbsv6\phobj\gedroids +
-\bbsv6\phobj\geplanet +
-\bbsv6\phobj\gelib +
-\bbsv6\phobj\secure
-\bbsv6\mbmgemp
-\bbsv6\mbmgemp.map
+\wgserv\phobj\gemain +
+\wgserv\phobj\gefuncs +
+\wgserv\phobj\gecmds +
+\wgserv\phobj\gecybs +
+\wgserv\phobj\gedroids +
+\wgserv\phobj\geplanet +
+\wgserv\phobj\gelib
+\wgserv\mbmgemp
+/MAP:\wgserv\mbmgemp.map
 \run286\bc3\lib\phapi +
-\bbsv6\dlib\galimp +
-\bbsv6\dlib\msgimp +
-\bbsv6\dlib\gsblimp +
-\borlandc\lib\mathh /Twd /s /n 
-\bbsv6\dlib\mathdef
+\wgserv\dlib\galimp +
+\wgserv\dlib\msgimp +
+\wgserv\dlib\gsblimp +
+\bc45\lib\mathh /Twd /s /n 
+\wgserv\dlib\mathdef
 
 

@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 #ifdef PHARLAP
@@ -147,7 +147,7 @@ if	(plptr->spyowner[0] != 0)
 
 		/* calculate the odds of the spy finding some usefull information */
 
-		if (gernd()%10 == 0) 
+		if (gernd()%10 == 0)
 			{
 			logthis(spr("Spy on %s in %d %d found stuff",plptr->name,xsect,ysect));
 
@@ -161,7 +161,7 @@ if	(plptr->spyowner[0] != 0)
 					break;
 				}
 
-			if (itemcnt > 0) 
+			if (itemcnt > 0)
 				{
 
 				/* calculate the accuracy of the information */
@@ -182,7 +182,7 @@ if	(plptr->spyowner[0] != 0)
 				strcpy(mail.userid,plptr->spyowner);
 				strcpy(mail.topic,"Intelligence Report");
 				mail.class = MAIL_CLASS_DISTRESS;
-	
+
 				sendit();
 				clrprf();
 				}
@@ -223,7 +223,7 @@ temp = plptr->items[I_FOOD].qty;
 if (temp > plptr->items[I_TROOPS].qty/100)
 	{
 	temp -= plptr->items[I_TROOPS].qty/100;
-	
+
 	plptr->items[I_FOOD].qty = temp;
 	}
 else
@@ -234,7 +234,7 @@ else
 if ((plptr->items[I_MEN].qty/100)> plptr->items[I_FOOD].qty)
 	{
 	cnt = plptr->items[I_MEN].qty / 8;
-	
+
 	temp = plptr->items[I_MEN].qty;
 
 	if (temp > cnt)
@@ -274,7 +274,7 @@ for (i=0;i<NUMITEMS;++i)
 	hrs = hrs/10000.0;
 
 	fact = 1.0;
-	
+
 	qty = (men * (rate/100.0)*(hrs/6.0))/7.0;
 
 	fact *= ((float)(plptr->enviorn+plptr->resource+2) * .25);
@@ -344,26 +344,26 @@ if (!sameas(plptr->userid,"**Free**"))
 	{
 
 	/* the higher the taxes the greater the chance of revolt */
-	
+
 	tfact = ((float)plptr->taxrate/120.0)* .35;
-	
+
 	qty = (float)plptr->items[I_TROOPS].qty;
 	men = (float)plptr->items[I_MEN].qty;
-	
+
 	men *=tfact;
-	
+
 	/* if there are not enough troops the odds are really high */
-	
+
 	if (men > qty)
 		{
-		if (gernd()%10 == 0) 
+		if (gernd()%10 == 0)
 			{
-	
+
 			logthis("Revolt!!");
 			cnt = plptr->items[I_TROOPS].qty / ((gernd()%8)+2);
 			plptr->items[I_TROOPS].qty = cnt;
-	
-	
+
+
 			mail.class = MAIL_CLASS_DISTRESS;
 			mail.type = MESG30;
 			strncpy(mail.userid,plptr->userid,UIDSIZ);
@@ -372,8 +372,8 @@ if (!sameas(plptr->userid,"**Free**"))
 			mail.int2 = plptr->ysect;
 			mail.long1 = cnt;
 			mailit(0);
-	
-			logthis("back from mailing it");				
+
+			logthis("back from mailing it");
 			strcpy(plptr->userid,"**Free**");
 			}
 		}
@@ -391,15 +391,15 @@ int	i;
 
 /* I know when you look at this later Mike you will never remember why
    you did this. So before you go tear it apart or go crazy trying to
-   figure it out I'll explain. 
+   figure it out I'll explain.
 
    We call the getsector routine the first time to either get a previously
    created sector or to create one. If one is created and there is a
    wormhole (or more) in it the function Xgetsect returns TRUE. If so then
-   we must call it again to get the sectors that are the destination points 
+   we must call it again to get the sectors that are the destination points
    of the wormhole(s). Since we don't want it to create more wormholes in
    the new sector (risking a runaway cascade effect) a flag is tripped on
-   telling Xgetsector to NOT create any wormholes. 
+   telling Xgetsector to NOT create any wormholes.
 
    If on the second pass Xgetsector gets a sector that already exists then
    we have to insert a wormhole into the next planet slot and create
@@ -487,7 +487,7 @@ if (!gesdb(GEGET,&pkey,&sector))
 		p = 0;
 
    logthis(spr("GE: Ins sect X:%d Y:%d Pl:%d",
-		pkey.xsect,pkey.ysect,p));              
+		pkey.xsect,pkey.ysect,p));
 
 	/* Figure out where they are */
 	if (neutral(sect))
@@ -529,7 +529,7 @@ if (!gesdb(GEGET,&pkey,&sector))
 
 			}
 		/* write the sector database record */
-	
+
 		sector.plnum = 0;
 		sector.type = SECTYPE_NORMAL;
 		sector.numplan = s00plnum;
@@ -600,9 +600,9 @@ if (!gesdb(GEGET,&pkey,&sector))
 				planet.debt = 0;
 				planet.warnings = 0;
 				planet.lastattack[0] = 0;
-	
+
 				strcpy(planet.password,"none");
-	
+
 				for (k = 0; k < NUMITEMS;++k)
 					{
 
@@ -619,7 +619,7 @@ if (!gesdb(GEGET,&pkey,&sector))
 					{
 					for (k = 0; k < NUMITEMS;++k) 
 						planet.items[k].rate = (unsigned int)rndm(5.1);
-	
+
 					planet.items[I_MEN].qty = (unsigned long)rndm(50000.0);
 					planet.items[I_MEN].rate = 5+(unsigned int)rndm(25.0);
 					planet.items[I_FOOD].qty = (unsigned long)rndm(3200.0);
@@ -667,7 +667,7 @@ int	idx;
 {
 
 setmem(&planet,sizeof(GALPLNT),0);
-		
+
 strncpy(planet.userid,s00[idx].owner,UIDSIZ);
 strncpy(planet.name,s00[idx].name,20);
 strcpy(planet.password,"none");
@@ -732,8 +732,8 @@ int	idx;
 {
 
 setmem(&planet,sizeof(GALPLNT),0);
-		
-		
+
+
 strncpy(planet.userid,s00[idx].owner,UIDSIZ);
 strncpy(planet.name,s00[idx].name,20);
 strcpy(planet.password,"none");
@@ -748,11 +748,11 @@ planet.items[I_TROOPS].markup2a = baseprice[I_TROOPS]*2;
 planet.items[I_MEN].qty = 1032000L;
 planet.items[I_MEN].sell = 'Y';
 planet.items[I_MEN].markup2a = baseprice[I_MEN]*2;
-		
+
 planet.items[I_FOOD].qty = 1032000L;
 planet.items[I_FOOD].sell = 'Y';
 planet.items[I_FOOD].markup2a = baseprice[I_FOOD]*2;
-		
+
 pkey.plnum = idx+1;
 pkey.xsect = 0;
 pkey.ysect = 0;
@@ -773,8 +773,8 @@ int	idx;
 {
 
 setmem(&planet,sizeof(GALPLNT),0);
-		
-		
+
+
 strncpy(planet.userid,s00[idx].owner,UIDSIZ);
 strncpy(planet.name,s00[idx].name,20);
 strcpy(planet.password,"none");
@@ -802,7 +802,7 @@ int	idx;
 {
 
 setmem(&worm,sizeof(GALWORM),0);
-		
+
 strncpy(worm.name,s00[idx].name,20);
 
 

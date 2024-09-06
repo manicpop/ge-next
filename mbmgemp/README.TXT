@@ -20,7 +20,7 @@ Authors Note: The source code to this program is being made available
                 I may be contacted via email at mmurdock@starphire.com    
 
  
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This program is free software; you can redistribute it and/or modify   
 under the terms of the GNU General Public License as published by the  
@@ -37,7 +37,7 @@ along with this program; if not, write to the Free Software Foundation,
 Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            
   
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The GNU General Public License (GPL)
 Version 2, June 1991

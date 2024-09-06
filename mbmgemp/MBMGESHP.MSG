@@ -32,7 +32,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S01SHLD {  Maximum Shield Type: 10} (S01TYPE#<NONE>) N 0 19
+S01SHLD {  Maximum Shield Type: 8} (S01TYPE#<NONE>) N 0 19
 
 Ship Class 01
 
@@ -40,7 +40,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S01PHSR {  Maximum Phaser Type: 10} (S01TYPE#<NONE>) N 0 19
+S01PHSR {  Maximum Phaser Type: 8} (S01TYPE#<NONE>) N 0 19
 
 Ship Class 01
 
@@ -75,14 +75,14 @@ Ship Class 01
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S01ZIPPR {  Has Zipper Capability? YES} (S01TYPE#<NONE>) B
+S01ZIPPR {  Has Zipper Capability? NO} (S01TYPE#<NONE>) B
 
 Ship Class 01
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S01MINE {  Has Mine Capability? YES} (S01TYPE#<NONE>) B
+S01MINE {  Has Mine Capability? NO} (S01TYPE#<NONE>) B
 
 Ship Class 01
 
@@ -117,14 +117,14 @@ Ship Class 01
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S01TONS {  Maximum Tonnage : 1000} (S01TYPE#<NONE>) N 1 2000000000
+S01TONS {  Maximum Tonnage : 5000} (S01TYPE#<NONE>) N 1 2000000000
 
 Ship Class 01
 
 This option specifies the price for each ship in this
 class.
 
-S01PRIC {  Price for each ship: 65000} (S01TYPE=USER) N 1 2000000000
+S01PRIC {  Price for each ship: 50000} (S01TYPE=USER) N 1 2000000000
 
 Ship Class 01
 
@@ -184,7 +184,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 
 Damage = damage / (SnnDAMF / 100)
 
-S01DAMF {  The damage effect factor: 90} (S01TYPE#<NONE>) N 1 32767
+S01DAMF {  The damage effect factor: 100} (S01TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -201,33 +201,32 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S01HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mInterceptor
-[0mMission Profile:  [1;32mShort range scouting & light attack
+S01HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mInterceptor   [1;37mLength: [1;32m156m    [1;37mWidth: [1;32m52m   [1;37mHeight: [1;32m17m
+[1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-8 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m5000 Su/T   [1;37mTop rated speed: [1;32mWarp 10   [1;37mKill points: [1;32m750
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m5000 Tons
 
-[0mLength:           [1;32m62m
-[0mWidth:            [1;32m20m
-[0mHeight:           [1;32m17m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-10 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-10 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32m<NONE>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m5000 Su/T
-[0mMaximum Speed:    [1;32mWarp 10
-[0mScanner range:    [1;32m100,000 (10 sectors)
-[0mCargo Capacity:   [1;32m1000 Tons
+[1;36m"Looking to start your journey into the galaxy? The INTERCEPTOR is the perfect
+ship for adventurers looking to learn the ropes of interstellar travel,
+and best of all, it's FREE*!
 
-[0mPrice:            [1;32m65,000 C
-[0mKill Points:      [1;32m10
-[0m
+With a warp 10 capable engine, torpedo launcher, and 5000 tons of cargo space,
+you'll be ready to start finding new planets to colonize and be prepared for
+light battles.
 
+When you're ready for more firepower, more cargo space, or a faster engine,
+remember to come back to Zygor for your next ship!
+
+*Free offer applies only to customers that don't already have at least one
+ship. The Interceptor retails at [0;33m50,000[1;36m for all other customers."
+[1;37m
 } (S01TYPE#<NONE>) T   Additional Help
 
 Ship Class 02
@@ -246,7 +245,7 @@ Ship Class 02
 
 This is the name of this class of ship.
 
-S02NAME {Stealth Fighter} (S02TYPE#<NONE>) S 29 Class-02 Ship Name
+S02NAME {Scout} (S02TYPE#<NONE>) S 29 Class-02 Ship Name
 
 Ship Class 02
 
@@ -261,7 +260,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S02SHLD {  Maximum Shield Type: 15} (S02TYPE#<NONE>) N 0 19
+S02SHLD {  Maximum Shield Type: 0} (S02TYPE#<NONE>) N 0 19
 
 Ship Class 02
 
@@ -269,28 +268,28 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S02PHSR {  Maximum Phaser Type: 15} (S02TYPE#<NONE>) N 0 19
+S02PHSR {  Maximum Phaser Type: 0} (S02TYPE#<NONE>) N 0 19
 
 Ship Class 02
 
 This option specifies if this ship class has torpedo
 capability.
 
-S02TORP {  Has Torpedo Capability? YES} (S02TYPE#<NONE>) B
+S02TORP {  Has Torpedo Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
 This option specifies if this ship class has missile
 capability.
 
-S02MISL {  Has Missile Capability? YES} (S02TYPE#<NONE>) B
+S02MISL {  Has Missile Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
 This option specifies if this ship class has decoy 
 launching capability.
 
-S02DECY {  Has Decoy Capability? YES} (S02TYPE#<NONE>) B
+S02DECY {  Has Decoy Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
@@ -304,70 +303,70 @@ Ship Class 02
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S02ZIPPR {  Has Zipper Capability? YES} (S02TYPE#<NONE>) B
+S02ZIPPR {  Has Zipper Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S02MINE {  Has Mine Capability? YES} (S02TYPE#<NONE>) B
+S02MINE {  Has Mine Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
 This option specifies if this ship class has planetary
 attack capability.
 
-S02ATTK {  Has Attack Planet Capability? YES} (S02TYPE=USER) B
+S02ATTK {  Has Attack Planet Capability? NO} (S02TYPE=USER) B
 
 Ship Class 02
 
 This option specifies if this ship class has cloaking
 capability.
 
-S02CLOK {  Has Cloaking Capability? YES} (S02TYPE#<NONE>) B
+S02CLOK {  Has Cloaking Capability? NO} (S02TYPE#<NONE>) B
 
 Ship Class 02
 
 This option controls the acceleration rate for this class
 of ship.
 
-S02ACCL {  Acceleration Rate: 5000} (S02TYPE#<NONE>) N 0 32767
+S02ACCL {  Acceleration Rate: 10000} (S02TYPE#<NONE>) N 0 32767
 
 Ship Class 02
 
 This option specifies the maximum warp for this class of
 ship.
 
-S02WARP {  Maximum Warp: 20} (S02TYPE#<NONE>) N 0 255
+S02WARP {  Maximum Warp: 40} (S02TYPE#<NONE>) N 0 255
 
 Ship Class 02
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S02TONS {  Maximum Tonnage : 2000} (S02TYPE#<NONE>) N 1 2000000000
+S02TONS {  Maximum Tonnage : 1000} (S02TYPE#<NONE>) N 1 2000000000
 
 Ship Class 02
 
 This option specifies the price for each ship in this
 class.
 
-S02PRIC {  Price for each ship: 500000} (S02TYPE=USER) N 1 2000000000
+S02PRIC {  Price for each ship: 75000} (S02TYPE=USER) N 1 2000000000
 
 Ship Class 02
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S02PNTS {  Points awarded for kill: 1500} (S02TYPE#<NONE>) N 1 32767
+S02PNTS {  Points awarded for kill: 500} (S02TYPE#<NONE>) N 1 32767
 
 Ship Class 02
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S02SRNG {  Scan Range: 200000} (S02TYPE#<NONE>) N 1 10000000
+S02SRNG {  Scan Range: 100000} (S02TYPE#<NONE>) N 1 10000000
 
 Ship Class 02
 
@@ -375,7 +374,7 @@ This option determines if this class of ship is "attackable"
 by cybertrons. If NO then Cyb's will only attack it if 
 provoked. If YES then they will attack on sight.
 
-S02CATK {  Cyb's can attack this class ship: YES} (S02TYPE=USER) B
+S02CATK {  Cyb's can attack this class ship: NO} (S02TYPE=USER) B
 
 Ship Class 02
 
@@ -384,7 +383,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S02NATK {  Number of cyb's to attack this class: 2} (S02TYPE=USER) N 0 255
+S02NATK {  Number of cyb's to attack this class: 1} (S02TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -414,7 +413,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S02DAMF {  Damage effect factor: 90} (S02TYPE#<NONE>) N 1 32767
+S02DAMF {  Damage effect factor: 100} (S02TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -431,33 +430,33 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S02HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mStealth Fighter
-[0mMission Profile:  [1;32mAdvanced Fighter with maximum capability at low cost
+S02HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mScout   [1;37mLength: [1;32m31m    [1;37mWidth: [1;32m10m   [1;37mHeight: [1;32m8m
+[1;37mShields: [0;31mNo   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [0;31mNo   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 40   [1;37mKill points: [1;32m500
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m1000 Tons
 
-[0mLength:           [1;32m3750m
-[0mWidth:            [1;32m1250m
-[0mHeight:           [1;32m100m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard\Mark-15 (maximum)
-[0mPhasers:          [1;32mMark-1 Standard\Mark-15 (maximum)
-[0mTorpedo:          [1;32mStandard Issue
-[0mMissile:          [1;32mStandard Issue
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m5000 Su/T
-[0mMaximum Speed:    [1;32mWarp 20
-[0mScanner range:    [1;32m200,000 (20 sectors)
-[0mCargo Capacity:   [1;32m2,000 Tons
-[0mCloak Capibility: [1;32mStandard Issue
-[0mPrice:            [1;32m500,000 C
-[0mKill Points:      [1;32m25
-[0m
+[1;36m"Can't wait to explore the outer reaches of the galaxy? Don't yet have the
+cash on hand for a more powerful ship? Consider the SCOUT, now available
+from Zygor.
 
+The Scout is a small and fast ship, rated for warp 40. The Scout features
+no weapons or shields, but does have a jammer launcher to help get yourself
+out of trouble if necessary. Steer clear of any hostile ships while exploring
+with the Scout.
+
+Explore deep space and claim the best planets while you can! Once you have the
+budget, make sure to come back to Zygor to purchase a freighter so you can
+begin bringing colonists and supplies to your new planets.
+
+The Scout retails for [0;33m75,000[1;36m."
+[1;37m
 } (S02TYPE#<NONE>) T   Additional Help
 
 Ship Class 03
@@ -476,7 +475,7 @@ Ship Class 03
 
 This is the name of this class of ship.
 
-S03NAME {Heavy Freighter} (S03TYPE#<NONE>) S 29 Class-03 Ship Name
+S03NAME {Light Freighter} (S03TYPE#<NONE>) S 29 Class-03 Ship Name
 
 Ship Class 03
 
@@ -491,7 +490,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S03SHLD {  Maximum Shield Type: 5} (S03TYPE#<NONE>) N 0 19
+S03SHLD {  Maximum Shield Type: 4} (S03TYPE#<NONE>) N 0 19
 
 Ship Class 03
 
@@ -499,14 +498,14 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S03PHSR {  Maximum Phaser Type: 5} (S03TYPE#<NONE>) N 0 19
+S03PHSR {  Maximum Phaser Type: 2} (S03TYPE#<NONE>) N 0 19
 
 Ship Class 03
 
 This option specifies if this ship class has torpedo
 capability.
 
-S03TORP {  Has Torpedo Capability? YES} (S03TYPE#<NONE>) B
+S03TORP {  Has Torpedo Capability? NO} (S03TYPE#<NONE>) B
 
 Ship Class 03
 
@@ -541,7 +540,7 @@ Ship Class 03
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S03MINE {  Has Mine Capability? YES} (S03TYPE#<NONE>) B
+S03MINE {  Has Mine Capability? NO} (S03TYPE#<NONE>) B
 
 Ship Class 03
 
@@ -576,21 +575,21 @@ Ship Class 03
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S03TONS {  Maximum Tonnage : 60000} (S03TYPE#<NONE>) N 1 2000000000
+S03TONS {  Maximum Tonnage : 100000} (S03TYPE#<NONE>) N 1 2000000000
 
 Ship Class 03
 
 This option specifies the price for each ship in this
 class.
 
-S03PRIC {  Price for each ship: 40000} (S03TYPE=USER) N 1 2000000000
+S03PRIC {  Price for each ship: 100000} (S03TYPE=USER) N 1 2000000000
 
 Ship Class 03
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S03PNTS {  Points awarded for kill: 500} (S03TYPE#<NONE>) N 1 32767
+S03PNTS {  Points awarded for kill: 1000} (S03TYPE#<NONE>) N 1 32767
 
 Ship Class 03
 
@@ -614,7 +613,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S03NATK {  Number of cyb's to attack this class: 0} (S03TYPE=USER) N 0 255
+S03NATK {  Number of cyb's to attack this class: 1} (S03TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -644,7 +643,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S03DAMF {  Damage effect factor: 200} (S03TYPE#<NONE>) N 1 32767
+S03DAMF {  Damage effect factor: 150} (S03TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -661,35 +660,32 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S03HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mHeavy Freighter
-[0mMission Profile:  [1;32mPlanet colonization/Supply runs/Invasion Staging
+S03HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mLight Freighter  [1;37mLength: [1;32m3125m    [1;37mWidth: [1;32m1041m   [1;37mHeight: [1;32m647m
+[1;37mShields: [1;32mMark-4 maximum   [1;37mPhasers: [1;32mMark-2 maximum   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 8   [1;37mKill points: [1;32m1000
+[1;37mScanner range: [1;32m50,000 subsectors (5 sectors)   [1;37mCargo capacity: [1;32m100,000 Tons
 
-[0mLength:           [1;32m7500m
-[0mWidth:            [1;32m2500m
-[0mHeight:           [1;32m248m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-5 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-5 maximum
-[0mTorpedo:          [1;32mStandard Issue
-[0mMissile:          [1;32m<NONE>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32m<NONE>
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m3000 Su/T
-[0mMaximum Speed:    [1;32mWarp 8
-[0mScanner range:    [1;32m50,000 (5 sectors)
-[0mCargo Capacity:   [1;32m60,000 Tons
+[1;36m"The LIGHT FREIGHTER, now available from Zygor, is the perfect ship for those
+who are light on cash but want to start moving big amounts of supplies. With
+100,000 tons of storage space and a warp 8 rated engine, you can start
+building your empire without any big upfront costs.
 
-[0mPlanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:            [1;32m40,000 C
-[0mKill Points:      [1;32m75
-[0m
+A fighter launcher is included for light planetary attacks, and a phaser
+(upgradable to Mark-2) should ward off small hostile ships.
 
+The Light Freighter retails for [0;33m100,000[1;36m.
+
+Note: This vessel has no relation to the Light Freighter sold at Zygor
+prior to Standard Year 3250, which was recalled. If you still have one,
+please return it to Zygor for a partial refund."
+[1;37m
 } (S03TYPE#<NONE>) T   Additional Help
 
 Ship Class 04
@@ -708,7 +704,7 @@ Ship Class 04
 
 This is the name of this class of ship.
 
-S04NAME {Destroyer} (S04TYPE#<NONE>) S 29 Class-04 Ship Name
+S04NAME {Patrol} (S04TYPE#<NONE>) S 29 Class-04 Ship Name
 
 Ship Class 04
 
@@ -723,7 +719,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S04SHLD {  Maximum Shield Type: 15} (S04TYPE#<NONE>) N 0 19
+S04SHLD {  Maximum Shield Type: 10} (S04TYPE#<NONE>) N 0 19
 
 Ship Class 04
 
@@ -731,7 +727,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S04PHSR {  Maximum Phaser Type: 15} (S04TYPE#<NONE>) N 0 19
+S04PHSR {  Maximum Phaser Type: 10} (S04TYPE#<NONE>) N 0 19
 
 Ship Class 04
 
@@ -759,7 +755,7 @@ Ship Class 04
 This option specifies if this ship class has jamming
 capabilities.
 
-S04JAMMR {  Has Jammer Capability? YES} (S04TYPE#<NONE>) B
+S04JAMMR {  Has Jammer Capability? NO} (S04TYPE#<NONE>) B
 
 Ship Class 04
 
@@ -773,63 +769,63 @@ Ship Class 04
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S04MINE {  Has Mine Capability? YES} (S04TYPE#<NONE>) B
+S04MINE {  Has Mine Capability? NO} (S04TYPE#<NONE>) B
 
 Ship Class 04
 
 This option specifies if this ship class has planetary
 attack capability.
 
-S04ATTK {  Has Attack Planet Capability? YES} (S04TYPE=USER) B
+S04ATTK {  Has Attack Planet Capability? NO} (S04TYPE=USER) B
 
 Ship Class 04
 
 This option specifies if this ship class has cloaking
 capability.
 
-S04CLOK {  Has Cloaking Capability? NO} (S04TYPE#<NONE>) B
+S04CLOK {  Has Cloaking Capability? YES} (S04TYPE#<NONE>) B
 
 Ship Class 04
 
 This option controls the acceleration rate for this class
 of ship.
 
-S04ACCL {  Acceleration Rate: 5000} (S04TYPE#<NONE>) N 0 32767
+S04ACCL {  Acceleration Rate: 2000} (S04TYPE#<NONE>) N 0 32767
 
 Ship Class 04
 
 This option specifies the maximum warp for this class of
 ship.
 
-S04WARP {  Maximum Warp: 25} (S04TYPE#<NONE>) N 0 255
+S04WARP {  Maximum Warp: 4} (S04TYPE#<NONE>) N 0 255
 
 Ship Class 04
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S04TONS {  Maximum Tonnage : 5000} (S04TYPE#<NONE>) N 1 2000000000
+S04TONS {  Maximum Tonnage : 10000} (S04TYPE#<NONE>) N 1 2000000000
 
 Ship Class 04
 
 This option specifies the price for each ship in this
 class.
 
-S04PRIC {  Price for each ship: 600000} (S04TYPE=USER) N 1 2000000000
+S04PRIC {  Price for each ship: 150000} (S04TYPE=USER) N 1 2000000000
 
 Ship Class 04
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S04PNTS {  Points awarded for kill: 2000} (S04TYPE#<NONE>) N 1 32767
+S04PNTS {  Points awarded for kill: 1000} (S04TYPE#<NONE>) N 1 32767
 
 Ship Class 04
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S04SRNG {  Scan Range: 100000} (S04TYPE#<NONE>) N 1 10000000
+S04SRNG {  Scan Range: 50000} (S04TYPE#<NONE>) N 1 10000000
 
 Ship Class 04
 
@@ -876,7 +872,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S04DAMF {  Damage effect factor: 90} (S04TYPE#<NONE>) N 1 32767
+S04DAMF {  Damage effect factor: 100} (S04TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -893,35 +889,32 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S04HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mDestroyer
-[0mMission Profile:  [1;32mShip to Ship Battle
+S04HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mPatrol  [1;37mLength: [1;32m312m    [1;37mWidth: [1;32m104m   [1;37mHeight: [1;32m74m
+[1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-10 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [0;31mNo
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 4   [1;37mKill points: [1;32m1000
+[1;37mScanner range: [1;32m50,000 subsectors (5 sectors)   [1;37mCargo capacity: [1;32m10,000 Tons
 
-[0mLength:           [1;32m250m
-[0mWidth:            [1;32m83m
-[0mHeight:           [1;32m112m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-15 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-15 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard issue Missile Launcher
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m5000 Su/T
-[0mMaximum Speed:    [1;32mWarp 25
-[0mScanner range:    [1;32m100,000 (10 sectors)
-[0mCargo Capacity:   [1;32m5000 Tons
+[1;36m"Need to fortify your defenses in a busy sector? Looking for big firepower for
+a small price? Look no further than the PATROL, new from Zygor. With a torpedo
+launcher, missile launcher, and a phaser upgradable to Mark-10, the Patrol is
+the perfect short-range ship for protecting a sector from attackers. Leave
+Patrols in your busiest sectors so you can respond to threats instantaneously,
+or buy one for every commander in your fleet.
 
-[0mPlanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:            [1;32m150,000 C
-[0mKill Points:      [1;32m150
-[0m
+With a warp 4 rated engine, the Patrol is not designed for long-range
+exploration, and it may be difficult to flee when outgunned. However, a
+cloaking system, along with decoy and jammer launchers, should help you get
+out of trouble long enough to call for backup.
 
+The Patrol retails for [0;33m150,000[1;36m."
+[1;37m
 } (S04TYPE#<NONE>) T   Additional Help
 
 Ship Class 05
@@ -940,7 +933,7 @@ Ship Class 05
 
 This is the name of this class of ship.
 
-S05NAME {Star Cruiser} (S05TYPE#<NONE>) S 29 Class-05 Ship Name
+S05NAME {Minelayer} (S05TYPE#<NONE>) S 29 Class-05 Ship Name
 
 Ship Class 05
 
@@ -955,7 +948,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S05SHLD {  Maximum Shield Type: 15} (S05TYPE#<NONE>) N 0 19
+S05SHLD {  Maximum Shield Type: 10} (S05TYPE#<NONE>) N 0 19
 
 Ship Class 05
 
@@ -963,35 +956,35 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S05PHSR {  Maximum Phaser Type: 15} (S05TYPE#<NONE>) N 0 19
+S05PHSR {  Maximum Phaser Type: 3} (S05TYPE#<NONE>) N 0 19
 
 Ship Class 05
 
 This option specifies if this ship class has torpedo
 capability.
 
-S05TORP {  Has Torpedo Capability? YES} (S05TYPE#<NONE>) B
+S05TORP {  Has Torpedo Capability? NO} (S05TYPE#<NONE>) B
 
 Ship Class 05
 
 This option specifies if this ship class has missile
 capability.
 
-S05MISL {  Has Missile Capability? YES} (S05TYPE#<NONE>) B
+S05MISL {  Has Missile Capability? NO} (S05TYPE#<NONE>) B
 
 Ship Class 05
 
 This option specifies if this ship class has decoy 
 launching capability.
 
-S05DECY {  Has Decoy Capability? YES} (S05TYPE#<NONE>) B
+S05DECY {  Has Decoy Capability? NO} (S05TYPE#<NONE>) B
 
 Ship Class 05
 
 This option specifies if this ship class has jamming
 capabilities.
 
-S05JAMMR {  Has Jammer Capability? YES} (S05TYPE#<NONE>) B
+S05JAMMR {  Has Jammer Capability? NO} (S05TYPE#<NONE>) B
 
 Ship Class 05
 
@@ -1012,7 +1005,7 @@ Ship Class 05
 This option specifies if this ship class has planetary
 attack capability.
 
-S05ATTK {  Has Attack Planet Capability? YES} (S05TYPE=USER) B
+S05ATTK {  Has Attack Planet Capability? NO} (S05TYPE=USER) B
 
 Ship Class 05
 
@@ -1026,42 +1019,42 @@ Ship Class 05
 This option controls the acceleration rate for this class
 of ship.
 
-S05ACCL {  Acceleration Rate: 10000} (S05TYPE#<NONE>) N 0 32767
+S05ACCL {  Acceleration Rate: 5000} (S05TYPE#<NONE>) N 0 32767
 
 Ship Class 05
 
 This option specifies the maximum warp for this class of
 ship.
 
-S05WARP {  Maximum Warp: 25} (S05TYPE#<NONE>) N 0 255
+S05WARP {  Maximum Warp: 15} (S05TYPE#<NONE>) N 0 255
 
 Ship Class 05
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S05TONS {  Maximum Tonnage : 3000} (S05TYPE#<NONE>) N 1 2000000000
+S05TONS {  Maximum Tonnage : 30000} (S05TYPE#<NONE>) N 1 2000000000
 
 Ship Class 05
 
 This option specifies the price for each ship in this
 class.
 
-S05PRIC {  Price for each ship: 700000} (S05TYPE=USER) N 1 2000000000
+S05PRIC {  Price for each ship: 200000} (S05TYPE=USER) N 1 2000000000
 
 Ship Class 05
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S05PNTS {  Points awarded for kill: 5000} (S05TYPE#<NONE>) N 1 32767
+S05PNTS {  Points awarded for kill: 1500} (S05TYPE#<NONE>) N 1 32767
 
 Ship Class 05
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S05SRNG {  Scan Range: 200000} (S05TYPE#<NONE>) N 1 10000000
+S05SRNG {  Scan Range: 100000} (S05TYPE#<NONE>) N 1 10000000
 
 Ship Class 05
 
@@ -1125,34 +1118,30 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S05HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mStar Cruiser
-[0mMission Profile:  [1;32mStealth Attack/Planet Invasion
+S05HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mMinelayer  [1;37mLength: [1;32m937m    [1;37mWidth: [1;32m312m   [1;37mHeight: [1;32m96m
+[1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-3 maximum   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [0;31mNo   [1;37mJammer launcher: [0;31mNo
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m5,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m1500
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m30,000 Tons
 
-[0mLength:           [1;32m375m
-[0mWidth:            [1;32m125m
-[0mHeight:           [1;32m75m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-15 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-15 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m10000 Su/T
-[0mMaximum Speed:    [1;32mWarp 25
-[0mScanner range:    [1;32m200,000 (20 sectors)
-[0mCargo Capacity:   [1;32m3000 Tons
-[0mStealth:          [1;32mHas Cloaking System
+[1;36m"Are you looking to get into the exciting world of galactic mining for a low
+price? Need a ship that can lay mines in a dangerous area that won't set you
+back financially if it's lost? Look no further than the MINELAYER, Zygor's
+least expensive ship equipped with a mine launcher.
 
-[0m
-lanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:          } (S05TYPE#<NONE>) T   Additional Help
+A shield system upgradable to Mark-10 is included to protect you from any
+close detonations, and a cloaking system is included to help you cover your
+tracks. Make sure to get to a safe distance first!
+
+The Minelayer retails for [0;33m200,000[1;36m."
+[1;37m
+} (S05TYPE#<NONE>) T   Additional Help
 
 Ship Class 06
 
@@ -1170,7 +1159,7 @@ Ship Class 06
 
 This is the name of this class of ship.
 
-S06NAME {Battle Cruiser} (S06TYPE#<NONE>) S 29 Class-06 Ship Name
+S06NAME {Monitor} (S06TYPE#<NONE>) S 29 Class-06 Ship Name
 
 Ship Class 06
 
@@ -1185,7 +1174,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S06SHLD {  Maximum Shield Type: 19} (S06TYPE#<NONE>) N 0 19
+S06SHLD {  Maximum Shield Type: 5} (S06TYPE#<NONE>) N 0 19
 
 Ship Class 06
 
@@ -1193,7 +1182,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S06PHSR {  Maximum Phaser Type: 19} (S06TYPE#<NONE>) N 0 19
+S06PHSR {  Maximum Phaser Type: 15} (S06TYPE#<NONE>) N 0 19
 
 Ship Class 06
 
@@ -1207,7 +1196,7 @@ Ship Class 06
 This option specifies if this ship class has missile
 capability.
 
-S06MISL {  Has Missile Capability? YES} (S06TYPE#<NONE>) B
+S06MISL {  Has Missile Capability? NO} (S06TYPE#<NONE>) B
 
 Ship Class 06
 
@@ -1235,63 +1224,63 @@ Ship Class 06
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S06MINE {  Has Mine Capability? YES} (S06TYPE#<NONE>) B
+S06MINE {  Has Mine Capability? NO} (S06TYPE#<NONE>) B
 
 Ship Class 06
 
 This option specifies if this ship class has planetary
 attack capability.
 
-S06ATTK {  Has Attack Planet Capability? YES} (S06TYPE=USER) B
+S06ATTK {  Has Attack Planet Capability? NO} (S06TYPE=USER) B
 
 Ship Class 06
 
 This option specifies if this ship class has cloaking
 capability.
 
-S06CLOK {  Has Cloaking Capability? YES} (S06TYPE#<NONE>) B
+S06CLOK {  Has Cloaking Capability? NO} (S06TYPE#<NONE>) B
 
 Ship Class 06
 
 This option controls the acceleration rate for this class
 of ship.
 
-S06ACCL {  Acceleration Rate: 3000} (S06TYPE#<NONE>) N 0 32767
+S06ACCL {  Acceleration Rate: 8000} (S06TYPE#<NONE>) N 0 32767
 
 Ship Class 06
 
 This option specifies the maximum warp for this class of
 ship.
 
-S06WARP {  Maximum Warp: 30} (S06TYPE#<NONE>) N 0 255
+S06WARP {  Maximum Warp: 20} (S06TYPE#<NONE>) N 0 255
 
 Ship Class 06
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S06TONS {  Maximum Tonnage : 6000} (S06TYPE#<NONE>) N 1 2000000000
+S06TONS {  Maximum Tonnage : 20000} (S06TYPE#<NONE>) N 1 2000000000
 
 Ship Class 06
 
 This option specifies the price for each ship in this
 class.
 
-S06PRIC {  Price for each ship: 800000} (S06TYPE=USER) N 1 2000000000
+S06PRIC {  Price for each ship: 400000} (S06TYPE=USER) N 1 2000000000
 
 Ship Class 06
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S06PNTS {  Points awarded for kill: 5000} (S06TYPE#<NONE>) N 1 32767
+S06PNTS {  Points awarded for kill: 1000} (S06TYPE#<NONE>) N 1 32767
 
 Ship Class 06
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S06SRNG {  Scan Range: 250000} (S06TYPE#<NONE>) N 1 10000000
+S06SRNG {  Scan Range: 200000} (S06TYPE#<NONE>) N 1 10000000
 
 Ship Class 06
 
@@ -1308,7 +1297,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S06NATK {  Number of cyb's to attack this class: 2} (S06TYPE=USER) N 0 255
+S06NATK {  Number of cyb's to attack this class: 3} (S06TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -1338,7 +1327,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S06DAMF {  Damage effect factor: 125} (S06TYPE#<NONE>) N 1 32767
+S06DAMF {  Damage effect factor: 100} (S06TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -1355,34 +1344,29 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S06HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mBattle Cruiser
-[0mMission Profile:  [1;32mStealth Attack/Planet Invasion
+S06HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mMonitor  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m112m
+[1;37mShields: [1;32mMark-5 maximum   [1;37mPhasers: [1;32mMark-15 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m8,000 Su/T   [1;37mTop rated speed: [1;32mWarp 20   [1;37mKill points: [1;32m1000
+[1;37mScanner range: [1;32m200,000 subsectors (20 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
-[0mLength:           [1;32m750m
-[0mWidth:            [1;32m250m
-[0mHeight:           [1;32m230m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-19 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-19 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m3000 Su/T
-[0mMaximum Speed:    [1;32mWarp 30
-[0mScanner range:    [1;32m250,000 (25 sectors)
-[0mCargo Capacity:   [1;32m6,000 Tons
-[0mStealth:          [1;32mHas Cloaking System
+[1;36m"Need to keep an eye on large area of space? Looking for a ship with big
+phaser capability? The warp 20 rated engine and 200,000-subsector scanner on the
+MONITOR, new from Zygor, might be just what you need.
 
-[0m
-lanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:         } (S06TYPE#<NONE>) T   Additional Help
+Finally, a medium-range vessel with the capabilities you need at a reasonable
+price. And once you have the money, you can upgrade the Monitor all the way
+up to a Mark-15 phaser! That's right, buy today, upgrade later!
+
+The Monitor retails for [0;33m400,000[1;36m."
+[1;37m
+} (S06TYPE#<NONE>) T   Additional Help
 
 Ship Class 07
 
@@ -1400,7 +1384,7 @@ Ship Class 07
 
 This is the name of this class of ship.
 
-S07NAME {Frigate} (S07TYPE#<NONE>) S 29 Class-07 Ship Name
+S07NAME {Heavy Freighter} (S07TYPE#<NONE>) S 29 Class-07 Ship Name
 
 Ship Class 07
 
@@ -1415,7 +1399,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S07SHLD {  Maximum Shield Type: 12} (S07TYPE#<NONE>) N 0 19
+S07SHLD {  Maximum Shield Type: 8} (S07TYPE#<NONE>) N 0 19
 
 Ship Class 07
 
@@ -1423,21 +1407,21 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S07PHSR {  Maximum Phaser Type: 12} (S07TYPE#<NONE>) N 0 19
+S07PHSR {  Maximum Phaser Type: 4} (S07TYPE#<NONE>) N 0 19
 
 Ship Class 07
 
 This option specifies if this ship class has torpedo
 capability.
 
-S07TORP {  Has Torpedo Capability? YES} (S07TYPE#<NONE>) B
+S07TORP {  Has Torpedo Capability? NO} (S07TYPE#<NONE>) B
 
 Ship Class 07
 
 This option specifies if this ship class has missile
 capability.
 
-S07MISL {  Has Missile Capability? YES} (S07TYPE#<NONE>) B
+S07MISL {  Has Missile Capability? NO} (S07TYPE#<NONE>) B
 
 Ship Class 07
 
@@ -1465,7 +1449,7 @@ Ship Class 07
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S07MINE {  Has Mine Capability? YES} (S07TYPE#<NONE>) B
+S07MINE {  Has Mine Capability? NO} (S07TYPE#<NONE>) B
 
 Ship Class 07
 
@@ -1486,42 +1470,42 @@ Ship Class 07
 This option controls the acceleration rate for this class
 of ship.
 
-S07ACCL {  Acceleration Rate: 10000} (S07TYPE#<NONE>) N 0 32767
+S07ACCL {  Acceleration Rate: 3000} (S07TYPE#<NONE>) N 0 32767
 
 Ship Class 07
 
 This option specifies the maximum warp for this class of
 ship.
 
-S07WARP {  Maximum Warp: 30} (S07TYPE#<NONE>) N 0 255
+S07WARP {  Maximum Warp: 12} (S07TYPE#<NONE>) N 0 255
 
 Ship Class 07
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S07TONS {  Maximum Tonnage : 12000} (S07TYPE#<NONE>) N 1 2000000000
+S07TONS {  Maximum Tonnage : 400000} (S07TYPE#<NONE>) N 1 2000000000
 
 Ship Class 07
 
 This option specifies the price for each ship in this
 class.
 
-S07PRIC {  Price for each ship: 1250000} (S07TYPE=USER) N 1 2000000000
+S07PRIC {  Price for each ship: 600000} (S07TYPE=USER) N 1 2000000000
 
 Ship Class 07
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S07PNTS {  Points awarded for kill: 5000} (S07TYPE#<NONE>) N 1 32767
+S07PNTS {  Points awarded for kill: 1500} (S07TYPE#<NONE>) N 1 32767
 
 Ship Class 07
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S07SRNG {  Scan Range: 250000} (S07TYPE#<NONE>) N 1 10000000
+S07SRNG {  Scan Range: 100000} (S07TYPE#<NONE>) N 1 10000000
 
 Ship Class 07
 
@@ -1585,35 +1569,29 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S07HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mFrigate
-[0mMission Profile:  [1;32mPlanetary Attack / Heavy Battle
+S07HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mHeavy Freighter  [1;37mLength: [1;32m12500m    [1;37mWidth: [1;32m4166m   [1;37mHeight: [1;32m1536m
+[1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-4 maximum   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 12   [1;37mKill points: [1;32m1500
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m400,000 Tons
 
-[0mLength:           [1;32m1500m
-[0mWidth:            [1;32m500m
-[0mHeight:           [1;32m200m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-12 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-12 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m10000 Su/T
-[0mMaximum Speed:    [1;32mWarp 30
-[0mScanner range:    [1;32m250,000 (25 sectors)
-[0mCargo Capacity:   [1;32m12,000 Tons
+[1;36m"Tired of the constraints of the Light Freighter? Ready to start moving big
+amounts of goods to your burgeoning empire? The new-and-improved HEAVY
+FREIGHTER, from Zygor, should be at the top of your shopping list.
 
-[0mPlanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:            [1;32m1,000,000 C
-[0mKill Points:      [1;32m300
-[0m
+With a warp 12 rated engine, 400,000 tons of cargo space, and a
+100,000-subsector scanner, the Heavy Freighter is an improvement on the Light
+Freighter in every way. A fighter launcher is included for medium-sized
+planetary attacks.
 
+The Heavy Freighter retails for [0;33m600,000[1;36m."
+[1;37m
 } (S07TYPE#<NONE>) T   Additional Help
 
 Ship Class 08
@@ -1632,7 +1610,7 @@ Ship Class 08
 
 This is the name of this class of ship.
 
-S08NAME {Dreadnought} (S08TYPE#<NONE>) S 29 Class-08 Ship Name
+S08NAME {Destroyer} (S08TYPE#<NONE>) S 29 Class-08 Ship Name
 
 Ship Class 08
 
@@ -1647,7 +1625,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S08SHLD {  Maximum Shield Type: 19} (S08TYPE#<NONE>) N 0 19
+S08SHLD {  Maximum Shield Type: 10} (S08TYPE#<NONE>) N 0 19
 
 Ship Class 08
 
@@ -1655,7 +1633,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S08PHSR {  Maximum Phaser Type: 19} (S08TYPE#<NONE>) N 0 19
+S08PHSR {  Maximum Phaser Type: 10} (S08TYPE#<NONE>) N 0 19
 
 Ship Class 08
 
@@ -1704,54 +1682,54 @@ Ship Class 08
 This option specifies if this ship class has planetary
 attack capability.
 
-S08ATTK {  Has Attack Planet Capability? YES} (S08TYPE=USER) B
+S08ATTK {  Has Attack Planet Capability? NO} (S08TYPE=USER) B
 
 Ship Class 08
 
 This option specifies if this ship class has cloaking
 capability.
 
-S08CLOK {  Has Cloaking Capability? YES} (S08TYPE#<NONE>) B
+S08CLOK {  Has Cloaking Capability? NO} (S08TYPE#<NONE>) B
 
 Ship Class 08
 
 This option controls the acceleration rate for this class
 of ship.
 
-S08ACCL {  Acceleration Rate: 15000} (S08TYPE#<NONE>) N 0 32767
+S08ACCL {  Acceleration Rate: 10000} (S08TYPE#<NONE>) N 0 32767
 
 Ship Class 08
 
 This option specifies the maximum warp for this class of
 ship.
 
-S08WARP {  Maximum Warp: 50} (S08TYPE#<NONE>) N 0 255
+S08WARP {  Maximum Warp: 25} (S08TYPE#<NONE>) N 0 255
 
 Ship Class 08
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S08TONS {  Maximum Tonnage : 40000} (S08TYPE#<NONE>) N 1 2000000000
+S08TONS {  Maximum Tonnage : 20000} (S08TYPE#<NONE>) N 1 2000000000
 
 Ship Class 08
 
 This option specifies the price for each ship in this
 class.
 
-S08PRIC {  Price for each ship: 2000000} (S08TYPE=USER) N 1 2000000000
+S08PRIC {  Price for each ship: 800000} (S08TYPE=USER) N 1 2000000000
 
 Ship Class 08
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S08PNTS {  Points awarded for kill: 10000} (S08TYPE#<NONE>) N 1 32767
+S08PNTS {  Points awarded for kill: 2000} (S08TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S08SRNG {  Scan Range: 500000} (S08TYPE#<NONE>) N 1 10000000
+S08SRNG {  Scan Range: 150000} (S08TYPE#<NONE>) N 1 10000000
 
 Ship Class 08
 
@@ -1768,7 +1746,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S08NATK {  Number of cyb's to attack this class: 2} (S08TYPE=USER) N 0 255
+S08NATK {  Number of cyb's to attack this class: 3} (S08TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -1798,7 +1776,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S08DAMF {  Damage effect factor: 125} (S08TYPE#<NONE>) N 1 32767
+S08DAMF {  Damage effect factor: 100} (S08TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -1815,35 +1793,29 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S08HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mDreadnought
-[0mMission Profile:  [1;32mHeavy Battle / Planatary Attack
+S08HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mDestroyer  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m124m
+[1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-10 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 25   [1;37mKill points: [1;32m2000
+[1;37mScanner range: [1;32m150,000 subsectors (15 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
-[0mLength:           [1;32m5000m
-[0mWidth:            [1;32m1666m
-[0mHeight:           [1;32m2000m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-19 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-19 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m15000 Su/T
-[0mMaximum Speed:    [1;32mWarp 50
-[0mScanner range:    [1;32m500,000 (50 sectors)
-[0mCargo Capacity:   [1;32m40,000 Tons
-[0mStealth:          [1;32mStandard Issue Cloaking System
-[0mPlanetary Attack: [1;32mHas Fighter Combat Systems
-                  
-[0mPrice:            [1;32m2,000,000 C
-[0mKill Points:      [1;32m500
-[0m
+[1;36m"Ready for more intense combat? Finally able to afford both speed and
+firepower? Looking to start getting into trouble, instead of getting out of
+it? Consider the DESTROYER, now available from Zygor.
 
+The Destroyer comes complete with torpedo, missile, and mine capability, and
+phasers and shields both upgradable to Mark-10. And if you get in over your
+head, a warp 25 rated engine with a snappy acceleration rate should help you
+make a quick escape.
+
+The Destroyer retails for [0;33m800,000[1;36m."
+[1;37m
 } (S08TYPE#<NONE>) T   Additional Help
 
 Ship Class 09
@@ -1862,7 +1834,7 @@ Ship Class 09
 
 This is the name of this class of ship.
 
-S09NAME {Freight Barge} (S09TYPE#<NONE>) S 29 Class-09 Ship Name
+S09NAME {Frigate} (S09TYPE#<NONE>) S 29 Class-09 Ship Name
 
 Ship Class 09
 
@@ -1877,7 +1849,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S09SHLD {  Maximum Shield Type: 6} (S09TYPE#<NONE>) N 0 19
+S09SHLD {  Maximum Shield Type: 8} (S09TYPE#<NONE>) N 0 19
 
 Ship Class 09
 
@@ -1885,21 +1857,21 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S09PHSR {  Maximum Phaser Type: 3} (S09TYPE#<NONE>) N 0 19
+S09PHSR {  Maximum Phaser Type: 6} (S09TYPE#<NONE>) N 0 19
 
 Ship Class 09
 
 This option specifies if this ship class has torpedo
 capability.
 
-S09TORP {  Has Torpedo Capability? NO} (S09TYPE#<NONE>) B
+S09TORP {  Has Torpedo Capability? YES} (S09TYPE#<NONE>) B
 
 Ship Class 09
 
 This option specifies if this ship class has missile
 capability.
 
-S09MISL {  Has Missile Capability? NO} (S09TYPE#<NONE>) B
+S09MISL {  Has Missile Capability? YES} (S09TYPE#<NONE>) B
 
 Ship Class 09
 
@@ -1920,14 +1892,14 @@ Ship Class 09
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S09ZIPPR {  Has Zipper Capability? NO} (S09TYPE#<NONE>) B
+S09ZIPPR {  Has Zipper Capability? YES} (S09TYPE#<NONE>) B
 
 Ship Class 09
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S09MINE {  Has Mine Capability? NO} (S09TYPE#<NONE>) B
+S09MINE {  Has Mine Capability? YES} (S09TYPE#<NONE>) B
 
 Ship Class 09
 
@@ -1948,28 +1920,28 @@ Ship Class 09
 This option controls the acceleration rate for this class
 of ship.
 
-S09ACCL {  Acceleration Rate: 1000} (S09TYPE#<NONE>) N 0 32767
+S09ACCL {  Acceleration Rate: 4000} (S09TYPE#<NONE>) N 0 32767
 
 Ship Class 09
 
 This option specifies the maximum warp for this class of
 ship.
 
-S09WARP {  Maximum Warp: 15} (S09TYPE#<NONE>) N 0 255
+S09WARP {  Maximum Warp: 30} (S09TYPE#<NONE>) N 0 255
 
 Ship Class 09
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S09TONS {  Maximum Tonnage : 200000} (S09TYPE#<NONE>) N 1 2000000000
+S09TONS {  Maximum Tonnage : 60000} (S09TYPE#<NONE>) N 1 2000000000
 
 Ship Class 09
 
 This option specifies the price for each ship in this
 class.
 
-S09PRIC {  Price for each ship: 3000000} (S09TYPE=USER) N 1 2000000000
+S09PRIC {  Price for each ship: 1000000} (S09TYPE=USER) N 1 2000000000
 
 Ship Class 09
 
@@ -1981,7 +1953,7 @@ S09PNTS {  Points awarded for kill: 5000} (S09TYPE#<NONE>) N 1 32767
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S09SRNG {  Scan Range: 200000} (S09TYPE#<NONE>) N 1 10000000
+S09SRNG {  Scan Range: 250000} (S09TYPE#<NONE>) N 1 10000000
 
 Ship Class 09
 
@@ -1989,7 +1961,7 @@ This option determines if this class of ship is "attackable"
 by cybertrons. If NO then Cyb's will only attack it if 
 provoked. If YES then they will attack on sight.
 
-S09CATK {  Cyb's can attack this class ship: NO} (S09TYPE=USER) B
+S09CATK {  Cyb's can attack this class ship: YES} (S09TYPE=USER) B
 
 Ship Class 09
 
@@ -1998,7 +1970,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S09NATK {  Number of cyb's to attack this class: 0} (S09TYPE=USER) N 0 255
+S09NATK {  Number of cyb's to attack this class: 3} (S09TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -2028,7 +2000,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S09DAMF {  Damage effect factor: 200} (S09TYPE#<NONE>) N 1 32767
+S09DAMF {  Damage effect factor: 100} (S09TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -2045,33 +2017,26 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S09HELP {[0m[2J***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mFreight Barge
-[0mMission Profile:  [1;32mBulk Transport / Planet Invasion Supply
+S09HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mFrigate  [1;37mLength: [1;32m1875m    [1;37mWidth: [1;32m625m   [1;37mHeight: [1;32m293m
+[1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-6 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 30   [1;37mKill points: [1;32m5000
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m60,000 Tons
 
-[0mLength:           [1;32m53750m
-[0mWidth:            [1;32m17916m
-[0mHeight:           [1;32m1230m
+[1;37mThe following information is from Zygor's sales catalog:
 
-[0mShields:          [1;32mMark-1 Standard/Mark-6 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-3 maximum
-[0mTorpedo:          [1;32m<NONE>
-[0mMissile:          [1;32m<NONE>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32m<NONE>
-[0mMine Launcher:    [1;32m<NONE>
-[0mAccel Rate:       [1;32m1000 Su/T
-[0mMaximum Speed:    [1;32mWarp 15
-[0mScanner range:    [1;32m200,000 (20 sectors)
-[0mCargo Capacity:   [1;32m200,000 Tons
-[0mPlanetary Attack: [1;32mHas Fighter Combat Systems
-[0mPrice:            [1;32m3,000,000 C
-[0mKill Points:      [1;32m200
-[0m
+[1;36m"If you want a battle-ready ship that doesn't skimp on the cargo space, take a
+look at the FRIGATE, from Zygor. Torpedo, missile, and mine capability is
+included along with a fighter launcher, and with 60,000 tons of cargo space,
+you can take out the competition and do supply runs for your planets at the
+same time!
 
+The Frigate retails for [0;33m1,000,000[1;36m."
+[1;37m
 } (S09TYPE#<NONE>) T   Additional Help
 
 Ship Class 10
@@ -2084,13 +2049,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S10TYPE {Class 10 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S10TYPE {Class 10 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 10
 
 This is the name of this class of ship.
 
-S10NAME {} (S10TYPE#<NONE>) S 29 Class-10 Ship Name
+S10NAME {Battle Cruiser} (S10TYPE#<NONE>) S 29 Class-10 Ship Name
 
 Ship Class 10
 
@@ -2105,7 +2070,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S10SHLD {  Maximum Shield Type: 6} (S10TYPE#<NONE>) N 0 19
+S10SHLD {  Maximum Shield Type: 16} (S10TYPE#<NONE>) N 0 19
 
 Ship Class 10
 
@@ -2113,7 +2078,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S10PHSR {  Maximum Phaser Type: 5} (S10TYPE#<NONE>) N 0 19
+S10PHSR {  Maximum Phaser Type: 16} (S10TYPE#<NONE>) N 0 19
 
 Ship Class 10
 
@@ -2162,54 +2127,54 @@ Ship Class 10
 This option specifies if this ship class has planetary
 attack capability.
 
-S10ATTK {  Has Attack Planet Capability? YES} (S10TYPE=USER) B
+S10ATTK {  Has Attack Planet Capability? NO} (S10TYPE=USER) B
 
 Ship Class 10
 
 This option specifies if this ship class has cloaking
 capability.
 
-S10CLOK {  Has Cloaking Capability? NO} (S10TYPE#<NONE>) B
+S10CLOK {  Has Cloaking Capability? YES} (S10TYPE#<NONE>) B
 
 Ship Class 10
 
 This option controls the acceleration rate for this class
 of ship.
 
-S10ACCL {  Acceleration Rate: 200} (S10TYPE#<NONE>) N 0 32767
+S10ACCL {  Acceleration Rate: 6000} (S10TYPE#<NONE>) N 0 32767
 
 Ship Class 10
 
 This option specifies the maximum warp for this class of
 ship.
 
-S10WARP {  Maximum Warp: 50} (S10TYPE#<NONE>) N 0 255
+S10WARP {  Maximum Warp: 35} (S10TYPE#<NONE>) N 0 255
 
 Ship Class 10
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S10TONS {  Maximum Tonnage : 40000} (S10TYPE#<NONE>) N 1 2000000000
+S10TONS {  Maximum Tonnage : 30000} (S10TYPE#<NONE>) N 1 2000000000
 
 Ship Class 10
 
 This option specifies the price for each ship in this
 class.
 
-S10PRIC {  Price for each ship: 2500000} (S10TYPE=USER) N 1 2000000000
+S10PRIC {  Price for each ship: 2000000} (S10TYPE=USER) N 1 2000000000
 
 Ship Class 10
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S10PNTS {  Points awarded for kill: 500} (S10TYPE#<NONE>) N 1 32767
+S10PNTS {  Points awarded for kill: 5000} (S10TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S10SRNG {  Scan Range: 500000} (S10TYPE#<NONE>) N 1 10000000
+S10SRNG {  Scan Range: 250000} (S10TYPE#<NONE>) N 1 10000000
 
 Ship Class 10
 
@@ -2226,7 +2191,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S10NATK {  Number of cyb's to attack this class: 2} (S10TYPE=USER) N 0 255
+S10NATK {  Number of cyb's to attack this class: 4} (S10TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -2273,33 +2238,28 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S10HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S10HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mBattle Cruiser  [1;37mLength: [1;32m937m    [1;37mWidth: [1;32m312m   [1;37mHeight: [1;32m204m
+[1;37mShields: [1;32mMark-16 maximum   [1;37mPhasers: [1;32mMark-16 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m6,000 Su/T   [1;37mTop rated speed: [1;32mWarp 35   [1;37mKill points: [1;32m5000
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m30,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"If you want to be prepared for any battle scenario, and to strike fear into
+the hearts of your enemies when you enter a sector, it's time to check out
+Zygor's BATTLE CRUISER.
+
+With Mark-16-capable phasers and shields and the full compliment of
+offensive and defensive capablities, the Battle Cruiser is focused solely
+on combat.
+
+The Battle Cruiser retails for [0;33m2,000,000[1;36m."
+[1;37m
 } (S10TYPE#<NONE>) T   Additional Help
 
 Ship Class 11
@@ -2312,13 +2272,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S11TYPE {Class 11 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S11TYPE {Class 11 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 11
 
 This is the name of this class of ship.
 
-S11NAME {} (S11TYPE#<NONE>) S 29 Class-11 Ship Name
+S11NAME {Dreadnought} (S11TYPE#<NONE>) S 29 Class-11 Ship Name
 
 Ship Class 11
 
@@ -2333,7 +2293,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S11SHLD {  Maximum Shield Type: 6} (S11TYPE#<NONE>) N 0 19
+S11SHLD {  Maximum Shield Type: 12} (S11TYPE#<NONE>) N 0 19
 
 Ship Class 11
 
@@ -2341,7 +2301,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S11PHSR {  Maximum Phaser Type: 5} (S11TYPE#<NONE>) N 0 19
+S11PHSR {  Maximum Phaser Type: 12} (S11TYPE#<NONE>) N 0 19
 
 Ship Class 11
 
@@ -2397,42 +2357,42 @@ Ship Class 11
 This option specifies if this ship class has cloaking
 capability.
 
-S11CLOK {  Has Cloaking Capability? NO} (S11TYPE#<NONE>) B
+S11CLOK {  Has Cloaking Capability? YES} (S11TYPE#<NONE>) B
 
 Ship Class 11
 
 This option controls the acceleration rate for this class
 of ship.
 
-S11ACCL {  Acceleration Rate: 200} (S11TYPE#<NONE>) N 0 32767
+S11ACCL {  Acceleration Rate: 4000} (S11TYPE#<NONE>) N 0 32767
 
 Ship Class 11
 
 This option specifies the maximum warp for this class of
 ship.
 
-S11WARP {  Maximum Warp: 50} (S11TYPE#<NONE>) N 0 255
+S11WARP {  Maximum Warp: 40} (S11TYPE#<NONE>) N 0 255
 
 Ship Class 11
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S11TONS {  Maximum Tonnage : 40000} (S11TYPE#<NONE>) N 1 2000000000
+S11TONS {  Maximum Tonnage : 100000} (S11TYPE#<NONE>) N 1 2000000000
 
 Ship Class 11
 
 This option specifies the price for each ship in this
 class.
 
-S11PRIC {  Price for each ship: 2500000} (S11TYPE=USER) N 1 2000000000
+S11PRIC {  Price for each ship: 3000000} (S11TYPE=USER) N 1 2000000000
 
 Ship Class 11
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S11PNTS {  Points awarded for kill: 500} (S11TYPE#<NONE>) N 1 32767
+S11PNTS {  Points awarded for kill: 10000} (S11TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
@@ -2454,7 +2414,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S11NATK {  Number of cyb's to attack this class: 2} (S11TYPE=USER) N 0 255
+S11NATK {  Number of cyb's to attack this class: 4} (S11TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -2501,33 +2461,26 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S11HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S11HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mDreadnought  [1;37mLength: [1;32m3125m    [1;37mWidth: [1;32m1041m   [1;37mHeight: [1;32m638m
+[1;37mShields: [1;32mMark-12 maximum   [1;37mPhasers: [1;32mMark-12 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 40   [1;37mKill points: [1;32m10,000
+[1;37mScanner range: [1;32m500,000 subsectors (50 sectors)   [1;37mCargo capacity: [1;32m100,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"Here it is... the top of the line DREADNOUGHT, from Zygor. All the
+capabilities you're looking for in one package. Ship-to-ship combat,
+100,000 tons of cargo space, a warp 40 rated engine, and a fighter launcher.
+While not as quick on the acceleration as some of our smaller options,
+the Dreadnought's capabilities are unmatched in this price range.
+
+The Dreadnought retails for [0;33m3,000,000[1;36m."
+[1;37m
 } (S11TYPE#<NONE>) T   Additional Help
 
 Ship Class 12
@@ -2540,13 +2493,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S12TYPE {Class 12 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S12TYPE {Class 12 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 12
 
 This is the name of this class of ship.
 
-S12NAME {} (S12TYPE#<NONE>) S 29 Class-12 Ship Name
+S12NAME {Freight Barge} (S12TYPE#<NONE>) S 29 Class-12 Ship Name
 
 Ship Class 12
 
@@ -2569,21 +2522,21 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S12PHSR {  Maximum Phaser Type: 5} (S12TYPE#<NONE>) N 0 19
+S12PHSR {  Maximum Phaser Type: 3} (S12TYPE#<NONE>) N 0 19
 
 Ship Class 12
 
 This option specifies if this ship class has torpedo
 capability.
 
-S12TORP {  Has Torpedo Capability? YES} (S12TYPE#<NONE>) B
+S12TORP {  Has Torpedo Capability? NO} (S12TYPE#<NONE>) B
 
 Ship Class 12
 
 This option specifies if this ship class has missile
 capability.
 
-S12MISL {  Has Missile Capability? YES} (S12TYPE#<NONE>) B
+S12MISL {  Has Missile Capability? NO} (S12TYPE#<NONE>) B
 
 Ship Class 12
 
@@ -2604,14 +2557,14 @@ Ship Class 12
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S12ZIPPR {  Has Zipper Capability? YES} (S12TYPE#<NONE>) B
+S12ZIPPR {  Has Zipper Capability? NO} (S12TYPE#<NONE>) B
 
 Ship Class 12
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S12MINE {  Has Mine Capability? YES} (S12TYPE#<NONE>) B
+S12MINE {  Has Mine Capability? NO} (S12TYPE#<NONE>) B
 
 Ship Class 12
 
@@ -2632,40 +2585,40 @@ Ship Class 12
 This option controls the acceleration rate for this class
 of ship.
 
-S12ACCL {  Acceleration Rate: 200} (S12TYPE#<NONE>) N 0 32767
+S12ACCL {  Acceleration Rate: 2000} (S12TYPE#<NONE>) N 0 32767
 
 Ship Class 12
 
 This option specifies the maximum warp for this class of
 ship.
 
-S12WARP {  Maximum Warp: 50} (S12TYPE#<NONE>) N 0 255
+S12WARP {  Maximum Warp: 15} (S12TYPE#<NONE>) N 0 255
 
 Ship Class 12
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S12TONS {  Maximum Tonnage : 40000} (S12TYPE#<NONE>) N 1 2000000000
+S12TONS {  Maximum Tonnage : 1000000} (S12TYPE#<NONE>) N 1 2000000000
 
 Ship Class 12
 
 This option specifies the price for each ship in this
 class.
 
-S12PRIC {  Price for each ship: 2500000} (S12TYPE=USER) N 1 2000000000
+S12PRIC {  Price for each ship: 5000000} (S12TYPE=USER) N 1 2000000000
 
 Ship Class 12
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S12PNTS {  Points awarded for kill: 500} (S12TYPE#<NONE>) N 1 32767
+S12PNTS {  Points awarded for kill: 5000} (S12TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S12SRNG {  Scan Range: 500000} (S12TYPE#<NONE>) N 1 10000000
+S12SRNG {  Scan Range: 200000} (S12TYPE#<NONE>) N 1 10000000
 
 Ship Class 12
 
@@ -2712,7 +2665,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S12DAMF {  Damage effect factor: 100} (S12TYPE#<NONE>) N 1 32767
+S12DAMF {  Damage effect factor: 150} (S12TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -2729,33 +2682,28 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S12HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S12HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mFreight Barge  [1;37mLength: [1;32m31250m    [1;37mWidth: [1;32m10416m   [1;37mHeight: [1;32m5462m
+[1;37mShields: [1;32mMark-6 maximum   [1;37mPhasers: [1;32mMark-3 maximum   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m5000
+[1;37mScanner range: [1;32m200,000 subsectors (20 sectors)   [1;37mCargo capacity: [1;32m1,000,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"Tired of doing the same supply runs over and over? Ready to upgrade to
+something with some serious freight capacity? The FREIGHT BARGE, from Zygor,
+features 1,000,000 tons of cargo space.
+
+The Freight Barge is slow and has little combat ability, but can move
+massive amounts of goods. Be prepared and have allies at the ready in case
+someone wants to make your barge's contents their own.
+
+The Freight Barge retails for [0;33m5,000,000[1;36m."
+[1;37m
 } (S12TYPE#<NONE>) T   Additional Help
 
 Ship Class 13
@@ -2768,13 +2716,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S13TYPE {Class 13 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S13TYPE {Class 13 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 13
 
 This is the name of this class of ship.
 
-S13NAME {} (S13TYPE#<NONE>) S 29 Class-13 Ship Name
+S13NAME {Surveyor} (S13TYPE#<NONE>) S 29 Class-13 Ship Name
 
 Ship Class 13
 
@@ -2789,7 +2737,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S13SHLD {  Maximum Shield Type: 6} (S13TYPE#<NONE>) N 0 19
+S13SHLD {  Maximum Shield Type: 12} (S13TYPE#<NONE>) N 0 19
 
 Ship Class 13
 
@@ -2797,21 +2745,21 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S13PHSR {  Maximum Phaser Type: 5} (S13TYPE#<NONE>) N 0 19
+S13PHSR {  Maximum Phaser Type: 0} (S13TYPE#<NONE>) N 0 19
 
 Ship Class 13
 
 This option specifies if this ship class has torpedo
 capability.
 
-S13TORP {  Has Torpedo Capability? YES} (S13TYPE#<NONE>) B
+S13TORP {  Has Torpedo Capability? NO} (S13TYPE#<NONE>) B
 
 Ship Class 13
 
 This option specifies if this ship class has missile
 capability.
 
-S13MISL {  Has Missile Capability? YES} (S13TYPE#<NONE>) B
+S13MISL {  Has Missile Capability? NO} (S13TYPE#<NONE>) B
 
 Ship Class 13
 
@@ -2832,68 +2780,68 @@ Ship Class 13
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S13ZIPPR {  Has Zipper Capability? YES} (S13TYPE#<NONE>) B
+S13ZIPPR {  Has Zipper Capability? NO} (S13TYPE#<NONE>) B
 
 Ship Class 13
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S13MINE {  Has Mine Capability? YES} (S13TYPE#<NONE>) B
+S13MINE {  Has Mine Capability? NO} (S13TYPE#<NONE>) B
 
 Ship Class 13
 
 This option specifies if this ship class has planetary
 attack capability.
 
-S13ATTK {  Has Attack Planet Capability? YES} (S13TYPE=USER) B
+S13ATTK {  Has Attack Planet Capability? NO} (S13TYPE=USER) B
 
 Ship Class 13
 
 This option specifies if this ship class has cloaking
 capability.
 
-S13CLOK {  Has Cloaking Capability? NO} (S13TYPE#<NONE>) B
+S13CLOK {  Has Cloaking Capability? YES} (S13TYPE#<NONE>) B
 
 Ship Class 13
 
 This option controls the acceleration rate for this class
 of ship.
 
-S13ACCL {  Acceleration Rate: 200} (S13TYPE#<NONE>) N 0 32767
+S13ACCL {  Acceleration Rate: 15000} (S13TYPE#<NONE>) N 0 32767
 
 Ship Class 13
 
 This option specifies the maximum warp for this class of
 ship.
 
-S13WARP {  Maximum Warp: 50} (S13TYPE#<NONE>) N 0 255
+S13WARP {  Maximum Warp: 75} (S13TYPE#<NONE>) N 0 255
 
 Ship Class 13
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S13TONS {  Maximum Tonnage : 40000} (S13TYPE#<NONE>) N 1 2000000000
+S13TONS {  Maximum Tonnage : 20000} (S13TYPE#<NONE>) N 1 2000000000
 
 Ship Class 13
 
 This option specifies the price for each ship in this
 class.
 
-S13PRIC {  Price for each ship: 2500000} (S13TYPE=USER) N 1 2000000000
+S13PRIC {  Price for each ship: 8000000} (S13TYPE=USER) N 1 2000000000
 
 Ship Class 13
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S13PNTS {  Points awarded for kill: 500} (S13TYPE#<NONE>) N 1 32767
+S13PNTS {  Points awarded for kill: 2500} (S13TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S13SRNG {  Scan Range: 500000} (S13TYPE#<NONE>) N 1 10000000
+S13SRNG {  Scan Range: 400000} (S13TYPE#<NONE>) N 1 10000000
 
 Ship Class 13
 
@@ -2910,7 +2858,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S13NATK {  Number of cyb's to attack this class: 2} (S13TYPE=USER) N 0 255
+S13NATK {  Number of cyb's to attack this class: 1} (S13TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -2957,33 +2905,26 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S13HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S13HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mSurveyor  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m147m
+[1;37mShields: [1;32mMark-12 maximum   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launcher: [0;31mNo
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m15,000 Su/T   [1;37mTop rated speed: [1;32mWarp 75   [1;37mKill points: [1;32m2500
+[1;37mScanner range: [1;32m400,000 subsectors (40 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"If speed is your primary concern, and you have the budget to back it up, the
+SURVEYOR is for you. With a warp 75 rated engine, you'll be able to traverse
+the galaxy and check up on all your planets in no time. With no weapons and
+limited cargo space, the Surveyor is not for combat and can only handle the
+smallest of supply runs.
+
+The Surveyor retails for [0;33m8,000,000[1;36m."
+[1;37m
 } (S13TYPE#<NONE>) T   Additional Help
 
 Ship Class 14
@@ -2996,13 +2937,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S14TYPE {Class 14 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S14TYPE {Class 14 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 14
 
 This is the name of this class of ship.
 
-S14NAME {} (S14TYPE#<NONE>) S 29 Class-14 Ship Name
+S14NAME {Planetary Transport} (S14TYPE#<NONE>) S 29 Class-14 Ship Name
 
 Ship Class 14
 
@@ -3017,7 +2958,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S14SHLD {  Maximum Shield Type: 6} (S14TYPE#<NONE>) N 0 19
+S14SHLD {  Maximum Shield Type: 19} (S14TYPE#<NONE>) N 0 19
 
 Ship Class 14
 
@@ -3025,7 +2966,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S14PHSR {  Maximum Phaser Type: 5} (S14TYPE#<NONE>) N 0 19
+S14PHSR {  Maximum Phaser Type: 0} (S14TYPE#<NONE>) N 0 19
 
 Ship Class 14
 
@@ -3039,7 +2980,7 @@ Ship Class 14
 This option specifies if this ship class has missile
 capability.
 
-S14MISL {  Has Missile Capability? YES} (S14TYPE#<NONE>) B
+S14MISL {  Has Missile Capability? NO} (S14TYPE#<NONE>) B
 
 Ship Class 14
 
@@ -3053,28 +2994,28 @@ Ship Class 14
 This option specifies if this ship class has jamming
 capabilities.
 
-S14JAMMR {  Has Jammer Capability? YES} (S14TYPE#<NONE>) B
+S14JAMMR {  Has Jammer Capability? NO} (S14TYPE#<NONE>) B
 
 Ship Class 14
 
 This option specifies if this ship class has zipper
 launching capabilities.
 
-S14ZIPPR {  Has Zipper Capability? YES} (S14TYPE#<NONE>) B
+S14ZIPPR {  Has Zipper Capability? NO} (S14TYPE#<NONE>) B
 
 Ship Class 14
 
 This option specifies if this ship class has mine 
 launching capabilities.
 
-S14MINE {  Has Mine Capability? YES} (S14TYPE#<NONE>) B
+S14MINE {  Has Mine Capability? NO} (S14TYPE#<NONE>) B
 
 Ship Class 14
 
 This option specifies if this ship class has planetary
 attack capability.
 
-S14ATTK {  Has Attack Planet Capability? YES} (S14TYPE=USER) B
+S14ATTK {  Has Attack Planet Capability? NO} (S14TYPE=USER) B
 
 Ship Class 14
 
@@ -3095,33 +3036,33 @@ Ship Class 14
 This option specifies the maximum warp for this class of
 ship.
 
-S14WARP {  Maximum Warp: 50} (S14TYPE#<NONE>) N 0 255
+S14WARP {  Maximum Warp: 0} (S14TYPE#<NONE>) N 0 255
 
 Ship Class 14
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S14TONS {  Maximum Tonnage : 40000} (S14TYPE#<NONE>) N 1 2000000000
+S14TONS {  Maximum Tonnage : 800000000} (S14TYPE#<NONE>) N 1 2000000000
 
 Ship Class 14
 
 This option specifies the price for each ship in this
 class.
 
-S14PRIC {  Price for each ship: 2500000} (S14TYPE=USER) N 1 2000000000
+S14PRIC {  Price for each ship: 20000000} (S14TYPE=USER) N 1 2000000000
 
 Ship Class 14
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S14PNTS {  Points awarded for kill: 500} (S14TYPE#<NONE>) N 1 32767
+S14PNTS {  Points awarded for kill: 10000} (S14TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S14SRNG {  Scan Range: 500000} (S14TYPE#<NONE>) N 1 10000000
+S14SRNG {  Scan Range: 100000} (S14TYPE#<NONE>) N 1 10000000
 
 Ship Class 14
 
@@ -3138,7 +3079,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S14NATK {  Number of cyb's to attack this class: 2} (S14TYPE=USER) N 0 255
+S14NATK {  Number of cyb's to attack this class: 3} (S14TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -3185,33 +3126,35 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S14HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S14HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mPlanetary Transport [1;37mLength: [1;32m25,000km  [1;37mWidth: [1;32m8333km  [1;37mHeight: [1;32m7842km
+[1;37mShields: [1;32mMark-19 maximum   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [0;31mNo   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [0;31mNo
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m200 Su/T   [1;37mTop rated speed: [1;32mImpulse 99   [1;37mKill points: [1;32m10000
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)  [1;37mCargo capacity: [1;32m800,000,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"Developed by the Lydorians in the 3270s to evacuate planets caught in the
+crossfire of the Cybertron-Sarten War, the PLANETARY TRANSPORT is now
+available at Zygor.
+
+With an incredible 800 million tons of cargo space, the Planetary Transport
+is capable of moving and sustaining the needs of the population of a small
+planet. However, with all that space comes some limitations. The Planetary
+Transport has no warp drive and is limited to impulse speeds. It has torpedo
+and decoy launchers, and a shield upgradable to Mark-19, but no other weapons
+or defensive systems. If you're planning to take the Planetary Transport
+through a busy region of space, an escort is recommended.
+
+The Planetary Transport retails for [0;33m20,000,000[1;36m.
+
+Note: If you're wondering how a vessel the size of a small planet can be
+manufactured and sold on demand... don't. It's the 33rd century!"
+[1;37m
 } (S14TYPE#<NONE>) T   Additional Help
 
 Ship Class 15
@@ -3224,20 +3167,20 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S15TYPE {Class 15 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S15TYPE {Class 15 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 15
 
 This is the name of this class of ship.
 
-S15NAME {} (S15TYPE#<NONE>) S 29 Class-15 Ship Name
+S15NAME {MBM Dreadnought} (S15TYPE#<NONE>) S 29 Class-15 Ship Name
 
 Ship Class 15
 
 This is the name of the ship itself (i.e. Cyber-destroyer)
 For USER ships this field is blank.
 
-S15SNAME {} (S15TYPE#<NONE>,USER) S 29 Class-15 Ship title name
+S15SNAME {MBM Dreadnought} (S15TYPE#<NONE>,USER) S 29 Class-15 Ship title name
 
 Ship Class 15
 
@@ -3245,7 +3188,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S15SHLD {  Maximum Shield Type: 6} (S15TYPE#<NONE>) N 0 19
+S15SHLD {  Maximum Shield Type: 19} (S15TYPE#<NONE>) N 0 19
 
 Ship Class 15
 
@@ -3253,7 +3196,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S15PHSR {  Maximum Phaser Type: 5} (S15TYPE#<NONE>) N 0 19
+S15PHSR {  Maximum Phaser Type: 19} (S15TYPE#<NONE>) N 0 19
 
 Ship Class 15
 
@@ -3309,14 +3252,14 @@ Ship Class 15
 This option specifies if this ship class has cloaking
 capability.
 
-S15CLOK {  Has Cloaking Capability? NO} (S15TYPE#<NONE>) B
+S15CLOK {  Has Cloaking Capability? YES} (S15TYPE#<NONE>) B
 
 Ship Class 15
 
 This option controls the acceleration rate for this class
 of ship.
 
-S15ACCL {  Acceleration Rate: 200} (S15TYPE#<NONE>) N 0 32767
+S15ACCL {  Acceleration Rate: 15000} (S15TYPE#<NONE>) N 0 32767
 
 Ship Class 15
 
@@ -3337,14 +3280,14 @@ Ship Class 15
 This option specifies the price for each ship in this
 class.
 
-S15PRIC {  Price for each ship: 2500000} (S15TYPE=USER) N 1 2000000000
+S15PRIC {  Price for each ship: 32000000} (S15TYPE=USER) N 1 2000000000
 
 Ship Class 15
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S15PNTS {  Points awarded for kill: 500} (S15TYPE#<NONE>) N 1 32767
+S15PNTS {  Points awarded for kill: 20000} (S15TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
@@ -3366,7 +3309,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S15NATK {  Number of cyb's to attack this class: 2} (S15TYPE=USER) N 0 255
+S15NATK {  Number of cyb's to attack this class: 4} (S15TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -3413,33 +3356,34 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S15HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S15HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mMBM Dreadnought  [1;37mLength: [1;32m1250m    [1;37mWidth: [1;32m416m   [1;37mHeight: [1;32m500m
+[1;37mShields: [1;32mMark-19 maximum   [1;37mPhasers: [1;32mMark-19 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [1;32mYes
+[1;37mAcceleration rate: [1;32m15,000 Su/T  [1;37mTop rated speed: [1;32mWarp 50  [1;37mKill points: [1;32m20,000
+[1;37mScanner range: [1;32m500,000 subsectors (50 sectors)   [1;37mCargo capacity: [1;32m40,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"Have you ever heard it said that 'They don't make them like they used to'?
+That's certainly the case when it comes to the MBM DREADNOUGHT, available from
+Zygor. With phasers and shields upgradable to Mark-19, a warp 50 rated
+engine with an amazing acceleration rate, and a full compliment of all the
+offensive and defensive weapons systems available, you'll be partying like
+it's 3250.
+
+The MBM Dreadnought hasn't been in production for decades, as the demand for
+larger cargo spaces has made this model and its relatively paltry 40,000-ton
+capacity out of style. However, Zygor still has a few of these collector's
+items in stock at the slightly inflated price of [0;33m32,000,000[1;36m each.
+
+Fun fact: The MBM Dreadnought is named after a celebrated computer programmer
+from 20th-century Earth whose code is still used in the interstellar flight
+control systems of today."
+[1;37m
 } (S15TYPE#<NONE>) T   Additional Help
 
 Ship Class 16
@@ -3452,13 +3396,13 @@ CYBORG = A Cybertron ship controlled by the automated
 DROID = A non-combatant ship (sometimes) controlled by
         much simpler navigation logic.
 
-S16TYPE {Class 16 type of Ship? <NONE>} E USER CYBORG DROID <NONE> 
+S16TYPE {Class 16 type of Ship? USER} E USER CYBORG DROID <NONE> 
 
 Ship Class 16
 
 This is the name of this class of ship.
 
-S16NAME {} (S16TYPE#<NONE>) S 29 Class-16 Ship Name
+S16NAME {Fleet Command} (S16TYPE#<NONE>) S 29 Class-16 Ship Name
 
 Ship Class 16
 
@@ -3473,7 +3417,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S16SHLD {  Maximum Shield Type: 6} (S16TYPE#<NONE>) N 0 19
+S16SHLD {  Maximum Shield Type: 17} (S16TYPE#<NONE>) N 0 19
 
 Ship Class 16
 
@@ -3481,7 +3425,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S16PHSR {  Maximum Phaser Type: 5} (S16TYPE#<NONE>) N 0 19
+S16PHSR {  Maximum Phaser Type: 17} (S16TYPE#<NONE>) N 0 19
 
 Ship Class 16
 
@@ -3530,7 +3474,7 @@ Ship Class 16
 This option specifies if this ship class has planetary
 attack capability.
 
-S16ATTK {  Has Attack Planet Capability? YES} (S16TYPE=USER) B
+S16ATTK {  Has Attack Planet Capability? NO} (S16TYPE=USER) B
 
 Ship Class 16
 
@@ -3544,40 +3488,40 @@ Ship Class 16
 This option controls the acceleration rate for this class
 of ship.
 
-S16ACCL {  Acceleration Rate: 200} (S16TYPE#<NONE>) N 0 32767
+S16ACCL {  Acceleration Rate: 10000} (S16TYPE#<NONE>) N 0 32767
 
 Ship Class 16
 
 This option specifies the maximum warp for this class of
 ship.
 
-S16WARP {  Maximum Warp: 50} (S16TYPE#<NONE>) N 0 255
+S16WARP {  Maximum Warp: 65} (S16TYPE#<NONE>) N 0 255
 
 Ship Class 16
 
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S16TONS {  Maximum Tonnage : 40000} (S16TYPE#<NONE>) N 1 2000000000
+S16TONS {  Maximum Tonnage : 1000000} (S16TYPE#<NONE>) N 1 2000000000
 
 Ship Class 16
 
 This option specifies the price for each ship in this
 class.
 
-S16PRIC {  Price for each ship: 2500000} (S16TYPE=USER) N 1 2000000000
+S16PRIC {  Price for each ship: 200000000} (S16TYPE=USER) N 1 2000000000
 
 Ship Class 16
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S16PNTS {  Points awarded for kill: 500} (S16TYPE#<NONE>) N 1 32767
+S16PNTS {  Points awarded for kill: 30000} (S16TYPE#<NONE>) N 1 32767
 
 This option specifies the maximum range in thousands for
 the range scanners in this class of ship.
 
-S16SRNG {  Scan Range: 500000} (S16TYPE#<NONE>) N 1 10000000
+S16SRNG {  Scan Range: 800000} (S16TYPE#<NONE>) N 1 10000000
 
 Ship Class 16
 
@@ -3594,7 +3538,7 @@ after this class of ship at the same time. Set to 0 to
 have Cyb's leave it alone. Set to higher numbers to
 have this class massed by cybs.
 
-S16NATK {  Number of cyb's to attack this class: 2} (S16TYPE=USER) N 0 255
+S16NATK {  Number of cyb's to attack this class: 5} (S16TYPE=USER) N 0 255
 
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
@@ -3624,7 +3568,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S16DAMF {  Damage effect factor: 100} (S16TYPE#<NONE>) N 1 32767
+S16DAMF {  Damage effect factor: 150} (S16TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -3641,33 +3585,31 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S16HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
+S16HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mFleet Command  [1;37mLength: [1;32m31250m    [1;37mWidth: [1;32m10416m   [1;37mHeight: [1;32m8500m
+[1;37mShields: [1;32mMark-17 maximum   [1;37mPhasers: [1;32mMark-17 maximum   [1;37mTorpedo launcher: [1;32mYes
+[1;37mMissile launcher: [1;32mYes   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 65   [1;37mKill points: [1;32m20,000
+[1;37mScanner range: [1;32m800,000 subsectors (80 sectors)   [1;37mCargo capacity: [1;32m1,000,000 Tons
 
+[1;37mThe following information is from Zygor's sales catalog:
+
+[1;36m"If you're a fleet commander looking for a big and fast ship to lead your
+forces into battle, and money is no object, it's time for the FLEET COMMAND,
+from Zygor.
+
+The Fleet Command pairs a warp 65 rated engine with a million tons of cargo
+space, and has the offensive and defensive capabilities you need to protect
+and fortify your allies in battle. Moving massive amounts of items to the
+front lines, swiftly moving from location to location to shore up your fleet,
+it's all possible with the Fleet Command.
+
+This kind of capability doesn't come cheap; the Fleet Command retails for
+[0;33m200,000,000[1;36m."
+[1;37m
 } (S16TYPE#<NONE>) T   Additional Help
 
 Ship Class 17
@@ -3869,33 +3811,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S17HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S17HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S17TYPE#<NONE>) T   Additional Help
 
 Ship Class 18
@@ -4097,33 +4015,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S18HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S18HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S18TYPE#<NONE>) T   Additional Help
 
 Ship Class 19
@@ -4325,33 +4219,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S19HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S19HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S19TYPE#<NONE>) T   Additional Help
 
 Ship Class 20
@@ -4553,33 +4423,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S20HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S20HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S20TYPE#<NONE>) T   Additional Help
 
 Ship Class 21
@@ -4783,33 +4629,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S21HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron Scout
-[0mMission Profile:  [1;32mLight Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m112m
-[0mWidth:            [1;32m37m
-[0mHeight:           [1;32m30m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S21HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S21TYPE#<NONE>) T   Additional Help
 
 Ship Class 22
@@ -5013,33 +4835,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S22HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron Battle Cruiser
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S22HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S22TYPE#<NONE>) T   Additional Help
 
 Ship Class 23
@@ -5243,33 +5041,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S23HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron Star Base
-[0mMission Profile:  [1;32mBase re-supply station
-[0m                  [1;32m
-[0mLength:           [1;32mUnknown
-[0mWidth:            [1;32mUnknown
-[0mHeight:           [1;32mUnknown
-[0m                  [1;32m
-[0mShields:          [1;32mUnknown
-[0mPhasers:          [1;32mUnknown
-[0mTorpedo:          [1;32mUnknown
-[0mMissile:          [1;32mUnknown
-[0mDecoy Launcher:   [1;32mReported
-[0mJammer Launcher:  [1;32mReported
-[0mZipper Launcher:  [1;32mReported
-[0mMine Launcher:    [1;32mUnknown
-[0mAccel Rate:       [1;32mNot Measured
-[0mMaximum Speed:    [1;32mUnknown
-[0mScanner range:    [1;32mReported Superior Scanning Range
-[0mCargo Capacity:   [1;32mUnknown
-[0m                  [1;32m
-[0mPrice:            [1;32mN/A
-[0mKill Points:      [1;32m10,000
-[0m
-
+S23HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S23TYPE#<NONE>) T   Additional Help
 
 Ship Class 24
@@ -5473,33 +5247,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S24HELP {[0m***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mSarten Attack Drone
-[0mMission Profile:  [1;32mFast Attack
-
-[0mLength:           [1;32m20m
-[0mWidth:            [1;32m5m
-[0mHeight:           [1;32m5m
-
-[0mShields:          [1;32mLight Defensive
-[0mPhasers:          [1;32mArmed
-[0mTorpedo:          [1;32mNone Reported
-[0mMissile:          [1;32mNone Reported
-[0mDecoy Launcher:   [1;32mSuspected
-[0mJammer Launcher:  [1;32mSuspected
-[0mZipper Launcher:  [1;32mNone Reported
-[0mMine Launcher:    [1;32mNone Reported
-[0mAccel Rate:       [1;32mExtremely Fast
-[0mMaximum Speed:    [1;32mUnknown
-[0mScanner range:    [1;32mUnknown
-[0mCargo Capacity:   [1;32mMinimal
-
-[0mPrice:            [1;32mN/A
-[0mKill Points:      [1;32m50
-[0m
-
+S24HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S24TYPE#<NONE>) T   Additional Help
 
 Ship Class 25
@@ -5661,7 +5411,7 @@ S25NATK {  Number of cyb's to attack this class: 2} (S25TYPE=USER) N 0 255
 This option specifies the lowest USER class that 
 this CYBORG class ship will attack.
 
-S25LATK {  Lowest class of USER ship this class will attack: 3} (S25TYPE=CYBORG) N 0 50
+S25LATK {  Lowest class of USER ship this class will attack: 5} (S25TYPE=CYBORG) N 0 50
 
 This option specifies the maximum number of this 
 class of automated ship to create in the game at
@@ -5703,33 +5453,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S25HELP {[0m***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[37mShip Class:       [1;32mSatren Obliterator
-[0mMission Profile:  [1;32mHeavy Battle Aggressor
-
-[0mLength:           [1;32mHuge
-[0mWidth:            [1;32mHuge
-[0mHeight:           [1;32mHuge
-
-[0mShields:          [1;32mVery Good
-[0mPhasers:          [1;32mDeadly
-[0mTorpedo:          [1;32mNone Suspected
-[0mMissile:          [1;32mNone Suspected
-[0mDecoy Launcher:   [1;32mNone Observed
-[0mJammer Launcher:  [1;32mNone Observed
-[0mZipper Launcher:  [1;32mNone Suspected
-[0mMine Launcher:    [1;32mNone Suspected
-[0mAccel Rate:       [1;32mSlow
-[0mMaximum Speed:    [1;32mUnknown
-[0mScanner range:    [1;32mLong Range
-[0mCargo Capacity:   [1;32mLarge Cargo Bay
-
-[0mPrice:            [1;32mN/A
-[0mKill Points:      [1;32m??
-[0m
-
+S25HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S25TYPE#<NONE>) T   Additional Help
 
 Ship Class 26
@@ -5933,33 +5659,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S26HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron ???
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S26HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S26TYPE#<NONE>) T   Additional Help
 
 Ship Class 27
@@ -6163,33 +5865,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S27HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron ???
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S27HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S27TYPE#<NONE>) T   Additional Help
 
 Ship Class 28
@@ -6393,33 +6071,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S28HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron ???
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S28HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S28TYPE#<NONE>) T   Additional Help
 
 Ship Class 29
@@ -6623,33 +6277,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S29HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron ???
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S29HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S29TYPE#<NONE>) T   Additional Help
 
 Ship Class 30
@@ -6853,33 +6483,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S30HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mCybertron ???
-[0mMission Profile:  [1;32mBattle Aggressor
-[0m                  [1;32m
-[0mLength:           [1;32m1562m
-[0mWidth:            [1;32m520m
-[0mHeight:           [1;32m300m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S30HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S30TYPE#<NONE>) T   Additional Help
 
 Ship Class 31
@@ -7083,33 +6689,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S31HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S31HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S31TYPE#<NONE>) T   Additional Help
 
 Ship Class 32
@@ -7313,33 +6895,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S32HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S32HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S32TYPE#<NONE>) T   Additional Help
 
 Ship Class 33
@@ -7543,33 +7101,9 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S33HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32m<ship name here>
-[0mMission Profile:  [1;32m<description>
-[0m                  [1;32m
-[0mLength:           [1;32m
-[0mWidth:            [1;32m
-[0mHeight:           [1;32m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-? maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-? maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m???? Su/T
-[0mMaximum Speed:    [1;32mWarp ?
-[0mScanner range:    [1;32m??,000 (?? sectors)
-[0mCargo Capacity:   [1;32m??? Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m??,000 C
-[0mKill Points:      [1;32m??
-[0m
-
+S33HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S33TYPE#<NONE>) T   Additional Help
 
 Ship Class 41
@@ -7601,7 +7135,7 @@ This option specifies the MAXIMUM shield type for this
 class of ship. Setting this option to 0 means this class
 of ship has no shields at all.
 
-S41SHLD {  Maximum Shield Type: 6} (S41TYPE#<NONE>) N 0 19
+S41SHLD {  Maximum Shield Type: 19} (S41TYPE#<NONE>) N 0 19
 
 Ship Class 41
 
@@ -7609,7 +7143,7 @@ This option specifies the MAXIMUM Phaser type for this
 class of ship. Setting this option to 0 means this class
 of ship has no phasers at all.
 
-S41PHSR {  Maximum Phaser Type: 5} (S41TYPE#<NONE>) N 0 19
+S41PHSR {  Maximum Phaser Type: 19} (S41TYPE#<NONE>) N 0 19
 
 Ship Class 41
 
@@ -7672,7 +7206,7 @@ Ship Class 41
 This option controls the acceleration rate for this class
 of ship.
 
-S41ACCL {  Acceleration Rate: 5000} (S41TYPE#<NONE>) N 0 32767
+S41ACCL {  Acceleration Rate: 30000} (S41TYPE#<NONE>) N 0 32767
 
 Ship Class 41
 
@@ -7686,21 +7220,21 @@ Ship Class 41
 This option specifies the maximum weight in tons for this
 class of ship.
 
-S41TONS {  Maximum Tonnage : 100000000} (S41TYPE#<NONE>) N 1 2000000000
+S41TONS {  Maximum Tonnage : 2000000000} (S41TYPE#<NONE>) N 1 2000000000
 
 Ship Class 41
 
 This option specifies the price for each ship in this
 class.
 
-S41PRIC {  Price for each ship: 32000000} (S41TYPE=USER) N 1 2000000000
+S41PRIC {  Price for each ship: 2000000000} (S41TYPE=USER) N 1 2000000000
 
 Ship Class 41
 
 This option specifies the points awarded to another player
 for killing this class of ship.
 
-S41PNTS {  Points awarded for kill: 1000} (S41TYPE#<NONE>) N 1 32767
+S41PNTS {  Points awarded for kill: 5} (S41TYPE#<NONE>) N 1 32767
 
 Ship Class 41
 
@@ -7754,7 +7288,7 @@ value of 100 is a factor of 1.0, 200 = 2.0, and 50 is
 Damage = damage / (SnnDAMF / 100)
 
 
-S41DAMF {  Damage effect factor: 100} (S41TYPE#<NONE>) N 1 32767
+S41DAMF {  Damage effect factor: 30000} (S41TYPE#<NONE>) N 1 32767
 
 This option is reserved for future use.
 
@@ -7771,35 +7305,12 @@ ship for additional help.
 
 Press F2 to edit this message
 
-S41HELP {***
-[36mDetailed Class Specification
-[31m-----------------------------------------------------------------------------
-[0mShip Class:       [1;32mSysopian Death Star
-[0mMission Profile:  [1;32mAnything it wants
-[0m                  [1;32m
-[0mLength:           [1;32m12500m
-[0mWidth:            [1;32m4166m
-[0mHeight:           [1;32m3500m
-[0m                  [1;32m
-[0mShields:          [1;32mMark-1 Standard/Mark-20 maximum
-[0mPhasers:          [1;32mMark-1 Standard/Mark-20 maximum
-[0mTorpedo:          [1;32mStandard Issue Torpedo Launcher
-[0mMissile:          [1;32mStandard Issue Missile Launcher>
-[0mDecoy Launcher:   [1;32mStandard Issue
-[0mJammer Launcher:  [1;32mStandard Issue
-[0mZipper Launcher:  [1;32mStandard Issue
-[0mMine Launcher:    [1;32mStandard Issue
-[0mAccel Rate:       [1;32m5000 Su/T
-[0mMaximum Speed:    [1;32mWarp 255
-[0mScanner range:    [1;32m1,000,000,000 (10000 sectors)
-[0mCargo Capacity:   [1;32m100,000,000 Tons
-[0m                  [1;32m
-[0mPrice:            [1;32m32,000,000 C
-[0mKill Points:      [1;32m1000
-[0m
-
+S41HELP {
+[1;36mType HELP CLASS for a list of valid ship classes.
+[1;37m
 } (S41TYPE#<NONE>) T   Additional Help
 
 
 SXXEND {} T Place holder - do not remove
 
+

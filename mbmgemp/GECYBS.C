@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 
@@ -108,7 +108,7 @@ if (!(geudb(GELOOKUP,cybname, &tmpusr)))
 	{
 	initusr(cybname);
 	geudb(GEADD,tmpusr.userid,&tmpusr);
-	logthis(spr("GE:INF:Adding %s user",tmpusr.userid)); 
+	logthis(spr("GE:INF:Adding %s user",tmpusr.userid));
 	}
 
 waruptr = warusroff(usrn);
@@ -121,12 +121,12 @@ if (geudb(GELOOKUP,cybname, waruptr))
 	if (waruptr->cash > CYB_MAXCASH)
 		waruptr->cash = CYB_MAXCASH;
 
-	logthis(spr("GE:INF:Load %s user",waruptr->userid)); 
+	logthis(spr("GE:INF:Load %s user",waruptr->userid));
 
 	if (gepdb(GELOOKUPNAME,cybname,0,ptr))
 		{
 		gcrbtv(ptr,0);
-		logthis(spr("GE:INF:Load %s ship",ptr->userid)); 
+		logthis(spr("GE:INF:Load %s ship",ptr->userid));
 
 		ptr->status = GESTAT_AUTO;
 		ptr->phasr = 100;
@@ -175,7 +175,7 @@ if (geudb(GELOOKUP,cybname, waruptr))
 	the less chance he will make an error                                   */
 
 		ptr->cybskill = (byte)gernd()%15+3;
-/*		
+/*
 		ptr->cybskill = 100;*/
 
 		ptr->status = GESTAT_AUTO;
@@ -205,18 +205,18 @@ WARSHP   *wptr;
 int      zothusn;
 int		i;
 
-double   ddist; 
+double   ddist;
 
 
 if (!sameas(ptr->userid,warusroff(usrn)->userid))
 	geshocst(0,"GE:ERR:Cyb Names !=");
-	
+
 i = usrn;
 ++i;
 
 sprintf(&cybname[7],"%d",i);
 
-logthis(spr("@cyb_lives %s",cybname)); 
+logthis(spr("@cyb_lives %s",cybname));
 
 
 /* reset the ticker to 255 to cause it to recalc */
@@ -240,7 +240,7 @@ if (ptr->jammer == 0)
 		{
 		wptr=warshpoff(zothusn);
 		/* if not me, and playing, and not cyborg, go getem */
-		if (user[zothusn].state == gestt 
+		if (user[zothusn].state == gestt
 			&& user[zothusn].substt >= FIGHTSUB
 			&& wptr->cloak != 10)
 			{
@@ -248,7 +248,7 @@ if (ptr->jammer == 0)
 			ddist = cdistance(&ptr->coord,&wptr->coord);
 			ddist *= 10000;
 
-			if (!neutral(&ptr->coord) 
+			if (!neutral(&ptr->coord)
 				&& ddist < (double)shipclass[ptr->shpclass].scanrange)
 				{
 				/* if ordinary cyb see if this is his lucky day */
@@ -260,16 +260,16 @@ if (ptr->jammer == 0)
 
 					ptr->speed2b = d_topspeed;
 					}
-	
+
 				/* fire phasers at the fool */
-	
-				if (ptr->where == 1 
-					&& wptr->where == 1 
+
+				if (ptr->where == 1
+					&& wptr->where == 1
 					&& gebemean(ptr,zothusn))
 					{
 					if (ddist < (tooclose+rndm(tooclose))
-						|| shipclass[wptr->shpclass].cybs_can_att 
-						|| wptr->cantexit > 0 
+						|| shipclass[wptr->shpclass].cybs_can_att
+						|| wptr->cantexit > 0
 						|| ptr->cantexit > 0)
 						{
 						if (ddist < 30000.0)
@@ -280,15 +280,15 @@ if (ptr->jammer == 0)
 						}
 					}
 				else
-				if (ptr->where == 0 
+				if (ptr->where == 0
 					&& wptr->where != 1)
 					{
 					ptr->degrees = (int)(cbearing(&ptr->coord,&wptr->coord,ptr->heading)+.5);
 					ptr->percent = 2;
-	
+
 					/* if the guy gets closer then 2000 or is not little guy or has fired */
 					if (ddist < (tooclose + rndm(tooclose))
-						|| shipclass[wptr->shpclass].cybs_can_att 
+						|| shipclass[wptr->shpclass].cybs_can_att
 						|| wptr->cantexit > 0)
 						{
 						cyb_attack(ptr,usrn,wptr,zothusn);
@@ -309,8 +309,8 @@ else
 	/* as long as they can't see ... the other player must be trying to get
 		away.... might as well mine the area */
 
-	if (shipclass[ptr->shpclass].has_mine 
-		&& ptr->items[I_MINE] > 0 
+	if (shipclass[ptr->shpclass].has_mine
+		&& ptr->items[I_MINE] > 0
 		&& gernd()%5 == 0)
 		laymine(ptr,usrn,10);
 
@@ -511,7 +511,7 @@ int i,j;
 
 wptr = wptr; /* eliminates warning*/
 
-if (ptr->phasr >= PMINFIRE 
+if (ptr->phasr >= PMINFIRE
 	&& gebemean(ptr,zothusn))
 	{
 	/* geshocst(0,spr("GE:phaser fired %d",ptr->degrees));*/
@@ -622,20 +622,20 @@ int      usrn;
 
 {
 
-if (ptr->cybmine < 255 
-	&& ptr->damage > CYB_MINDAM 
+if (ptr->cybmine < 255
+	&& ptr->damage > CYB_MINDAM
 	&& (gernd()%10 == 0))
 	{
-	if (shipclass[ptr->shpclass].has_mine 
-		&& ptr->items[I_MINE] > 0 
+	if (shipclass[ptr->shpclass].has_mine
+		&& ptr->items[I_MINE] > 0
 		&& gernd()%5 == 0)
 		laymine(ptr,usrn,10);
 
 	if (shipclass[ptr->shpclass].has_jam
-		&& ptr->items[I_JAMMERS] > 0 
+		&& ptr->items[I_JAMMERS] > 0
 		&& gernd()%100 == 0)
 		jam(ptr,usrn);
-	
+
 	ptr->speed2b = d_topspeed;
 	ptr->head2b = rndm(359.9);
 	ptr->holdcourse = gernd()%10 + 5;
@@ -680,7 +680,7 @@ if (zothusn >= nterms)
 	ptr->cybmine = (byte)255;
 	}
 else
-	{	
+	{
 	if (!ingegame(zothusn))
 		{
 		ptr->cybmine = (byte)255;
@@ -689,7 +689,7 @@ else
 		}
 
 	wptr=warshpoff(zothusn);
-	
+
 	if (wptr->cloak == 10)
 		{
 		ptr->holdcourse=gernd()%5+5;
@@ -698,18 +698,18 @@ else
 		/* if the guy is cloaked then give up after awhile */
 		if(gernd()%10 == 0)
 			ptr->cybmine = 255;
-	
+
 		return;
 		}
-	
+
 	low_ship = zothusn;
 	low_dist = cdistance(&ptr->coord,&(wptr->coord));
 	}
-	
+
 if (ptr->cybmine == (byte)255)
 	{
 	lta = shipclass[ptr->shpclass].lowest_to_attk-1;
-	
+
 	for (zothusn=0 ; zothusn < nterms ; zothusn++)
 		{
 		wptr=warshpoff(zothusn);

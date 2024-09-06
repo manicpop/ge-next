@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 
@@ -114,7 +114,7 @@ sprintf(&droidname[7],"%d",usrn);
 waruptr = warusroff(usrn);
 warsptr = warshpoff(usrn);
 
-logthis(spr("GE:INF:Adding %s user",droidname)); 
+logthis(spr("GE:INF:Adding %s user",droidname));
 
 initusr(droidname);
 
@@ -144,7 +144,7 @@ ptr->shieldtype = shipclass[class].max_shlds;
 
 /* if murdonian transport - put tons on */
 if(sameas(shipclass[ptr->shpclass].typename,"Murdonian Transport"))
-	{	
+	{
 	ptr->items[I_FLUXPOD] = gernd()%50;
 	ptr->items[I_DECOYS] = gernd()%250;
 	ptr->items[I_TORPEDO] = gernd()%250;
@@ -155,7 +155,7 @@ if(sameas(shipclass[ptr->shpclass].typename,"Murdonian Transport"))
 	ptr->items[I_GOLD] = gernd()%250;
 	}
 else
-	{	
+	{
 	ptr->items[I_FLUXPOD] = gernd()%50;
 	ptr->items[I_DECOYS] = gernd()%25;
 	ptr->items[I_MINE] = gernd()%10;
@@ -331,7 +331,7 @@ if (ptr->jammer == 0)
 					shieldup(ptr,usrn);
 				else
 					shielddn(ptr,usrn);
-	
+
 				ptr->tick = CYBTICKTIME + gernd()%CYBTICKTIME;
 				droid_annoy(ptr,zothusn,4,DRDMSG11,DRDMSG15);
 				}
@@ -378,7 +378,7 @@ if (ptr->jammer == 0)
 
 		/* if we are in hyperspace and fighting and missiles detected
 			get out of hyperspace */
-			
+
 		if (ptr->where == 1)
 			{
 			if (missl_attached(ptr,usrn))
@@ -404,7 +404,7 @@ else
 
 /**************************************************************************
 ** Class 12 Action                                                       **
-** Vakory Survey Droid 
+** Vakory Survey Droid
 **************************************************************************/
 
 void  FUNC droid_act_class_12(ptr,usrn)
@@ -437,7 +437,7 @@ if (ptr->jammer == 0)
 					shieldup(ptr,usrn);
 				else
 					shielddn(ptr,usrn);
-	
+
 				droid_annoy(ptr,zothusn,4,DRDMSG1,DRDMSG5);
 				ptr->tick = CYBTICKTIME + gernd()%CYBTICKTIME;
 
@@ -510,14 +510,14 @@ if (ptr->jammer == 0)
 			{
 			if (ptr->items[I_MINE] > 0)
 				laymine(ptr,usrn,10);
-		
+
 			if (ptr->items[I_JAMMERS] >0)
 				jam(ptr,usrn);
-	
+
 			ptr->speed2b = (double)(ptr->topspeed * 1000);
 			ptr->head2b = rndm(359.9);
 			ptr->holdcourse = gernd()%30 + 20;
-		
+
 			}
 		}
 	}

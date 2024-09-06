@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 

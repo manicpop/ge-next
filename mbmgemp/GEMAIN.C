@@ -41,13 +41,13 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
 /*       your tabs to 3....    MBM                                         */
 
 
 
-/* if FASTPLANET defined updates happen every 5 seconds 
+/* if FASTPLANET defined updates happen every 5 seconds
 
 #define FASTPLANET */
 
@@ -91,11 +91,11 @@
 
 
 #ifdef GETRAINER
-#define VERSION "3.2e Trainer"
+#define VERSION "ge-next 0.09 Trainer"
 #define GEHELP			"MBMG2HLP.MCV"
 #define GEMSG			"MBMG2MSG.MCV"
 #else
-#define VERSION "3.2e"
+#define VERSION "ge-next 0.09"
 #define GEHELP			"MBMGEHLP.MCV"
 #define GEMSG			"MBMGEMSG.MCV"
 #endif
@@ -298,7 +298,7 @@ long 			phaserprice[TOPPHASOR];
 unsigned		baseprice[NUMITEMS];
 
 /* OMITTED 3.2c.7
-long shieldprice[TOPSHIELD] = {5000,	 
+long shieldprice[TOPSHIELD] = {5000,
 										10000,
 										40000L,
 										100000L,
@@ -395,14 +395,14 @@ MENU	menu[] = {
 };
 
 
-#ifdef FAKESECURE
+/*#ifdef FAKESECURE
 
 struct secure dummy_secure;
 
 
 #endif
 
-struct secure	sv_secure;
+struct secure	sv_secure;*/
 
 /**************************************************************************
 ** System start up function                                              **
@@ -413,9 +413,9 @@ void EXPORT init__galemp(void)
 
 {
 #ifdef GETRAINER
-stzcpy(mbmge.descrp,gmdnam("MBMG2.MDF"),MNMSIZ);                             
+stzcpy(mbmge.descrp,gmdnam("MBMG2.MDF"),MNMSIZ);
 #else
-stzcpy(mbmge.descrp,gmdnam("MBMGEMP.MDF"),MNMSIZ);                             
+stzcpy(mbmge.descrp,gmdnam("MBMGEMP.MDF"),MNMSIZ);
 #endif
 
 iniwara();
@@ -616,7 +616,7 @@ gebb1=opnbtv(geship,sizeof(WARSHP));
 
 gebb4=opnbtv(gemail,sizeof(struct message)+GEMSGSIZ);
 
-#ifndef FAKESECURE
+/*#ifndef FAKESECURE
 
 gebb2=sec_opnbtv(geplnt,sizeof(GALSECT),SEED,REGNO,KEY,METHOD);
 
@@ -627,10 +627,11 @@ sv_secure.open_stat 	= secure->open_stat;
 sv_secure.days_run 	= secure->days_run;
 sv_secure.days_tot	= secure->days_tot;
 
-#else
+#else*/
 
 gebb2=opnbtv(geplnt,sizeof(GALSECT));
-secure = &dummy_secure;
+
+/*secure = &dummy_secure;
 secure->open_stat = 1;
 secure->days_run = 15;
 secure->days_tot = 5;
@@ -639,14 +640,16 @@ sv_secure.open_stat 	= secure->open_stat;
 sv_secure.days_run 	= secure->days_run;
 sv_secure.days_tot	= secure->days_tot;
 
-#endif
+#endif*/
 
-geshocst(2,spr("GE:Opn Pl St %d %d %d",secure->open_stat,secure->days_run,secure->days_tot));
+geshocst(2,spr("GE:Opn Pl St %d %d %d",1,15,5));
 
-if (secure->open_stat != 0)
-	numrecs = cntrbtv();
-else
-	numrecs = 100;
+/*if (secure->open_stat != 0)*/
+
+numrecs = cntrbtv();
+
+/*else
+	numrecs = 100;*/
 
 numrecs+=25;
 
@@ -659,21 +662,21 @@ if (plantime < 4)
 	plantime = 4;
 
 #ifdef FASTPLANET
-	plantime = 4; 
+	plantime = 4;
 #endif
 
 geshocst(1,spr("Numrecs calculated to be %ld",numrecs));
 geshocst(1,spr("Plantime set to %d",plantime));
 
-#ifndef FAKESECURE
+/*#ifndef FAKESECURE
 
 gebb5=sec_opnbtv(geuser,sizeof(WARUSR),SEED,REGNO,KEY,METHOD);
 
-#else
+#else*/
 
 gebb5=opnbtv(geuser,sizeof(WARUSR));
 
-secure->open_stat = 1;
+/*secure->open_stat = 1;
 secure->days_run = 15;
 secure->days_tot = 5;
 
@@ -687,9 +690,9 @@ if (sv_secure.open_stat != secure->open_stat)
 if (sv_secure.days_tot != secure->days_tot)
 	{
 	catastro("GE: Secure Days Open failure!");
-	}
+	}*/
 
-geshocst(2,spr("GE:Opn Us St %d %d %d",secure->open_stat,secure->days_run,secure->days_tot));
+geshocst(2,spr("GE:Opn Us St %d %d %d",1,15,5));
 
 gehlpmb =opnmsg(GEHELP);
 
@@ -701,7 +704,7 @@ nships = nterms + numships;
 warusr_ecl=pltile(nships*(long)sizeof(WARUSR),0,sizeof(WARUSR),sizeof(WARUSR));
 warusr=MK_FP(warusr_ecl,0);
 
-for (j=0 ; j < nships ; j++) 
+for (j=0 ; j < nships ; j++)
 	{
 	setmem((void *)warusroff(j),sizeof(WARUSR),0);
 	}
@@ -711,7 +714,7 @@ geshocst(1,spr("GE:INF:User Mem: %ld",nships*sizeof(WARUSR)));
 warshp_ecl=pltile(nships*(long)sizeof(WARSHP),0,sizeof(WARSHP),sizeof(WARSHP));
 warshp=MK_FP(warshp_ecl,0);
 
-for (j=0 ; j < nships ; j++) 
+for (j=0 ; j < nships ; j++)
 	{
 	setmem(((void *)warshpoff(j)),sizeof(WARSHP),0);
 	}
@@ -805,7 +808,7 @@ if ((i*NCL) != n)
 /* out how many that really is.                         */
 
 geshocst(1,spr("GE:INF:Fnd %d class slots",i));
-tot_classes = i;	
+tot_classes = i;
 
 n = 0;
 
@@ -842,7 +845,7 @@ for (n=0; n<tot_classes; ++n)
 
 	shipclass[i].shipname = stgopt(++classbase);
 	logthis(spr("  Shipname %s",shipclass[i].shipname));
- 
+
 	shipclass[i].max_shlds = numopt(++classbase,0,19);
 	shipclass[i].max_phasr = numopt(++classbase,0,19);
 	shipclass[i].max_torps = ynopt(++classbase);
@@ -914,7 +917,7 @@ for (i=0; i<s00plnum; ++i)
 	n					= ynopt(classbase);
 	if (!n)
 		catastro(spr("GE:ERR:Sect00 Table Error %d Msg # %d",i+1,S00P1DEF+(i*NPL)));
-		
+
 	s00[i].name 	= stgopt(++classbase);
 	s00[i].owner 	= stgopt(++classbase);
 	s00[i].type		= numopt(++classbase,0,3);
@@ -939,37 +942,44 @@ lockwarn = TRUE;
 
 /* tell everyone that we are up */
 geshocst(0,spr("Galactic Empire %s",VERSION));
-if (secure->open_stat == -1)
+/*if (secure->open_stat == -1)
 	geshocst(0,spr("Unregistered - Day %d of %d",secure->days_run,secure->days_tot));
 else
-if (secure->open_stat == 1)
-	geshocst(0,spr("Registration # %s",stgopt(REGNO)));
-else
-geshocst(0,"Unregistered - Disabled!");
+if (secure->open_stat == 1)*/
+
+geshocst(0,spr("Registration # %s",stgopt(REGNO)));
+
+/*else
+geshocst(0,"Unregistered - Disabled!");*/
 
 
 #ifdef PHARLAP
-if (secure->open_stat != 0)
-	{
-	rtkick(TICKTIME,pwarrti);
-	rtkick(TICKTIME2,pwarrti2);
-	rtkick(60,pwarrti3);
-	rtkick(plantime,pplarti);
+/*if (secure->open_stat != 0)
+	{*/
+
+rtkick(TICKTIME,pwarrti);
+rtkick(TICKTIME2,pwarrti2);
+rtkick(60,pwarrti3);
+rtkick(plantime,pplarti);
 #ifdef BLDPLNTS
 	rtkick(30,plabld);
 #endif
-	rtkick(1,pautorti);
-	}
+rtkick(1,pautorti);
+
+/*	}*/
 
 #else
-if (secure->open_stat != 0)
-	{
-	rtkick(TICKTIME,warrti);
-	rtkick(TICKTIME2,warrti2);
-	rtkick(60,warrti3);
-	rtkick(plantime,plarti);
-	rtkick(1,autorti);
-	}
+/*if (secure->open_stat != 0)
+	{*/
+
+rtkick(TICKTIME,warrti);
+rtkick(TICKTIME2,warrti2);
+rtkick(60,warrti3);
+rtkick(plantime,plarti);
+rtkick(1,autorti);
+
+/*	}*/
+
 #endif
 
 
@@ -998,8 +1008,8 @@ int	 FUNC gelogon(void)
 
 setmbk(gemb);
 
-if (secure->open_stat == 0)
-	return(0);
+/*if (secure->open_stat == 0)
+	return(0);*/
 
 if (!hasmkey(PLAYKEY))
 	return(0);
@@ -1018,7 +1028,7 @@ if (gernd()%10 == 1)
 	}
 return(0);
 }
-		
+
 /**************************************************************************
 ** User deleted  routine                                                 **
 **************************************************************************/
@@ -1042,8 +1052,8 @@ return(0);
 void  FUNC gedeletea(uid)
 char *uid;
 {
-if (secure->open_stat == 0)
-	return;
+/*if (secure->open_stat == 0)
+	return;*/
 
 if (geudb(GELOOKUP,uid, &tmpusr))
 	{
@@ -1062,7 +1072,7 @@ geshocst(1,spr("GE:User %s not in DB",uid));
 return;
 }
 
-		
+
 /**************************************************************************
 ** Midnight cleanup routine                                              **
 **************************************************************************/
@@ -1091,8 +1101,8 @@ char	tmpbuf2[2];
 
 setmbk(gemb);
 
-if (secure->open_stat == 0)
-	return;
+/*if (secure->open_stat == 0)
+	return;*/
 
 geshocst(0,spr("GE:INF:Begin Cleanup"));
 
@@ -1145,7 +1155,7 @@ if (qlobtv(0))
 
 					strncpy(tmpstat.userid,tmpusr.userid,UIDSIZ);
 					tmpstat.class = MAIL_CLASS_PRODRPT;
-					tmpstat.type  = MESG20; 
+					tmpstat.type  = MESG20;
 					tmpstat.stamp = cofdat(today());
 					sprintf(tmpstat.dtime,"%s - %.5s",ncedat(today()),nctime(now()));
 					strcpy(tmpstat.name1,planet.name);
@@ -1168,14 +1178,15 @@ if (qlobtv(0))
 		} while (qnxbtv());
 	}
 
-if (secure->open_stat != 0)
-	{
-	sprintf(gechrbuf,"%ld",(cntrbtv()/2L));
-	geshocst(0,spr("GE:INF:Plnt DB Size %sk",gechrbuf));
+/*if (secure->open_stat != 0)
+	{*/
 
-	if (cntrbtv() >=  max_plrec)
-		geshocst(0,"GE:INF:Max Sect Reached");
-	}
+sprintf(gechrbuf,"%ld",(cntrbtv()/2L));
+geshocst(0,spr("GE:INF:Plnt DB Size %sk",gechrbuf));
+
+if (cntrbtv() >=  max_plrec)
+	geshocst(0,"GE:INF:Max Sect Reached");
+/*}*/
 
 geshocst(1,spr("GE:INF:Cleanup Phase-3"));
 
@@ -1343,7 +1354,7 @@ unsigned long    v;
 v = value_pl();
 tmpusr.plscore += v;
 }
-	
+
 
 unsigned  FUNC long value_pl()
 {
@@ -1397,8 +1408,8 @@ return(0);
 void  FUNC warhupa(void)
 {
 
-if (secure->open_stat == 0)
-	return;
+/*if (secure->open_stat == 0)
+	return;*/
 
 setbtv(gebb1);
 setmbk(gemb);
@@ -1457,7 +1468,7 @@ return(0);
 
 void  FUNC clswara(void)
 {
-if (gemb != NULL) 
+if (gemb != NULL)
 	{
 	clsmsg(gemb);
 	gemb=NULL;
@@ -1467,11 +1478,14 @@ clsbtv(gebb1);
 
 clsbtv(gebb4);
 
-if (secure->open_stat != 0)
-	{
-	clsbtv(gebb2);
-	clsbtv(gebb5);
-	}
+/*if (secure->open_stat != 0)
+	{*/
+
+clsbtv(gebb2);
+clsbtv(gebb5);
+
+/*	}*/
+
 logthis("***GALACTIC EMPIRE SHUTDOWN***");
 return;
 }
@@ -1483,7 +1497,7 @@ return;
 int	 FUNC galemp()
 {
 int i,rtn;
-if (secure->open_stat == 0)
+/*if (secure->open_stat == 0)
 	{
 	prf("\r\n\r\n\r\n");
 	prf("The Galactic Empire trial period is over. If you wish to ");
@@ -1492,7 +1506,7 @@ if (secure->open_stat == 0)
 	prf("\r\n\r\n\r\n");
 	outprfge(ALWAYS,usrnum);
 	return(0);
-	}
+	}*/
 setbtv(gebb1);
 setmbk(gemb);
 warsptr=warshpoff(usrnum);
@@ -1591,7 +1605,7 @@ switch  (func)
 		break;
 
 	case    GEUPDATE        :
-		
+
 		if (acqbtv(NULL,&shpkey,1))
 			{
 			updbtv(geptr);
@@ -1642,7 +1656,7 @@ switch  (func)
 	case    GELOOKUP        :
 		if (qeqbtv(usrname,0))
 			rtn = 1;
-		logthis(spr("GE: lookup *%s* f:%d",usrname,rtn)); 
+		logthis(spr("GE: lookup *%s* f:%d",usrname,rtn));
 		break;
 
 	case    GEADD           :
@@ -1669,7 +1683,7 @@ switch  (func)
 		break;
 
 	case    GEUPDATE        :
-		logthis(spr("DEBUG <%s> <%s> update",usrname,geptr->userid)); 
+		logthis(spr("DEBUG <%s> <%s> update",usrname,geptr->userid));
 		if (acqbtv(NULL,usrname,0))
 			{
 			updbtv(geptr);
@@ -1711,7 +1725,7 @@ GALSECT *geptr;
 int     rtn;
 long    numrecs = 0;
 
-logthis(spr("Func GESDB, func = %d, sect*= %ld,geptr*=%ld",func,(long)sect,(long)geptr)); 
+logthis(spr("Func GESDB, func = %d, sect*= %ld,geptr*=%ld",func,(long)sect,(long)geptr));
 logthis(spr("            xsect %d, ysect %d, plnum %d",sect->xsect,sect->ysect,sect->plnum));
 
 setbtv(gebb2);
@@ -1763,7 +1777,7 @@ switch  (func)
 		if  ((geptr->xsect != sect->xsect)
 				||(geptr->ysect != sect->ysect)
 				||(geptr->plnum != sect->plnum))
-			{	
+			{
 			if (acqbtv(geptr,sect,0))
 				{
 				logthis("gesdb GEGET acqbtv found record");
@@ -1802,7 +1816,7 @@ if (plnum > 0 && plnum <= MAXPLANETS)
 		{
 		logthis (spr("Getsectdat:plnum = %d, numplan = %d",plnum,sector.numplan));
 		getplanet(&(warshpoff(usrn)->coord),plnum);
-/* If this fails what happens */		
+/* If this fails what happens */
 		plptr = &planet;
 		if (plptr->type == PLTYPE_WORM)
 			{
@@ -1822,7 +1836,7 @@ if (plnum > 0 && plnum <= MAXPLANETS)
 						bbad = TRUE;
 						break;
 						}
-					} 
+					}
 				if (!bbad)
 					{
 					movecoord(&beacon[usrn].coord,&plptr->coord);
@@ -1832,7 +1846,7 @@ if (plnum > 0 && plnum <= MAXPLANETS)
 				}
 			}
 		}
-	else 
+	else
 		{
 		return(FALSE);
 		}
@@ -1867,10 +1881,10 @@ for (i=0;i<MAXTEAMS;++i)
 
 logthis("Loading Team Table");
 
-if ((mzfp=fopen("MBMGETEA.DAT","r")) != NULL) 
+if ((mzfp=fopen("MBMGETEA.DAT","r")) != NULL)
 	{
 	i = 0;
-	while(fgets(buffer,sizeof(buffer),mzfp) != NULL) 
+	while(fgets(buffer,sizeof(buffer),mzfp) != NULL)
 		{
 		if (sameto("TEAM|",buffer)&& buffer[80] == '|')
 			{
@@ -2096,7 +2110,7 @@ do
 
 		tocks = 0;
 		fpos = 0;
-		
+
 
 		geshocst(1,spr("GE:INF:plarti:recalib t=%d",plantime));
 		geshocst(1,spr("GE:INF:plarti:pass took %d",minutes));
@@ -2150,7 +2164,7 @@ if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1)
 
 	for (i=0;i<NUMITEMS;++i)
 		{
-		planet.items[i].qty = 1032000L;   
+		planet.items[i].qty = 1032000L;
 		planet.items[i].sell = 'Y';
 		planet.items[i].markup2a = (baseprice[i]*2)+(gernd()%baseprice[i]);
 		}
@@ -2174,7 +2188,7 @@ if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 2)
 	planet.items[I_FOOD].markup2a = (baseprice[I_FOOD]*2)+(gernd()%baseprice[I_FOOD]);
 	flag = 1;
 	}
-	
+
 if (flag == 1)
 	{
 	logthis("plarti:changes made to planet - update it");
@@ -2343,7 +2357,7 @@ if (ticktock2 >= 30 && ticktock1 < nships)
 				for (j=0;j<nships;++j)
 					{
 					/* is this a automatron and of this class */
-					if ((warshpoff(j))->status == GESTAT_AUTO 
+					if ((warshpoff(j))->status == GESTAT_AUTO
 						&& (warshpoff(j))->shpclass == i)
 						{
 						clscnt++;
@@ -2360,9 +2374,9 @@ if (ticktock2 >= 30 && ticktock1 < nships)
 				}
 			}
 
-		/* should also add a random factor to choose a auto class even if the 
-   		class is full */		
-	
+		/* should also add a random factor to choose a auto class even if the
+   		class is full */
+
 		if (gernd()%100 == 0 || class == -1)
 			{
 			logthis("pick random class");
@@ -2379,9 +2393,9 @@ if (ticktock2 >= 30 && ticktock1 < nships)
 					}
 				}
 			}
-			
+
 		logthis(spr("picked class - %d",class));
-		
+
 		/* initialize the non-user ship areas */
 		if (class > -1)
 			{
@@ -2407,7 +2421,7 @@ if (cybhaltflg <= 0)
 		{
 		wptr=warshpoff(count);
 		zothusn=count;
-	
+
 		if (wptr->status == GESTAT_AUTO)
 			{
 			if (wptr->tick == 0)
@@ -2615,7 +2629,7 @@ clrprf();
 }
 
 /**************************************************************************
-** Send message to all ships in scanning range of this ship             
+** Send message to all ships in scanning range of this ship
 **************************************************************************/
 
 void  FUNC outrange(filter,coordptr)
@@ -2647,7 +2661,7 @@ clrprf();
 **   Automatons are always in the game
 **************************************************************************/
 
-	
+
 int      FUNC ingegame(shpno)
 int     shpno;
 {
@@ -2670,15 +2684,15 @@ return(FALSE);
 
 /**************************************************************************
 ** SHOCST Replacement                                                    **
-** 
+**
 **************************************************************************/
 
-	
+
 void	 FUNC geshocst(opt,str)
 int	opt;
 char	*str;
 {
-char	tmpbuf[40]; 
+char	tmpbuf[40];
 /* kill warning */
 str = str;
 
@@ -2689,7 +2703,7 @@ if (opt == 0)
 	usrnum = -1;
 #ifdef PHARLAP
 	strncpy(tmpbuf,str,32);
-	tmpbuf[31] = NULL;	
+	tmpbuf[31] = NULL;
 	shocst(tmpbuf,str);
 #else
 	shocst(0,str);
@@ -2703,7 +2717,7 @@ if (opt <= showopt)
 	usrnum = -1;
 #ifdef PHARLAP
 	strncpy(tmpbuf,str,32);
-	tmpbuf[31] = NULL;	
+	tmpbuf[31] = NULL;
 	shocst(tmpbuf,str);
 #else
 	shocst(0,str);
@@ -2715,9 +2729,9 @@ if (logflag)
 }
 
 /****************************************************************************
- * The following mnu functions are response handlers for input from the 
+ * The following mnu functions are response handlers for input from the
  * player while in a particular state. Each of these then typically results
- * in additional menus/messages being displayed to the player and the 
+ * in additional menus/messages being displayed to the player and the
  * players state (substt) modified.
  ****************************************************************************/
 
@@ -2904,27 +2918,27 @@ if (margc > 0)
 	if (genearas("y",margv[0]))
 		{
 		plnum = warsptr->where - 10;
-		
+
 		getplanetdat(usrnum);
-		
+
 		strncpy(plptr->userid,warsptr->userid,UIDSIZ);
 		++waruptr->planets;
-		
+
 		for (i=0;i<NUMITEMS;++i)
 			plptr->items[i].rate = 0;
-		
+
 		plptr->items[I_MEN].rate = 50;
 		plptr->items[I_FOOD].rate = 50;
-		
+
 		setsect(warsptr); /* build PKEY */
 		gesdb(GEUPDATE,&pkey,&sector);
-		
+
 		pkey.plnum = plnum;
 		gesdb(GEUPDATE,(PKEY *)&pkey,(GALSECT *)&planet);
-		
+
 		prfmsg(ADMENU1A);
 		outprfge(ALWAYS,usrnum);
-		usrptr->substt = ADMENU1A;		
+		usrptr->substt = ADMENU1A;
 		}
 	else
 	if (genearas("n",margv[0]))
@@ -2951,24 +2965,24 @@ int	mnu_admenu1a()
 if (margc > 0)
 	{
 	plnum = warsptr->where - 10;
-	
+
 	getplanetdat(usrnum);
 	rstrin();
-	
+
 	*margv[0] = toupper(*margv[0]);
 	strncpy(plptr->name,margv[0],19);
 	plptr->name[19] = 0;
-	
+
 	setsect(warsptr); /* build PKEY */
 	pkey.plnum = plnum;
 	gesdb(GEUPDATE,(PKEY *)&pkey,(GALSECT *)&planet);
-	
+
 	prfmsg(ADMENU1B,        plnum,
-							
+
 							plptr->name,
 							warsptr->userid,
 							warsptr->shipname);
-		
+
 	prfmsg (ADMENU2);
 	outprfge(ALWAYS,usrnum);
 	usrptr->substt = ADMENU2;
@@ -2993,9 +3007,9 @@ if (margc > 0)
 	if (*margv[0] >= '1' && *margv[0] <= '7')
 		{
 		plnum = warsptr->where - 10;
-		
+
 		getplanetdat(usrnum);
-		
+
 		switch (*margv[0])
 			{
 			case '1':
@@ -3026,27 +3040,27 @@ if (margc > 0)
 				prfmsg(PRESSKEY);
 				usrptr->substt = ADMENU2;
 				break;
-			
+
 			case '2':
 				prfmsg(ADMENU2B);
 				usrptr->substt = ADMENU2B;
 				break;
-			
+
 			case '3':
 				prfmsg(ADMENU2E);
 				usrptr->substt = ADMENU2E;
 				break;
-		
+
 			case '4':
 				prfmsg(ADMENU2G);
 				usrptr->substt = ADMENU1A;
 				break;
-		
+
 			case '5':
 				prfmsg(ADMENU2H);
 				usrptr->substt = ADMENU2H;
 				break;
-		
+
 			case '6':
 				prfmsg(ADMENU2I);
 				usrptr->substt = ADMENU2I;
@@ -3307,7 +3321,7 @@ return(1);
 int	 FUNC mnu_admenu2j()
 {
 plnum = warsptr->where - 10;
-	
+
 getplanetdat(usrnum);
 
 if (margc == 0)
@@ -3326,7 +3340,7 @@ else
 setsect(warsptr); /* build PKEY */
 pkey.plnum = plnum;
 gesdb(GEUPDATE,(PKEY *)&pkey,(GALSECT *)&planet);
-	
+
 prfmsg (ADMENU2);
 outprfge(ALWAYS,usrnum);
 usrptr->substt = ADMENU2;
@@ -3342,7 +3356,7 @@ selectship();
 return(1);
 }
 
-/* player selected read messages from main menu, was displayed the mail 
+/* player selected read messages from main menu, was displayed the mail
    sub-menu, and was asked to select an option */
 
 int mnu_menug()
@@ -3402,11 +3416,11 @@ else
 return(1);
 }
 
-/* player selected option 1 on the mail sub-menu and 
+/* player selected option 1 on the mail sub-menu and
    player was displayed the first message in the mail file and has been asked
    to press N for next or X to exit.
 */
- 
+
 
 int  FUNC mnu_menug1()
 {
@@ -3450,11 +3464,11 @@ else
 return(1);
 }
 
-/* player selected option 2 on the mail sub-menu and 
+/* player selected option 2 on the mail sub-menu and
    player was displayed the first message in the mail file and has been asked
    to press N for next or X to exit.
 */
- 
+
 int  FUNC mnu_menug2()
 {
 if (margc > 0)
@@ -3586,7 +3600,7 @@ if (hdl == (FILE *)0)
 		geshocst(0,"GE:ERR MBMGEMNU.TXT Open Failed");
 	else
 		logthis("optdisp: mbmgemnu.txt opened");
-	}	
+	}
 
 if (hdl != (FILE *)0)
 	{

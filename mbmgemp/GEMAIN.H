@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 
 #define TRUE            1
 #define FALSE           0
@@ -457,7 +457,7 @@ GALPLNT {                /* star system data record               */
 	char	spyowner[UIDSIZ];
 	int	technology;
 	unsigned long	teamcode;
-	char	filler[512-182-(UIDSIZ*2)-(sizeof(ITEM)*NUMITEMS)];         
+	char	filler[512-182-(UIDSIZ*2)-(sizeof(ITEM)*NUMITEMS)];
 
 };
 
@@ -501,7 +501,7 @@ extern
 MAILKEY {
 	  char	userid[UIDSIZ];
 	  int		class;
-	  long	msgno;	
+	  long	msgno;
 		};
 
 #define MAIL struct _mail
@@ -598,7 +598,7 @@ SHIP    {
 #define CYB_TOUGH_0	0
 #define CYB_TOUGH_1 	1
 
-struct  	cmd 
+struct  	cmd
 			{
 			char *command;
 			void (*func)();
@@ -649,11 +649,11 @@ TEAM	{
 		unsigned long	teamscore;
 		char				password[11];
 		char				secret[11];
-		int				flag;		
+		int				flag;
 		};
 
 
-		
+
 #define BEACONTAB struct _beacontab
 extern
 BEACONTAB	{
@@ -661,8 +661,8 @@ BEACONTAB	{
 	int	plnum;
 	char	beacon[BEACONMSGSZ];
 	};
-		
-		
+
+
 #define METHOD 1
 
 

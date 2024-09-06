@@ -41,7 +41,7 @@
  *                                                                         *
  *               I may be contacted via email at mmurdock@starphire.com    *
  ***************************************************************************/
- 
+
 
 
 /* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
@@ -386,7 +386,7 @@ if (genearas(margv[1],"class"))
 					sprintf(gechrbuf,"%5ldk",shipclass[i].max_tons/1000);
 				else
 					sprintf(gechrbuf,"%5ld ",shipclass[i].max_tons);
-	
+
 		  		if (shipclass[i].max_price >999999L)
 					sprintf(gechrbuf2,"%7ldm",shipclass[i].max_price/1000000L);
 				else
@@ -394,7 +394,7 @@ if (genearas(margv[1],"class"))
 					sprintf(gechrbuf2,"%7ldk",shipclass[i].max_price/1000);
 				else
 					sprintf(gechrbuf2,"%7ld ",shipclass[i].max_price);
-	
+
 		  		if (shipclass[i].scanrange >999999L)
 					sprintf(gechrbuf3,"%4ldm",shipclass[i].scanrange/1000000L);
 				else
@@ -402,12 +402,12 @@ if (genearas(margv[1],"class"))
 					sprintf(gechrbuf3,"%4ldk",shipclass[i].scanrange/1000);
 				else
 					sprintf(gechrbuf3,"%4ld ",shipclass[i].scanrange);
-	
+
 		  		if (shipclass[i].max_accel >999)
 					sprintf(gechrbuf4,"%3dk",shipclass[i].max_accel/1000);
 				else
 					sprintf(gechrbuf4,"%3d ",shipclass[i].max_accel);
-	
+
 				prf("%2d %-20s%-2d %-2d %d %d %d %d %d %d %d %d %s %2d %s %s %s %3d\r",
 					i+1,
 					shipclass[i].typename,
@@ -416,9 +416,9 @@ if (genearas(margv[1],"class"))
 					shipclass[i].max_torps,
 					shipclass[i].max_missl,
 					shipclass[i].has_decoy,
-					shipclass[i].has_jam,  
+					shipclass[i].has_jam,
 					shipclass[i].has_zip,
-					shipclass[i].has_mine, 
+					shipclass[i].has_mine,
 					shipclass[i].max_attk,
 					shipclass[i].max_cloak,
 					gechrbuf4,
@@ -428,7 +428,7 @@ if (genearas(margv[1],"class"))
 					gechrbuf3,
 					shipclass[i].max_points
 					);
-				}		
+				}
 			}
 		prfmsg(HLPCLS2);
 		outprfge(ALWAYS,usrnum);
@@ -531,8 +531,8 @@ if (valpcnt(margv[1],0,99) && valdegree(gechrbuf))
 					{
 					ddist = cdistance(&warsptr->coord,&wptr->coord);
 					ddist *= 10000;
-					
-					if (ddist < (shipclass[wptr->shpclass].scanrange/2) 
+
+					if (ddist < (shipclass[wptr->shpclass].scanrange/2)
 						&& wptr->jammer == 0)
 						{
 						bearing = (int)(cbearing(&wptr->coord,&warsptr->coord,wptr->heading)+.5);
@@ -542,7 +542,7 @@ if (valpcnt(margv[1],0,99) && valdegree(gechrbuf))
 						outprfge(ALWAYS,zothusn);
 						}
 					}
-				}				
+				}
 			}
 		}
 	else
@@ -782,7 +782,7 @@ if (warsptr->where >= 10)
 	}
 
 plnum = (atoi(margv[1]));
-			
+
 if (plnum <= MAXPLANETS && plnum > 0)
 	{
 	got_plt = getplanetdat(usrnum);
@@ -958,7 +958,7 @@ if (ptr->phasr >=PMINFIRE)
 					factor = (double)damage;
 					tonfact = 1.0 + ((double)(shipclass[wptr->shpclass].max_tons)/TONFACT);
 
-											
+
 
 					factor = (factor*((double)(1+ptr->phasrtype)/2.5)) / tonfact;
 
@@ -1059,7 +1059,7 @@ if (ptr->energy >= HPMINFIR)
 						tonfact = 1.0 + ((double)(shipclass[wptr->shpclass].max_tons)/TONFACT);
 
 						factor = (factor*(double)ptr->phasrtype) / tonfact;
-							
+
 						damage = (int)(factor);
 
 						/* sysop phaser */
@@ -1145,7 +1145,7 @@ if (margv[1] == NULL || margc < 2)
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
-	
+
 shpnum = findshp(margv[1],1);
 
 if (shpnum == usrnum)
@@ -1256,7 +1256,7 @@ if (margv[1] == NULL || margc < 2)
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
-	
+
 if (margv[2] == NULL || margc < 3)
 	{
 	prfmsg(MISFMT);
@@ -1278,7 +1278,7 @@ energy = (unsigned)eng_long;
 eng_flu = energy/misengfc;
 
 if (eng_flu > 0 && eng_flu >= (warsptr->energy+MOVENGMIN))
-	{					 
+	{
 	prfmsg(MISSHRT);
 	outprfge(ALWAYS,usrnum);
 	return;
@@ -1483,7 +1483,7 @@ else
 
 	if (i>=NOSCANTAB)
 		return(-1);
-	
+
 	}
 
 if (!ingegame(shpnum))
@@ -1640,7 +1640,7 @@ for (zothusn=0; zothusn < nships ; zothusn++)
 		ddist = 1.0-(ddist/(double)shipclass[warsptr->shpclass].scanrange);
 		if (ddist < 0)
 			ddist = 0;
-		
+
 		wptr->jammer = (unsigned)(((double)jamtime)*ddist);
 		prfmsg(JAMMER3);
 		outprfge(FILTER,zothusn);
@@ -1867,7 +1867,7 @@ if (margc > 2)
 		{
 		prfmsg(BADCOM);
 		}
-	
+
 	}
 else
 	{
@@ -2066,7 +2066,7 @@ if (sameas(margv[1],"inv"))
 			prf("%s\r",gechrbuf);
 			}
 		}
-	
+
 	sprintf(gechrbuf2,"%ld",calcweight(warsptr));
 	prfmsg(REP37,gechrbuf2);
 	}
@@ -2203,7 +2203,7 @@ if (margc != 3)
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
-	
+
 shpnum = findshp(margv[2],1);
 
 if (shpnum == usrnum)
@@ -2238,7 +2238,7 @@ if (shpnum >= 0)
 		tons = (long)(shipclass[wptr->shpclass].max_tons);
 		len  =tons/32L;
 		wid  =tons/96L;
-		
+
 		prfmsg(SCAN04A,spr("%ld",len),spr("%ld",wid));
 
 		if (warsptr->where != 1 && wptr->where != 1)
@@ -2246,12 +2246,12 @@ if (shpnum >= 0)
 			damage   = (unsigned) (wptr->damage+.5);
 			damstr(damage);
 			prfmsg(SCAN05,gechrbuf);
-		
+
 			if (wptr->shieldstat == SHIELDUP)
 				prfmsg(SCAN06);
 			else
 				prfmsg(SCAN07);
-		
+
 			prfmsg(SCAN07A,wuptr->kills);
 			}
 
@@ -2306,9 +2306,9 @@ if (margc != 3)
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
-	
+
 plnum = atoi(margv[2]);
-			
+
 if (plnum <= MAXPLANETS && plnum > 0)
 	{
 	getplanetdat(usrnum);
@@ -2346,7 +2346,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 			else
 			if (plptr->enviorn == 3)
 				prfmsg(SCAN15);
-		
+
 			prfmsg(SCAN16);
 			if (plptr->resource == 0)
 				prfmsg(SCAN12);
@@ -2393,7 +2393,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				else
 					strcpy(gechrbuf,"Heavily");
 				prfmsg(SCAN28,gechrbuf);
-		
+
 				if (plptr->items[I_MISSILE].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
@@ -2405,7 +2405,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				else
 					strcpy(gechrbuf,"Large");
 				prfmsg(SCAN29,gechrbuf);
-		
+
 				if (plptr->items[I_TORPEDO].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
@@ -2417,7 +2417,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				else
 					strcpy(gechrbuf,"Large");
 				prfmsg(SCAN30,gechrbuf);
-		
+
 				if (plptr->items[I_FLUXPOD].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
@@ -2429,7 +2429,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				else
 					strcpy(gechrbuf,"Large");
 				prfmsg(SCAN33,gechrbuf);
-		
+
 				if (plptr->items[I_FOOD].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
@@ -2441,12 +2441,12 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				else
 					strcpy(gechrbuf,"Large");
 				prfmsg(SCAN34,gechrbuf);
-		
+
 				if (plptr->items[I_FIGHTER].qty == 0)
 					prfmsg(SCAN31);
 				else
 					prfmsg(SCAN32);
-		
+
 				}
 			}
 		prfmsg(DASHES);
@@ -2535,7 +2535,7 @@ for (i=0,mptr = mines; i<nummines;++mptr,++i)
 /* DEBUG
 		sprintf(gechrbuf,"xf = %f - yf = %f",xf,yf);
 		prf("MINES FOUND @ %s",gechrbuf);*/
-		if ((xf >= 0.0 && xf < (double)MAXX) 
+		if ((xf >= 0.0 && xf < (double)MAXX)
 			&& (yf >= 0.0 && yf < (double)MAXY))
 			{
 			y=(int)yf;
@@ -2556,7 +2556,7 @@ for (i=0 ; i< NOSCANTAB; i++)
 		xf = (((double)MAXX)/2.0)+(xf/xfactor);
 		yf = (((double)MAXY)/2.0)+(yf/yfactor);
 
-		if ((xf >= 0.0 && xf < (double)MAXX) 
+		if ((xf >= 0.0 && xf < (double)MAXX)
 			&& (yf>= 0.0 && yf < (double)MAXY))
 			{
 			x=(int)xf;
@@ -2630,7 +2630,7 @@ x = coord2(warsptr->coord.xcoord) +50;
 y = coord2(warsptr->coord.ycoord) +50;
 map[y/(SSMAX/(MAXY-1))][x/(SSMAX/(MAXX-1))] = '*';
 mapc[y/(SSMAX/(MAXY-1))][x/(SSMAX/(MAXX-1))] = '2';
-	
+
 map_planets();
 printmap();
 outprfge(ALWAYS,usrnum);
@@ -2680,7 +2680,7 @@ y1 = (warsptr->coord.ycoord);
 range = range*2.0;
 xfactor = (range)/((double)MAXX-1.0);
 yfactor = (range)/((double)MAXY-1.0);
-/* debug 
+/* debug
 prf("Xfactor=%s,Yfactor=%s\r",spr("%ld",(long)xfactor),spr("%ld",(long)yfactor));*/
 
 for (othusn=0 ; othusn < nships ; othusn++)
@@ -2820,7 +2820,7 @@ for (othusn=0 ; othusn < nships ; othusn++)
 
 		wptr=warshpoff(othusn);
 		ddistance = cdistance(&ptr->coord,&wptr->coord)*10000;
-		if (ddistance < shipclass[ptr->shpclass].scanrange 
+		if (ddistance < shipclass[ptr->shpclass].scanrange
 			&& wptr->cloak < 10)
 			{
 			for (i=0;i<NOSCANTAB;++i)
@@ -2908,7 +2908,7 @@ memcpy(lettmp,letters,LETSIZE);
 /* look at each ship in the table and punch out the letter from the
    list... when all done the letters remaining are available */
 
-/* DEBUG - REMOVE THIS WHEN DONE 
+/* DEBUG - REMOVE THIS WHEN DONE
 for (i=0;i<NOSCANTAB;++i)
 	logthis(spr("PLTR-A:%d flg=%d shipno=%d letter=%d/%c",i,ptr->ship[i].flag,ptr->ship[i].shipno,ptr->ship[i].letter,ptr->ship[i].letter));*/
 
@@ -2944,7 +2944,7 @@ for (i=0;i<NOSCANTAB;++i)
 			}
 		}
 	}
-/* DEBUG - REMOVE THIS WHEN DONE 
+/* DEBUG - REMOVE THIS WHEN DONE
 for (i=0;i<NOSCANTAB;++i)
 	logthis(spr("PLTR-Z:%d flg=%d shipno=%d letter=%d/%c",i,ptr->ship[i].flag,ptr->ship[i].shipno,ptr->ship[i].letter,ptr->ship[i].letter));*/
 
@@ -2996,12 +2996,12 @@ for (i=0; i<MAXY; ++i)
 		{
 		if (mapc[i][j] == '1')
 			{
-			prf(".[31m%c.[37m",map[i][j]);
+			prf("\33[31m%c\33[37m",map[i][j]);
 			}
 		else
 		if (mapc[i][j] == '2')
 			{
-			prf(".[33m%c.[37m",map[i][j]);
+			prf("\33[33m%c\33[37m",map[i][j]);
 			}
 		else
 			{
@@ -3441,7 +3441,7 @@ if (sameas(plptr->userid,warsptr->userid))
 	setsect(warsptr); /* build PKEY */
 	pkey.plnum = plnum;
 	gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
-	
+
 	prfmsg(ABAN02);
 	outprfge(ALWAYS,usrnum);
 
@@ -3452,7 +3452,7 @@ else
 	outprfge(ALWAYS,usrnum);
 	}
 }
-	
+
 
 
 /**************************************************************************
@@ -3627,8 +3627,8 @@ unsigned long num;
 double r;
 int won = 0;
 int	ii;
-unsigned long 	i, 
-					j, 
+unsigned long 	i,
+					j,
 					left1,
 					left2,
 					kill1,
@@ -3754,7 +3754,7 @@ if (ratio > 5L) /* big enough to let spy report on it */
 else
 if (ratio > 1L)
 	call_4_help(FALSE,won);
-	
+
 
 /* dont mail him unless its significant*/
 if (ratio > 1L)
@@ -3775,7 +3775,7 @@ if (ratio > 1L)
 	mail.long1 = num;
 	sprintf(mail.name2,"%s",warsptr->shipname);
 	sprintf(mail.string1,"%s",warsptr->userid);
-	
+
 	mailit(1);
 	}
 
@@ -3791,7 +3791,7 @@ unsigned long num;
 
 double r;
 int won = 0;
-unsigned long 	j, 
+unsigned long 	j,
 					left1,
 					left2,
 					kill1,
@@ -3838,12 +3838,12 @@ if (left1 > 0 && plptr->items[I_TROOPS].qty > 500 && (gernd()%5-1) > 0)
 	kill1 += (unsigned long)((double)left1 * r);
 	}
 
-/* if there are fighters on the planet then they will shoot down some of 
+/* if there are fighters on the planet then they will shoot down some of
    the attackers */
 
 if (left2 > 0L)
 	{
-	/* this specifies the planet fighters kill ratio - 
+	/* this specifies the planet fighters kill ratio -
 	   at least 20% and as much as 120.0% */
 	r = rndm(plattrf2)+.2;  /* 1.0 */
 	kill1 += (unsigned long)((double)left2 * r);
@@ -3917,7 +3917,7 @@ if (ratio > 5) /* big enough to let spy report on it */
 else
 if (ratio > 1)
 	call_4_help(FALSE,won);
-	
+
 plptr->items[I_FIGHTER].qty = left2;
 
 if (ratio > 2 || won == 1)
@@ -3971,8 +3971,8 @@ if (onsys(plptr->userid) && user[othusn].state != fse_state)
 	}
 else
 if (won == 0
-	&& send_spy_mail 
-	&& gernd()%6 == 0 
+	&& send_spy_mail
+	&& gernd()%6 == 0
 	&& plptr->spyowner[0] != 0)
 	{
 	prfmsg(SPYM3,plptr->name,xsect,ysect,warsptr->userid);
@@ -3982,7 +3982,7 @@ if (won == 0
 	clrprf();
 	}
 else
-if (won == 1 
+if (won == 1
 	&& plptr->spyowner[0] != 0)
 	{
 	prfmsg(SPYM4,plptr->name,xsect,ysect,warsptr->userid);
@@ -4022,14 +4022,14 @@ j = gemaxlist;
 
 if (margc == 2 && sameas(margv[1],"all"))
 	j = 200;
-	
+
 if (qhibtv(1))
 	{
 	if (usaptr->scnwid <60)
 		prfmsg(ROSTER1,gemaxlist);
 	else
 		prfmsg(ROSTER2,gemaxlist);
-		
+
 	do
 		{
 		gcrbtv(&tmpusr,1);
@@ -4156,7 +4156,7 @@ if ((amt = atol(margv[1])) > 0L)
 	if (warsptr->items[item] >= amt)
 		{
 		doll = (long)baseprice[item]*amt;
-		
+
 		fee = 1L + (doll/1000L);
 
 		warsptr->items[item] -= amt;
@@ -4221,7 +4221,7 @@ plnum = warsptr->where - 10;
 getplanetdat(usrnum);
 
 /* two problems:
-   1 - trading player has no team affiliation and planet was designated 
+   1 - trading player has no team affiliation and planet was designated
 	    TEAM while the owner had no team affiliation...hence they both are
 		 on the same team. Need to find out what the teamcode is when no team
 		 is set... 0 I suspect.
@@ -4229,7 +4229,7 @@ getplanetdat(usrnum);
 */
 
 
-if (sameas(plptr->password,"team") 
+if (sameas(plptr->password,"team")
 	&& plptr->teamcode > 0
 	&& plptr->teamcode != waruptr->teamcode)
 	{
@@ -4238,7 +4238,7 @@ if (sameas(plptr->password,"team")
 	return;
 	}
 else
-if (sameas(plptr->password,"team") 
+if (sameas(plptr->password,"team")
 	&& plptr->teamcode > 0
 	&& plptr->teamcode == waruptr->teamcode)
 	{
@@ -4670,7 +4670,7 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				}
 			else
 				delta = 0;
-				
+
 			delta = phaserprice[type-1]-delta;
 			credit = 0;
 
@@ -4679,7 +4679,7 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				credit = (delta*-1);
 				fee = credit/50L;
 				credit = credit-fee;
-				if (credit < 0) 
+				if (credit < 0)
 					credit = 0;
 				prfmsg(NEW28,l2as(fee),l2as(credit));
 				outprfge(ALWAYS,usrnum);
@@ -4752,7 +4752,7 @@ WARSHP *ptr;
 if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY))))
 #else
 if ((!syscmds) || (sysonly && !(usrptr->flags&ISYSOP)))
-#endif   
+#endif
 	{
 	prf("Huh?\r");
 	outprfge(ALWAYS,usrnum);
@@ -4778,7 +4778,7 @@ if (sameas("help",margv[1]) && margc == 2)
 	prf("\r");
 	outprfge(ALWAYS,usrnum);
 	}
-else	
+else
 if (sameas("get",margv[1]) && margc == 4)
 	{
 	if (margc == 4)
@@ -4928,13 +4928,13 @@ if (sameas("unjam",margv[1]))
 else
 if (sameas("list",margv[1]))
 	{
-	if (margc == 2) 
+	if (margc == 2)
 		i = 0;
-	else 
+	else
 		i = atoi(margv[2]);
 
 	prf("Chn Name xsect ysect damage tick cybmine\r");
-	if (nships>i+50) 
+	if (nships>i+50)
 		j = i+50;
 	else
 		j = nships;
@@ -4972,7 +4972,7 @@ if (sameas("classlist",margv[1]))
 else
 if (sameas("cybpause",margv[1])&& margc == 3)
 	{
-	i = atoi(margv[2]);	
+	i = atoi(margv[2]);
 	prf("Cybertrons paused for %d seconds\r",i);
 	cybhaltflg = i;
 	done();
@@ -5084,7 +5084,7 @@ if (margv[1] == NULL)
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
-	
+
 shpnum = findshp(margv[1],1);
 
 if (shpnum >= 0)
@@ -5176,8 +5176,8 @@ outprfge(ALWAYS,usrnum);
 
 void  FUNC cmd_displ()
 {
-prf("REG ID:%s\rSec_code:%d\rDay:%d of %d\r",
-	stgopt(REGNO),secure->open_stat,secure->days_run,secure->days_tot);
+prf("REG ID:%s\r",
+	stgopt(REGNO));
 outprfge(ALWAYS,usrnum);
 }
 
@@ -5374,8 +5374,8 @@ if (sameas(margv[1],"join"))
 	update_team_tab();
 
 	/* tell user that team has been created */
-	
-	prfmsg(TEAMJOIN,teamtab[i].teamname);	
+
+	prfmsg(TEAMJOIN,teamtab[i].teamname);
 	outprfge(ALWAYS,usrnum);
 
 	return;
@@ -5441,18 +5441,18 @@ if (sameas(margv[1],"unjoin"))
 			if (waruptr->teamcode == teamtab[i].teamcode)
 				{
 				prfmsg(TEAMUNJN,teamname(waruptr));
-				outprfge(ALWAYS,usrnum);								  		
+				outprfge(ALWAYS,usrnum);
 				waruptr->teamcode = 0;
 				geudb(GEUPDATE,waruptr->userid,waruptr);
 
 				/* update the team count */
-		
+
 				teamtab[i].teamcount--;
 				if (teamtab[i].teamcount > 65000U) /* roll over */
 					teamtab[i].teamcount = 0;
-	
+
 				/* update the disk copy of team database */
-	
+
 				update_team_tab();
 
 				return;
@@ -5539,7 +5539,7 @@ if (sameas(margv[1],"start"))
 		}
 
 	/* add the team to the team database */
-	
+
 	teamtab[next].teamcode = tmp.teamcode;
 	strncpy(teamtab[next].teamname, tmp.teamname, 30);
 	teamtab[next].teamcount = tmp.teamcount;
@@ -5555,10 +5555,10 @@ if (sameas(margv[1],"start"))
 	update_team_tab();
 
 	/* tell user that team has been created */
-	
-	prfmsg(TEAMCRT,tmp.teamname,gechrbuf,tmp.password,tmp.secret);	
+
+	prfmsg(TEAMCRT,tmp.teamname,gechrbuf,tmp.password,tmp.secret);
 	outprfge(ALWAYS,usrnum);
-	
+
 	return;
 	}
 else
@@ -5575,14 +5575,14 @@ if (sameas(margv[1],"members"))
 	setbtv(gebb5);
 
 	strncpy(tmpbuf2,KEY,1);
-		
+
 	j = team_max;
 	i = 0;
-	
+
 	if (qeqbtv(&waruptr->teamcode,2))
 		{
 		prfmsg(TEAMMHDR,gemaxlist);
-			
+
 		do
 			{
 			gcrbtv(&tmpusr,2);
@@ -5592,7 +5592,7 @@ if (sameas(margv[1],"members"))
 					prf("%s",tmpusr.userid);
 				else
 					prf(", %s",tmpusr.userid);
-	
+
 				outprfge(ALWAYS,usrnum);
 				++i;
 				}
@@ -5608,7 +5608,7 @@ if (sameas(margv[1],"members"))
 	else
 		{
 		logthis("No one in team yet");
-		}																																									
+		}
 	}
 else
 if (sameas(margv[1],"kick"))
@@ -5652,7 +5652,7 @@ if (sameas(margv[1],"kick"))
 						strcpy(mail.topic,"Team Membership Revoked");
 						sendit();
 						clrprf();
-					
+
 						/* tell this user it is done */
 						prfmsg(TEAMKICK,tmpusr.userid);
 						outprfge(ALWAYS,usrnum);
@@ -5660,16 +5660,16 @@ if (sameas(margv[1],"kick"))
 						}
 					else
 						{
-						badfmt(TEAMNTM);	
+						badfmt(TEAMNTM);
 						}
-					
+
 					}
 				else
 					{
 					badfmt(TEAMNFND);
 					}
 				}
-			else 
+			else
 				{
 				badfmt(TEAMBDSC);
 				}
@@ -5711,7 +5711,7 @@ if (sameas(margv[1],"newpass"))
 				update_team_tab();
 				return;
 				}
-			else 
+			else
 				{
 				badfmt(TEAMBDSC);
 				}
@@ -5753,7 +5753,7 @@ if (sameas(margv[1],"newname"))
 				update_team_tab();
 				return;
 				}
-			else 
+			else
 				{
 				badfmt(TEAMBDSC);
 				}
@@ -5864,7 +5864,7 @@ if (sameas(margv[2],"report"))
 	prf("SD1:%s,%d*\r",
 		warsptr->shipname,
 		warsptr->shpclass);
-		
+
 	prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
 		spr("%ld",(long)warsptr->heading),
 		spr("%ld",(long)warsptr->speed),
@@ -5946,7 +5946,7 @@ void FUNC scan_data1()
 SCANTAB *sptr;
 WARSHP  *wptr;
 int i,j;
-unsigned spd;
+/*unsigned spd;*/
 char    mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s\r"};
 
 
@@ -5956,8 +5956,8 @@ update_scantab(warsptr,usrnum);
 
 sptr = &scantab[usrnum];
 
-spd = (unsigned) warsptr->speed;
-			
+/*spd = (unsigned) warsptr->speed;*/
+
 prf("Shp Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
 
 setsect(warsptr);
@@ -6023,7 +6023,7 @@ char	* FUNC gedots(int numdots)
 int	i;
 static char	dotbuf[41];
 
-if (numdots >40) 
+if (numdots >40)
 	numdots = 40;
 
 for (i=0;i<numdots;++i)
@@ -6080,11 +6080,11 @@ if (warsptr->items[I_SPY] > 0)
 	prfmsg(SPYM1);
 	outprfge(ALWAYS,usrnum);
 	strcpy(plptr->spyowner,warsptr->userid);
-	
+
 	setsect(warsptr); /* build PKEY */
 	pkey.plnum = plnum;
 	gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
-	
+
 	return;
 	}
 else
