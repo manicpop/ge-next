@@ -6,14 +6,14 @@
 .path.c=c:\wgserv\src
 .path.h=c:\wgserv\src
 .path.dll=c:\wgserv
-.path.msg=c:\wgserv\src
+.path.msg=c:\wgserv
 .path.obj=c:\wgserv\phobj
 
 ###############################################################################
 #####                           Build DLL's                               #####
 ###############################################################################
 mbmgemp.dll: \
-     mbmgemsg.h    mbmgehlp.h                                         \
+     mbmgemsg.h    mbmgehlp.h    mbmgeshp.h                            \
      gemain.obj     gefuncs.obj   gecmds.obj    gecybs.obj   geplanet.obj \
      gelib.obj      gedroids.obj \
      \wgserv\dlib\galimp.lib        \wgserv\dlib\gsblimp.lib                 \
@@ -45,8 +45,14 @@ gedroids.obj: gedroids.c
 ###############################################################################
 
 mbmgemsg.h: mbmgemsg.msg
-     ..\wgsmsx mbmgemsg
+     cd \wgserv
+     wgsmsx mbmgemsg -osrc
+     cd \wgserv\src
 mbmgehlp.h: mbmgehlp.msg
-     ..\wgsmsx mbmgehlp
+     cd \wgserv
+     wgsmsx mbmgehlp -osrc
+     cd \wgserv\src
 mbmgeshp.h: mbmgeshp.msg
-     ..\wgsmsx mbmgeshp
+     cd \wgserv
+     wgsmsx mbmgeshp -osrc
+     cd \wgserv\src
