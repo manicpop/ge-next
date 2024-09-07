@@ -3097,7 +3097,13 @@ REP09 {[1;37mNeutron flux.......... %u
 REP10 {[1;37mShields (Mark-%d)......[1;32m UP[1;37m
 } T 
 
+REP10S {[1;37mShields (Mark-%d).....[1;32m UP[1;37m
+} T 
+
 REP11 {[1;37mShields (Mark-%d)......[0;31m DOWN[1;37m
+} T 
+
+REP11S {[1;37mShields (Mark-%d).....[0;31m DOWN[1;37m
 } T 
 
 REP11B {[1;37mShield bank charge....[1;33m %d[1;37m
@@ -3130,7 +3136,13 @@ REP18A {[0;31m   Maintenance status - %d centocks[1;37m
 REP23 {[1;37mPhasers (Mark-%d)...... [1;32m<operative>[1;37m
 } T 
 
+REP23S {[1;37mPhasers (Mark-%d)..... [1;32m<operative>[1;37m
+} T 
+
 REP24 {[1;37mPhasers (Mark-%d)...... [0;31m<inoperable>[1;37m
+} T 
+
+REP24S {[1;37mPhasers (Mark-%d)..... [0;31m<inoperable>[1;37m
 } T 
 
 REP24A {[1;37mComm frequenices...... [1;34mA[1;37m:[1;34m%u  B[1;37m:[1;34m%u  C[1;37m:[1;34m%u[1;37m
@@ -3171,6 +3183,9 @@ REP37 {[1;37mTotal cargo weight... %s tons
 } T 
 
 REP38 {[1;37mInventory report:
+} T 
+
+REP39 {[1;37mRoster position....... %d
 } T 
 
 REP40 {[1;37mCyborg: %d, Cybmine: %d, Cybskill: %d, Cybupdate: %d

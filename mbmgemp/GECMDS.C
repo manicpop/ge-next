@@ -1986,26 +1986,50 @@ if (sameas(margv[1],"sys"))
 	{
 	prfmsg(REP36);
 	prfmsg(REP09,energy);
-	if (warsptr->shieldtype > 0)
+	if (shipclass[warsptr->shpclass].max_shlds != 0)
 		{
 		if (warsptr->shieldstat == SHIELDUP)
 			{
-			prfmsg(REP10,warsptr->shieldtype);
+			if (warsptr->shieldtype < 10)
+				{
+				prfmsg(REP10,warsptr->shieldtype);
+				}
+			else
+				{
+				prfmsg(REP10S,warsptr->shieldtype);
+				}
 			charge(warsptr,&max,&pcnt);
 			prfmsg(REP11B,pcnt);
 			}
 		else
 		if (warsptr->shieldstat == SHIELDDN || warsptr->shieldstat == SHIELDDM)
 			{
-			prfmsg(REP11,warsptr->shieldtype);
+			if (warsptr->shieldtype < 10)
+				{
+				prfmsg(REP11,warsptr->shieldtype);
+				}
+			else
+				{
+				prfmsg(REP11S,warsptr->shieldtype);
+				}
 			}
 		}
-	if (warsptr->phasrtype > 0)
+	if (shipclass[warsptr->shpclass].max_phasr != 0)
 		{
 		if (warsptr->phasr > 0)
-			prfmsg(REP23,warsptr->phasrtype);
+			{
+			if (warsptr->phasrtype < 10)
+				prfmsg(REP23,warsptr->phasrtype);
+			else
+				prfmsg(REP23S,warsptr->phasrtype);
+			}
 		else
-			prfmsg(REP24,warsptr->phasrtype);
+			{
+			if (warsptr->phasrtype < 10)
+				prfmsg(REP24,warsptr->phasrtype);
+			else
+				prfmsg(REP24S,warsptr->phasrtype);
+			}
 		}
 
 	prfmsg(REP24A,warsptr->freq[0],warsptr->freq[1],warsptr->freq[2]);
@@ -2035,7 +2059,7 @@ if (sameas(margv[1],"sys"))
 	if (warsptr->repair > 0)
 		prfmsg(REP18A,warsptr->repair);
 
-	prf("Ros Pos: %d\r",waruptr->rospos);
+	prfmsg(REP39,waruptr->rospos);
 
 	}
 else
