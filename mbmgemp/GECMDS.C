@@ -1189,7 +1189,7 @@ if (lockon(ptr,0,shpnum,usrn) == 1)
 			return;
 			}
 		}
-	prfmsg(TORMANY);
+	prfmsg(TORMANY,MAXTORPS);
 	outprfge(FILTER,usrn);
 	}
 }
@@ -1305,7 +1305,7 @@ if ( shpnum >= 0)
 				return;
 				}
 			}
-		prfmsg(MISMANY);
+		prfmsg(MISMANY,MAXMISSL);
 		outprfge(FILTER,usrnum);
 		}
 	}
@@ -1762,7 +1762,7 @@ if (laymine(warsptr,usrnum,i) == 1)
 	return;
 	}
 
-prfmsg(MINE2);
+prfmsg(MINE2,usermines);
 outprfge(FILTER,usrnum);
 }
 

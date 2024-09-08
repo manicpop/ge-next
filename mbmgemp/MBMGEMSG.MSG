@@ -2412,7 +2412,7 @@ TFIRE2 {***
 } T 
 
 TORMANY {
-[0;37m[[1;31mERROR[0;37m] There are already too many torpedoes locked onto that ship.[1;37m
+[0;37m[[1;31mERROR[0;37m] Only %d torpedoes can lock onto a ship at once.[1;37m
 } T 
 
 TORP2 {
@@ -2436,7 +2436,7 @@ MFIRE2 {***
 } T 
 
 MISMANY {
-[0;37m[[1;31mERROR[0;37m] There are already too many hyper-missiles locked onto that ship.[1;37m
+[0;37m[[1;31mERROR[0;37m] Only %d hyper-missiles can lock onto a ship at once.[1;37m
 } T 
 
 MISS01 {
@@ -5268,7 +5268,7 @@ MINE3 {
 } T 
 
 MINE2 {
-[0;37m[[1;31mERROR[0;37m] The maximum amount of mines you can safely launch are already deployed![1;37m
+[0;37m[[1;31mERROR[0;37m] The mine launcher can only safely deploy %d mines at once.[1;37m
 } T 
 
 MINE4 {***
