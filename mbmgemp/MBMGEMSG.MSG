@@ -3133,6 +3133,13 @@ REP18 {[0;31m   Tactical scanners damaged[1;37m
 REP18A {[0;31m   Maintenance status - %d centocks[1;37m
 } T 
 
+REP19 {[0;31m   Warp engines inoperable[1;37m
+} T 
+
+REP20 {[0;31m   Warp engines damaged
+   Warp [1;37m%d[0;31m or below recommended[1;37m
+} T 
+
 REP23 {[1;37mPhasers (Mark-%d)...... [1;32m<operative>[1;37m
 } T 
 

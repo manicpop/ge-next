@@ -1,5 +1,11 @@
 ge-next RELEASE NOTES
 
+=== 0.1 === (in progress)
+* REP SYS cleanup:
+	- phasers and shields properly aligned whether one digit or two
+	- ships without phasers/shields don't show them
+	- warp engine damage now listed
+
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
 code to Github. The release version will be 0.1.
