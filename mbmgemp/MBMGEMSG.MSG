@@ -20,7 +20,6 @@ SYSKEY {SYSOP} S 15 Key required for sysop powers
 
 A registration number is not required for ge-next.
 Feel free to put any eight digit number here.
-Future versions will remove this entirely.
 
 REGNO {12345678} S 8 Registration Number
 
@@ -147,11 +146,6 @@ is provided to you in case you wish to store the datafiles
 in a seperate directory.
 
 GESHIP {MBMGESHP.DAT} S 40 GE Ship Filename
-
-Keep this set to YES, the option to use MBBS mail has
-been removed. Future versions will remove this entirely.
-
-USEGEMSG {Use GE mail system? YES} B
 
 This option specifies the filename of the Mail database. It
 is provided to you in case you wish to store the datafiles

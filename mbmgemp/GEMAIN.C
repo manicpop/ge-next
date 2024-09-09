@@ -233,7 +233,6 @@ int			gemaxplrs,
 				cyb_gold,
 				tot_classes,
 				team_max,
-				usegemsg,
 				fse_state,
 				phatowrp,
 				misengfc,
@@ -463,7 +462,6 @@ s00plnum		= numopt(S00PLNUM,3,9);
 maxplanets	= numopt(MAXPLSE,1,9);
 teambonus	= numopt(TEAMBONU,0,32000)*100L;
 team_max		= numopt(TEAMMAX,0,32000);
-usegemsg		= ynopt(USEGEMSG);
 
 profon  		= ynopt(PROFON);
 logflag		= ynopt(LOGFLG);
@@ -3504,13 +3502,10 @@ void  FUNC disp_main_menu()
 {
 prfmsg (MENUA);
 
-if (usegemsg)
-	{
-	if (mailscan(usaptr->userid,0))
-		prfmsg(MENUB2);
-	else
-		prfmsg(MENUB1);
-	}
+if (mailscan(usaptr->userid,0))
+	prfmsg(MENUB2);
+else
+	prfmsg(MENUB1);
 
 if (optmenu)
 	prf("\r   %c ... %s",optchr,opttxt);

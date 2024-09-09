@@ -2313,11 +2313,6 @@ if (mail.userid[0] == '*')
 
 setmem(gemsg,FIXEDMSGSIZ,0);
 
-/* only increment if using MBBS Mail
-if (!usegemsg)
-	gemsg->msgno=++sv.msgtot;
-else */
-
 gemsg->msgno = 0;
 
 strcpy(gemsg->userto,mail.userid);
@@ -2326,36 +2321,16 @@ strcpy(gemsg->to,mail.userid);
 strcpy(gemsg->topic,mail.topic);
 gemsg->auxtpc[0] = 0;
 
-/*if (usegemsg)*/
-
 gemsg->flags = mail.class;
-
-/*else
-	gemsg->flags=0;*/
 
 gemsg->crdate=today();
 gemsg->crtime=now();
 
-/* robbed nreply for time stamp
-if (usegemsg)*/
-
 gemsg->nreply = cofdat(today());
-
-/*else
-	gemsg->nreply=0;*/
 
 prf2tx();
 
-/*if user has selected to use the GE mail system*/
-
-/*if (usegemsg)
-	{*/
-
 return(sendgemsg(gemsg,mail.userid));
-
-/*	}
-
-return(sendmsg(gemsg,mail.userid));*/
 
 }
 
