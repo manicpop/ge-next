@@ -2642,6 +2642,10 @@ ORBIT1 {
 [0;37mSensors confirm stationary orbit around planet [1;34m%d[0;37m, [1;34m%s[0;37m.[1;37m
 } T 
 
+ORBIT1N {
+[0;37mSensors confirm stationary orbit around planet [1;34m%d[0;37m.[1;37m
+} T 
+
 ORBIT2 {
 [0;37m[[1;31mERROR[0;37m] You must be within 250 subsectors of a planet to establish an orbit.[1;37m
 } T 

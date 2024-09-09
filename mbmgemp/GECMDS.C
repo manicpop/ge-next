@@ -783,7 +783,14 @@ if (plnum <= MAXPLANETS && plnum > 0)
 		distance = (unsigned)(cdistance(&warsptr->coord,&plptr->coord)*10000);
 		if (distance <= 250)
 			{
-			prfmsg(ORBIT1,plnum,plptr->name);
+			if (strlen(plptr->name) == 0)
+				{
+				prfmsg(ORBIT1N,plnum);
+				}
+			else
+				{
+				prfmsg(ORBIT1,plnum,plptr->name);
+				}
 			warsptr->where = 10 + plnum;
 			warsptr->speed = 0;
 			warsptr->speed2b = 0;
