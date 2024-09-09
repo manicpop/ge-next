@@ -99,7 +99,7 @@ limit the disk I/O each time. There is no problem changing
 this value AFTER a game has begun.
 
 
-MAXPLSE {Maximum planets in a sector? 5} N 1 9
+MAXPLSE {Maximum planets in a sector? 4} N 1 9
 
 If a player tries to attack another player in the Neutral
 Zone they will be fired upon by the Enforcer planet. Set
