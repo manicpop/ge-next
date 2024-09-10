@@ -395,7 +395,7 @@ if (genearas(margv[1],"class"))
 					sprintf(gechrbuf4,"%d",shipclass[i].max_accel);
 
 				if (shipclass[i].max_warp == 0)
-					sprintf(gechrbuf5,"\33[0;31m  N");
+					sprintf(gechrbuf5,"\33[0;31m N");
 				else
 					sprintf(gechrbuf5,"%d",shipclass[i].max_warp);
 
@@ -409,23 +409,14 @@ if (genearas(margv[1],"class"))
 				else
 					sprintf(gechrbuf7,"%d",shipclass[i].max_phasr);
 
-				prf("\33[1;36m%2d \33[0;36m%-36s\33[0;37mPrice: \33[0;33m%4s  \33[0;37mPoints:" \
-				" \33[1;37m%5d  \33[0;37mWarp: \33[1;37m%3s\r" \
-				" \33[0;37mAccel: \33[1;37m%3s Su/T    \33[0;37mShield: \33[1;37m%2s  " \
-				" \33[0;37mPhaser: \33[1;37m%2s    \33[0;37mCargo: \33[1;37m%4s tons  " \
-				" \33[0;37mScan: \33[1;37m%4s\r" \
-				" \33[0;37mTorp: %s  \33[0;37mMisl: %s  \33[0;37mMine: %s  \33[0;37mFighters: %s " \
-				" \33[0;37mDecoy: %s  \33[0;37mJamr: %s  \33[0;37mZip: %s  \33[0;37mCloak: %s\r",
+				prf("\33[1;36m%2d \33[0;36m%-27s \33[0;37mPrice:\33[0;33m%5s  \33[1;37m%2s  %2s  %2s  %s  %s  %s  %s  %s  %s  %s  %s\r" \
+				"\33[0;37mScan: \33[1;37m%3s \33[0;37mAccl: \33[1;37m%4s \33[0;37mCargo: \33[1;37m%4s\33[0;37m Pts: \33[1;37m%5d \r",
 					i+1,
 					shipclass[i].typename,
 					gechrbuf2,
-					shipclass[i].max_points,
 					gechrbuf5,
-					gechrbuf4,
 					gechrbuf6,
 					gechrbuf7,
-					gechrbuf,
-					gechrbuf3,
 					shipclass[i].max_torps ? "\33[1;32mY" : "\33[0;31mN",
 					shipclass[i].max_missl ? "\33[1;32mY" : "\33[0;31mN",
 					shipclass[i].has_mine ? "\33[1;32mY" : "\33[0;31mN",
@@ -433,7 +424,11 @@ if (genearas(margv[1],"class"))
 					shipclass[i].has_decoy ? "\33[1;32mY" : "\33[0;31mN",
 					shipclass[i].has_jam ? "\33[1;32mY" : "\33[0;31mN",
 					shipclass[i].has_zip ? "\33[1;32mY" : "\33[0;31mN",
-					shipclass[i].max_cloak ? "\33[1;32mY" : "\33[0;31mN"
+					shipclass[i].max_cloak ? "\33[1;32mY" : "\33[0;31mN",
+					gechrbuf4,
+					gechrbuf3,
+					gechrbuf,
+					shipclass[i].max_points
 					);
 				}
 			}

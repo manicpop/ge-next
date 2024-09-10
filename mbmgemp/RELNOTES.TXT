@@ -12,6 +12,7 @@ ge-next RELEASE NOTES
 	- MAXPLSE is the maximum amount of planets created in a sector,
 	but the real max was one fewer than this value. fixed.
 	default is now 4 which is what it (effectively) was before.
+* new HELP CLASS screen
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
