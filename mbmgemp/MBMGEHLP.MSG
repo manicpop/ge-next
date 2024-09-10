@@ -993,12 +993,11 @@ opponent's own ship.
 [1;37m} T 
 
 HLPCLS1 {
-[1;36m
-These are the classes of ships manufactured at Zygor and their capabilities:
+[1;36mThese are the classes of ships manufactured at Zygor and their capabilities:
 [0;37m
-                                             W   S   P  T  M  M  F  D  J  Z  C
-                                             r   h   h  o  i  i  i  e  a  i  l
-                                             p   i   a  r  s  n  g  c  m  p  o
+                                P  W  S  P T M M F D J Z C   A    S    T     P
+                                r  r  h  h o i i i e a i l   c    c    o     t
+                                c  p  i  a r s n g c m p o   l    n    n     s
 } T 
 
 HLPCLS2 {

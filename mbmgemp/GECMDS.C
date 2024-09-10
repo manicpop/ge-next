@@ -409,8 +409,8 @@ if (genearas(margv[1],"class"))
 				else
 					sprintf(gechrbuf7,"%d",shipclass[i].max_phasr);
 
-				prf("\33[1;36m%2d \33[0;36m%-27s \33[0;37mPrice:\33[0;33m%5s  \33[1;37m%2s  %2s  %2s  %s  %s  %s  %s  %s  %s  %s  %s\r" \
-				"\33[0;37mScan: \33[1;37m%3s \33[0;37mAccl: \33[1;37m%4s \33[0;37mCargo: \33[1;37m%4s\33[0;37m Pts: \33[1;37m%5d \r",
+				prf("\33[1;36m%2d \33[0;36m%-24s \33[0;33m%5s \33[1;37m" \
+				"%2s \33[1;37m%2s %2s %s %s %s %s %s %s %s %s \33[1;37m%3s %4s %4s %5d\r",
 					i+1,
 					shipclass[i].typename,
 					gechrbuf2,
