@@ -2907,7 +2907,7 @@ ATTACKM0 {
 } T 
 
 ATTACKM1 {
-[0;32mTransporting [1;37m%s troops[1;32m to the planet![1;37m
+[1;36mOn your orders, [1;37m%s troops[1;36m have deployed to the planet.[1;37m
 
 ***
 } T 

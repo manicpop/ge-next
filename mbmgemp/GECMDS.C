@@ -3561,13 +3561,6 @@ void  FUNC cmd_attack()
 int won;
 unsigned long num;
 
-if (shipclass[warsptr->shpclass].max_attk == 0)
-	{
-	prfmsg(ATTACK0A);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
 if (warsptr->where < 10)
 	{
 	prfmsg(ATTACK1);
@@ -3620,37 +3613,48 @@ if (margc == 3)
 				prfmsg(ATTACK9);
 				outprfge(ALWAYS,usrnum);
 				}
-			return;
 			}
 		else
 			{
 			prfmsg(ATTACKM0);
+			outprfge(ALWAYS,usrnum);
 			}
+		return;
 		}
 	else
 	if (genearas("fig",margv[2]))
 		{
-		num = atol(margv[1]);
-		if (num > 0 && num <= warsptr->items[I_FIGHTER])
+		if (shipclass[warsptr->shpclass].max_attk > 0)
 			{
-			warsptr->hostile = warsptr->where;
-			warsptr->cantexit = FIRETICKS;
-			won = attack_fig(num);
-			if (won == 1)
+			num = atol(margv[1]);
+			if (num > 0 && num <= warsptr->items[I_FIGHTER])
 				{
-				prfmsg(ATTACK8);
-				outprfge(ALWAYS,usrnum);
+				warsptr->hostile = warsptr->where;
+				warsptr->cantexit = FIRETICKS;
+				won = attack_fig(num);
+				if (won == 1)
+					{
+					prfmsg(ATTACK8);
+					outprfge(ALWAYS,usrnum);
+					}
+				else
+					{
+					prfmsg(ATTACK9);
+					outprfge(ALWAYS,usrnum);
+					}
 				}
 			else
 				{
-				prfmsg(ATTACK9);
+				prfmsg(ATTACKF0);
 				outprfge(ALWAYS,usrnum);
 				}
 			return;
 			}
 		else
 			{
-			prfmsg(ATTACKF0);
+			prfmsg(ATTACK0A);
+			outprfge(ALWAYS,usrnum);
+			return;
 			}
 		}
 	prfmsg(ATTFMT);
