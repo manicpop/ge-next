@@ -993,37 +993,13 @@ opponent's own ship.
 [1;37m} T 
 
 HLPCLS1 {
-[1;36mThese are the classes of ships manufactured at Zygor. Each has its own features and
-capabilities. The chart below summarizes the differences.
-[1;32m
-                       S  P  T M D J Z M F C              
-                       h  h  o i e a i i i l              
-                       l  s  r s c m p n g o            
-## --Class Name---     d--r--p-l-y-r-r-e-t-k-Acc-Warp-Tons----Price--Scan--Pts
-[1;36m} T 
+[1;36m
+These are the classes of ships manufactured at Zygor and their capabilities:
 
+} T 
 
 HLPCLS2 {
-[0;31m------------------------------------------------------------------------------
-[1;36mShld -- maximum shield type (0 = no shields)
-Phsr -- maximum phaser type (0 = no phasers)
-Torp -- 0 = has no torpedo launcher / 1 = has torpedo launcher
-Misl -- 0 = has no missile laucnher / 1 = has missile launcher
-Decy -- 0 = has no decoy launcher / 1 = has decoy launcher
-Jamr -- 0 = has no jammer launcher / 1 = has jammer launcher
-Zipr -- 0 = has no zipper launcher / 1 = has zipper launcher
-Mine -- 0 = has no mine launcher / 1 = has mine launcher
-Figt -- 0 = has fighter laucher / 1 = has no fighter launcher
-Clok -- 0 = has no cloaking system / 1 = has cloaking system
-Acc -- maximum acceleration rate
-Warp -- maximum rated speed of warp drive (0 = impulse only)
-Tons -- maximum tonnage ship can transport
-Price -- price for a ship of this class
-Scan -- maximum scanner range
-Pts -- points for destroying a ship in this class
-
-For more details on a class of ship use the [1;37mHELP CLASS [1;32mnn[1;36m command, where [1;32mnn[1;36m is
-the class number from the table above.
+[1;36mFor more details on a class of ship, enter [1;37mHELP CLASS [1;32m[class number][1;36m.
 [1;37m} T 
 
 HLPCLS3 {

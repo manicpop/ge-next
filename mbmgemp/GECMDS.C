@@ -344,7 +344,7 @@ void  FUNC cmd_gehelp()
 {
 int     ndx,i;
 
-char	gechrbuf4[20];
+char	gechrbuf4[20], gechrbuf5[20], gechrbuf6[20], gechrbuf7[20];
 
 setmbk(gehlpmb);
 
@@ -366,53 +366,74 @@ if (genearas(margv[1],"class"))
 			if (shipclass[i].max_type == CLASSTYPE_USER)
 				{
 		  		if (shipclass[i].max_tons >999999L)
-					sprintf(gechrbuf,"%5ldm",shipclass[i].max_tons/1000000L);
+					sprintf(gechrbuf,"%ldm",shipclass[i].max_tons/1000000L);
 				else
 		  		if (shipclass[i].max_tons >999)
-					sprintf(gechrbuf,"%5ldk",shipclass[i].max_tons/1000);
+					sprintf(gechrbuf,"%ldk",shipclass[i].max_tons/1000);
 				else
-					sprintf(gechrbuf,"%5ld ",shipclass[i].max_tons);
+					sprintf(gechrbuf,"%ld",shipclass[i].max_tons);
 
 		  		if (shipclass[i].max_price >999999L)
-					sprintf(gechrbuf2,"%7ldm",shipclass[i].max_price/1000000L);
+					sprintf(gechrbuf2,"%ldm",shipclass[i].max_price/1000000L);
 				else
 		  		if (shipclass[i].max_price >999)
-					sprintf(gechrbuf2,"%7ldk",shipclass[i].max_price/1000);
+					sprintf(gechrbuf2,"%ldk",shipclass[i].max_price/1000);
 				else
-					sprintf(gechrbuf2,"%7ld ",shipclass[i].max_price);
+					sprintf(gechrbuf2,"%ld",shipclass[i].max_price);
 
 		  		if (shipclass[i].scanrange >999999L)
-					sprintf(gechrbuf3,"%4ldm",shipclass[i].scanrange/1000000L);
+					sprintf(gechrbuf3,"%ldm",shipclass[i].scanrange/1000000L);
 				else
 		  		if (shipclass[i].scanrange >999)
-					sprintf(gechrbuf3,"%4ldk",shipclass[i].scanrange/1000);
+					sprintf(gechrbuf3,"%ldk",shipclass[i].scanrange/1000);
 				else
-					sprintf(gechrbuf3,"%4ld ",shipclass[i].scanrange);
+					sprintf(gechrbuf3,"%ld",shipclass[i].scanrange);
 
 		  		if (shipclass[i].max_accel >999)
-					sprintf(gechrbuf4,"%3dk",shipclass[i].max_accel/1000);
+					sprintf(gechrbuf4,"%dk",shipclass[i].max_accel/1000);
 				else
-					sprintf(gechrbuf4,"%3d ",shipclass[i].max_accel);
+					sprintf(gechrbuf4,"%d",shipclass[i].max_accel);
 
-				prf("%2d %-20s%-2d %-2d %d %d %d %d %d %d %d %d %s %2d %s %s %s %3d\r",
+				if (shipclass[i].max_warp == 0)
+					sprintf(gechrbuf5,"\33[0;31m  N");
+				else
+					sprintf(gechrbuf5,"%d",shipclass[i].max_warp);
+
+				if (shipclass[i].max_shlds == 0)
+					sprintf(gechrbuf6,"\33[0;31m N");
+				else
+					sprintf(gechrbuf6,"%d",shipclass[i].max_shlds);
+
+				if (shipclass[i].max_phasr == 0)
+					sprintf(gechrbuf7,"\33[0;31m N");
+				else
+					sprintf(gechrbuf7,"%d",shipclass[i].max_phasr);
+
+				prf("\33[1;36m%2d \33[0;36m%-36s\33[0;37mPrice: \33[0;33m%4s  \33[0;37mPoints:" \
+				" \33[1;37m%5d  \33[0;37mWarp: \33[1;37m%3s\r" \
+				" \33[0;37mAccel: \33[1;37m%3s Su/T    \33[0;37mShield: \33[1;37m%2s  " \
+				" \33[0;37mPhaser: \33[1;37m%2s    \33[0;37mCargo: \33[1;37m%4s tons  " \
+				" \33[0;37mScan: \33[1;37m%4s\r" \
+				" \33[0;37mTorp: %s  \33[0;37mMisl: %s  \33[0;37mMine: %s  \33[0;37mFighters: %s " \
+				" \33[0;37mDecoy: %s  \33[0;37mJamr: %s  \33[0;37mZip: %s  \33[0;37mCloak: %s\r",
 					i+1,
 					shipclass[i].typename,
-					shipclass[i].max_shlds,
-					shipclass[i].max_phasr,
-					shipclass[i].max_torps,
-					shipclass[i].max_missl,
-					shipclass[i].has_decoy,
-					shipclass[i].has_jam,
-					shipclass[i].has_zip,
-					shipclass[i].has_mine,
-					shipclass[i].max_attk,
-					shipclass[i].max_cloak,
-					gechrbuf4,
-					shipclass[i].max_warp,
-					gechrbuf,
 					gechrbuf2,
+					shipclass[i].max_points,
+					gechrbuf5,
+					gechrbuf4,
+					gechrbuf6,
+					gechrbuf7,
+					gechrbuf,
 					gechrbuf3,
-					shipclass[i].max_points
+					shipclass[i].max_torps ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].max_missl ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].has_mine ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].max_attk ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].has_decoy ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].has_jam ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].has_zip ? "\33[1;32mY" : "\33[0;31mN",
+					shipclass[i].max_cloak ? "\33[1;32mY" : "\33[0;31mN"
 					);
 				}
 			}
