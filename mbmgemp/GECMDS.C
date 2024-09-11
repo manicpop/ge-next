@@ -591,7 +591,7 @@ else
 	topspeed=warsptr->topspeed;
 	if (speed < 0)
 		{
-		prfmsg(WARP02);
+		prfmsg(WARPFMT);
 		outprfge(ALWAYS,usrnum);
 		return;
 		}
@@ -657,34 +657,26 @@ if (*margv[1] == '@') /* turn absolute */
 	{
 	if (warsptr->helm == 0)
 		{
-		if (warsptr->speed >= 0)
+		if (useenergy(warsptr,usrnum,ROTENGUSE) == 1)
 			{
-			if (useenergy(warsptr,usrnum,ROTENGUSE) == 1)
+			*margv[1] = '+';
+			deg = atoi(margv[1]);
+			if (deg < 360)
 				{
-				*margv[1] = '+';
-				deg = atoi(margv[1]);
-				if (deg < 360)
-					{
-					prfmsg(NOWTURN,deg);
-					outprfge(ALWAYS,usrnum);
-					warsptr->head2b   = (double)deg;
-					}
-				else
-					{
-					prfmsg(NUMOOR,0,359);
-					outprfge(ALWAYS,usrnum);
-					return;
-					}
+				prfmsg(NOWTURN,deg);
+				outprfge(ALWAYS,usrnum);
+				warsptr->head2b   = (double)deg;
 				}
 			else
 				{
-				prfmsg(NOROTPW);
+				prfmsg(NUMOOR,0,359);
 				outprfge(ALWAYS,usrnum);
+				return;
 				}
 			}
 		else
 			{
-			prfmsg(CANTROT);
+			prfmsg(NOROTPW);
 			outprfge(ALWAYS,usrnum);
 			}
 		}
@@ -699,24 +691,16 @@ if (valdegree(margv[1]))
 	{
 	if (warsptr->helm == 0)
 		{
-		if (warsptr->speed >= 0)
+		if (useenergy(warsptr,usrnum,ROTENGUSE) == 1)
 			{
-			if (useenergy(warsptr,usrnum,ROTENGUSE) == 1)
-				{
-				deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-				prfmsg(NOWTURN,deg);
-				outprfge(ALWAYS,usrnum);
-				warsptr->head2b   = (double)deg;
-				}
-			else
-				{
-				prfmsg(NOROTPW);
-				outprfge(ALWAYS,usrnum);
-				}
+			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+			prfmsg(NOWTURN,deg);
+			outprfge(ALWAYS,usrnum);
+			warsptr->head2b   = (double)deg;
 			}
 		else
 			{
-			prfmsg(CANTROT);
+			prfmsg(NOROTPW);
 			outprfge(ALWAYS,usrnum);
 			}
 		}
@@ -818,12 +802,12 @@ if (plnum <= MAXPLANETS && plnum > 0)
 		}
 	else
 		{
-		prfmsg(FOOLISH);
+		prfmsg(NOPLNT);
 		}
 	}
 else
 	{
-	prfmsg(FOOLISH);
+	prfmsg(NOPLNT);
 	}
 outprfge(ALWAYS,usrnum);
 }
@@ -846,77 +830,68 @@ if (shipclass[warsptr->shpclass].max_phasr == 0)
 	return;
 	}
 
-
-if (warsptr->phasrtype > 0)
+if (warsptr->where == 1)
 	{
-	if (warsptr->where == 1)
+	if (margc == 2)
 		{
-		if (margc == 2)
+		if (valdegree(margv[1]))
+			{
+			if (warsptr->hypha == 0)
+				{
+				firehp(warsptr,usrnum);
+				}
+			else
+				{
+				prfmsg(HPWAIT);
+				outprfge(ALWAYS,usrnum);
+				}
+			}
+		}
+	else
+		{
+		prfmsg(HPHAFMT);
+		outprfge(ALWAYS,usrnum);
+		}
+	}
+else
+	{
+	if (margc == 2)
+		{
+		if (warsptr->phasr >=PMINFIRE)
 			{
 			if (valdegree(margv[1]))
 				{
-				if (warsptr->hypha == 0)
-					{
-					firehp(warsptr,usrnum);
-					}
-				else
-					{
-					prfmsg(HPWAIT);
-					outprfge(ALWAYS,usrnum);
-					}
+				warsptr->percent = 1;
+				firep(warsptr,usrnum);
 				}
 			}
 		else
 			{
-			prfmsg(HPHAFMT);
+			prfmsg(PHANONE);
+			outprfge(ALWAYS,usrnum);
+			}
+		}
+	else
+	if (margc == 3)
+		{
+		if (warsptr->phasr >=PMINFIRE)
+			{
+			if (valpcnt(margv[2],0,5) && valdegree(margv[1]))
+				{
+				firep(warsptr,usrnum);
+				}
+			}
+		else
+			{
+			prfmsg(PHANONE);
 			outprfge(ALWAYS,usrnum);
 			}
 		}
 	else
 		{
-		if (margc == 2)
-			{
-			if (warsptr->phasr >=PMINFIRE)
-				{
-				if (valdegree(margv[1]))
-					{
-					warsptr->percent = 1;
-					firep(warsptr,usrnum);
-					}
-				}
-			else
-				{
-				prfmsg(PHANONE);
-				outprfge(ALWAYS,usrnum);
-				}
-			}
-		else
-		if (margc == 3)
-			{
-			if (warsptr->phasr >=PMINFIRE)
-				{
-				if (valpcnt(margv[2],0,5) && valdegree(margv[1]))
-					{
-					firep(warsptr,usrnum);
-					}
-				}
-			else
-				{
-				prfmsg(PHANONE);
-				outprfge(ALWAYS,usrnum);
-				}
-			}
-		else
-			{
-			prfmsg(PHAFMT);
-			outprfge(ALWAYS,usrnum);
-			}
+		prfmsg(PHAFMT);
+		outprfge(ALWAYS,usrnum);
 		}
-	}
-else
-	{
-	prfmsg(PHA01);
-	outprfge(ALWAYS,usrnum);
 	}
 }
 
@@ -931,7 +906,7 @@ double factor,tonfact;
 
 if (ptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The phasers are");
 	outprfge(ALWAYS,usrn);
 	return;
 	}
@@ -1016,7 +991,7 @@ if (ptr->phasr >=PMINFIRE)
 	}
 else
 	{
-	prfmsg(NOFIREP);
+	prfmsg(PHANONE);
 	outprfge(ALWAYS,usrn);
 	}
 if (ptr->shieldstat == SHIELDUP)
@@ -1131,7 +1106,7 @@ if (warsptr->where == 1)
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The torpedo launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1159,7 +1134,7 @@ shpnum = findshp(margv[1],1);
 
 if (shpnum == usrnum)
 	{
-	prfmsg(FOOLISH);
+	prfmsg(FRCTER);
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -1242,7 +1217,7 @@ if (shipclass[warsptr->shpclass].max_missl == 0)
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The missile launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1297,7 +1272,7 @@ shpnum = findshp(margv[1],1);
 
 if (shpnum == usrnum)
 	{
-	prfmsg(FOOLISH);
+	prfmsg(FRCTER);
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -1567,7 +1542,7 @@ if (warsptr->where == 1)
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The decoy launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1605,7 +1580,7 @@ void  FUNC cmd_jammer()
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The jammer launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1678,7 +1653,7 @@ if (!shipclass[warsptr->shpclass].has_zip)
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The zipper launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1749,7 +1724,7 @@ if (neutral(&warsptr->coord))
 
 if (warsptr->cloak > 0 )
 	{
-	prfmsg(PCLOKUP);
+	prfmsg(PCLOKUP,"The mine launcher is");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2250,7 +2225,7 @@ shpnum = findshp(margv[2],1);
 
 if (shpnum == usrnum)
 	{
-	prfmsg(FOOLISH);
+	prfmsg(FRCTER);
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -2357,7 +2332,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 	refresh(warsptr,usrnum);
 	if (plnum > sector.numplan)
 		{
-		prfmsg(FOOLISH);
+		prfmsg(NOPLNT);
 		outprfge(ALWAYS,usrnum);
 		}
 	else
@@ -2512,13 +2487,13 @@ if (plnum <= MAXPLANETS && plnum > 0)
 
 		else
 		{
-		prfmsg(FOOLISH);
+		prfmsg(NOPLNT);
 		outprfge(ALWAYS,usrnum);
 		}
 	}
 else
 	{
-	prfmsg(FOOLISH);
+	prfmsg(NOPLNT);
 	outprfge(ALWAYS,usrnum);
 	}
 }
@@ -2766,7 +2741,7 @@ printmap();
 
 outprfge(ALWAYS,usrnum);
 }
-#ifdef NOTHING
+/*#ifdef NOTHING
 void scan_hy()
 
 {
@@ -2791,7 +2766,7 @@ else
 		{
 		wptr=warshpoff(othusn);
 		if (ingegame(othusn))
-/*              if (ingegame(othusn) && wptr->where == 1)*/
+/*              if (ingegame(othusn) && wptr->where == 1)
 			{
 			xf = ((wptr->coord.xcoord)+(double)univmax);
 			yf = ((wptr->coord.ycoord)+(double)univmax);
@@ -2819,7 +2794,7 @@ else
 outprfge(ALWAYS,usrnum);
 }
 #endif
-
+*/
 
 /* alternate idea: read off the ship letter & ship no to a seperate table.
    then zero out ship no as before */
@@ -3171,13 +3146,6 @@ if (warsptr->where == 1)
 	return;
 	}
 
-if (warsptr->shieldtype == 0)
-	{
-	prfmsg(SHLD2);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
 if (margc != 2)
 	{
 	prfmsg(SHLDFMT);
@@ -3355,13 +3323,6 @@ plnum = warsptr->where - 10;
 
 getplanetdat(usrnum);
 
-if (plptr->type == PLTYPE_WORM)
-	{
-	prfmsg(TRANSFR0);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
 if (trans_opt || sameas(plptr->userid,warsptr->userid))
 	{
 	if ((amt = atol(margv[2])) > 0L)
@@ -3385,7 +3346,7 @@ if (trans_opt || sameas(plptr->userid,warsptr->userid))
 		}
 	else
 		{
-		prfmsg(TRANSFR2);
+		prfmsg(TRANSFMT);
 		}
 	}
 else
@@ -3403,13 +3364,6 @@ unsigned long amt;
 plnum = warsptr->where - 10;
 
 getplanetdat(usrnum);
-
-if (plptr->type == PLTYPE_WORM)
-	{
-	prfmsg(TRANSFR0);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
 
 /* you must own this planet or NOBODY must own it to xfer up */
 
@@ -3443,7 +3397,7 @@ if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0)
 		}
 	else
 		{
-		prfmsg(TRANSUP2);
+		prfmsg(TRANSFMT);
 		}
 	}
 else
@@ -3490,7 +3444,7 @@ if (sameas(plptr->userid,warsptr->userid))
 	}
 else
 	{
-	prfmsg(ABAN03);
+	prfmsg(ADMIN2);
 	outprfge(ALWAYS,usrnum);
 	}
 }
@@ -3516,19 +3470,11 @@ plnum = warsptr->where - 10;
 
 getplanetdat(usrnum);
 
-if (plptr->type == PLTYPE_WORM)
-	{
-	prfmsg(ADMIN2A);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
-
 if (plptr->userid[0] == 0)
 	{
 	if (waruptr->planets >= max_plnts)
 		{
-		prfmsg(ADMIN4);
+		prfmsg(ADMIN4,max_plnts);
 		outprfge(ALWAYS,usrnum);
 		return;
 		}
@@ -3563,7 +3509,7 @@ unsigned long num;
 
 if (warsptr->where < 10)
 	{
-	prfmsg(ATTACK1);
+	prfmsg(ADMIN1);
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -3571,14 +3517,6 @@ if (warsptr->where < 10)
 plnum = warsptr->where - 10;
 
 getplanetdat(usrnum);
-
-if (plptr->type == PLTYPE_WORM)
-	{
-	prfmsg(ATTACK0B);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
 
 if (sameas(plptr->userid,warsptr->userid))
 	{
@@ -4439,7 +4377,7 @@ if (plptr->userid[0] != 0)
 		}
 	else
 		{
-		prfmsg(BUY5);
+		prfmsg(BUYFMT);
 		}
 	}
 else
@@ -4758,7 +4696,7 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 		}
 	else
 		{
-		prfmsg(NEW15);
+		prfmsg(NEWFMT);
 		}
 	}
 else
@@ -6089,7 +6027,7 @@ void  FUNC cmd_spy()
 
 if (warsptr->where < 10)
 	{
-	prfmsg(SPY1);
+	prfmsg(ADMIN1);
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -6097,14 +6035,6 @@ if (warsptr->where < 10)
 plnum = warsptr->where - 10;
 
 getplanetdat(usrnum);
-
-if (plptr->type == PLTYPE_WORM)
-	{
-	prfmsg(SPY0B);
-	outprfge(ALWAYS,usrnum);
-	return;
-	}
-
 
 if (sameas(plptr->userid,warsptr->userid))
 	{
@@ -6203,7 +6133,7 @@ if ((amt = atol(margv[1])) > 0L)
 	}
 else
 	{
-	prfmsg(JETT2);
+	prfmsg(JETTFMT);
 	outprfge(ALWAYS,usrnum);
 	}
 }

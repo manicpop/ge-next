@@ -2883,7 +2883,7 @@ else
 		gwar();
 	else
 		{
-		prfmsg(HUH);
+		prfmsg(FORHELP);
 		outprfge(ALWAYS,usrnum);
 		}
 	}
@@ -3018,7 +3018,6 @@ if (margc > 0)
 				sprintf(gechrbuf,"%ld",plptr->tax);
 				prfmsg(ADMIN04A,gechrbuf);
 				prfmsg(ADMIN04B,plptr->taxrate);
-		/*              prfmsg(ADMIN05,plptr->warnings);*/
 				prfmsg(ADMIN06,plptr->password);
 				prfmsg(DASHES);
 				prfmsg(PRESSKEY);

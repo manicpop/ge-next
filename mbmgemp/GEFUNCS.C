@@ -584,7 +584,7 @@ if (flag == 1)
 		prfmsg(HYCLDN);
 		ptr->cloak = 0;
 		}
-	prfmsg(HYPERIN);
+	prfmsg(HYPERIN,warsptr->shipname);
 	outprfge(FILTER,usrn);
 
 	ptr->where = 1;
@@ -600,7 +600,7 @@ if (flag == 1)
 	}
 else
 	{
-	prfmsg(HYPEROUT);
+	prfmsg(HYPEROUT,warsptr->shipname);
 	outprfge(FILTER,usrn);
 
 	ptr->where = 0;
@@ -1685,7 +1685,7 @@ for (i=0,dptr=ptr->decout;i<MAXDECOY;++i)
 		{
 		if (--dptr[i] == 0)
 			{
-			prfmsg(DECGONE);
+			prfmsg(DECGONE,warsptr->shipname);
 			outprfge(FILTER,usrn);
 			}
 		}
@@ -1709,7 +1709,7 @@ else
 if (ptr->cloak == 2)
 	{
 	ptr->cloak = 10;
-	prfmsg(CLOKUP);
+	prfmsg(CLOKUP,warsptr->shipname);
 	outprfge(ALWAYS,usrn);
 	}
 }

@@ -2035,10 +2035,6 @@ WARHUP {***
 [0;37mCommander [0;36m%s[0;37m's ship just vanished![1;37m
 } T 
 
-HUH {
-[1;36mType [1;37m?[1;36m for help.[1;37m
-} T 
-
 NOSHPS {
 [1;36mAll the ships have been assigned, please check back later.[1;37m
 } T 
@@ -2073,7 +2069,7 @@ KILLEDBY {***
 } T 
 
 PHITHIM {
-[0;37mSensors indicate you caused [0;31m%s[0;37m damage to Commander [0;36m%s[0;37m's ship![1;37m
+[0;37mThe phasers caused [0;31m%s[0;37m damage to Commander [0;36m%s[0;37m's ship![1;37m
 } T 
 
 PHITYOU {***
@@ -2081,7 +2077,7 @@ PHITYOU {***
 } T 
 
 PDEFLECT {
-[0;37mSensors indicate the phasers were deflected by Commander [0;36m%s[0;37m's shields![1;37m
+[0;37mThe phasers were deflected by Commander [0;36m%s[0;37m's shields![1;37m
 } T 
 
 PHITDEF {***
@@ -2098,7 +2094,7 @@ PHSRMAX {***
 } T 
 
 PCLOKUP {
-[0;37m[[1;31mERROR[0;37m] That won't work while the cloaking system is on.[1;37m
+[0;37m[[1;31mERROR[0;37m] %s inoperable while cloaking is on.[1;37m
 } T 
 
 WARP {***
@@ -2116,10 +2112,6 @@ NOACCEL {***
 WARP01 {
 [0;37m[[1;31mERROR[0;37m] This ship is not equipped with warp drive.[1;37m
 } T 
-
-WARP02 {
-[1;36mType [1;37mHELP WARP[1;36m for the correct usage.[1;37m
-} T
 
 WARP03 {
 [0;37m[[1;31mERROR[0;37m] The warp drive can't operate at that speed.[1;37m
@@ -2170,10 +2162,6 @@ SPEED0 {***
 [0;37mHelm reports dead stop.[1;37m
 } T 
 
-NOFIREP {
-[0;37m[[1;31mERROR[0;37m] There is insufficient power to fire![1;37m
-} T 
-
 PFIRED {
 [0;32mPhasers fired at [0;31m%d[0;32m percent power - focus [0;31m%d[0;32m![1;37m
 } T 
@@ -2181,8 +2169,6 @@ PFIRED {
 PHREPR {***
 [1;32mDamage Control reports phasers are now functional![1;37m
 } T 
-
-CANTROT {Obsolete referenced message.} T 
 
 NOROTPW {
 [0;37m[[1;31mERROR[0;37m] There is not enough power in the neutron flux to rotate.[1;37m
@@ -2248,10 +2234,6 @@ SHLD1 {
 [0;37m[[1;31mERROR[0;37m] Shields are not functional in hyperspace.[1;37m
 } T 
 
-SHLD2 {
-[0;37m[[1;31mERROR[0;37m] This ship is not equipped with shields.[1;37m
-} T 
-
 CLOK01 {
 [0;37m[[1;31mERROR[0;37m] This ship is not equipped with a cloaking system.[1;37m
 } T 
@@ -2265,7 +2247,7 @@ CLOKDWN {
 } T
 
 CLOKUP {***
-[1;32mThis ship is now completely invisible![1;37m
+[1;32mThe [0;36m%s[1;32m is now completely invisible![1;37m
 } T
 
 CLOKON {
@@ -2374,7 +2356,7 @@ FCNONO {
 } T 
 
 HYPERIN {***
-[1;35mHelm reports you are entering HYPERSPACE![1;37m
+[1;35mHelm reports the [0;36m%s[1;35m is entering HYPERSPACE![1;37m
 } T 
 
 HYPERIN2 {***
@@ -2382,7 +2364,7 @@ HYPERIN2 {***
 } T 
 
 HYPEROUT {***
-[1;35mHelm reports you are leaving hyperspace.[1;37m
+[1;35mHelm reports the [0;36m%s[1;35m is leaving hyperspace.[1;37m
 } T 
 
 HYPEROU2 {***
@@ -2494,8 +2476,6 @@ MISSL2 {***
 [0;37mAn incoming missile has lost lockon and self-destructed![1;37m
 } T 
 
-NOSCANL {Obsolete referenced message.} T 
-
 HYSHDN {***
 [0;37mShields are now down.[1;37m
 } T 
@@ -2539,8 +2519,12 @@ ANNOUN {***
 [0;37mA %s, the [0;36m%s[0;37m, has been detected cruising the galaxy.[1;37m
 } T 
 
-FOOLISH {
-[0;37m[[1;31mERROR[0;37m] No such object is detected on sensors.[1;37m
+NOPLNT {
+[0;37m[[1;31mERROR[0;37m] There is no such planet in this sector.[1;37m
+} T 
+
+FRCTER {
+[0;37m[[1;31mERROR[0;37m][1;37m
 } T 
 
 NODECOYS {
@@ -2548,7 +2532,7 @@ NODECOYS {
 } T 
 
 DECGONE {
-[0;37m[[1;31mCAUTION[0;37m] A decoy deployed from this ship has self-destructed![1;37m
+[0;37m[[1;31mCAUTION[0;37m] A decoy deployed from the [0;36m%s[0;37m has self-destructed![1;37m
 } T 
 
 DECFIRE {
@@ -2694,14 +2678,8 @@ LEAVEORB {
 [0;37mLeaving orbit![1;37m
 } T 
 
-TRANSFR0 {Obsolete referenced message.} T Transfer to wormhole message
-
 TRANSFR1 {
 [1;36mThere are not that many on-board.[1;37m
-} T 
-
-TRANSFR2 {
-[1;36mType [1;37mHELP TRANSFER[1;36m for the correct usage.[1;37m
 } T 
 
 TRANSFR3 {
@@ -2718,14 +2696,6 @@ TRANSFR5 {
 
 TRANSUP1 {
 [1;36mThey don't have that many available.[1;37m
-} T 
-
-TRANSUP2 {
-[1;36mType [1;37mHELP TRANSFER[1;36m for the correct usage.[1;37m
-} T 
-
-TRANSUP3 {
-[1;36mItems can only be transferred while in orbit.[1;37m
 } T 
 
 TRANSUP4 {
@@ -2748,10 +2718,6 @@ ABAN02 {
 [1;36mConfirmed, the planet is now unclaimed.[1;37m
 } T 
 
-ABAN03 {
-[1;36mYou do not own this planet.[1;37m
-} T 
-
 ADMIN1 {
 [1;36mYou must first orbit a planet.[1;37m
 } T 
@@ -2760,14 +2726,12 @@ ADMIN2 {
 [1;36mYou do not own this planet.[1;37m
 } T 
 
-ADMIN2A {Obsolete referenced message.} T Own Wormhole Message
-
 ADMIN3 {
 [1;36mReturning to command mode...[1;37m
 } T 
 
 ADMIN4 {
-[1;36mYou've already claimed the maximum amount of planets permitted by galactic law.[1;37m
+[1;36mYou've already claimed %d planets, the maximum permitted by galactic law.[1;37m
 } T 
 
 ADMENU1 {
@@ -2894,12 +2858,6 @@ ATTACK0 {
 
 ATTACK0A {
 [0;37m[[1;31mERROR[0;37m] This ship is not equipped with a fighter launcher.[1;37m
-} T 
-
-ATTACK0B {Obsolete referenced message.} T Attack Wormhole Message
-
-ATTACK1 {
-[1;36mYou must first orbit a planet.[1;37m
 } T 
 
 ATTACKM0 {
@@ -3032,10 +2990,6 @@ BUY4 {
 [1;36mThey are not selling their [1;37m%s[1;36m.[1;37m
 } T 
 
-BUY5 {
-[1;36mType [1;37mHELP BUY[1;36m for the correct usage.[1;37m
-} T 
-
 BUY7 {
 [1;36mThis planet is unsettled.[1;37m
 } T 
@@ -3058,10 +3012,6 @@ FORHELP {
 
 PHANONE {
 [0;37m[[1;31mERROR[0;37m] There is insufficient phaser power to fire![1;37m
-} T 
-
-PHA01 {
-[0;37m[[1;31mERROR[0;37m] This ship is not equipped with phasers.[1;37m
 } T 
 
 REP01 {
@@ -3267,8 +3217,6 @@ SCAN24 {[1;37m   Range Scan Dist:%s (s:%d %d)
 SCAN25 {[1;37m   Sector Scan mag:1x (s:%d %d)
 } T 
 
-SCAN26 {Obsolete referenced message.} T 
-
 SCAN28 {[0;37m%s populated.
 } T 
 
@@ -3321,8 +3269,6 @@ ADMIN04A {[0;37mTax revenue ................ [0;33m%s
 
 ADMIN04B {[0;37mTax rate ................... [1;37m%d
 } T 
-
-ADMIN05 {Obsolete commented message.} T 
 
 ADMIN06 {[0;37mTrade password.............. [1;37m%s
 } T 
@@ -3543,10 +3489,6 @@ NEW11 {
 
 NEW12 {
 [0;37m[[1;31mERROR[0;37m] There is no such item.[1;37m
-} T 
-
-NEW15 {
-[1;36mType [1;37mHELP NEW[1;36m for correct usage.[1;37m
 } T 
 
 NEW16 {
@@ -5403,15 +5345,9 @@ SPY0 {
 [1;36mYou own this planet, you can't spy on it.[1;37m
 } T 
 
-SPY0B {Obsolete referenced message.} T spy Wormhole Message
-
 SPY0C {
 [1;36mSpying on the Galactic Command is a capital offense![1;37m
 } T
-
-SPY1 {
-[1;36mYou must first orbit a planet.[1;37m
-} T 
 
 SPYM0 {
 [1;36mThere are no spies on-board.[1;37m
@@ -5475,10 +5411,6 @@ End report
 
 JETT1 {
 [0;37m[[1;31mERROR[0;37m] There are not that many on-board.[1;37m
-} T 
-
-JETT2 {
-[1;36mType [1;37mHELP JETTISON[1;36m for the correct usage.[1;37m
 } T 
 
 JETT3 {
