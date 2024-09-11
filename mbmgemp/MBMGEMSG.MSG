@@ -2347,6 +2347,10 @@ FCBROKE {
 [0;37m[[1;31mERROR[0;37m] Damage Control is repairing the fire control systems.[1;37m
 } T 
 
+PHBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the phasers.[1;37m
+} T 
+
 FCREPR {***
 [1;32mDamage Control reports fire control systems are now functional![1;37m
 } T 
@@ -3072,7 +3076,7 @@ REP15 {[0;31m   Shields out[1;37m
 REP16 {[0;31m   Helm damaged[1;37m
 } T 
 
-REP17 {[0;31m   Cloaking system out[1;37m
+REP17 {[0;31m   Cloaking system damaged[1;37m
 } T 
 
 REP18 {[0;31m   Tactical scanners damaged[1;37m
@@ -3086,6 +3090,12 @@ REP19 {[0;31m   Warp engines inoperable[1;37m
 
 REP20 {[0;31m   Warp engines damaged
    Warp [1;37m%d[0;31m or below recommended[1;37m
+} T 
+
+REP21 {[0;31m   Phasers damaged[1;37m
+} T 
+
+REP22 {[0;31m   Fire control damaged[1;37m
 } T 
 
 REP23 {[1;37mPhasers (Mark-%d)...... [1;32m<operative>[1;37m

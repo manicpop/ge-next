@@ -5,6 +5,8 @@ ge-next RELEASE NOTES
 	- phasers and shields properly aligned whether one digit or two
 	- ships without phasers/shields don't show them
 	- warp engine damage now listed
+	- fire control damage now listed
+	- phaser damage now listed (not just <inoperable>)
 * option to use MBBS mail removed
 * ORB cleanup:
 	- if orbiting an unnamed planet, don't try to display name
@@ -15,13 +17,16 @@ ge-next RELEASE NOTES
 * new HELP CLASS screen
 * all ships can attack with troops now, only certain ships can attack
   with fighters. part 1 of many refinements coming to planetary attack.
-* when entering or leaving hyperspace, your ship's name is displayed.
 * MSG cleanup:
 	- add ship name to several messages "The ShipName has entered
 	hyperspace" etc
 	- got rid of redundant messages
 	- farewell to FOOLISH, this was kind of a catchall and has
 	been replaced with several more descriptive messages
+	- got rid of (most?) unused messages
+* if phasers are damaged there is now a message displayed instead of
+  just saying there is insufficient power
+* if phasers are inoperable, hyperphasers are now inoperable as well
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

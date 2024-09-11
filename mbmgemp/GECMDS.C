@@ -830,6 +830,13 @@ if (shipclass[warsptr->shpclass].max_phasr == 0)
 	return;
 	}
 
+if (warsptr->phasr < 0)
+	{
+	prfmsg(PHBROKE);
+	outprfge(ALWAYS,usrnum);
+	return;
+	}
+
 if (warsptr->where == 1)
 	{
 	if (margc == 2)
@@ -2054,6 +2061,10 @@ if (sameas(margv[1],"sys"))
 		prfmsg(REP17);
 	if (warsptr->tactical < 0 )
 		prfmsg(REP18);
+	if (warsptr->phasr < 0 )
+		prfmsg(REP21);
+	if (warsptr->firecntl > 0)
+		prfmsg(REP22);
 
 	if (shipclass[warsptr->shpclass].max_warp != 0)
 		{
