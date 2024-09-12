@@ -3216,7 +3216,7 @@ SCAN13 {[1;37mMarginal
 SCAN14 {[1;37mGood
 } T 
 
-SCAN15 {[1;37mVery Good
+SCAN15 {[1;37mVery good
 } T 
 
 SCAN16 {[0;37mResources: } T 
@@ -3227,7 +3227,7 @@ SCAN24 {[1;37m   Range Scan Dist:%s (s:%d %d)
 SCAN25 {[1;37m   Sector Scan mag:1x (s:%d %d)
 } T 
 
-SCAN28 {[0;37m%s populated.
+SCAN28 {[0;37mPopulation: [1;37m%s
 } T 
 
 SCAN29 {[0;37m%s stockpile of missiles.
@@ -3245,7 +3245,7 @@ SCAN32 {[0;37mThere are indications of fighters.
 SCAN33 {[0;37m%s stockpile of flux pods.
 } T 
 
-SCAN34 {[0;37m%s stockpile of food.
+SCAN34 {[0;37m%s stockpile of mines.
 } T 
 
 SCANWRM {

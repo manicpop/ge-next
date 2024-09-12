@@ -2390,7 +2390,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 			/*DEBUG
 			prf("plptr->userid=%s\rwarsptr->userid=%s\r",plptr->userid,warsptr->userid);*/
 
-			if (sameas(plptr->userid,warsptr->userid))
+			if (sameas(plptr->userid,warsptr->userid) || (plptr->userid[0] == 0 && warsptr->where - 10 == plnum))
 				{
 				for (i=0; i<NUMITEMS; ++i)
 					{
@@ -2405,30 +2405,33 @@ if (plnum <= MAXPLANETS && plnum > 0)
 			else
 				{
 				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty == 0)
-					strcpy(gechrbuf,"Not");
+					strcpy(gechrbuf,"None");
 				else
-				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 2500)
-					strcpy(gechrbuf,"Sparsly");
+				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 100)
+					strcpy(gechrbuf,"Less than 100");
+				else
+				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 1000)
+					strcpy(gechrbuf,"Hundreds");
 				else
 				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 10000)
-					strcpy(gechrbuf,"Lightly");
+					strcpy(gechrbuf,"Thousands");
 				else
 				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 100000L)
-					strcpy(gechrbuf,"Moderatly");
+					strcpy(gechrbuf,"Tens of thousands");
 				else
 				if (plptr->items[I_MEN].qty + plptr->items[I_TROOPS].qty < 1000000L)
-					strcpy(gechrbuf,"Widely");
+					strcpy(gechrbuf,"Hundreds of thousands");
 				else
-					strcpy(gechrbuf,"Heavily");
+					strcpy(gechrbuf,"Millions");
 				prfmsg(SCAN28,gechrbuf);
 
 				if (plptr->items[I_MISSILE].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
-				if (plptr->items[I_MISSILE].qty < 25)
+				if (plptr->items[I_MISSILE].qty < 250)
 					strcpy(gechrbuf,"Small");
 				else
-				if (plptr->items[I_MISSILE].qty < 100)
+				if (plptr->items[I_MISSILE].qty < 1000)
 					strcpy(gechrbuf,"Moderate");
 				else
 					strcpy(gechrbuf,"Large");
@@ -2437,10 +2440,10 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				if (plptr->items[I_TORPEDO].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
-				if (plptr->items[I_TORPEDO].qty < 25)
+				if (plptr->items[I_TORPEDO].qty < 250)
 					strcpy(gechrbuf,"Small");
 				else
-				if (plptr->items[I_TORPEDO].qty < 100)
+				if (plptr->items[I_TORPEDO].qty < 1000)
 					strcpy(gechrbuf,"Moderate");
 				else
 					strcpy(gechrbuf,"Large");
@@ -2449,22 +2452,22 @@ if (plnum <= MAXPLANETS && plnum > 0)
 				if (plptr->items[I_FLUXPOD].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
-				if (plptr->items[I_FLUXPOD].qty < 25)
+				if (plptr->items[I_FLUXPOD].qty < 250)
 					strcpy(gechrbuf,"Small");
 				else
-				if (plptr->items[I_FLUXPOD].qty < 100)
+				if (plptr->items[I_FLUXPOD].qty < 1000)
 					strcpy(gechrbuf,"Moderate");
 				else
 					strcpy(gechrbuf,"Large");
 				prfmsg(SCAN33,gechrbuf);
 
-				if (plptr->items[I_FOOD].qty == 0)
+				if (plptr->items[I_MINE].qty == 0)
 					strcpy(gechrbuf,"No");
 				else
-				if (plptr->items[I_FOOD].qty < 25)
+				if (plptr->items[I_MINE].qty < 250)
 					strcpy(gechrbuf,"Small");
 				else
-				if (plptr->items[I_FOOD].qty < 100)
+				if (plptr->items[I_MINE].qty < 1000)
 					strcpy(gechrbuf,"Moderate");
 				else
 					strcpy(gechrbuf,"Large");

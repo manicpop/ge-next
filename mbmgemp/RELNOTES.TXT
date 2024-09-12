@@ -27,6 +27,14 @@ ge-next RELEASE NOTES
 * if phasers are damaged there is now a message displayed instead of
   just saying there is insufficient power
 * if phasers are inoperable, hyperphasers are now inoperable as well
+* SCAN PL changes:
+	- population for planets you don't own now represented as
+	thousands, hundreds of thousands, millions, etc
+	- mines shown instead of food
+	- if you are orbiting an unowned planet the scan will show
+	the entire inventory like it does when you own it
+	- the amounts that are considered moderate and large
+	stockpiles was raised
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
