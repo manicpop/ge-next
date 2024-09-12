@@ -35,6 +35,8 @@ ge-next RELEASE NOTES
 	the entire inventory like it does when you own it
 	- the amounts that are considered moderate and large
 	stockpiles was raised
+* bug that showed "helm is damaged" (when it's not) if entering an
+  invalid degree value with the WARP command fixed
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

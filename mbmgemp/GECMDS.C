@@ -608,27 +608,30 @@ else
 	else
 		strcpy(gechrbuf,"0");
 
-	if (warsptr->helm == 0 && valdegree(gechrbuf))
+	if (warsptr->helm == 0)
 		{
-		if (speed > topspeed)
+		if (valdegree(gechrbuf))
 			{
-			prfmsg(WARP04,topspeed);
+			if (speed > topspeed)
+				{
+				prfmsg(WARP04,topspeed);
+				outprfge(ALWAYS,usrnum);
+				}
+
+			if (warsptr->where >= 10)
+				{
+				refresh(warsptr,usrnum);
+				prfmsg(LEAVEORB);
+				warsptr->where = 0;
+				warsptr->repair = 0;
+				}
+
+			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+			prfmsg(ENGFIRE,deg);
 			outprfge(ALWAYS,usrnum);
+			warsptr->speed2b = 1000.0 * (float)speed;
+			warsptr->head2b   = (double)deg;
 			}
-
-		if (warsptr->where >= 10)
-			{
-			refresh(warsptr,usrnum);
-			prfmsg(LEAVEORB);
-			warsptr->where = 0;
-			warsptr->repair = 0;
-			}
-
-		deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-		prfmsg(ENGFIRE,deg);
-		outprfge(ALWAYS,usrnum);
-		warsptr->speed2b = 1000.0 * (float)speed;
-		warsptr->head2b   = (double)deg;
 		}
 	else
 		{
