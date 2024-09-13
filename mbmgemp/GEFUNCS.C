@@ -287,6 +287,8 @@ tmpusr.cash 		= startcash;
 
 tmpusr.topshipno 	= 0;
 
+tmpusr.options[0]	= TRUE; /* scannames default */
+tmpusr.options[2]	= TRUE; /* scanfull default */
 
 return(0);
 }

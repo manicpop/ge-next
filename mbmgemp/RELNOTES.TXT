@@ -37,6 +37,8 @@ ge-next RELEASE NOTES
 	stockpiles was raised
 * bug that showed "helm is damaged" (when it's not) if entering an
   invalid degree value with the WARP command fixed
+* SCANNAMES and SCANFULL settings are now ON by default when a new
+  player enters. they can still be turned off.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
