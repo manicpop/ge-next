@@ -3013,7 +3013,7 @@ if (margc > 0)
 					prf("%s\r",gechrbuf);
 					}
 				prfmsg(DASHES);
-				sprintf(gechrbuf,"%ld",plptr->cash);
+				sprintf(gechrbuf,"%lu",plptr->cash);
 				prfmsg(ADMIN04,gechrbuf);
 				sprintf(gechrbuf,"%ld",plptr->tax);
 				prfmsg(ADMIN04A,gechrbuf);

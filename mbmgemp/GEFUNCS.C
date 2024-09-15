@@ -2279,7 +2279,7 @@ switch (mail.type)
 		strcpy(mail.topic,"Production Report");
 		memcpy(&tmpstat,&mail,sizeof(MAILSTAT));
 		prfmsg(tmpstat.type,tmpstat.name1,tmpstat.int1,tmpstat.int2);
-		sprintf(gechrbuf2,"%ld",tmpstat.cash);
+		sprintf(gechrbuf2,"%lu",tmpstat.cash);
 		prf("Cash %s  ",gechrbuf2);
 		sprintf(gechrbuf2,"%ld",tmpstat.debt);
 		prf("Debt %s  ",gechrbuf2);

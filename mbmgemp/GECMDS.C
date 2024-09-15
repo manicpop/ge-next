@@ -2112,7 +2112,7 @@ if (sameas(margv[1],"acc"))
 		prfmsg(REP27,waruptr->planets);
 
 
-	sprintf(gechrbuf,"%ld",waruptr->cash);
+	sprintf(gechrbuf,"%lu",waruptr->cash);
 	prfmsg(REP28,gechrbuf);
 
 	if (waruptr->score <= 0)
@@ -4166,9 +4166,9 @@ if ((amt = atol(margv[1])) > 0L)
 			fee = doll;
 
 		waruptr->cash += (doll-fee);
-		/* this will fix those who go negative */
+		/* this will fix those who go negative
 		if ((long)waruptr->cash < 0)
-			waruptr->cash = 0;
+			waruptr->cash = 0 */
 
 		gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
 		geudb(GEUPDATE,waruptr->userid,waruptr);
@@ -4205,9 +4205,9 @@ void  FUNC cmd_buy()
 int i;
 
 
-/* this will fix those who go negative */
+/* this will fix those who go negative
 if ((long)waruptr->cash < 0)
-	waruptr->cash = 0;
+	waruptr->cash = 0; */
 
 
 if (warsptr->where < 10)
@@ -5855,7 +5855,7 @@ if (sameas(margv[2],"report"))
 		waruptr->rospos,
 		waruptr->planets);
 	sprintf(gechrbuf,"%ld",waruptr->score);
-	sprintf(gechrbuf2,"%ld",waruptr->cash);
+	sprintf(gechrbuf2,"%lu",waruptr->cash);
 	sprintf(gechrbuf3,"%ld",waruptr->population);
 	prf("UD2:%s,%s,%s*\r",gechrbuf,gechrbuf2,gechrbuf3);
 	outprfge(ALWAYS,usrnum);
