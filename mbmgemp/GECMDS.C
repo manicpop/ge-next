@@ -4156,30 +4156,42 @@ if ((amt = atol(margv[1])) > 0L)
 	{
 	if (warsptr->items[item] >= amt)
 		{
-		doll = (long)baseprice[item]*amt;
+		if (amt > 2147483647L / baseprice[item])
+			{
+			prfmsg(SELL4);
+			return;
+			}
+		else
+			{
+			doll = (long)baseprice[item]*amt;
 
-		fee = 1L + (doll/1000L);
+			fee = 1L + (doll/1000L);
 
-		warsptr->items[item] -= amt;
-		/* if there is more tax than profit then tax = profit */
-		if ((doll-fee) < 0)
-			fee = doll;
+			if (waruptr->cash > 4294967295UL - (doll - fee))
+				{
+				prfmsg(TOORICH);
+				return;
+				}
+			else
+				{
+				warsptr->items[item] -= amt;
+				/* if there is more tax than profit then tax = profit */
+				if ((doll-fee) < 0)
+					fee = doll;
 
-		waruptr->cash += (doll-fee);
-		/* this will fix those who go negative
-		if ((long)waruptr->cash < 0)
-			waruptr->cash = 0 */
+				waruptr->cash += (doll-fee);
 
-		gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
-		geudb(GEUPDATE,waruptr->userid,waruptr);
+				gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
+				geudb(GEUPDATE,waruptr->userid,waruptr);
 
-		sprintf(gechrbuf,"%ld",amt);
-		sprintf(gechrbuf2,"%ld",(doll-fee));
-		sprintf(gechrbuf3,"%ld",fee);
+				sprintf(gechrbuf,"%lu",amt);
+				sprintf(gechrbuf2,"%ld",(doll-fee));
+				sprintf(gechrbuf3,"%ld",fee);
 
-		prfmsg(SELL2,gechrbuf3,gechrbuf2,gechrbuf,item_name[item]);
-
-		return;
+				prfmsg(SELL2,gechrbuf3,gechrbuf2,gechrbuf,item_name[item]);
+				return;
+				}
+			}
 		}
 	else
 		{
