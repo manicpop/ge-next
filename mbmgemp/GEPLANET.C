@@ -326,7 +326,9 @@ for (i=0;i<NUMITEMS;++i)
 fact = (float)plptr->taxrate/1200;
 
 qty = fact * (float)plptr->items[I_MEN].qty;
-plptr->tax += (long)qty;
+if (plptr->tax > 4294967295UL - qty)
+	qty = 4294967295UL - plptr->tax;
+plptr->tax += (unsigned long)qty;
 
 
 /* see if there is a revolt */

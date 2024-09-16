@@ -2289,7 +2289,7 @@ switch (mail.type)
 		prf("Cash %s  ",gechrbuf2);
 		sprintf(gechrbuf2,"%ld",tmpstat.debt);
 		prf("Debt %s  ",gechrbuf2);
-		sprintf(gechrbuf2,"%ld",tmpstat.tax);
+		sprintf(gechrbuf2,"%lu",tmpstat.tax);
 		prf("Tax %s  \r",gechrbuf2);
 		for(i=0;i<NUMITEMS;++i)
 			{

@@ -40,8 +40,11 @@ ge-next RELEASE NOTES
 * SCANNAMES and SCANFULL settings are now ON by default when a new
   player enters. they can still be turned off.
 * cash is now displayed as unsigned, meaning cash can be a value of
-  up to 4,294,967,295. sell command now has checks to make sure you
-  don't exceed this amount.
+  up to 4,294,967,295. sell command, new command, cash awarded after
+  user kill, and tax collect from planet now all have checks to make
+  sure you don't exceed this amount.
+* planetary cash and tax are capped at 4,294,967,295 and can no
+  longer overflow.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

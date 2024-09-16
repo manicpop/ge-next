@@ -3015,7 +3015,7 @@ if (margc > 0)
 				prfmsg(DASHES);
 				sprintf(gechrbuf,"%lu",plptr->cash);
 				prfmsg(ADMIN04,gechrbuf);
-				sprintf(gechrbuf,"%ld",plptr->tax);
+				sprintf(gechrbuf,"%lu",plptr->tax);
 				prfmsg(ADMIN04A,gechrbuf);
 				prfmsg(ADMIN04B,plptr->taxrate);
 				prfmsg(ADMIN06,plptr->password);
@@ -3092,14 +3092,22 @@ amt = atol(margv[0]);
 
 if (amt <= plptr->tax)
 	{
-	sprintf(gechrbuf,"%ld",amt);
-	prfmsg(ADMENU2C,gechrbuf);
-	outprfge(ALWAYS,usrnum);
-	waruptr->cash += amt;
-	plptr->tax -= amt;
-	setsect(warsptr); /* build PKEY */
-	pkey.plnum = plnum;
-	gesdb(GEUPDATE,(PKEY *)&pkey,(GALSECT *)&planet);
+	if (waruptr->cash > 4294967295UL - amt)
+		{
+		prfmsg(TOORICH);
+		outprfge(ALWAYS,usrnum);
+		}
+	else
+		{
+		sprintf(gechrbuf,"%lu",amt);
+		prfmsg(ADMENU2C,gechrbuf);
+		outprfge(ALWAYS,usrnum);
+		waruptr->cash += amt;
+		plptr->tax -= amt;
+		setsect(warsptr); /* build PKEY */
+		pkey.plnum = plnum;
+		gesdb(GEUPDATE,(PKEY *)&pkey,(GALSECT *)&planet);
+		}
 	}
 else
 	{
