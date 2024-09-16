@@ -1196,6 +1196,12 @@ if (who >= 0 && who < nships && who != usrn)
 		if (amt > 0)
 			{
 			waruptr->cash -= amt;
+			if (wuptr->cash > 4294967295UL - amt)
+				{
+				amt = 4294967295UL - wuptr->cash;
+				prfmsg(TOORICH,ptr->userid);
+				outprfge(ALWAYS,who);
+				}
 			wuptr->cash += amt;
 			sprintf(gechrbuf,"%ld",amt);
 			prfmsg(CHGLSR1,gechrbuf);

@@ -4217,11 +4217,6 @@ void  FUNC cmd_buy()
 int i;
 
 
-/* this will fix those who go negative
-if ((long)waruptr->cash < 0)
-	waruptr->cash = 0; */
-
-
 if (warsptr->where < 10)
 	{
 	prfmsg(BUY1);
@@ -4331,6 +4326,7 @@ int item;
 {
 long amt,avail;
 long tot;
+unsigned long ptot;
 
 if (plptr->userid[0] != 0)
 	{
@@ -4345,29 +4341,31 @@ if (plptr->userid[0] != 0)
 					{
 					if ((tot = price(item,amt)) <= waruptr->cash)
 						{
-						if (sameas(margv[0],"buy"))
+						if (strncmp(margv[0],"buy",3) == 0)
 							{
 							if (!neutral(&warsptr->coord))
 								{
 								plptr->items[item].qty -= amt;
 								plptr->items[item].sold2a += amt;
-								plptr->cash +=tot;
+								if (plptr->cash > 4294967295UL - tot)
+									ptot = 4294967295UL - plptr->cash;
+								plptr->cash +=ptot;
 								setsect(warsptr);
 								pkey.plnum = plnum;
 								gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
 								}
 							warsptr->items[item] += amt;
 							waruptr->cash -= tot;
-							sprintf(gechrbuf,"%ld",tot);
+							sprintf(gechrbuf,"%lu",tot);
 
 							if (sameas(plptr->userid, warsptr->userid))
 								{
-								sprintf(gechrbuf2,"%ld",amt);
+								sprintf(gechrbuf2,"%lu",amt);
 								prfmsg(BUY9,gechrbuf2,item_name[item],baseprice[item],gechrbuf);
 								}
 							else
 								{
-								sprintf(gechrbuf2,"%ld",amt);
+								sprintf(gechrbuf2,"%lu",amt);
 /*								prfmsg(BUY9,gechrbuf2,item_name[item],baseprice[item]+plptr->items[item].markup2a,gechrbuf);*/
 								prfmsg(BUY9,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
 								}
@@ -4375,22 +4373,22 @@ if (plptr->userid[0] != 0)
 							}
 						else
 							{
-							sprintf(gechrbuf,"%ld",tot);
-							sprintf(gechrbuf2,"%ld",amt);
+							sprintf(gechrbuf,"%lu",tot);
+							sprintf(gechrbuf2,"%lu",amt);
 /*							prfmsg(PRICE1,gechrbuf2,item_name[item],baseprice[item]+plptr->items[item].markup2a,gechrbuf);*/
 							prfmsg(PRICE1,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
 							}
 						}
 					else
 						{
-						sprintf(gechrbuf,"%ld",tot);
-						sprintf(gechrbuf2,"%ld",amt);
+						sprintf(gechrbuf,"%lu",tot);
+						sprintf(gechrbuf2,"%lu",amt);
 						prfmsg(BUY2,gechrbuf,gechrbuf2,item_name[item]);
 						}
 					}
 				else
 					{
-					sprintf(gechrbuf,"%ld",avail);
+					sprintf(gechrbuf,"%lu",avail);
 					prfmsg(BUY3,gechrbuf,item_name[item]);
 					}
 				}
@@ -4630,8 +4628,13 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				credit = (delta*-1);
 				fee = credit/50L;
 				credit = credit-fee;
-				if (credit < 0) 
+				if (credit < 0)
 					credit = 0;
+				if (waruptr->cash > 4294967295UL - credit)
+					{
+					credit = 4294967295UL - waruptr->cash;
+					prfmsg(TOORICH);
+					}
 				prfmsg(NEW18,l2as(fee),l2as(credit));
 				outprfge(ALWAYS,usrnum);
 				delta = 0;
@@ -4650,7 +4653,14 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				waruptr->cash -= delta;
 				waruptr->cash += credit;
 				warsptr->shieldtype = type;
-				prfmsg(NEW7,l2as(delta),type);
+				if (delta == 0)
+					{
+					prfmsg(NEW13,type);
+					}
+				else
+					{
+					prfmsg(NEW7,l2as(delta),type);
+					}
 				}
 			else
 				{
@@ -4694,6 +4704,11 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				credit = credit-fee;
 				if (credit < 0)
 					credit = 0;
+				if (waruptr->cash > 4294967295UL - credit)
+					{
+					credit = 4294967295UL - waruptr->cash;
+					prfmsg(TOORICH);
+					}
 				prfmsg(NEW28,l2as(fee),l2as(credit));
 				outprfge(ALWAYS,usrnum);
 				delta = 0;
@@ -4711,7 +4726,14 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				waruptr->cash -= delta;
 				waruptr->cash += credit;
 				warsptr->phasrtype = type;
-				prfmsg(NEW10,l2as(delta),type);
+				if (delta == 0)
+					{
+					prfmsg(NEW14,type);
+					}
+				else
+					{
+					prfmsg(NEW10,l2as(delta),type);
+					}
 				}
 			else
 				{

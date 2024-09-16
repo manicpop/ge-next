@@ -3501,6 +3501,14 @@ NEW12 {
 [0;37m[[1;31mERROR[0;37m] There is no such item.[1;37m
 } T 
 
+NEW13 {
+[1;36mYour ship now has a Mark-%d shield.[1;37m
+} T 
+
+NEW14 {
+[1;36mYour ship now has a Mark-%d phaser.[1;37m
+} T 
+
 NEW16 {
 [1;36mYou already have %d ships, the maximum amount permitted by galactic law.[1;37m
 } T 
@@ -3520,7 +3528,8 @@ NEW19 {[1;36mYou will be credited [0;33m%s[1;36m for the existing used shield
 NEW27 {[1;36mThe minimum charge of [0;33m1000[1;36m will be charged for installation.[1;37m
 } T
 
-NEW28 {[1;36mThere is no charge for the new phaser and after deducting a transaction
+NEW28 {
+[1;36mThere is no charge for the new phaser and after deducting a transaction
 fee of [0;33m%s[1;36m, [0;33m%s[1;36m has been deposited to your account.[1;37m
 } T
 

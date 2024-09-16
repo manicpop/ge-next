@@ -249,6 +249,8 @@ taxfact = 1-((float)plptr->taxrate/120.0);
 
 temp = (long)(baseprice[I_GOLD]);
 temp = (plptr->items[I_GOLD].qty)*temp;
+if (plptr->cash > 4294967295UL - temp)
+	temp = 4294967295UL - plptr->cash;
 plptr->cash += temp;
 
 plptr->items[I_GOLD].qty = 0;
