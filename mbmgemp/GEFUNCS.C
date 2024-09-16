@@ -1196,10 +1196,10 @@ if (who >= 0 && who < nships && who != usrn)
 		if (amt > 0)
 			{
 			waruptr->cash -= amt;
-			if (wuptr->cash > 4294967295UL - amt)
+			if (wuptr->cash > ULCAP - amt)
 				{
-				amt = 4294967295UL - wuptr->cash;
-				prfmsg(TOORICH,ptr->userid);
+				amt = ULCAP - wuptr->cash;
+				prfmsg(TOORICH,ULCAP,ptr->userid);
 				outprfge(ALWAYS,who);
 				}
 			wuptr->cash += amt;

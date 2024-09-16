@@ -4156,7 +4156,7 @@ if ((amt = atol(margv[1])) > 0L)
 	{
 	if (warsptr->items[item] >= amt)
 		{
-		if (amt > 2147483647L / baseprice[item])
+		if (amt > SLCAP / baseprice[item])
 			{
 			prfmsg(SELL4);
 			return;
@@ -4167,9 +4167,9 @@ if ((amt = atol(margv[1])) > 0L)
 
 			fee = 1L + (doll/1000L);
 
-			if (waruptr->cash > 4294967295UL - (doll - fee))
+			if (waruptr->cash > ULCAP - (doll - fee))
 				{
-				prfmsg(TOORICH);
+				prfmsg(TOORICH,ULCAP);
 				return;
 				}
 			else
@@ -4347,8 +4347,8 @@ if (plptr->userid[0] != 0)
 								{
 								plptr->items[item].qty -= amt;
 								plptr->items[item].sold2a += amt;
-								if (plptr->cash > 4294967295UL - tot)
-									ptot = 4294967295UL - plptr->cash;
+								if (plptr->cash > ULCAP - tot)
+									ptot = ULCAP - plptr->cash;
 								plptr->cash +=ptot;
 								setsect(warsptr);
 								pkey.plnum = plnum;
@@ -4630,10 +4630,10 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				credit = credit-fee;
 				if (credit < 0)
 					credit = 0;
-				if (waruptr->cash > 4294967295UL - credit)
+				if (waruptr->cash > ULCAP - credit)
 					{
-					credit = 4294967295UL - waruptr->cash;
-					prfmsg(TOORICH);
+					credit = ULCAP - waruptr->cash;
+					prfmsg(TOORICH,ULCAP);
 					}
 				prfmsg(NEW18,l2as(fee),l2as(credit));
 				outprfge(ALWAYS,usrnum);
@@ -4704,10 +4704,10 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 				credit = credit-fee;
 				if (credit < 0)
 					credit = 0;
-				if (waruptr->cash > 4294967295UL - credit)
+				if (waruptr->cash > ULCAP - credit)
 					{
-					credit = 4294967295UL - waruptr->cash;
-					prfmsg(TOORICH);
+					credit = ULCAP - waruptr->cash;
+					prfmsg(TOORICH,ULCAP);
 					}
 				prfmsg(NEW28,l2as(fee),l2as(credit));
 				outprfge(ALWAYS,usrnum);

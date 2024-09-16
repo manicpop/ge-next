@@ -3092,9 +3092,9 @@ amt = atol(margv[0]);
 
 if (amt <= plptr->tax)
 	{
-	if (waruptr->cash > 4294967295UL - amt)
+	if (waruptr->cash > ULCAP - amt)
 		{
-		prfmsg(TOORICH);
+		prfmsg(TOORICH,ULCAP);
 		outprfge(ALWAYS,usrnum);
 		}
 	else

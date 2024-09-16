@@ -96,6 +96,8 @@
 #define SNMSIZ  25
 
 #define PI 3.1415927
+#define SLCAP 2147483647L
+#define ULCAP 4294967295UL
 
 #define GELOOKUP     1
 #define GEADD        2
