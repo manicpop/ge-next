@@ -654,28 +654,5 @@ BEACONTAB	{
 	char	beacon[BEACONMSGSZ];
 	};
 
-
-#define METHOD 1
-
-
-#define KEY  "\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255"
-
-#define SEED "10094056"  /*Choose a unique seed for each application */
-/*            ^     ^    */
-/*            1     4    */
-/*               14 = number of day's test drive is to run   */
-
-struct secure {
-    int open_stat;  /* 0=not opened, -1=testdrive, 1=registered */
-    int days_run;   /* number of days run as test drive (-1=!testdrive) */
-    int days_tot;   /* number of days testdrive is good for (-1=!testdrive) */
-    char reg_num[9];   /* Registration number */
-    char key[60];
-    };
-
-
-extern struct secure *secure;
-struct btvblk *sec_opnbtv(char *datfilnam,int sizostruct,char *seed, int regnum,char *key, int method);
-
 #define FUNC _export
 

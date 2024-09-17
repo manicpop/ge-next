@@ -2949,13 +2949,6 @@ IHIT2 {***
 [0;37m[[0;31mWARNING![0;37m] Direct hit from an ion cannon burst![1;37m
 } T 
 
-ROSTER1 {
-[1;36mTop %d Roster List
-[0;31m---------------------------------------
-[1;34mPlayer.................................
-...............Score Kills Pl Empire Sz[1;37m
-} T 
-
 ROSTER2 {
 [1;36mTop %d Roster List
 [0;31m-----------------------------------------------------------

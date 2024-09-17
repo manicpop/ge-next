@@ -3061,7 +3061,26 @@ int i,j;
 int shp;
 int ff;
 
-ff		=	0;
+ff		=	0;setmbk(gemb);
+
+geshocst(0,spr("GE:INF:Begin Cleanup"));
+
+/* clear out planet counter */
+geshocst(1,spr("GE:INF:Cleanup Phase-1"));
+setbtv(gebb5);
+if (qlobtv(0))
+	{
+	do
+		{
+		gcrbtv(&tmpusr,0);
+		tmpusr.planets = 0;
+		tmpusr.score = 0;
+		tmpusr.plscore = 0;
+		tmpusr.population = 0;
+		updbtv(&tmpusr);
+		gcrbtv(&tmpusr,0);   /* thank you BTRIEVE 5.00b */
+		} while (qnxbtv());
+	}
 shp	=	0;
 
 sptr = &scantab[usrnum];
@@ -3074,12 +3093,12 @@ for (i=0; i<MAXY; ++i)
 		{
 		if (mapc[i][j] == '1')
 			{
-			prf(".[31m%c.[37m",map[i][j]);
+			prf("\33[31m%c\33[37m",map[i][j]);
 			}
 		else
 		if (mapc[i][j] == '2')
 			{
-			prf(".[33m%c.[37m",map[i][j]);
+			prf("\33[33m%c\33[37m",map[i][j]);
 			}
 		else
 			{
@@ -4010,14 +4029,10 @@ void  FUNC cmd_geroster()
 
 {
 
-char	tmpbuf2[2];
-
 int i = 0;
 int j;
 
 setbtv(gebb5);
-
-strncpy(tmpbuf2,KEY,1);
 
 j = gemaxlist;
 
@@ -4026,27 +4041,17 @@ if (margc == 2 && sameas(margv[1],"all"))
 
 if (qhibtv(1))
 	{
-	if (usaptr->scnwid <60)
-		prfmsg(ROSTER1,gemaxlist);
-	else
-		prfmsg(ROSTER2,gemaxlist);
-
+	prfmsg(ROSTER2,gemaxlist);
 	do
 		{
 		gcrbtv(&tmpusr,1);
 		logthis(spr("ROS:Got %s Score %ld",tmpusr.userid,tmpusr.score));
-		if (tmpusr.score > 0
-			&& tmpusr.userid[0] != tmpbuf2[0]
-			&& tmpusr.userid[0] != '@')
+		if (tmpusr.score > 0 && tmpusr.userid[0] != '@')
 			{
 			++i;
 			sprintf(gechrbuf,"%11ld",tmpusr.score);
 			sprintf(gechrbuf2," %8.3fm",((float)tmpusr.population)/100.0);
-			if (usaptr->scnwid <60)
-				prf("%-30s\r          %s%5d%3d%s\r",tmpusr.userid,gechrbuf,tmpusr.kills,tmpusr.planets,gechrbuf2);
-			else
-				prf("%-30s%s%5d%3d%s\r",tmpusr.userid,gechrbuf,tmpusr.kills,tmpusr.planets,gechrbuf2);
-
+			prf("%-30s%s%5d%3d%s\r",tmpusr.userid,gechrbuf,tmpusr.kills,tmpusr.planets,gechrbuf2);
 			outprfge(ALWAYS,usrnum);
 			}
 		} while (qprbtv() && i < j);
@@ -5328,8 +5333,6 @@ TEAM	tmp;
 
 int	temptab[MAXTEAMS];
 
-char	tmpbuf2[2];
-
 
 if (margc < 2)
 	{
@@ -5615,8 +5618,6 @@ if (sameas(margv[1],"members"))
 
 	setbtv(gebb5);
 
-	strncpy(tmpbuf2,KEY,1);
-
 	j = team_max;
 	i = 0;
 
@@ -5858,11 +5859,11 @@ void  FUNC ansifunc(int func)
 switch (func)
 	{
 	case	HOMEY:
-		prf(".[0;0H");
+		prf("\33[0;0H");
 		break;
 
 	case	CLEAR:
-		prf(".[2J");
+		prf("\33[2J");
 		break;
 	}
 }
@@ -5987,7 +5988,7 @@ void FUNC scan_data1()
 SCANTAB *sptr;
 WARSHP  *wptr;
 int i,j;
-/*unsigned spd;*/
+
 char    mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s\r"};
 
 
@@ -5996,8 +5997,6 @@ prf("DataScan: Range: %s\r",spr("%6ld",shipclass[warsptr->shpclass].scanrange));
 update_scantab(warsptr,usrnum);
 
 sptr = &scantab[usrnum];
-
-/*spd = (unsigned) warsptr->speed;*/
 
 prf("Shp Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
 

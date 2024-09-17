@@ -38,9 +38,6 @@
 #define FASTPLANET */
 
 /*
-#define FAKESECURE 1*/
-
-/*
 #define BLDPLNTS 1 */
 
 
@@ -338,15 +335,6 @@ MENU	menu[] = {
 };
 
 
-/*#ifdef FAKESECURE
-
-struct secure dummy_secure;
-
-
-#endif
-
-struct secure	sv_secure;*/
-
 /**************************************************************************
 ** System start up function                                              **
 **************************************************************************/
@@ -424,7 +412,7 @@ team_max		= numopt(TEAMMAX,0,32000);
 profon  		= ynopt(PROFON);
 logflag		= ynopt(LOGFLG);
 
-if (logflag) 
+if (logflag)
 geshocst(0,"GE:Ext Trace Logging ON!");
 #ifdef FASTPLANET
 geshocst(0,"GE:FASTPLANET ON!");
@@ -558,40 +546,9 @@ gebb1=opnbtv(geship,sizeof(WARSHP));
 
 gebb4=opnbtv(gemail,sizeof(struct message)+GEMSGSIZ);
 
-/*#ifndef FAKESECURE
-
-gebb2=sec_opnbtv(geplnt,sizeof(GALSECT),SEED,REGNO,KEY,METHOD);
-
-if (gebb2 == (BTVFILE *)0)
-	catastro("GE: MBMGEPLT.DAT Open Failure");
-
-sv_secure.open_stat 	= secure->open_stat;
-sv_secure.days_run 	= secure->days_run;
-sv_secure.days_tot	= secure->days_tot;
-
-#else*/
-
 gebb2=opnbtv(geplnt,sizeof(GALSECT));
 
-/*secure = &dummy_secure;
-secure->open_stat = 1;
-secure->days_run = 15;
-secure->days_tot = 5;
-
-sv_secure.open_stat 	= secure->open_stat;
-sv_secure.days_run 	= secure->days_run;
-sv_secure.days_tot	= secure->days_tot;
-
-#endif*/
-
-geshocst(2,spr("GE:Opn Pl St %d %d %d",1,15,5));
-
-/*if (secure->open_stat != 0)*/
-
 numrecs = cntrbtv();
-
-/*else
-	numrecs = 100;*/
 
 numrecs+=25;
 
@@ -610,29 +567,7 @@ if (plantime < 4)
 geshocst(1,spr("Numrecs calculated to be %ld",numrecs));
 geshocst(1,spr("Plantime set to %d",plantime));
 
-/*#ifndef FAKESECURE
-
-gebb5=sec_opnbtv(geuser,sizeof(WARUSR),SEED,REGNO,KEY,METHOD);
-
-#else*/
-
 gebb5=opnbtv(geuser,sizeof(WARUSR));
-
-/*secure->open_stat = 1;
-secure->days_run = 15;
-secure->days_tot = 5;
-
-#endif
-
-if (sv_secure.open_stat != secure->open_stat)
-	{
-	catastro("GE: Secure Stat Open failure!");
-	}
-
-if (sv_secure.days_tot != secure->days_tot)
-	{
-	catastro("GE: Secure Days Open failure!");
-	}*/
 
 geshocst(2,spr("GE:Opn Us St %d %d %d",1,15,5));
 
@@ -884,20 +819,9 @@ lockwarn = TRUE;
 
 /* tell everyone that we are up */
 geshocst(0,spr("Galactic Empire %s",VERSION));
-/*if (secure->open_stat == -1)
-	geshocst(0,spr("Unregistered - Day %d of %d",secure->days_run,secure->days_tot));
-else
-if (secure->open_stat == 1)*/
-
 geshocst(0,spr("Registration # %s",stgopt(REGNO)));
 
-/*else
-geshocst(0,"Unregistered - Disabled!");*/
-
-
 #ifdef PHARLAP
-/*if (secure->open_stat != 0)
-	{*/
 
 rtkick(TICKTIME,pwarrti);
 rtkick(TICKTIME2,pwarrti2);
@@ -908,19 +832,13 @@ rtkick(plantime,pplarti);
 #endif
 rtkick(1,pautorti);
 
-/*	}*/
-
 #else
-/*if (secure->open_stat != 0)
-	{*/
 
 rtkick(TICKTIME,warrti);
 rtkick(TICKTIME2,warrti2);
 rtkick(60,warrti3);
 rtkick(plantime,plarti);
 rtkick(1,autorti);
-
-/*	}*/
 
 #endif
 
@@ -935,9 +853,6 @@ for(i=0;i<nmods;i++)
   	if((sameas((char *)(module[i]->descrp),"Editor")) == TRUE)
 		fse_state=i;
   	}
-
-
-
 }
 
 /**************************************************************************
@@ -949,9 +864,6 @@ int	 FUNC gelogon(void)
 {
 
 setmbk(gemb);
-
-/*if (secure->open_stat == 0)
-	return(0);*/
 
 if (!hasmkey(PLAYKEY))
 	return(0);
@@ -994,8 +906,6 @@ return(0);
 void  FUNC gedeletea(uid)
 char *uid;
 {
-/*if (secure->open_stat == 0)
-	return;*/
 
 if (geudb(GELOOKUP,uid, &tmpusr))
 	{
@@ -1039,12 +949,7 @@ int i;
 int foundit;
 long	scr;
 
-char	tmpbuf2[2];
-
 setmbk(gemb);
-
-/*if (secure->open_stat == 0)
-	return;*/
 
 geshocst(0,spr("GE:INF:Begin Cleanup"));
 
@@ -1056,18 +961,14 @@ if (qlobtv(0))
 	do
 		{
 		gcrbtv(&tmpusr,0);
-		if (!sameto(tmpusr.userid,KEY))
-			{
-			tmpusr.planets = 0;
-			tmpusr.score = 0;
-			tmpusr.plscore = 0;
-			tmpusr.population = 0;
-			updbtv(&tmpusr);
-			gcrbtv(&tmpusr,0);   /* thank you BTRIEVE 5.00b */
-			}
+		tmpusr.planets = 0;
+		tmpusr.score = 0;
+		tmpusr.plscore = 0;
+		tmpusr.population = 0;
+		updbtv(&tmpusr);
+		gcrbtv(&tmpusr,0);   /* thank you BTRIEVE 5.00b */
 		} while (qnxbtv());
 	}
-
 
 geshocst(1,spr("GE:INF:Cleanup Phase-2"));
 
@@ -1120,15 +1021,11 @@ if (qlobtv(0))
 		} while (qnxbtv());
 	}
 
-/*if (secure->open_stat != 0)
-	{*/
-
 sprintf(gechrbuf,"%ld",(cntrbtv()/2L));
 geshocst(0,spr("GE:INF:Plnt DB Size %sk",gechrbuf));
 
 if (cntrbtv() >=  max_plrec)
 	geshocst(0,"GE:INF:Max Sect Reached");
-/*}*/
 
 geshocst(1,spr("GE:INF:Cleanup Phase-3"));
 
@@ -1168,34 +1065,31 @@ if (qlobtv(0))
 	do
 		{
 		gcrbtv(&tmpusr,0);
-		if (!sameto(tmpusr.userid,KEY)) /* ignore the secret key record */
+		foundit = FALSE;
+		if (tmpusr.teamcode > 0)
 			{
-			foundit = FALSE;
-			if (tmpusr.teamcode > 0)
+			for (i=0;i<MAXTEAMS;++i)
 				{
-				for (i=0;i<MAXTEAMS;++i)
+				if (teamtab[i].teamcode == tmpusr.teamcode)
 					{
-					if (teamtab[i].teamcode == tmpusr.teamcode)
-						{
-						foundit=TRUE;
-						break;
-						}
-					}
-				if (foundit == FALSE)
-					{
-					tmpusr.teamcode = 0;
-					logthis(spr("Reset Teamcode to 0 [%s]",tmpusr.userid));
-					}
-				else
-					{
-					++teamtab[i].teamcount;
-					sprintf(gechrbuf,"++Teamcnt %ld %s",tmpusr.teamcode,tmpusr.userid);
-					logthis(gechrbuf);
+					foundit=TRUE;
+					break;
 					}
 				}
 			if (foundit == FALSE)
-				updbtv(&tmpusr);
+				{
+				tmpusr.teamcode = 0;
+				logthis(spr("Reset Teamcode to 0 [%s]",tmpusr.userid));
+				}
+			else
+				{
+				++teamtab[i].teamcount;
+				sprintf(gechrbuf,"++Teamcnt %ld %s",tmpusr.teamcode,tmpusr.userid);
+				logthis(gechrbuf);
+				}
 			}
+		if (foundit == FALSE)
+			updbtv(&tmpusr);
 		gcrbtv(&tmpusr,0);
 		} while (qnxbtv());
 	}
@@ -1207,38 +1101,35 @@ if (qlobtv(0))
 	do
 		{
 		gcrbtv(&tmpusr,0);
-		if (!sameto(tmpusr.userid,KEY)) /* ignore the secret key record */
+		tmpusr.score = tmpusr.plscore + tmpusr.klscore;
+
+		if (tmpusr.teamcode > 0)
 			{
-			tmpusr.score = tmpusr.plscore + tmpusr.klscore;
-
-			if (tmpusr.teamcode > 0)
+			for (i=0;i<MAXTEAMS;++i)
 				{
-				for (i=0;i<MAXTEAMS;++i)
+				if (teamtab[i].teamcode == tmpusr.teamcode)
 					{
-					if (teamtab[i].teamcode == tmpusr.teamcode)
-						{
-						break;
-						}
+					break;
 					}
-
-				/* just incase things get messed up */
-				if (teamtab[i].teamcount == 0)
-					teamtab[i].teamcount = 1;
-
-				teamtab[i].teamscore += teambonus;
-
-				sprintf(gechrbuf,"++Teamscr=%ld+(%ld/%d) %s",
-					teamtab[i].teamscore,
-					tmpusr.score,
-					teamtab[i].teamcount,
-					tmpusr.userid);
-				logthis(gechrbuf);
-
-				scr = tmpusr.score/(long)teamtab[i].teamcount;
-				teamtab[i].teamscore += scr;
 				}
-			updbtv(&tmpusr);
+
+			/* just incase things get messed up */
+			if (teamtab[i].teamcount == 0)
+			teamtab[i].teamcount = 1;
+
+			teamtab[i].teamscore += teambonus;
+
+			sprintf(gechrbuf,"++Teamscr=%ld+(%ld/%d) %s",
+				teamtab[i].teamscore,
+				tmpusr.score,
+				teamtab[i].teamcount,
+				tmpusr.userid);
+			logthis(gechrbuf);
+
+			scr = tmpusr.score/(long)teamtab[i].teamcount;
+			teamtab[i].teamscore += scr;
 			}
+		updbtv(&tmpusr);
 		gcrbtv(&tmpusr,0);
 		} while (qnxbtv());
 	}
@@ -1264,16 +1155,12 @@ i = 0;
 
 setbtv(gebb5);
 
-strncpy(tmpbuf2,KEY,1);
-
 if (qhibtv(1))
 	{
 	do
 		{
 		gcrbtv(&tmpusr,1);
-		if (tmpusr.score > 0
-			&& tmpusr.userid[0] != tmpbuf2[0]
-			&& tmpusr.userid[0] != '@')
+		if (tmpusr.score > 0 && tmpusr.userid[0] != '@')
 			{
 			++i;
 			tmpusr.rospos = i;
@@ -1350,9 +1237,6 @@ return(0);
 void  FUNC warhupa(void)
 {
 
-/*if (secure->open_stat == 0)
-	return;*/
-
 setbtv(gebb1);
 setmbk(gemb);
 
@@ -1417,16 +1301,9 @@ if (gemb != NULL)
 	}
 
 clsbtv(gebb1);
-
 clsbtv(gebb4);
-
-/*if (secure->open_stat != 0)
-	{*/
-
 clsbtv(gebb2);
 clsbtv(gebb5);
-
-/*	}*/
 
 logthis("***GALACTIC EMPIRE SHUTDOWN***");
 return;
@@ -1439,16 +1316,7 @@ return;
 int	 FUNC galemp()
 {
 int i,rtn;
-/*if (secure->open_stat == 0)
-	{
-	prf("\r\n\r\n\r\n");
-	prf("The Galactic Empire trial period is over. If you wish to ");
-	prf("have this game permanently added to this system let your SYSOP ");
-	prf("know how much you enjoy GALACTIC EMPIRE and want it back!!");
-	prf("\r\n\r\n\r\n");
-	outprfge(ALWAYS,usrnum);
-	return(0);
-	}*/
+
 setbtv(gebb1);
 setmbk(gemb);
 warsptr=warshpoff(usrnum);
