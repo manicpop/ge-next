@@ -49,6 +49,10 @@ ge-next RELEASE NOTES
   have their price set to base prices.
 * when editing an item on the admin screen you can now press enter
   to keep the current value
+* if you've been traveling over the recommended warp speed long
+  enough that your top speed has been lowered, and you change
+  speed, you're now only lowered to the new top speed if you choose
+  a speed over the new top speed.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

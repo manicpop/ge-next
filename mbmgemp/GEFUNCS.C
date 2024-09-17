@@ -763,7 +763,8 @@ if (ptr->speed > 0)
             engine maximum speed */
 
 				ptr->topspeed = ptr->topspeed/ptr->warncntr;
-				ptr->speed2b = ptr->topspeed*1000.0;
+				if (ptr->speed2b > ptr->topspeed*1000.0)
+					ptr->speed2b = ptr->topspeed*1000.0;
 				prfmsg(WARPSPD,ptr->topspeed);
 				outprfge(FILTER,usrn);
 				/* reset the warning counter */
