@@ -586,7 +586,7 @@ if (flag == 1)
 		prfmsg(HYCLDN);
 		ptr->cloak = 0;
 		}
-	prfmsg(HYPERIN,warsptr->shipname);
+	prfmsg(HYPERIN,ptr->shipname);
 	outprfge(FILTER,usrn);
 
 	ptr->where = 1;
@@ -602,7 +602,7 @@ if (flag == 1)
 	}
 else
 	{
-	prfmsg(HYPEROUT,warsptr->shipname);
+	prfmsg(HYPEROUT,ptr->shipname);
 	outprfge(FILTER,usrn);
 
 	ptr->where = 0;
