@@ -45,6 +45,10 @@ ge-next RELEASE NOTES
   sure you don't exceed this amount.
 * planetary cash and tax are capped at 4,294,967,295 and can no
   longer overflow.
+* when admining a planet for the first time, all items automatically
+  have their price set to base prices.
+* when editing an item on the admin screen you can now press enter
+  to keep the current value
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

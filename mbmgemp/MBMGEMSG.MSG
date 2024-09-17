@@ -2769,11 +2769,11 @@ ADMENU2B {
 [1;36mTransfer how much tax from the planetary bank to your account?[1;37m } T 
 
 ADMENU2C {
-[0;33m%s[1;36m collected in taxes!
+[0;33m%s[1;36m collected in taxes![1;37m
 } T 
 
 ADMENU2D {
-[1;36mThere isn't that much tax revenue in the planetary bank!
+[1;36mThere isn't that much tax revenue in the planetary bank![1;37m
 } T 
 
 ADMENU2E {
@@ -2797,13 +2797,13 @@ ADMENU2E {
 [1;36mSelect now:[1;37m } T 
 
 ADMEN2F1 {
-[1;36mEnter the percentage of effort toward [1;37m%s[1;36m:[1;37m } T 
+[1;36mPercentage of effort toward [1;37m%s[1;36m ([1;37m%u[1;36m)?[1;37m } T 
 
-ADMEN2F2 {[1;36mCharge how much for each [1;37m%s[1;36m?[1;37m } T 
+ADMEN2F2 {[1;36mCharge how much for each [1;37m%s[1;36m ([1;37m%u[1;36m)?[1;37m } T 
 
-ADMEN2F3 {[1;36mSell [1;37m%s[1;36m to other ships (Y/N)?[1;37m } T 
+ADMEN2F3 {[1;36mSell [1;37m%s[1;36m to other ships ([1;37m%c[1;36m)?[1;37m } T 
 
-ADMEN2F4 {[1;36mReserve how many [1;37m%s[1;36m for stockpiling?[1;37m } T 
+ADMEN2F4 {[1;36mReserve how many [1;37m%s[1;36m for stockpiling ([1;37m%u[1;36m)?[1;37m } T 
 
 ADMEN2FA {
 [1;36mTotal percentage exceeds 100 percent. Percentage of effort toward
@@ -3262,13 +3262,10 @@ PLUSDASH { [1;37m  +------------------------------+
 PLUSFULL { [1;37m  +------------------------------+  Shp Distance Bearing Heading Speed
 } T 
 
-ADMIN01 {Planet Accounting report for %s
+ADMIN01 {Planet accounting report for %s:
 } T 
 
-ADMIN02 {Item          Rate Qty  Price  Resv  S Sold
-} T 
-
-ADMIN03 {%-11s %5u %5u %5u %5u  %1c %4u %4u
+ADMIN02 {Item         Rate        Qty Price  Resv  Sell     Sold
 } T 
 
 ADMIN04 {[0;37mCash in planetary bank ..... [0;33m%s

@@ -4348,8 +4348,14 @@ if (plptr->userid[0] != 0)
 								plptr->items[item].qty -= amt;
 								plptr->items[item].sold2a += amt;
 								if (plptr->cash > ULCAP - tot)
+									{
 									ptot = ULCAP - plptr->cash;
-								plptr->cash +=ptot;
+									plptr->cash +=ptot;
+									}
+								else
+									{
+									plptr->cash +=tot;
+									}
 								setsect(warsptr);
 								pkey.plnum = plnum;
 								gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);

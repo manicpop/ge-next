@@ -282,48 +282,6 @@ long			shieldprice[TOPSHIELD];
 long 			phaserprice[TOPPHASOR];
 unsigned		baseprice[NUMITEMS];
 
-/* OMITTED 3.2c.7
-long shieldprice[TOPSHIELD] = {5000,
-										10000,
-										40000L,
-										100000L,
-										250000L,
-										500000L,
-										750000L,
-										1100000L,
-										1500000L,
-										2500000L,
-										4000000L,
-										6000000L,
-										8000000L,
-										10000000L,
-										30000000L,
-										50000000L,
-										80000000L,
-										120000000L,
-										250000000L};
-
-long phaserprice[TOPPHASOR] = {5000,
-										10000,
-										40000L,
-										100000L,
-										220000L,
-										400000L,
-										650000L,
-										900000L,
-										1200000L,
-										2000000L,
-										3800000L,
-										5000000L,
-										7000000L,
-										9000000L,
-										15000000L,
-										30000000L,
-										60000000L,
-										100000000L,
-										200000000L};
-
-*/
 /* Maximum items a planet can hold (adjusted later)*/
 
 double   maxpl[NUMITEMS];
@@ -2805,14 +2763,6 @@ if (margc == 1)
 		return(1);
 		}
 	else
-	if (sameas(input,"5"))
-		{
-		mailread("@@sysstat1",MAIL_CLASS_GAMESTATS);
-		prfmsg(REPRMT);
-		outprfge(ALWAYS,usrnum);
-		return(1);
-		}
-	else
 	if (sameas(input,"I"))
 		{
 		prfmsg(COINFO);
@@ -2908,11 +2858,17 @@ if (margc > 0)
 		strncpy(plptr->userid,warsptr->userid,UIDSIZ);
 		++waruptr->planets;
 
-		for (i=0;i<NUMITEMS;++i)
-			plptr->items[i].rate = 0;
+		if (strlen(plptr->name) == 0)
+			{
+			for (i=0;i<NUMITEMS;++i)
+				{
+				plptr->items[i].rate = 0;
+				plptr->items[i].markup2a = baseprice[i];
+				}
 
-		plptr->items[I_MEN].rate = 50;
-		plptr->items[I_FOOD].rate = 50;
+			plptr->items[I_MEN].rate = 50;
+			plptr->items[I_FOOD].rate = 50;
+			}
 
 		setsect(warsptr); /* build PKEY */
 		gesdb(GEUPDATE,&pkey,&sector);
@@ -3002,7 +2958,7 @@ if (margc > 0)
 				prfmsg(ADMIN02);
 				for (i=0; i<NUMITEMS; ++i)
 					{
-					sprintf(gechrbuf,"%-11s %5u %5ld %5u %5u %1c %5ld",
+					sprintf(gechrbuf,"%-11s %5u %10ld %5u %5u %5c %8ld",
 							item_name[i],
 							plptr->items[i].rate,
 							plptr->items[i].qty,
@@ -3112,9 +3068,9 @@ if (amt <= plptr->tax)
 else
 	{
 	prfmsg(ADMENU2D);
-	outprfge(ALWAYS,usrnum);
 	}
 prfmsg(ADMENU2);
+outprfge(ALWAYS,usrnum);
 usrptr->substt = ADMENU2;
 return(1);
 }
@@ -3130,7 +3086,7 @@ for (i=0; i<NUMITEMS; ++i) /* skip notused */
 	if (genearas(kwrd[i],margv[0]))
 		{
 		warsptr->titem = i;
-		prfmsg(ADMEN2F1,item_name[warsptr->titem]);
+		prfmsg(ADMEN2F1,item_name[warsptr->titem],plptr->items[warsptr->titem].rate);
 		outprfge(ALWAYS,usrnum);
 		usrptr->substt = ADMEN2F1;
 		return(1);
@@ -3151,15 +3107,23 @@ int  FUNC mnu_admenu2f1()
 unsigned amt;
 amt = atoi(margv[0]);
 
-if (margc == 1 && amt <=100)
+if (margc == 0)
 	{
-	titems[usrnum].rate = amt;
-	prfmsg(ADMEN2F2,item_name[warsptr->titem]);
+	titems[usrnum].rate = plptr->items[warsptr->titem].rate;
+	prfmsg(ADMEN2F2,item_name[warsptr->titem],plptr->items[warsptr->titem].markup2a);
 	outprfge(ALWAYS,usrnum);
 	usrptr->substt = ADMEN2F2;
 	return(1);
 	}
-prfmsg(ADMEN2F1,item_name[warsptr->titem]);
+if (margc == 1 && amt <=100)
+	{
+	titems[usrnum].rate = amt;
+	prfmsg(ADMEN2F2,item_name[warsptr->titem],plptr->items[warsptr->titem].markup2a);
+	outprfge(ALWAYS,usrnum);
+	usrptr->substt = ADMEN2F2;
+	return(1);
+	}
+prfmsg(ADMEN2F1,item_name[warsptr->titem],plptr->items[warsptr->titem].rate);
 outprfge(ALWAYS,usrnum);
 return(1);
 }
@@ -3171,16 +3135,24 @@ int  FUNC mnu_admenu2f2()
 unsigned amt;
 amt = atoi(margv[0]);
 
+if (margc == 0)
+	{
+	titems[usrnum].markup2a = plptr->items[warsptr->titem].markup2a;
+	prfmsg(ADMEN2F3,item_name[warsptr->titem],plptr->items[warsptr->titem].sell);
+	outprfge(ALWAYS,usrnum);
+	usrptr->substt = ADMEN2F3;
+	return(1);
+	}
 if (margc == 1 && amt <=32000)
 	{
 	titems[usrnum].markup2a = amt;
-	prfmsg(ADMEN2F3,item_name[warsptr->titem]);
+	prfmsg(ADMEN2F3,item_name[warsptr->titem],plptr->items[warsptr->titem].sell);
 	outprfge(ALWAYS,usrnum);
 	usrptr->substt = ADMEN2F3;
 	return(1);
 	}
 
-prfmsg(ADMEN2F2,item_name[warsptr->titem]);
+prfmsg(ADMEN2F2,item_name[warsptr->titem],plptr->items[warsptr->titem].markup2a);
 outprfge(ALWAYS,usrnum);
 return(1);
 }
@@ -3190,15 +3162,23 @@ return(1);
 int  FUNC mnu_admenu2f3()
 {
 
-if (margc == 1 && (genearas("y",margv[0]) || genearas("n",margv[0])))
+if (margc == 0)
 	{
-	titems[usrnum].sell = toupper(*margv[0]);
-	prfmsg(ADMEN2F4,item_name[warsptr->titem]);
+	titems[usrnum].sell = plptr->items[warsptr->titem].sell;
+	prfmsg(ADMEN2F4,item_name[warsptr->titem],plptr->items[warsptr->titem].reserve);
 	outprfge(ALWAYS,usrnum);
 	usrptr->substt = ADMEN2F4;
 	return(1);
 	}
-prfmsg(ADMEN2F3,item_name[warsptr->titem]);
+if (margc == 1 && (genearas("y",margv[0]) || genearas("n",margv[0])))
+	{
+	titems[usrnum].sell = toupper(*margv[0]);
+	prfmsg(ADMEN2F4,item_name[warsptr->titem],plptr->items[warsptr->titem].reserve);
+	outprfge(ALWAYS,usrnum);
+	usrptr->substt = ADMEN2F4;
+	return(1);
+	}
+prfmsg(ADMEN2F3,item_name[warsptr->titem],plptr->items[warsptr->titem].sell);
 outprfge(ALWAYS,usrnum);
 return(1);
 }
@@ -3210,6 +3190,15 @@ int  FUNC mnu_admenu2f4()
 unsigned amt;
 amt = atoi(margv[0]);
 
+if (margc == 0)
+	{
+	titems[usrnum].reserve = plptr->items[warsptr->titem].reserve;
+	update_items();
+	prfmsg(ADMENU2);
+	outprfge(ALWAYS,usrnum);
+	usrptr->substt = ADMENU2;
+	return(1);
+	}
 if (margc == 1 && amt <=32000)
 	{
 	titems[usrnum].reserve = amt;
@@ -3219,7 +3208,7 @@ if (margc == 1 && amt <=32000)
 	usrptr->substt = ADMENU2;
 	return(1);
 	}
-prfmsg(ADMEN2F4,item_name[warsptr->titem]);
+prfmsg(ADMEN2F4,item_name[warsptr->titem],plptr->items[warsptr->titem].reserve);
 outprfge(ALWAYS,usrnum);
 return(1);
 }
