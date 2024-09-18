@@ -4873,6 +4873,13 @@ if (sameas("cash",margv[1]) && margc == 3)
 	return;
 	}
 else
+if (sameas("points",margv[1]) && margc == 3)
+	{
+	waruptr->score += atol(margv[2]);
+	done();
+	return;
+	}
+else
 if (sameas("goto",margv[1]) && margc == 4)
 	{
 	if (margc == 4)
