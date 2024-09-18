@@ -569,8 +569,6 @@ geshocst(1,spr("Plantime set to %d",plantime));
 
 gebb5=opnbtv(geuser,sizeof(WARUSR));
 
-geshocst(2,spr("GE:Opn Us St %d %d %d",1,15,5));
-
 gehlpmb =opnmsg(GEHELP);
 
 /* ships in game is at least number of terminal channels */
@@ -822,13 +820,12 @@ geshocst(0,spr("Galactic Empire %s",VERSION));
 geshocst(0,spr("Registration # %s",stgopt(REGNO)));
 
 #ifdef PHARLAP
-
 rtkick(TICKTIME,pwarrti);
 rtkick(TICKTIME2,pwarrti2);
 rtkick(60,pwarrti3);
 rtkick(plantime,pplarti);
 #ifdef BLDPLNTS
-	rtkick(30,plabld);
+rtkick(30,plabld);
 #endif
 rtkick(1,pautorti);
 

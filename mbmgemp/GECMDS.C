@@ -3061,26 +3061,7 @@ int i,j;
 int shp;
 int ff;
 
-ff		=	0;setmbk(gemb);
-
-geshocst(0,spr("GE:INF:Begin Cleanup"));
-
-/* clear out planet counter */
-geshocst(1,spr("GE:INF:Cleanup Phase-1"));
-setbtv(gebb5);
-if (qlobtv(0))
-	{
-	do
-		{
-		gcrbtv(&tmpusr,0);
-		tmpusr.planets = 0;
-		tmpusr.score = 0;
-		tmpusr.plscore = 0;
-		tmpusr.population = 0;
-		updbtv(&tmpusr);
-		gcrbtv(&tmpusr,0);   /* thank you BTRIEVE 5.00b */
-		} while (qnxbtv());
-	}
+ff		=	0;
 shp	=	0;
 
 sptr = &scantab[usrnum];
