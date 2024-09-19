@@ -2118,7 +2118,7 @@ if (sameas(margv[1],"acc"))
 	if (waruptr->score <= 0)
 		sprintf(gechrbuf,"0");
 	else
-		sprintf(gechrbuf,"%ld",waruptr->score);
+		sprintf(gechrbuf,"%lu",waruptr->score);
 
 	prfmsg(REP30,gechrbuf);
 
@@ -4018,21 +4018,29 @@ setbtv(gebb5);
 j = gemaxlist;
 
 if (margc == 2 && sameas(margv[1],"all"))
+	{
+	prfmsg(ROSTER1);
+	outprfge(ALWAYS,usrnum);
 	j = 200;
+	}
+else
+	{
+	prfmsg(ROSTER2,gemaxlist);
+	outprfge(ALWAYS,usrnum);
+	}
 
 if (qhibtv(1))
 	{
-	prfmsg(ROSTER2,gemaxlist);
 	do
 		{
 		gcrbtv(&tmpusr,1);
-		logthis(spr("ROS:Got %s Score %ld",tmpusr.userid,tmpusr.score));
-		if (tmpusr.score > 0 && tmpusr.userid[0] != '@')
+		logthis(spr("ROS:Got %s Score %lu",tmpusr.userid,tmpusr.score));
+		if ((tmpusr.score > 0 || j == 200) && tmpusr.userid[0] != '@')
 			{
 			++i;
-			sprintf(gechrbuf,"%11ld",tmpusr.score);
-			sprintf(gechrbuf2," %8.3fm",((float)tmpusr.population)/100.0);
-			prf("%-30s%s%5d%3d%s\r",tmpusr.userid,gechrbuf,tmpusr.kills,tmpusr.planets,gechrbuf2);
+			sprintf(gechrbuf,"%11lu",tmpusr.score);
+			sprintf(gechrbuf2," %10.2fm",((float)tmpusr.population)/100.0);
+			prf("%-29s%s%6d%4d%s\r",tmpusr.userid,gechrbuf,tmpusr.kills,tmpusr.planets,gechrbuf2);
 			outprfge(ALWAYS,usrnum);
 			}
 		} while (qprbtv() && i < j);
@@ -4858,6 +4866,12 @@ if (sameas("points",margv[1]) && margc == 3)
 	{
 	waruptr->score += atol(margv[2]);
 	done();
+	return;
+	}
+else
+if (sameas("midnight",margv[1]) && margc == 2)
+	{
+	gemidnighta();
 	return;
 	}
 else

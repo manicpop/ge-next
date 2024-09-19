@@ -282,6 +282,7 @@ tmpusr.plscore 	= 0;
 tmpusr.klscore 	= 0;
 tmpusr.rospos  	= 0;
 tmpusr.teamcode	= 0;
+tmpusr.population = 0;
 
 tmpusr.cash 		= startcash;
 
