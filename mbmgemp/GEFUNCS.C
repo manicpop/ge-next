@@ -353,6 +353,14 @@ void  FUNC selectship()
 int selection;
 int     shpno;
 
+if ((sameas(margv[0],"x")) || (sameas(margv[0],"X")))
+	{
+	disp_main_menu();
+	outprfge(ALWAYS,usrnum);
+	usrptr->substt = 1;
+	return;
+	}
+
 selection = (atoi(margv[0]))-1;
 if (selection >= 0)
 	{

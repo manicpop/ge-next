@@ -3713,7 +3713,7 @@ Planet name         sector planet
 FLEET3 {[1;36mWhich ship do you wish to command this mission?[1;37m } T 
 
 FLEET4 {
-[1;36mBe real... pick one from the list.[1;37m
+[1;36mPick a ship from the list or "x" to return to the main menu.[1;37m
 } T 
 
 RENAME1 {

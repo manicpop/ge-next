@@ -53,6 +53,10 @@ ge-next RELEASE NOTES
   enough that your top speed has been lowered, and you change
   speed, you're now only lowered to the new top speed if you choose
   a speed over the new top speed.
+* roster cleaned up and re-spaced so huge population values won't
+  explode the columns. "ros all" now also shows users with 0 score.
+* you can now enter "x" at the ship selection screen to go back to
+  the main menu in case you decide you don't want to play after all.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
