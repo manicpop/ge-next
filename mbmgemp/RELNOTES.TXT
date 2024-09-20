@@ -57,6 +57,10 @@ ge-next RELEASE NOTES
   explode the columns. "ros all" now also shows users with 0 score.
 * you can now enter "x" at the ship selection screen to go back to
   the main menu in case you decide you don't want to play after all.
+* cleaned up how the galactic perimeter is established. you can now
+  travel all way to (default) 300 300, you are only bounced back
+  after trying to pass that. if you have wraparound on, it now
+  wraps to the correct sector (e.g. 300 to -300).
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

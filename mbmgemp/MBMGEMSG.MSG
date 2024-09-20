@@ -250,7 +250,7 @@ This option controls whether the galaxy wraps or has a
 "bumper". If YES then it wraps around top to bottom, and
 side to side.
 
-UNIVWRAP {Does the Galaxy wrap around? NO} B
+UNIVWRAP {Does the Galaxy wrap around? YES} B
 
 This value controls how large the GEPLANET.DAT data file
 will grow to. Each time a sector is "teraformed" the 
@@ -2028,7 +2028,7 @@ disconnect now, your ship will be destroyed![1;37m
 } T 
 
 EXIWAR2 {***
-[0;37mScanners can no longer locate the [0;36m%s[0;37m.[1;37m
+[0;37mSensors can no longer locate the [0;36m%s[0;37m.[1;37m
 } T 
 
 WARHUP {***
@@ -3328,11 +3328,11 @@ MOVE1 {***
 } T 
 
 MOVE2 {***
-[0;37mScanners indicate the [0;36m%s[0;37m has left this sector.[1;37m
+[0;37mSensors indicate the [0;36m%s[0;37m has left this sector.[1;37m
 } T 
 
 MOVE3 {***
-[0;37mScanners indicate the [0;36m%s[0;37m has entered this sector.[1;37m
+[0;37mSensors indicate the [0;36m%s[0;37m has entered this sector.[1;37m
 } T 
 
 MOVE4 {***
@@ -5207,7 +5207,7 @@ CYBLASTM {DO NOT REMOVE THIS MESSAGE!!!!!!} T
 
 
 TELEPORT {***
-[0;37m[[0;31mWARNING![0;37m] Navagation beyond the galactic perimeter is not permitted. Engines
+[0;37m[[0;31mWARNING![0;37m] Navigation beyond the galactic perimeter is not permitted. Engines
 shut down under emergency procedures.
 
 Damage control reports [0;31mmoderate[0;37m damage to all sections due to kinetic shock.[1;37m

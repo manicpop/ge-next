@@ -4800,7 +4800,7 @@ if (sameas("goto",margv[1]) && margc == 4)
 		{
 		i = atoi(margv[2]);
 		j = atoi(margv[3]);
-		if (i < univmax && j < univmax)
+		if (abs(i) <= univmax && abs(j) <= univmax)
 			{
 			warsptr->where = 0;
 			warsptr->hostile = 0;
@@ -5088,9 +5088,7 @@ if (margc != 3)
 x = atoi(margv[1]);
 y = atoi(margv[2]);
 
-
-if (x<(univmax*-1) || x >(univmax) ||
-	y<(univmax*-1) || y >(univmax))
+if (abs(x) > univmax || abs(y) > univmax)
 	{
 	prfmsg(FORMAT,"NAVIGATE");
 	outprfge(ALWAYS,usrnum);

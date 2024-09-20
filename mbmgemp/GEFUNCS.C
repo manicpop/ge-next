@@ -648,11 +648,11 @@ if (ptr->speed > 0)
 
 	if (ptr->where <= 1)
 		{
-		if (ptr->coord.xcoord > univmax)
+		if (ptr->coord.xcoord > univmax+1)
 			{
 			if (univwrap)
 				{
-				ptr->coord.xcoord       -= (double)(univmax*2);
+				ptr->coord.xcoord       -= (double)((univmax*2)+1);
 				}
 			else
 				{
@@ -665,7 +665,7 @@ if (ptr->speed > 0)
 			{
 			if (univwrap)
 				{
-				ptr->coord.xcoord       += (double)(univmax*2);
+				ptr->coord.xcoord       += (double)((univmax*2)+1);
 				}
 			else
 				{
@@ -675,11 +675,11 @@ if (ptr->speed > 0)
 			}
 
 
-		if (ptr->coord.ycoord > univmax)
+		if (ptr->coord.ycoord > univmax+1)
 			{
 			if (univwrap)
 				{
-				ptr->coord.ycoord       -= (double)(univmax*2);
+				ptr->coord.ycoord       -= (double)((univmax*2)+1);
 				}
 			else
 				{
@@ -692,7 +692,7 @@ if (ptr->speed > 0)
 			{
 			if (univwrap)
 				{
-				ptr->coord.ycoord       += (double)(univmax*2);
+				ptr->coord.ycoord       += (double)((univmax*2)+1);
 				}
 			else
 				{
