@@ -61,6 +61,8 @@ ge-next RELEASE NOTES
   travel all way to (default) 300 300, you are only bounced back
   after trying to pass that. if you have wraparound on, it now
   wraps to the correct sector (e.g. 300 to -300).
+* changed the CYBNEW and DROIDNEW announcments to show the sector
+  of the newly created ship, as opposed to the (fake) bearing.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

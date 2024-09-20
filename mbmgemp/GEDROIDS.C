@@ -146,7 +146,8 @@ ptr->status = GESTAT_AUTO;
 ptr->tick = CYBTICKTIME + gernd()%CYBTICKTIME;
 
 /*gepdb(GEUPDATE,ptr->userid,ptr->shipno,ptr); DONT NEED TO MAKE PERM*/
-prfmsg(DROIDNEW,gernd()%359);
+setsect(ptr);
+prfmsg(DROIDNEW,xsect,ysect);
 outwar(FILTER,usrn,0);
 }
 

@@ -171,7 +171,8 @@ if (geudb(GELOOKUP,cybname, waruptr))
 		/* DEBUG */
 
 		gepdb(GEUPDATE,ptr->userid,ptr->shipno,ptr);
-		prfmsg(CYBNEW,gernd()%359);
+		setsect(ptr);
+		prfmsg(CYBNEW,xsect,ysect);
 		outwar(FILTER,usrn,0);
 		}
 	}
