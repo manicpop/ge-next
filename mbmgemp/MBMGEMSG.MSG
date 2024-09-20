@@ -250,7 +250,7 @@ This option controls whether the galaxy wraps or has a
 "bumper". If YES then it wraps around top to bottom, and
 side to side.
 
-UNIVWRAP {Does the Galaxy wrap around? YES} B
+UNIVWRAP {Does the Galaxy wrap around? NO} B
 
 This value controls how large the GEPLANET.DAT data file
 will grow to. Each time a sector is "teraformed" the 
@@ -3015,6 +3015,14 @@ FORHELP {
 PHANONE {
 [0;37m[[1;31mERROR[0;37m] There is insufficient phaser power to fire![1;37m
 } T 
+
+SETOPTS {
+[0;37mUser options are:[1;37m
+} T
+
+SETOPT {
+[0;37mUser option [1;37m%s[0;37m set [1;37m%s[0;37m.[1;37m
+} T
 
 REP01 {
 [1;37m%s: the %s

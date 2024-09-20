@@ -5163,12 +5163,11 @@ if (margc < 2 || margc > 3)
 
 if (sameas(margv[1],"?"))
 	{
-	prf("User Options are...\r");
+	prfmsg(SETOPTS);
 	for (i=0;i<NUMOPTS;++i)
 		{
-		prf("  %s%s%s\r",options[i],gedots(20-strlen(options[i])),(waruptr->options[i] ? "On" : "Off"));
+		prf("  %s%s%s\r",options[i],gedots(15-strlen(options[i])),(waruptr->options[i] ? " on" : " off"));
 		}
-	prf("\r");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -5181,7 +5180,7 @@ for (i=0;i<NUMOPTS;++i)
 		if (sameas(margv[2],"on"))
 			{
 			waruptr->options[i] = TRUE;
-			prf("Option %s set ON\r",options[i]);
+			prfmsg(SETOPT,options[i],"ON");
 			outprfge(ALWAYS,usrnum);
 			return;
 			}
@@ -5189,7 +5188,7 @@ for (i=0;i<NUMOPTS;++i)
 		if (sameas(margv[2],"off"))
 			{
 			waruptr->options[i] = FALSE;
-			prf("Option %s set OFF\r",options[i]);
+			prfmsg(SETOPT,options[i],"OFF");
 			outprfge(ALWAYS,usrnum);
 			return;
 			}
