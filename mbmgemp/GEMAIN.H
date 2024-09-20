@@ -87,8 +87,6 @@
 #define SHMAXCHG 10           /* Max (full) charge in the shields          */
 #define SHMINCHG 5            /* Minimum charge to be effective            */
 
-#define SCANADJ   40           /* Adjustment factor for range scanner       */
-
 #define TONFACT	15000.0      /* divisor for ton factor */
 
 #define SSMAX    10000
@@ -117,9 +115,6 @@
 #define MAXTORPS 3
 #define MAXMISSL 3
 #define MAXDECOY 10
-
-/* how far does the hyper scanner look */
-#define HYSCANRANGE 5
 
 #define DECOYTIME 15             /* times TICKTIME how long a decoy lives */
 #define TICKTIME  6             /* how often does RTKICK fire    6   */
@@ -156,8 +151,6 @@
 
 #define COUNTDOWN			20   /* self destruct countdown */
 
-#define CYB_GO_WARP             1
-#define CYB_MINCLASS    3   /* Minimum class a Cybertron will pick on */
 #define CYBSLO                          3   /* slows down the cyborgs reaction time */
 #define CYB_ALLOW                       35  /* how much allowance per tick          */
 #define CYB_MAXCASH     2000000L  /* maximum cash cybertrons can hold */
@@ -165,13 +158,6 @@
 #define CYB_BE_EASY             60       /* 60 kills till we get really mean */
 #define CYB_BREAKOFF            500     /* 1 in x chance that cyb will break off attk */
 #define CYB_MINDAM              75    /* % of damage when cyb jams and mines */
-#define CYBS_FIGHT              FALSE /* TRUE if Cybs fight each other */
-#define CYB_BADBAD              FALSE /* TRUE if cybs attack anyone once they */
-										/* have been fired upon. FALSE if they  */
-										/* only attack their attacker */
-#define CYBMAXPERTICK   2               /* the number of cybs processed each tick */
-#define QUADMAXPERTICK  5               /* the number of quads processed each tick */
-
 
 #define TELEDAM                 17      /* amount of damage done when edge reached */
 
@@ -291,7 +277,7 @@ WARUSR {                           /* user data blocks                       */
 		unsigned			rospos;
 		int				planets;            /*   Planets owned                        */
 		unsigned long	cash;               /*   cash on hand                         */
-		unsigned long 	debt;               /*   I owe, I owe, its off to work I go   */
+		unsigned long 	debt;               /*   this isn't used but it could be helpful later   */
 		unsigned long	plscore;
 		unsigned long 	klscore;
 		unsigned long 	population;
@@ -438,7 +424,7 @@ GALPLNT {                /* star system data record               */
 	char	enviorn;             /* enviornment factor                                              */
 	char	resource;                               /* resources                                                                    */
 	unsigned	long cash;                                           /* cash on hand                                                         */
-	unsigned long	debt;                /* amount you owe                      */
+	unsigned long	debt;                /* unused                  */
 	unsigned long	tax;                 /* amount of tax collected             */
 	int	taxrate;             /* rate to tax population              */
 	char	warnings;            /* warnings to intruders               */
@@ -531,7 +517,7 @@ MAILSTAT	{
 	int             int1;
 	int             int2;
 	unsigned long            cash;                /* cash on hand                  */
-	unsigned long            debt;                /* amount you owe                      */
+	unsigned long            debt;                /* unused                      */
 	unsigned long            tax;                 /* amount of tax collected             */
 	unsigned long            itemqty[NUMITEMS];
 	char            filler[253-97-(UIDSIZ)-(sizeof(long)*NUMITEMS)];         /* fill to 250 BJ changed size for name*/
