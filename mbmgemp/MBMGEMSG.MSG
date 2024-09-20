@@ -2423,10 +2423,6 @@ MISS01 {
 [0;37m[[1;31mERROR[0;37m] This ship is not equipped with a missile launcher.[1;37m
 } T 
 
-LOCK1 {
-[0;37mFire control locked on ship [0;36m%c[0;37m.[1;37m
-} T 
-
 LOCK2 {***
 [0;37m[[0;31mWARNING![0;37m] Ship [0;36m%c[0;37m has a fire control scanner locked onto this ship![1;37m
 } T 
@@ -2622,6 +2618,9 @@ BADCOM {
 DASHES {[0;31m--------------------------------------[1;37m
 } T 
 
+DASHESL {[0;31m----------------------------------------------------------[1;37m
+} T 
+
 ORBIT0 {
 [0;37m[[1;31mERROR[0;37m] Wormholes cannot be orbited.[1;37m
 } T Orbit wormhole message
@@ -2753,7 +2752,7 @@ the empire of [0;36m%s[1;36m the Great, commander of the [0;36m%s[1;36m.[1;
 
 ADMENU2 {
 [1;36m  Planet Administration Menu
-[0;31m  ----------------------------------------------------------
+[0;31m  --------------------------------------------------------
 [1;34m  1 - Get accounting report
   2 - Collect taxes
   3 - Alter work assignments and adjust trade policy/pricing
@@ -2763,7 +2762,7 @@ ADMENU2 {
   7 - Set beacon message
   X - Exit to command mode[1;36m
 
-Please select (1-6):[1;37m } T 
+  Please select (1-6):[1;37m } T 
 
 ADMENU2B {
 [1;36mTransfer how much tax from the planetary bank to your account?[1;37m } T 
@@ -3201,9 +3200,6 @@ SCAN09 {[0;37mCommanded by: [1;34m%s[0;37m
 SCAN10 {[0;37mBearing: [1;37m%d[0;37m  Distance: [1;37m%s[0;37m
 } T 
 
-SCAN10A {[1;37mType: %d
-} T 
-
 SCAN11 {[0;37mEnvironment: } T 
 
 SCAN12 {[1;37mPoor
@@ -3248,11 +3244,8 @@ SCAN34 {[0;37m%s stockpile of mines.
 } T 
 
 SCANWRM {
-[0;37mScanning wormhole:
+[0;37mScanning wormhole [1;34m%d[0;37m: [1;34m%s[1;37m
 } T 
-
-SCANWRM1 {[1;37m Named: %s
-} T
 
 PLUSDASH { [1;37m  +------------------------------+
 } T 
@@ -3261,7 +3254,8 @@ PLUSDASH { [1;37m  +------------------------------+
 PLUSFULL { [1;37m  +------------------------------+  Shp Distance Bearing Heading Speed
 } T 
 
-ADMIN01 {Planet accounting report for %s:
+ADMIN01 {
+Planet accounting report for %s:
 } T 
 
 ADMIN02 {Item         Rate        Qty Price  Resv  Sell     Sold

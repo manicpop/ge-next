@@ -95,21 +95,21 @@ int dfsthn();
 int gestt;
 
 
-struct module mbmge={        /* module interface block               */
-	  "",                      /*    description for main menu         */
-	  gelogon,                 /*    user logon supplemental routine   */
-	  galemp,                  /*    input routine if selected         */
-	  stshdlr,                 /*    status-input routine if selected  */
-	  NULL,                    /*    "injoth" routine for this module  */
-	  pwarlof,                 /*    user logoff supplemental routine  */
-	  pwarhup,                  /*    hangup (lost carrier) routine     */
-	  pgemidnight,              /*    midnight cleanup routine          */
-	  pgedelete,                /*    delete-account routine            */
-	  pclswar                   /*    finish-up (sys shutdown) routine  */
+struct module mbmge={		/* module interface block               */
+	  "",			/*    description for main menu         */
+	  gelogon,		/*    user logon supplemental routine   */
+	  galemp,		/*    input routine if selected         */
+	  stshdlr,		/*    status-input routine if selected  */
+	  NULL,			/*    "injoth" routine for this module  */
+	  pwarlof,		/*    user logoff supplemental routine  */
+	  pwarhup,		/*    hangup (lost carrier) routine     */
+	  pgemidnight,		/*    midnight cleanup routine          */
+	  pgedelete,		/*    delete-account routine            */
+	  pclswar		/*    finish-up (sys shutdown) routine  */
 };
 
 
-BTVFILE         *gebb1,  /* GEship.dat   */
+BTVFILE			*gebb1,  /* GEship.dat   */
 			*gebb2,  /* GEplanet.dat */
 			*gebb4,  /* GEmail.dat   */
 			*gebb5;  /* GEuser.dat   */
@@ -146,15 +146,15 @@ GALWORM worm;
 
 PLANETAB        *ptab;
 
-char map[MAXY][MAXX+1];          /* global scan map array */
+char map[MAXY][MAXX+1];           /* global scan map array */
 char mapc[MAXY][MAXX+1];          /* global scan map array color map */
 
 MINE            *mines;       /* place to stuff mines */
 
 MAIL            mail;
-MAILSTAT			tmpstat;
+MAILSTAT	tmpstat;
 
-BEACONTAB		*beacon;
+BEACONTAB	*beacon;
 
 struct message *gemsg;
 
@@ -174,21 +174,21 @@ unsigned			xcord,ycord;
 
 PKEY				pkey;
 unsigned			distance;
-double			ddistance;
+double				ddistance;
 int				bearing;
 unsigned			energy;
 unsigned			damage;
 char				*gechrbuf,*gechrbuf2,*gechrbuf3;
 char				*warpbuf;
 int				plnum;
-GALPLNT			*plptr;
+GALPLNT				*plptr;
 ITEM				*titems;
 TEAM				*teamtab;
 
 int				su;
 int				tmp_usrnum;
 
-long			max_plrec,
+long				max_plrec,
 				teambonus,
 				pltvcash,
 				pltvdiv,
@@ -196,7 +196,7 @@ long			max_plrec,
 
 unsigned			plantime = PLANTIME;
 
-int			gemaxplrs,
+int				gemaxplrs,
 				gefreebies,
 				gemaxlist,
 				maxships,
@@ -240,19 +240,18 @@ int			gemaxplrs,
 				univwrap,
 				maxplanets;
 
-char			*opttxt,
+char				*opttxt,
 				optchr;
 
-long			*opttbl;
+long				*opttbl;
 
-double		tor_fact,
+double				tor_fact,
 				tdammax,
 				mdammax,
 				mis_fact,
 				idammax,
 				minedammax,
 				repairrate,
-/*				tonfact,    omitted */
 				tooclose,
 				hyperdist1,
 				hyperdist2,
@@ -302,22 +301,15 @@ MENU {
 	int	(*func)();
 	};
 
-/*int 	mnu_main(), mnu_main_ans(), mnu_fightsub(), mnu_admenu1(), mnu_admenu1a(),
-		mnu_admenu1(), mnu_admenu1a(), mnu_admenu2(), mnu_admenu2b(), mnu_admenu2e(),
-		mnu_admenu2f1(), mnu_admenu2f2(), mnu_admenu2f3(), mnu_admenu2f4(),
-		mnu_admenu2h(), mnu_admenu2i(), mnu_choosesh(), mnu_menug(), mnu_menug1(),
-		mnu_menug2(), mnu_admenu2j();
-*/
-
 #define MENUNUM (sizeof(menu)/sizeof(MENU))
 
 MENU	menu[] = {
-	{	0,				mnu_main,},
-	{	1,				mnu_main_ans},
+	{	0,		mnu_main,},
+	{	1,		mnu_main_ans},
 	{	FIGHTSUB,	mnu_fightsub},
-	{	ADMENU1,		mnu_admenu1},
+	{	ADMENU1,	mnu_admenu1},
 	{	ADMENU1A,	mnu_admenu1a},
-	{	ADMENU2,		mnu_admenu2},
+	{	ADMENU2,	mnu_admenu2},
 	{	ADMENU2B,	mnu_admenu2b},
 	{	ADMENU2E,	mnu_admenu2e},
 	{	ADMEN2F1,	mnu_admenu2f1},
@@ -385,7 +377,7 @@ geuser		= stgopt(GEUSER);
 geship		= stgopt(GESHIP);
 geplnt		= stgopt(GEPLNT);
 gemail		= stgopt(GEMAIL);
-geshipcl		= stgopt(GESHIPCL);
+geshipcl	= stgopt(GESHIPCL);
 
 gemaxplrs	= numopt(MAXPLRS,1,256);
 gefreebies 	= numopt(FREEBIES,0,1);
@@ -394,22 +386,22 @@ maxships 	= numopt(MAXSHIPS,1,50);
 se100dam 	= numopt(SE100DAM,1,101);
 showopt    	= numopt(SHOWOPT,0,5);
 trans_opt 	= ynopt(TRANSOPT);
-syscmds 		= ynopt(SYSCMDS);
-sysonly 		= ynopt(SYSONLY);
+syscmds 	= ynopt(SYSCMDS);
+sysonly 	= ynopt(SYSONLY);
 max_plnts 	= numopt(MAXPLNTS,1,256);
 plantock 	= lngopt(PLANTOCK,1,32760)*60L;
 numships 	= numopt(NUMSHIPS,1,500);
 maxdroids	= numopt(MAXDROID,0,500);
 plodds		= numopt(PLODDS,1,20);
-wormodds		= numopt(WORMODDS,1,100);
-univmax 		= numopt(UNIVMAX,10,32767);
-univwrap		= ynopt(UNIVWRAP);
-s00plnum		= numopt(S00PLNUM,3,9);
+wormodds	= numopt(WORMODDS,1,100);
+univmax 	= numopt(UNIVMAX,10,32767);
+univwrap	= ynopt(UNIVWRAP);
+s00plnum	= numopt(S00PLNUM,3,9);
 maxplanets	= numopt(MAXPLSE,1,9);
 teambonus	= numopt(TEAMBONU,0,32000)*100L;
-team_max		= numopt(TEAMMAX,0,32000);
+team_max	= numopt(TEAMMAX,0,32000);
 
-profon  		= ynopt(PROFON);
+profon  	= ynopt(PROFON);
 logflag		= ynopt(LOGFLG);
 
 if (logflag)
@@ -418,35 +410,35 @@ geshocst(0,"GE:Ext Trace Logging ON!");
 geshocst(0,"GE:FASTPLANET ON!");
 #endif
 
-hpfirdst		= numopt(HPFIRDST,1,20);
-hpdammax		= numopt(HPDAMMAX,1,200);
-pfirdist		= numopt(PFIRDST,1,20);
+hpfirdst	= numopt(HPFIRDST,1,20);
+hpdammax	= numopt(HPDAMMAX,1,200);
+pfirdist	= numopt(PFIRDST,1,20);
 pdammax		= numopt(PDAMMAX,1,200);
 
 jamtime		= numopt(JAMTIME,1,10);
-maildays		= numopt(MAILDAYS,1,7);
-torpsped		= numopt(TORPSPED,1,10000);
-mislsped		= numopt(MISLSPED,1,10000);
+maildays	= numopt(MAILDAYS,1,7);
+torpsped	= numopt(TORPSPED,1,10000);
+mislsped	= numopt(MISLSPED,1,10000);
 
-nummines		= numopt(NUMMINES,1,200);
+nummines	= numopt(NUMMINES,1,200);
 usermines 	= numopt(USRMINES,1,200);
 
 decodds		= numopt(DECODDS,1,20);
 
-tor_fact	 	= (double)numopt(TORFACT,1,50);
-tor_fact		= tor_fact/10.0;
+tor_fact	= (double)numopt(TORFACT,1,50);
+tor_fact	= tor_fact/10.0;
 tdammax		= (double)numopt(TDAMMAX,1,100);
-mis_fact	 	= (double)numopt(MISFACT,1,50);
-mis_fact		= mis_fact/10.0;
+mis_fact	= (double)numopt(MISFACT,1,50);
+mis_fact	= mis_fact/10.0;
 mdammax		= (double)numopt(MDAMMAX,1,100);
 idammax		= (double)numopt(IDAMMAX,1,100);
 minedammax	= (double)numopt(MNDAMMAX,1,200);
 repairrate	= (double)numopt(REPAIRRT,1,50);
-repairrate  = repairrate/100.0;
+repairrate 	= repairrate/100.0;
 
-tooclose		= (double)numopt(TOOCLOSE,1,32000);
+tooclose	= (double)numopt(TOOCLOSE,1,32000);
 
-clenguse		= numopt(CLENGUSE,1,32000);
+clenguse	= numopt(CLENGUSE,1,32000);
 
 startcash	= (long)numopt(STRTCASH,1,32000);
 startcash	*=1000L;
@@ -454,28 +446,28 @@ startcash	*=1000L;
 max_plrec	= (long)numopt(MAXPLREC,10,32767);
 max_plrec	*=2;
 
-cyb_gold		= numopt(CYBGOLD,0,32000);
+cyb_gold	= numopt(CYBGOLD,0,32000);
 
 hyperdist1	= (double)numopt(HYPDST1,1,32000);
 hyperdist2	= (double)numopt(HYPDST2,1,32000);
 
-plattrf1		= (double)(numopt(PLATTRF1,5,1000));
-plattrf1		= plattrf1/100.0;
+plattrf1	= (double)(numopt(PLATTRF1,5,1000));
+plattrf1	= plattrf1/100.0;
 
-plattrf2		= (double)(numopt(PLATTRF2,5,1000));
-plattrf2		= plattrf2/100.0;
-
-
-plattrf3		= (double)(numopt(PLATTRF3,5,1000));
-plattrf3		= plattrf3/100.0;
+plattrf2	= (double)(numopt(PLATTRF2,5,1000));
+plattrf2	= plattrf2/100.0;
 
 
-plattrt1		= (double)(numopt(PLATTRT1,5,1000));
-plattrt1		= plattrt1/100.0;
+plattrf3	= (double)(numopt(PLATTRF3,5,1000));
+plattrf3	= plattrf3/100.0;
 
 
-plattrt2		= (double)(numopt(PLATTRT2,5,1000));
-plattrt2		= plattrt2/100.0;
+plattrt1	= (double)(numopt(PLATTRT1,5,1000));
+plattrt1	= plattrt1/100.0;
+
+
+plattrt2	= (double)(numopt(PLATTRT2,5,1000));
+plattrt2	= plattrt2/100.0;
 
 
 
@@ -881,7 +873,7 @@ return(0);
 }
 
 /**************************************************************************
-** User deleted  routine                                                 **
+** User deleted routine                                                  **
 **************************************************************************/
 
 #ifdef PHARLAP
@@ -1248,7 +1240,6 @@ if (warsptr->status == GESTAT_USER)
 		{
 		/* if modem hangup */
 		logthis(spr("User Hungup Status = %d",status));
-/*		if (warsptr->cantexit > 0 && status == 11)*/
 		if (warsptr->cantexit > 0)
 			{
 			killem(warsptr,usrnum);
@@ -2398,7 +2389,7 @@ clrprf();
 
 
 /**************************************************************************
-** Send message to all ships in this sector                             **
+** Send message to all ships in this sector                              **
 **************************************************************************/
 
 void  FUNC outsect(filter,coordptr,exclude,freq)
@@ -2436,7 +2427,7 @@ clrprf();
 }
 
 /**************************************************************************
-** Send message to all ships in scanning range of this ship
+** Send message to all ships in scanning range of this ship              **
 **************************************************************************/
 
 void  FUNC outrange(filter,coordptr)
@@ -2465,7 +2456,7 @@ clrprf();
 
 /**************************************************************************
 ** Check is user is in the game                                          **
-**   Automatons are always in the game
+**   Automatons are always in the game                                   **
 **************************************************************************/
 
 
@@ -2491,7 +2482,6 @@ return(FALSE);
 
 /**************************************************************************
 ** SHOCST Replacement                                                    **
-**
 **************************************************************************/
 
 
@@ -2535,12 +2525,12 @@ if (logflag)
 	logthis(spr("CON: %s",str));
 }
 
-/****************************************************************************
- * The following mnu functions are response handlers for input from the
- * player while in a particular state. Each of these then typically results
- * in additional menus/messages being displayed to the player and the
- * players state (substt) modified.
- ****************************************************************************/
+/*****************************************************************************
+** The following mnu functions are response handlers for input from the     **
+** player while in a particular state. Each of these then typically results **
+** in additional menus/messages being displayed to the player and the       **
+** players state (substt) modified.                                         **
+*****************************************************************************/
 
 /* player selected GE from the main menu */
 
@@ -2819,7 +2809,7 @@ if (margc > 0)
 			{
 			case '1':
 				prfmsg(ADMIN01,plptr->name);
-				prfmsg(DASHES);
+				prfmsg(DASHESL);
 				prfmsg(ADMIN02);
 				for (i=0; i<NUMITEMS; ++i)
 					{
@@ -2833,14 +2823,14 @@ if (margc > 0)
 							plptr->items[i].sold2a);
 					prf("%s\r",gechrbuf);
 					}
-				prfmsg(DASHES);
+				prfmsg(DASHESL);
 				sprintf(gechrbuf,"%lu",plptr->cash);
 				prfmsg(ADMIN04,gechrbuf);
 				sprintf(gechrbuf,"%lu",plptr->tax);
 				prfmsg(ADMIN04A,gechrbuf);
 				prfmsg(ADMIN04B,plptr->taxrate);
 				prfmsg(ADMIN06,plptr->password);
-				prfmsg(DASHES);
+				prfmsg(DASHESL);
 				prfmsg(PRESSKEY);
 				usrptr->substt = ADMENU2;
 				break;

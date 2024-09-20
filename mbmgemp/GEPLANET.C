@@ -85,11 +85,6 @@ if (sameas(plptr->spyowner,plptr->userid))
 
 if	(plptr->spyowner[0] != 0)
 	{
-/*	if(!uidxst(plptr->spyowner))
-		{
-		plptr->spyowner[0]=0;
-		}
-	else */
 		{
 		setmbk(gemb);
 		xsect = coord1(plptr->coord.xcoord);
@@ -831,8 +826,9 @@ wormtab[wormnum].dest.ycoord = worm.coord.ycoord;
 logthis("Worm build first time");
 
 }
+
 /**************************************************************************
-** look up planet.        **
+** look up planet.                                                       **
 **************************************************************************/
 
 int  FUNC getplanet(sect,plnt)
@@ -853,7 +849,7 @@ return(0);
 
 
 /**************************************************************************
-** is this players ship in the neutral zone ?    **
+** is this players ship in the neutral zone ?                            **
 **************************************************************************/
 
 int    FUNC neutral(coord)

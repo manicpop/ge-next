@@ -165,7 +165,7 @@ warsptr->status = GESTAT_USER;
 
 /**************************************************************************
 ** Initialize all the ship data                                          **
-** NOTE: waruptr MUST be set to this channel first
+** NOTE: waruptr MUST be set to this channel first                       **
 **************************************************************************/
 
 int  FUNC initshp(userid,type)
@@ -1306,7 +1306,7 @@ int           usrn;
 
 
 /**************************************************************************
-** Check  flux status                                                  **
+** Check flux status                                                     **
 **************************************************************************/
 
 void  FUNC fluxstat(ptr,usrn)
@@ -1333,7 +1333,7 @@ if (ptr->energy < ENGYMIN)
 
 
 /**************************************************************************
-** Check  shield status                                                  **
+** Check shield status                                                   **
 **************************************************************************/
 
 void  FUNC shieldstat(ptr,usrn)
@@ -1365,7 +1365,7 @@ if (ptr->shieldstat == SHIELDDM)
 
 
 /**************************************************************************
-** Check  cloak  status                                                  **
+** Check cloak status                                                    **
 **************************************************************************/
 
 void  FUNC cloakstat(ptr,usrn)
@@ -1402,7 +1402,7 @@ if (ptr->cloak < 0)
 }
 
 /**************************************************************************
-** Check  mine  status                                                  **
+** Check mine status                                                     **
 **************************************************************************/
 
 void  FUNC checkmines()
@@ -1521,7 +1521,7 @@ else
 
 
 /**************************************************************************
-** Check  for incoming torpedoes or missiles & track decoys               **
+** Check for incoming torpedoes or missiles & track decoys               **
 **************************************************************************/
 
 void  FUNC checktm(ptr,usrn)
@@ -1642,7 +1642,6 @@ for (i=0,mptr=ptr->lmissl;i<MAXMISSL;++i,++mptr)
 
 			if (ptr->shieldstat == SHIELDUP)
 				{
-/*				damfact = (double)mptr->energy;*/
 				damfact = damfact/50000.0;
 				damfact = damfact * rndm(.1);
 				ptr->damage += mdammax*damfact;
@@ -1658,7 +1657,6 @@ for (i=0,mptr=ptr->lmissl;i<MAXMISSL;++i,++mptr)
 				{
 				prfmsg(MHIT2,tmpbuf);
 				outprfge(ALWAYS,usrn);
-/*				damfact = (double)mptr->energy;*/
 				damfact = damfact/50000.0;
 				damfact = damfact * (rndm(.5)+.5);
 				ptr->damage += mdammax*damfact;
@@ -2115,7 +2113,7 @@ WARSHP *ptr;
 }
 
 /**************************************************************************
-** move one coord to another (direction is <-- )                **
+** move one coord to another (direction is <-- )                         **
 **************************************************************************/
 
 void  FUNC movecoord(pointb, pointa)
@@ -2144,11 +2142,10 @@ return ((ax == bx) && (ay == by));
 }
 
 
-
-
 /**************************************************************************
-** genearas function. Compare for length of element 1 only                 **
+** genearas function. Compare for length of element 1 only               **
 **************************************************************************/
+
 int  FUNC genearas(str1,str2)
 char *str1,*str2;
 

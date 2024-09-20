@@ -63,7 +63,7 @@
 /* LOCAL GLOBAL DEFS *****************************************************/
 
 
-char *kwrd[NUMITEMS] = {        "men",
+char *kwrd[NUMITEMS] = {						"men",
 									"mis",
 									"tor",
 									"ion",
@@ -78,82 +78,81 @@ char *kwrd[NUMITEMS] = {        "men",
 									"gol",
 									"spy"};
 
-char *item_name[NUMITEMS] = {   "men",
-										"missiles",
-										"torpedos",
-										"ion cannons",
-										"flux pods",
-										"food cases",
-										"fighters",
-										"decoys",
-										"troops",
-										"zippers",
-										"jammers",
-										"mines",
-										"gold",
-										"spy"};
+char *item_name[NUMITEMS] = {						"men",
+									"missiles",
+									"torpedoes",
+									"ion cannons",
+									"flux pods",
+									"food cases",
+									"fighters",
+									"decoys",
+									"troops",
+									"zippers",
+									"jammers",
+									"mines",
+									"gold",
+									"spies"};
 
 
-void cmd_gehelp(),cmd_cloak(),cmd_gehelp(),cmd_impulse(),cmd_phas(),
-	cmd_report(),cmd_rotate(),cmd_send(),cmd_scan(),cmd_shields(),
-	cmd_warp(),cmd_torp(), cmd_missl(), cmd_decoy(), cmd_flux(), cmd_set(),
+void cmd_gehelp(), cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
+	cmd_report(), cmd_rotate(), cmd_send(), cmd_scan(), cmd_shields(),
+	cmd_warp(), cmd_torp(), cmd_missl(), cmd_decoy(), cmd_flux(), cmd_set(),
 	cmd_orbit(), cmd_transfer(), cmd_admin(), cmd_attack(), cmd_geroster(),
-	cmd_buy(),cmd_price(),  cmd_planet(), cmd_maint(),
-	cmd_new(),cmd_sell(),cmd_sysop(),cmd_rename(), cmd_destruct(), cmd_abort(),
+	cmd_buy(), cmd_price(), cmd_planet(), cmd_maint(), cmd_new(),
+	cmd_sell(), cmd_sysop(), cmd_rename(), cmd_destruct(), cmd_abort(),
 	cmd_jammer(), cmd_mine(), cmd_abandon(), cmd_zipper(), cmd_lock(),
 	cmd_navigate(), cmd_who(), cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(),
-	cmd_team(),cmd_spy(),cmd_jettison();
+	cmd_team(), cmd_spy(), cmd_jettison();
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
 struct  cmd     gecmds[]={
-/*    command     function    0=payers only */
-/*    -------     ----------- ------------- */
-			 {"?",	cmd_gehelp,		1},
-			 {"aba",	cmd_abandon,	0},
-			 {"abo",	cmd_abort,		1},
-			 {"adm",	cmd_admin,		0},
-			 {"att",	cmd_attack,		0},
-			 {"buy",	cmd_buy,			0},
-			 {"clo",	cmd_cloak,		1},
-          {"cls",	cmd_clear,		0},
-          {"dat", cmd_data,		0},
-			 {"dec",	cmd_decoy,		1},
-			 {"des",	cmd_destruct,	1},
-			 {"flu",	cmd_flux,		1},
-			 {"fre",	cmd_freq,		0},
-			 {"hel",	cmd_gehelp,		1},
-			 {"imp",	cmd_impulse,	1},
-			 {"jam",	cmd_jammer,		1},
-			 {"jet",	cmd_jettison,	1},
-			 {"loc",	cmd_lock,		1},
-			 {"mai",	cmd_maint,		1},
-			 {"min",	cmd_mine,		1},
-			 {"mis",	cmd_missl,		1},
-			 {"nav",	cmd_navigate,	1},
-			 {"new",	cmd_new,			1},
-			 {"orb",	cmd_orbit,		1},
-			 {"pha",	cmd_phas,		1},
-			 {"pla",	cmd_planet,		0},
-			 {"pri",	cmd_price,		0},
-			 {"ren",	cmd_rename,		0},
-			 {"rep",	cmd_report,		1},
-/*			 {"rg#",	cmd_displ,		1},*/
-			 {"ros",	cmd_geroster,	1},
-			 {"rot",	cmd_rotate,		1},
-			 {"sca",	cmd_scan,		1},
-			 {"sel", cmd_sell,		1},
-			 {"sen",	cmd_send,		0},
-			 {"set",	cmd_set,			1},
-			 {"shi",	cmd_shields,	1},
-			 {"spy",	cmd_spy,			1},
-			 {"sys",	cmd_sysop,		1},
-          {"tea", cmd_team,		1},
-			 {"tor",	cmd_torp,		1},
-			 {"tra",	cmd_transfer,	0},
-			 {"war",	cmd_warp,		1},
-			 {"who",	cmd_who,			1},
-			 {"zip",	cmd_zipper,		1}
+		/*    command     function    0=payers only */
+		/*    -------     ----------- ------------- */
+			{"?",	cmd_gehelp,	1},
+			{"aba",	cmd_abandon,	0},
+			{"abo",	cmd_abort,	1},
+			{"adm",	cmd_admin,	0},
+			{"att",	cmd_attack,	0},
+			{"buy",	cmd_buy,	0},
+			{"clo",	cmd_cloak,	1},
+			{"cls",	cmd_clear,	0},
+          		{"dat",	cmd_data,	0},
+			{"dec",	cmd_decoy,	1},
+			{"des",	cmd_destruct,	1},
+			{"flu",	cmd_flux,	1},
+			{"fre",	cmd_freq,	0},
+			{"hel",	cmd_gehelp,	1},
+			{"imp",	cmd_impulse,	1},
+			{"jam",	cmd_jammer,	1},
+			{"jet",	cmd_jettison,	1},
+			{"loc",	cmd_lock,	1},
+			{"mai",	cmd_maint,	1},
+			{"min",	cmd_mine,	1},
+			{"mis",	cmd_missl,	1},
+			{"nav",	cmd_navigate,	1},
+			{"new",	cmd_new,	1},
+			{"orb",	cmd_orbit,	1},
+			{"pha",	cmd_phas,	1},
+			{"pla",	cmd_planet,	0},
+			{"pri",	cmd_price,	0},
+			{"ren",	cmd_rename,	0},
+			{"rep",	cmd_report,	1},
+			{"ros",	cmd_geroster,	1},
+			{"rot",	cmd_rotate,	1},
+			{"sca",	cmd_scan,	1},
+			{"sel", cmd_sell,	1},
+			{"sen",	cmd_send,	0},
+			{"set",	cmd_set,	1},
+			{"shi",	cmd_shields,	1},
+			{"spy",	cmd_spy,	1},
+			{"sys",	cmd_sysop,	1},
+          		{"tea", cmd_team,	1},
+			{"tor",	cmd_torp,	1},
+			{"tra",	cmd_transfer,	0},
+			{"war",	cmd_warp,	1},
+			{"who",	cmd_who,	1},
+			{"zip",	cmd_zipper,	1}
 };
 
 
@@ -175,21 +174,20 @@ struct hlpcmd gehlp[] = {
 		{"cloak",			HLPCLO},
 		{"cls",				HLPCLS},
 		{"decoy",			HLPDEC},
-		{"destruct",		HLPDES},
-		{"flux",				HLPFLU},
-		{"freq",				HLPFRE},
-		{"help",				HLPHEL},
-		{"hyper",			HLPHYP},
+		{"destruct",			HLPDES},
+		{"flux",			HLPFLU},
+		{"freq",			HLPFRE},
+		{"help",			HLPHEL},
 		{"impulse",			HLPIMP},
 		{"jammer",			HLPJAM},
-		{"jettison",		HLPJET},
-		{"lock",				HLPLOC},
-		{"maintenance",	HLPMAI},
-		{"mine",				HLPMIN},
+		{"jettison",			HLPJET},
+		{"lock",			HLPLOC},
+		{"maintenance",			HLPMAI},
+		{"mine",			HLPMIN},
 		{"missile",			HLPMIS},
-		{"navigate",		HLPNAV},
+		{"navigate",			HLPNAV},
 		{"new",				HLPNEW},
-		{"newprice",		HLPNEW2},
+		{"newprice",			HLPNEW2},
 		{"orbit",			HLPORB},
 		{"phaser",			HLPPHA},
 		{"planet",			HLPPLA},
@@ -198,17 +196,16 @@ struct hlpcmd gehlp[] = {
 		{"report",			HLPREP},
 		{"roster",			HLPROS},
 		{"rotate",			HLPROT},
-		{"scan",				HLPSCA},
-		{"sell",				HLPSEL},
-		{"send",				HLPSEN},
+		{"scan",			HLPSCA},
+		{"sell",			HLPSEL},
+		{"send",			HLPSEN},
 		{"set",				HLPSET},
 		{"shield",			HLPSHI},
 		{"spy",				HLPSPY},
-		{"team",				HLPTEA},
+		{"team",			HLPTEA},
 		{"torpedo",			HLPTOR},
-		{"transfer",		HLPTRA},
-		{"warp",				HLPWAR},
-		{"wormholes",		HLPWORM},
+		{"transfer",			HLPTRA},
+		{"warp",			HLPWAR},
 		{"zipper",			HLPZIP},
 
 /* FYI: The above are commands and below are topics....       Mike       */
@@ -217,17 +214,19 @@ struct hlpcmd gehlp[] = {
 		{"battle2",			HLPBATT2},
 		{"battle3",			HLPBATT3},
 		{"class",			HLPCLS1},
-		{"communicate",	HLPCOMMU},
-		{"cybertron",		HLPCYBER},
+		{"communicate",			HLPCOMMU},
+		{"cybertron",			HLPCYBER},
 		{"galaxy",			HLPGALXY},
+		{"hyper",			HLPHYP},
 		{"moving",			HLPNAVIG},
 		{"planets",			HLPPLANT},
-		{"planets2",		HLPPLAN2},
-		{"planets3",		HLPPLAN3},
+		{"planets2",			HLPPLAN2},
+		{"planets3",			HLPPLAN3},
 		{"scoring",			HLPSCORE},
 		{"sector",			HLPSECTR},
-		{"starting",		HLPSTART},
-		{"strategy",		HLPSTRAT},
+		{"starting",			HLPSTART},
+		{"strategy",			HLPSTRAT},
+		{"wormholes",			HLPWORM},
 		{NULL,				0}
 };
 
@@ -1089,7 +1088,7 @@ else
 
 
 /**************************************************************************
-** Fire torpedos                                                          **
+** Fire torpedoes                                                        **
 **************************************************************************/
 
 void  FUNC cmd_torp()
@@ -1390,8 +1389,6 @@ if (wptr->cloak < 10 && (dist*10000.0) < (double)shipclass[warsptr->shpclass].sc
 		{
 		if (lockwarn == TRUE)
 			{
-/*			prfmsg(LOCK1,shpltr(usrn,ship));
-			outprfge(FILTER,usrn); */
 			prfmsg(LOCK2,shpltr(ship,usrn));
 			outprfge(FILTER,ship);
 			}
@@ -1526,7 +1523,7 @@ ptr->damage += se100dam;
 }
 
 /**************************************************************************
-** Fire decoys                                                          **
+** Fire decoys                                                           **
 **************************************************************************/
 
 void  FUNC cmd_decoy()
@@ -1710,7 +1707,7 @@ ptr->cantexit = FIRETICKS;
 }
 
 /**************************************************************************
-** Launch Mine                                                         **
+** Launch Mine                                                           **
 **************************************************************************/
 
 void  FUNC cmd_mine()
@@ -1934,14 +1931,14 @@ if (freq >= 20000)
 }
 
 /**************************************************************************
-** Generate ships report                                                **
+** Generate ships report                                                 **
 **************************************************************************/
 
 void  FUNC cmd_report()
 {
 int             max,pcnt,i;
 
-if (margc != 2 )
+if (margc != 2 || (!sameas(margv[1],"nav") && !sameas(margv[1],"sys") && !sameas(margv[1],"inv") && !sameas(margv[1],"acc")))
 	{
 	prfmsg(REPFMT);
 	outprfge(ALWAYS,usrnum);
@@ -2092,7 +2089,7 @@ if (sameas(margv[1],"inv"))
 		{
 		if (warsptr->items[i] > 0)
 			{
-			sprintf(gechrbuf,"%s%s%12ld",item_name[i],gedots(26-strlen(item_name[i])),warsptr->items[i]);
+			sprintf(gechrbuf,"%s%s%16ld",item_name[i],gedots(22-strlen(item_name[i])),warsptr->items[i]);
 			gechrbuf[0] = toupper(gechrbuf[0]);
 			prf("%s\r",gechrbuf);
 			}
@@ -2128,10 +2125,6 @@ if (sameas(margv[1],"acc"))
 		{
 		prfmsg(REP31A,teamname(waruptr));
 		}
-	}
-else
-	{
-	prfmsg(REPFMT);
 	}
 
 prfmsg(DASHES);
@@ -2199,9 +2192,6 @@ if (margc > 1)
 	else
 	if (genearas("lo",margv[1]))
 		scan_lo();
-/*	else
-	if (genearas("hy",margv[1]))
-		scan_hy();*/
 	else
 		{
 		prfmsg(SCANFMT);
@@ -2361,7 +2351,6 @@ if (plnum <= MAXPLANETS && plnum > 0)
 			prfmsg(SCAN09,plptr->userid);
 
 		prfmsg(SCAN10,bearing,spr("%ld",(long)ddistance));
-/*		prfmsg(SCAN10A,plptr->type);*/
 
 		if (warsptr->where != 1)
 			{
@@ -2492,9 +2481,7 @@ if (plnum <= MAXPLANETS && plnum > 0)
 		memcpy(&worm,plptr,sizeof(GALWORM));
 		bearing = (int)(cbearing(&warsptr->coord,&worm.coord,warsptr->heading)+.5);
 		ddistance = cdistance(&warsptr->coord,&worm.coord)*10000;
-		prfmsg(SCANWRM);
-		if (worm.name[0] != 0)
-			prfmsg(SCANWRM1,worm.name);
+		prfmsg(SCANWRM,plnum,worm.name);
 		prfmsg(DASHES);
 
 		prfmsg(SCAN10,bearing,spr("%ld",(long)ddistance));
@@ -2730,11 +2717,6 @@ for (othusn=0 ; othusn < nships ; othusn++)
 		yf+=(((double)MAXY)/2.0);
 
 
-/*
-		x = (((int)MAXX)/2D)+((int)(xf/xfactor));
-		y = (((int)MAXY)/2D)+((int)(yf/yfactor));
-*/
-
 		if ((xf >= 0.0 && xf < (double)MAXX) && (yf>= 0.0 && yf < (double)MAXY))
 			{
 			x = (int)xf;
@@ -2758,63 +2740,6 @@ printmap();
 
 outprfge(ALWAYS,usrnum);
 }
-/*#ifdef NOTHING
-void scan_hy()
-
-{
-unsigned x,y;
-WARSHP  *wptr;
-
-double xfactor,yfactor,xf,yf;
-
-
-if(warsptr->where != 1)
-	{
-	prfmsg(NOSCANL);
-	}
-else
-	{
-	setsect(warsptr);
-	prfmsg(SCAN26,xsect,ysect);
-	clearmap();
-	xfactor = ((double)univmax*2.0)/((double)MAXX-1.0);
-	yfactor = ((double)univmax*2.0)/((double)MAXY-1.0);
-	for (othusn=0 ; othusn < nships ; othusn++)
-		{
-		wptr=warshpoff(othusn);
-		if (ingegame(othusn))
-/*              if (ingegame(othusn) && wptr->where == 1)
-			{
-			xf = ((wptr->coord.xcoord)+(double)univmax);
-			yf = ((wptr->coord.ycoord)+(double)univmax);
-			x = (unsigned)(xf/xfactor);
-			y = (unsigned)(yf/yfactor);
-
-			map[y][x] = '+';
-			if (wptr->status == GESTAT_AUTO)
-				mapc[y][x] = '1';
-			else
-				mapc[y][x] = '2';
-
-			}
-		}
-	xf = ((warsptr->coord.xcoord)+(double)univmax);
-	yf = ((warsptr->coord.ycoord)+(double)univmax);
-	xfactor = ((double)univmax*2.0)/((double)MAXX-1.0);
-	yfactor = ((double)univmax*2.0)/((double)MAXY-1.0);
-	x = (unsigned)(xf/xfactor);
-	y = (unsigned)(yf/yfactor);
-
-	map[y][x] = '*';
-	printmap();
-	}
-outprfge(ALWAYS,usrnum);
-}
-#endif
-*/
-
-/* alternate idea: read off the ship letter & ship no to a seperate table.
-   then zero out ship no as before */
 
 void FUNC update_scantab(ptr, usrn)
 WARSHP  *ptr;
@@ -2825,11 +2750,6 @@ WARSHP  *wptr;
 SCANTAB tmp;
 
 char	lettab[300];
-
-/* clear the letter table 
-for (i=0;i<300;++i)
-	lettab[i]=0;
-*/
 
 setmem(&lettab[0],sizeof(char)*300,0);
 
@@ -2878,11 +2798,6 @@ for (othusn=0 ; othusn < nships ; othusn++)
 						if (tmp.ship[j].flag == 1)
 							{
 							memcpy(&tmp.ship[j+1],&tmp.ship[j],sizeof(SHIPTAB));
-/* no longer needed
-							tmp.ship[j+1].shipno = tmp.ship[j].shipno;
-							tmp.ship[j+1].dist   = tmp.ship[j].dist;
-							tmp.ship[j+1].letter = tmp.ship[j].letter;
-*/
 							}
 						}
 					/* fill the hole with the new ship */
@@ -4092,7 +4007,7 @@ else
 
 
 /**************************************************************************
-** Sell goods                                                             **
+** Sell goods                                                            **
 **************************************************************************/
 
 void  FUNC cmd_sell()
@@ -4366,7 +4281,6 @@ if (plptr->userid[0] != 0)
 							else
 								{
 								sprintf(gechrbuf2,"%lu",amt);
-/*								prfmsg(BUY9,gechrbuf2,item_name[item],baseprice[item]+plptr->items[item].markup2a,gechrbuf);*/
 								prfmsg(BUY9,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
 								}
 							return;
@@ -4375,7 +4289,6 @@ if (plptr->userid[0] != 0)
 							{
 							sprintf(gechrbuf,"%lu",tot);
 							sprintf(gechrbuf2,"%lu",amt);
-/*							prfmsg(PRICE1,gechrbuf2,item_name[item],baseprice[item]+plptr->items[item].markup2a,gechrbuf);*/
 							prfmsg(PRICE1,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
 							}
 						}
@@ -4448,7 +4361,6 @@ long    tot;
 if (sameas(plptr->userid, warsptr->userid))
 	tot = ((long)baseprice[item])*amt;
 else
-/*	tot = ((long)baseprice[item] + (long)plptr->items[item].markup2a)*amt;*/
 	tot = ((long)plptr->items[item].markup2a)*amt;
 
 return(tot);
@@ -4539,7 +4451,7 @@ outprfge(ALWAYS,usrnum);
 
 
 /**************************************************************************
-** New ship or goods command                                                      **
+** New ship or goods command                                             **
 **************************************************************************/
 
 void  FUNC cmd_new()
@@ -5216,19 +5128,6 @@ prf("ID:%s,%s,%s\r",usaptr->userid,usaptr->usrnam,"NULL");
 #endif
 outprfge(ALWAYS,usrnum);
 }
-
-
-/**************************************************************************
-** reg command...                                                        **
-**************************************************************************/
-
-void  FUNC cmd_displ()
-{
-prf("REG ID:%s\r",
-	stgopt(REGNO));
-outprfge(ALWAYS,usrnum);
-}
-
 
 
 /**************************************************************************
@@ -6076,7 +5975,7 @@ return (dotbuf);
 
 
 /**************************************************************************
-** Spy Command                                                        **
+** Spy Command                                                           **
 **************************************************************************/
 
 void  FUNC cmd_spy()
@@ -6129,8 +6028,7 @@ outprfge(ALWAYS,usrnum);
 }
 
 /**************************************************************************
-** Jettison Command                                                        **
-   JETT 100 TOR
+** Jettison Command                                                      **
 **************************************************************************/
 
 void  FUNC cmd_jettison()
