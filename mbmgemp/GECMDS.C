@@ -178,6 +178,7 @@ struct hlpcmd gehlp[] = {
 		{"flux",			HLPFLU},
 		{"freq",			HLPFRE},
 		{"help",			HLPHEL},
+		{"hyper",			HLPHYP},
 		{"impulse",			HLPIMP},
 		{"jammer",			HLPJAM},
 		{"jettison",			HLPJET},
@@ -217,7 +218,6 @@ struct hlpcmd gehlp[] = {
 		{"communicate",			HLPCOMMU},
 		{"cybertron",			HLPCYBER},
 		{"galaxy",			HLPGALXY},
-		{"hyper",			HLPHYP},
 		{"moving",			HLPNAVIG},
 		{"planets",			HLPPLANT},
 		{"planets2",			HLPPLAN2},
@@ -488,7 +488,7 @@ WARSHP	*wptr;
 double	ddist;
 if (margc < 2 || margc > 3)
 	{
-	prfmsg(IMPFMT);
+	prfmsg(FORMAT,"IMPULSE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -581,7 +581,7 @@ if (warsptr->topspeed == 0)
 
 if (margc < 2 || margc > 3)
 	{
-	prfmsg(WARPFMT);
+	prfmsg(FORMAT,"WARP");
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -590,7 +590,7 @@ else
 	topspeed=warsptr->topspeed;
 	if (speed < 0)
 		{
-		prfmsg(WARPFMT);
+		prfmsg(FORMAT,"WARP");
 		outprfge(ALWAYS,usrnum);
 		return;
 		}
@@ -651,7 +651,7 @@ unsigned deg;
 
 if (margc != 2)
 	{
-	prfmsg(ROTFMT);
+	prfmsg(FORMAT,"ROTATE");
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -750,7 +750,7 @@ int got_plt;
 
 if (margc != 2)
 	{
-	prfmsg(ORBFMT);
+	prfmsg(FORMAT,"ORBIT");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -858,7 +858,7 @@ if (warsptr->where == 1)
 		}
 	else
 		{
-		prfmsg(HPHAFMT);
+		prfmsg(FORMAT,"HYPER");
 		outprfge(ALWAYS,usrnum);
 		}
 	}
@@ -898,7 +898,7 @@ else
 		}
 	else
 		{
-		prfmsg(PHAFMT);
+		prfmsg(FORMAT,"PHASER");
 		outprfge(ALWAYS,usrnum);
 		}
 	}
@@ -1132,9 +1132,16 @@ if (warsptr->items[I_TORPEDO] == 0)
 	return;
 	}
 
-if (margv[1] == NULL || margc < 2)
+if (margv[1] == NULL)
 	{
 	prfmsg(NOSHIP);
+	outprfge(ALWAYS,usrnum);
+	return;
+	}
+
+if (margc < 2)
+	{
+	prfmsg(FORMAT,"TORPEDO");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1243,7 +1250,7 @@ if (warsptr->items[I_MISSILE] == 0)
 	return;
 	}
 
-if (margv[1] == NULL || margc < 2)
+if (margv[1] == NULL && margc == 3)
 	{
 	prfmsg(NOSHIP);
 	outprfge(ALWAYS,usrnum);
@@ -1252,7 +1259,7 @@ if (margv[1] == NULL || margc < 2)
 
 if (margv[2] == NULL || margc < 3)
 	{
-	prfmsg(MISFMT);
+	prfmsg(FORMAT,"MISSILE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1261,7 +1268,7 @@ eng_long = atol(margv[2]);
 
 if (eng_long == 0 || eng_long > 50000L)
 	{
-	prfmsg(MISFMT);
+	prfmsg(FORMAT,"MISSILE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1746,7 +1753,7 @@ if (warsptr->items[I_MINE] <= 0)
 
 if (margc != 2 )
 	{
-	prfmsg(MINFMT);
+	prfmsg(FORMAT,"MINE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1755,7 +1762,7 @@ i = atoi(margv[1]);
 
 if (i < 1 || i > 50)
 	{
-	prfmsg(MINFMT);
+	prfmsg(FORMAT,"MINE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1862,7 +1869,7 @@ if (margc > 2)
 	}
 else
 	{
-	prfmsg(SNDFMT);
+	prfmsg(FORMAT,"SEND");
 	}
 outprfge(FILTER,usrnum);
 }
@@ -1880,7 +1887,7 @@ char letter;
 
 if (margc < 3)
 	{
-	prfmsg(SETFMT);
+	prfmsg(FORMAT,"FREQ");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1889,7 +1896,7 @@ letter = toupper(*margv[1]);
 
 if (letter < 'A' || letter > 'C')
 	{
-	prfmsg(SETFMT);
+	prfmsg(FORMAT,"FREQ");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1907,7 +1914,7 @@ freq = atoi(margv[2]);
 
 if (freq == 0)
 	{
-	prfmsg(FREQFMT);
+	prfmsg(FORMAT,"FREQ");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -1940,7 +1947,7 @@ int             max,pcnt,i;
 
 if (margc != 2 || (!sameas(margv[1],"nav") && !sameas(margv[1],"sys") && !sameas(margv[1],"inv") && !sameas(margv[1],"acc")))
 	{
-	prfmsg(REPFMT);
+	prfmsg(FORMAT,"REPORT");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2194,13 +2201,13 @@ if (margc > 1)
 		scan_lo();
 	else
 		{
-		prfmsg(SCANFMT);
+		prfmsg(FORMAT,"SCAN");
 		outprfge(ALWAYS,usrnum);
 		}
 	}
 else
 	{
-	prfmsg(SCANFMT);
+	prfmsg(FORMAT,"SCAN");
 	outprfge(ALWAYS,usrnum);
 	}
 }
@@ -2220,7 +2227,7 @@ long	tons;
 
 if (margc != 3)
 	{
-	prfmsg(SCANFMT);
+	prfmsg(FORMAT,"SCAN");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2323,7 +2330,7 @@ unsigned i;
 
 if (margc != 3)
 	{
-	prfmsg(SCANFMT);
+	prfmsg(FORMAT,"SCAN");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2517,7 +2524,7 @@ MINE            *mptr;
 
 if (margc != 3)
 	{
-	prfmsg(SCANFMT);
+	prfmsg(FORMAT,"SCAN");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2669,7 +2676,7 @@ WARSHP  *wptr;
 
 if (margc != 2)
 	{
-	prfmsg(SCANFMT);
+	prfmsg(FORMAT,"SCAN");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -2678,7 +2685,7 @@ if (margc == 4 )
 	{
 	if (!sameto("full",margv[3]))
 		{
-		prfmsg(SCANFMT);
+		prfmsg(FORMAT,"SCAN");
 		outprfge(ALWAYS,usrnum);
 		return;
 		}
@@ -3080,7 +3087,7 @@ if (warsptr->where == 1)
 
 if (margc != 2)
 	{
-	prfmsg(SHLDFMT);
+	prfmsg(FORMAT,"SHIELD");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -3116,7 +3123,7 @@ if (sameas(margv[1],"down"))
 	}
 else
 	{
-	prfmsg(SHLDFMT);
+	prfmsg(FORMAT,"SHIELD");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -3140,7 +3147,7 @@ if (shipclass[warsptr->shpclass].max_cloak == 0)
 
 if (margc != 2)
 	{
-	prfmsg(CLOFMT);
+	prfmsg(FORMAT,"CLOAK");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -3202,7 +3209,7 @@ if (sameas(margv[1],"off"))
 		}
 	return;
 	}
-prfmsg(CLOFMT);
+prfmsg(FORMAT,"CLOAK");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -3234,14 +3241,14 @@ if (margc == 4)
 			if (sameas("down",margv[1]))
 				trans_down(i);
 			else
-				prfmsg(TRANSFMT);
+				prfmsg(FORMAT,"TRANSFER");
 			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
 	}
 
-prfmsg(TRANSFMT);
+prfmsg(FORMAT,"TRANSFER");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -3278,7 +3285,7 @@ if (trans_opt || sameas(plptr->userid,warsptr->userid))
 		}
 	else
 		{
-		prfmsg(TRANSFMT);
+		prfmsg(FORMAT,"TRANSFER");
 		}
 	}
 else
@@ -3329,7 +3336,7 @@ if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0)
 		}
 	else
 		{
-		prfmsg(TRANSFMT);
+		prfmsg(FORMAT,"TRANSFER");
 		}
 	}
 else
@@ -3527,11 +3534,11 @@ if (margc == 3)
 			return;
 			}
 		}
-	prfmsg(ATTFMT);
+	prfmsg(FORMAT,"ATTACK");
 	}
 else
 	{
-	prfmsg(ATTFMT);
+	prfmsg(FORMAT,"ATTACK");
 	}
 outprfge(ALWAYS,usrnum);
 }
@@ -4050,7 +4057,7 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 		}
 	}
 
-prfmsg(SELLFMT);
+prfmsg(FORMAT,"SELL");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -4109,7 +4116,7 @@ if ((amt = atol(margv[1])) > 0L)
 	}
 else
 	{
-	prfmsg(SELLFMT);
+	prfmsg(FORMAT,"SELL");
 	}
 }
 
@@ -4190,7 +4197,7 @@ if (margc > 2)
 			}
 		}
 	}
-prfmsg(BUYFMT);
+prfmsg(FORMAT,"BUY");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -4226,7 +4233,7 @@ if (margc == 3)
 			}
 		}
 	}
-prfmsg(PRICEFMT);
+prfmsg(FORMAT,"PRICE");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -4317,7 +4324,7 @@ if (plptr->userid[0] != 0)
 		}
 	else
 		{
-		prfmsg(BUYFMT);
+		prfmsg(FORMAT,"BUY");
 		}
 	}
 else
@@ -4462,7 +4469,7 @@ long	delta,credit,fee;
 
 if (margc != 3)
 	{
-	prfmsg(NEWFMT);
+	prfmsg(FORMAT,"NEW");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -4659,7 +4666,7 @@ if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
 		}
 	else
 		{
-		prfmsg(NEWFMT);
+		prfmsg(FORMAT,"NEW");
 		}
 	}
 else
@@ -5074,7 +5081,7 @@ double	bear;
 
 if (margc != 3)
 	{
-	prfmsg(NAVFMT);
+	prfmsg(FORMAT,"NAVIGATE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -5085,7 +5092,7 @@ y = atoi(margv[2]);
 if (x<(univmax*-1) || x >(univmax) ||
 	y<(univmax*-1) || y >(univmax))
 	{
-	prfmsg(NAVFMT);
+	prfmsg(FORMAT,"NAVIGATE");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -5151,7 +5158,7 @@ char	*options[NUMOPTS]={
 
 if (margc < 2 || margc > 3)
 	{
-	prfmsg(SETFMT);
+	prfmsg(FORMAT,"SET");
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
@@ -5190,35 +5197,35 @@ for (i=0;i<NUMOPTS;++i)
 			}
 		else
 			{
-			prfmsg(SETFMT);
+			prfmsg(FORMAT,"SET");
 			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
 	}
-prfmsg(SETFMT);
+prfmsg(FORMAT,"SET");
 outprfge(ALWAYS,usrnum);
 return;
 }
 
 /**************************************************************************
-** Team Command                                                           **
-**   Team join nnnnnn pppppppppp
-**   Team score
-**   Team unjoin
-**   Team start nnnnnn ssssssssss pppppppppp <team name>
-**        nnnnnn is teamcode
-**        ssssssssss is the secret password for the founder
-**        pppppppppp is the public password for team members
-**   Team members
-**   Team kick ssssssssss userid
-**   Team newpass ssssssssss pppppppppp
-**   Team newname ssssssssss <team name>
-
-  Add logic to compare if the team member got kicked off and tell him in
-  a mail message. nice
-
-  Add logic to remove a teamcode that has no members at cleanup
+** Team Command                                                          **
+**   Team join nnnnnn pppppppppp                                         **
+**   Team score                                                          **
+**   Team unjoin                                                         **
+**   Team start nnnnnn ssssssssss pppppppppp <team name>                 **
+**        nnnnnn is teamcode                                             **
+**        ssssssssss is the secret password for the founder              **
+**        pppppppppp is the public password for team members             **
+**   Team members                                                        **
+**   Team kick ssssssssss userid                                         **
+**   Team newpass ssssssssss pppppppppp                                  **
+**   Team newname ssssssssss <team name>                                 **
+**                                                                       **
+**   Add logic to compare if the team member got kicked off and tell     **
+**   him in a mail message. nice                                         **
+**                                                                       **
+**   Add logic to remove a teamcode that has no members at cleanup       **
 **************************************************************************/
 
 void  FUNC cmd_team()
@@ -5237,7 +5244,8 @@ int	temptab[MAXTEAMS];
 
 if (margc < 2)
 	{
-	badfmt(TEAMFMT);
+	prfmsg(FORMAT,"TEAM");
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
@@ -5246,7 +5254,8 @@ if (sameas(margv[1],"join"))
 	/* got enough parameters */
 	if (margc != 4)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 
@@ -5256,7 +5265,8 @@ if (sameas(margv[1],"join"))
 
 	if (strlen(gechrbuf) != 5)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	/* are they all digits */
@@ -5264,7 +5274,8 @@ if (sameas(margv[1],"join"))
 		{
 		if (gechrbuf[i] < '0' || gechrbuf[i] > '9')
 			{
-			badfmt(TEAMFMT);
+			prfmsg(FORMAT,"TEAM");
+			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
@@ -5403,12 +5414,13 @@ if (sameas(margv[1],"unjoin"))
 				return;
 				}
 			}
-		badfmt(TEAMNOT);
-
+		prfmsg(TEAMNOT);
+		outprfge(ALWAYS,usrnum);
 		}
 	else
 		{
-		badfmt(TEAMNOT);
+		prfmsg(TEAMNOT);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	}
@@ -5417,7 +5429,8 @@ if (sameas(margv[1],"start"))
 	{
 	if (margc < 6)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	/* see how many teams are already created */
@@ -5438,7 +5451,8 @@ if (sameas(margv[1],"start"))
 	strcpy(gechrbuf,margv[2]);
 	if (strlen(gechrbuf) != 5)
 		{
-		badfmt(TEAMBAD);
+		prfmsg(TEAMBAD);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	/* are they all digits */
@@ -5446,7 +5460,8 @@ if (sameas(margv[1],"start"))
 		{
 		if (gechrbuf[i] < '0' || gechrbuf[i] > '9')
 			{
-			badfmt(TEAMBAD);
+			prfmsg(TEAMBAD);
+			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
@@ -5454,7 +5469,8 @@ if (sameas(margv[1],"start"))
 
 	if (tmp.teamcode <= 0)
 		{
-		badfmt(TEAMBAD);
+		prfmsg(TEAMBAD);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 
@@ -5473,12 +5489,14 @@ if (sameas(margv[1],"start"))
 			break;
 		if (tmp.teamcode == teamtab[i].teamcode)
 			{
-			badfmt(TEAMEXST);
+			prfmsg(TEAMEXST);
+			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		if (sameas(tmp.teamname,teamtab[i].teamname))
 			{
-			badfmt(TEAMEXST);
+			prfmsg(TEAMEXST);
+			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
@@ -5558,7 +5576,8 @@ if (sameas(margv[1],"kick"))
 	{
 	if (margc < 4)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 
@@ -5603,23 +5622,27 @@ if (sameas(margv[1],"kick"))
 						}
 					else
 						{
-						badfmt(TEAMNTM);
+						prfmsg(TEAMNTM);
+						outprfge(ALWAYS,usrnum);
 						}
 
 					}
 				else
 					{
-					badfmt(TEAMNFND);
+					prfmsg(TEAMNFND);
+					outprfge(ALWAYS,usrnum);
 					}
 				}
 			else
 				{
-				badfmt(TEAMBDSC);
+				prfmsg(TEAMBDSC);
+				outprfge(ALWAYS,usrnum);
 				}
 			return;
 			}
 		}
-	badfmt(TEAMNOT);
+	prfmsg(TEAMNOT);
+	outprfge(ALWAYS,usrnum);
 	}
 else
 if (sameas(margv[1],"newpass"))
@@ -5627,7 +5650,8 @@ if (sameas(margv[1],"newpass"))
 
 	if (margc < 4)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 
@@ -5645,7 +5669,8 @@ if (sameas(margv[1],"newpass"))
 				/* get the password - make sure it is less than 10 char */
 				if (strlen(margv[3]) > 10)
 					{
-				 	badfmt(TEAMBPSS);
+				 	prfmsg(TEAMBPSS);
+					outprfge(ALWAYS,usrnum);
 					return;
 					}
 				strcpy(teamtab[i].password,margv[3]);
@@ -5656,19 +5681,22 @@ if (sameas(margv[1],"newpass"))
 				}
 			else
 				{
-				badfmt(TEAMBDSC);
+				prfmsg(TEAMBDSC);
+				outprfge(ALWAYS,usrnum);
 				}
 			return;
 			}
 		}
-	badfmt(TEAMNOT);
+	prfmsg(TEAMNOT);
+	outprfge(ALWAYS,usrnum);
 	}
 else
 if (sameas(margv[1],"newname"))
 	{
 	if (margc < 4)
 		{
-		badfmt(TEAMFMT);
+		prfmsg(FORMAT,"TEAM");
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 
@@ -5687,7 +5715,8 @@ if (sameas(margv[1],"newname"))
 				rstrin();
 				if (strlen(margv[3]) < 5)
 					{
-				 	badfmt(TEAMBNAM);
+				 	prfmsg(TEAMBNAM);
+					outprfge(ALWAYS,usrnum);
 					return;
 					}
 				strncpy(teamtab[i].teamname,margv[3],30);
@@ -5698,12 +5727,14 @@ if (sameas(margv[1],"newname"))
 				}
 			else
 				{
-				badfmt(TEAMBDSC);
+				prfmsg(TEAMBDSC);
+				outprfge(ALWAYS,usrnum);
 				}
 			return;
 			}
 		}
-	badfmt(TEAMNOT);
+	prfmsg(TEAMNOT);
+	outprfge(ALWAYS,usrnum);
 	}
 else
 if (sameas(margv[1],"dumpitout"))
@@ -5722,12 +5753,7 @@ if (sameas(margv[1],"dumpitout"))
 		outprfge(ALWAYS,usrnum);
 		}
 	}
-badfmt(TEAMFMT);
-}
-
-void	FUNC badfmt(int	msg)
-{
-prfmsg(msg);
+prfmsg(FORMAT,"TEAM");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -6048,7 +6074,7 @@ if (margc == 3)
 		}
 	}
 
-prfmsg(JETTFMT);
+prfmsg(FORMAT,"JETTISON");
 outprfge(ALWAYS,usrnum);
 }
 
@@ -6089,9 +6115,10 @@ if ((amt = atol(margv[1])) > 0L)
 	}
 else
 	{
-	prfmsg(JETTFMT);
+	prfmsg(FORMAT,"JETTISON");
 	outprfge(ALWAYS,usrnum);
 	}
 }
+
 
 

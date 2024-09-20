@@ -5354,6 +5354,22 @@ TEAMMHDR {
 [1;36mThe members of your team are...[1;37m
 } T
 
+JETT1 {
+[0;37m[[1;31mERROR[0;37m] There are not that many on-board.[1;37m
+} T 
+
+JETT3 {
+[1;37m%s %s[0;37m have been jettisoned.[1;37m
+} T 
+
+FORMAT {
+[1;36mType [1;37mHELP %s[1;36m for the correct usage.[1;37m
+} T 
+
+MSGPRF {
+[0;37m[[1;31mERROR[0;37m] The Galactic Communications Commission will not allow such a message.[1;37m
+} T 
+
 BEAC01 {***
 [0;37mBeacon message from planet [1;34m%d
 [1;36m< [1;37m%s[1;36m >[1;37m
@@ -5427,116 +5443,6 @@ End report
 
 } T
 
-JETT1 {
-[0;37m[[1;31mERROR[0;37m] There are not that many on-board.[1;37m
-} T 
-
-JETT3 {
-[1;37m%s %s[0;37m have been jettisoned.[1;37m
-} T 
-
-NAVFMT {
-[1;36mType [1;37mHELP NAVIGATE[1;36m for the correct usage.[1;37m
-} T 
-
-SETFMT {
-[1;36mType [1;37mHELP SET[1;36m for the correct usage.[1;37m
-} T 
-
-WARPFMT {
-[1;36mType [1;37mHELP WARP[1;36m for the correct usage.[1;37m
-} T 
-
-IMPFMT {
-[1;36mType [1;37mHELP IMPULSE[1;36m for the correct usage.[1;37m
-} T 
-
-ROTFMT {
-[1;36mType [1;37mHELP ROTATE[1;36m for the correct usage.[1;37m
-} T 
-
-PHAFMT {
-[1;36mType [1;37mHELP PHASER[1;36m for the correct usage.[1;37m
-} T 
-
-SNDFMT {
-[1;36mType [1;37mHELP SEND[1;36m for the correct usage.[1;37m
-} T 
-
-SCANFMT {
-[1;36mType [1;37mHELP SCAN[1;36m for the correct usage.[1;37m
-} T 
-
-ORBFMT {
-[1;36mType [1;37mHELP ORBIT[1;36m for the correct usage.[1;37m
-} T 
-
-REPFMT {[1;36mType [1;37mHELP REPORT[1;36m for the correct usage.[1;37m
-} T 
-
-TRANSFMT {
-[1;36mType [1;37mHELP TRANSFER[1;36m for the correct usage.[1;37m
-} T 
-
-ATTFMT {
-[1;36mType [1;37mHELP ATTACK[1;36m for the correct usage.[1;37m
-} T 
-
-BUYFMT {
-[1;36mType [1;37mHELP BUY[1;36m for the correct usage.[1;37m
-} T 
-
-PRICEFMT {
-[1;36mType [1;37mHELP PRICE[1;36m for the correct usage.[1;37m
-} T 
-
-MISFMT {
-[1;36mType [1;37mHELP MISSILE[1;36m for the correct usage.[1;37m
-} T 
-
-HPHAFMT {
-[1;36mType [1;37mHELP HYPER[1;36m for the correct usage.[1;37m
-} T 
-
-NEWFMT {
-[1;36mType [1;37mHELP NEW[1;36m for the correct usage.[1;37m
-} T 
-
-SELLFMT {
-[1;36mType [1;37mHELP SELL[1;36m for the correct usage.[1;37m
-} T 
-
-MINFMT {
-[1;36mType [1;37mHELP MINE[1;36m for the correct usage.[1;37m
-} T 
-
-SHLDFMT {
-[1;36mType [1;37mHELP SHIELD[1;36m for the correct usage.[1;37m
-} T 
-
-FREQFMT {
-[1;36mType [1;37mHELP FREQ[1;36m for the correct usage.[1;37m
-} T 
-
-MSGPRF {
-[0;37m[[1;31mERROR[0;37m] The Galactic Communications Commission will not allow such a message.[1;37m
-} T 
-
-TEAMFMT {
-[1;36mType [1;37mHELP TEAM[1;36m for the correct usage.[1;37m
-} T
-
-SPYFMT {
-[1;36mType [1;37mHELP SPY[1;36m for the correct usage.[1;37m
-} T
-
-JETTFMT {
-[1;36mType [1;37mHELP JETTISON[1;36m for the correct usage.[1;37m
-} T
-
-CLOFMT {
-[1;36mType [1;37mHELP CLOAK[1;36m for the correct usage.[1;37m
-} T
 
 ENDMARK {ENDMARK} T Endmark - do not remove
 

@@ -252,7 +252,6 @@
 /*    5145 */ void FUNC cmd_displ P((void ));
 /*    5158 */ void FUNC cmd_set P((void ));
 /*    5245 */ void FUNC cmd_team P((void ));
-/*    5753 */ void FUNC badfmt P((int msg ));
 /*    5759 */ char *FUNC teamname P((WARUSR *ptr ));
 /*    5776 */ void FUNC cmd_clear P((void ));
 /*    5783 */ void FUNC ansifunc P((int func ));

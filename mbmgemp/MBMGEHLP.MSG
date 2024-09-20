@@ -11,8 +11,8 @@ Commands: [1;32mabandon  abort  admin  attack  buy  cloak  cls  decoy  destruct
           roster  rotate  scan  sell  send  set  shield  spy  team  torpedo
           transfer  warp  zipper
 
-[1;36m Topics:  [1;32mbattle  class  communicate  cybertron  galaxy  hyper  moving
-          planets  scoring  sector  starting  strategy  wormholes
+[1;36m Topics:  [1;32mbattle  class  communicate  cybertron  galaxy  moving  planets
+          scoring  sector  starting  strategy  wormholes
 
 [1;36mEnter [1;37mHELP[1;36m followed by any of these commands or topics for more information.[1;37m
 } T 
