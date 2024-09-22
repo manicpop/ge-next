@@ -827,7 +827,8 @@ ptr->coord.ycoord       = (rndm((double)(univmax-2)))+1;
 ptr->speed = 0.0;
 ptr->speed2b = 0.0;
 ptr->damage += TELEDAM;
-prfmsg(TELEPORT);
+damstr(TELEDAM);
+prfmsg(TELEPORT,gechrbuf);
 outprfge(ALWAYS,usrn);
 }
 

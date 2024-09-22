@@ -946,6 +946,8 @@ if (ptr->phasr >=PMINFIRE)
 	if (neutral(&ptr->coord))
 		{
 		zaphim(ptr,usrn);
+		prfmsg(FRCTER);
+		outprfge(ALWAYS,usrn);
 		return;
 		}
 	deg = (unsigned)normal(ptr->heading + (double)ptr->degrees);
@@ -1040,6 +1042,8 @@ if (ptr->energy >= HPMINFIR)
 	if (neutral(&ptr->coord))
 		{
 		zaphim(ptr,usrn);
+		prfmsg(FRCTER);
+		outprfge(ALWAYS,usrn);
 		return;
 		}
 	deg = (unsigned)normal(ptr->heading + (double)ptr->degrees);
@@ -1175,6 +1179,8 @@ if ( shpnum >= 0)
 	if (neutral(&warsptr->coord))
 		{
 		zaphim(warsptr,usrnum);
+		prfmsg(FRCTER);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	torp(warsptr,usrnum,shpnum);
@@ -1313,6 +1319,8 @@ if ( shpnum >= 0)
 	if (neutral(&warsptr->coord))
 		{
 		zaphim(warsptr,usrnum);
+		prfmsg(FRCTER);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	if (lockon(warsptr,1,shpnum,usrnum) == 1)
@@ -1540,7 +1548,8 @@ void FUNC zaphim(ptr,usrn)
 WARSHP  *ptr;
 int             usrn;
 {
-prfmsg(ZAPHIM1);
+damstr(se100dam);
+prfmsg(ZAPHIM1,gechrbuf);
 outprfge(ALWAYS,usrn);
 ptr->damage += se100dam;
 }
@@ -2252,7 +2261,7 @@ shpnum = findshp(margv[2],1);
 
 if (shpnum == usrnum)
 	{
-	prfmsg(FRCTER);
+	prfmsg(SCANER);
 	outprfge(ALWAYS,usrnum);
 	}
 else
@@ -3483,6 +3492,8 @@ if (sameas(plptr->userid,warsptr->userid))
 if (neutral(&warsptr->coord))
 	{
 	zaphim(warsptr,usrnum);
+	prfmsg(ATTKER);
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 

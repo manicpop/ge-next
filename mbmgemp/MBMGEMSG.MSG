@@ -2524,7 +2524,15 @@ NOPLNT {
 } T 
 
 FRCTER {
-[0;37m[[1;31mERROR[0;37m][1;37m
+[0;37m[[1;31mERROR[0;37m] Fire control malfunction, weapons not fired.[1;37m
+} T 
+
+SCANER {
+[0;37m[[1;31mERROR[0;37m] Scanner malfunction.[1;37m
+} T 
+
+ATTKER {
+[0;37m[[1;31mERROR[0;37m] Attack aborted.[1;37m
 } T 
 
 NODECOYS {
@@ -3348,9 +3356,7 @@ MOVE4 {***
 } T 
 
 ZAPHIM1 {***
-[0;37m[[0;31mWARNING![0;37m] Direct hit from the Enforcer Planet's energy beam, caused [0;31mvery light[0;37m damage!
-
-[0;37m[[1;31mERROR[0;37m] Weapons not fired.[1;37m
+[0;37m[[0;31mWARNING![0;37m] Direct hit from the Enforcer Planet's energy beam, caused [0;31m%s[0;37m damage!
 } T 
 
 ZAPHIM2 {***
@@ -5250,7 +5256,7 @@ TELEPORT {***
 [0;37m[[0;31mWARNING![0;37m] Navigation beyond the galactic perimeter is not permitted. Engines
 shut down under emergency procedures.
 
-Damage control reports [0;31mmoderate[0;37m damage to all sections due to kinetic shock.[1;37m
+Damage control reports [0;31m%s[0;37m damage to all sections due to kinetic shock.[1;37m
 } T 
 
 MINE0 {
