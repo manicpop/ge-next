@@ -891,7 +891,9 @@ for (i=0; i<MAXPLANETS;++i)
 					gesdb(GEGETNOW,&pkey,(GALSECT *)&worm);
 					ptr->coord.xcoord = worm.destination.xcoord;
 					ptr->coord.ycoord = worm.destination.ycoord;
+					prfmsg(MOVE1,xsect,ysect,coord1(worm.destination.xcoord),coord1(worm.destination.ycoord));
 					ptr->damage+= 5.5;
+					outprfge(ALWAYS,usrn);
 					cleartm(usrn);	/* clear the tors and missiles */
 					}
 				}

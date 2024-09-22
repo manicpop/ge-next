@@ -68,6 +68,8 @@ ge-next RELEASE NOTES
   transfer spies to two, so you can now enter or "spy" or "spies."
 * cleaned up the sysop commands and moved the messages from them
   into the MSG files.
+* helm now announces your new sector after you pass through a
+  wormhole.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
