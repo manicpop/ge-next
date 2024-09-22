@@ -76,7 +76,7 @@ char *kwrd[NUMITEMS] = {						"men",
 									"jam",
 									"min",
 									"gol",
-									"spy"};
+									"sp"};
 
 char *item_name[NUMITEMS] = {						"men",
 									"missiles",
@@ -203,6 +203,7 @@ struct hlpcmd gehlp[] = {
 		{"set",				HLPSET},
 		{"shield",			HLPSHI},
 		{"spy",				HLPSPY},
+		{"sys",				HLPSYS},
 		{"team",			HLPTEA},
 		{"torpedo",			HLPTOR},
 		{"transfer",			HLPTRA},
@@ -345,8 +346,22 @@ int     ndx,i;
 
 char	gechrbuf4[20], gechrbuf5[20], gechrbuf6[20], gechrbuf7[20];
 
-setmbk(gehlpmb);
+if (genearas(margv[1],"sys"))
+	{
+#ifdef PHARLAP
+	if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY))))
+#else
+	if ((!syscmds) || (sysonly && !(usrptr->flags&ISYSOP)))
+#endif
+        	{
+		setmbk(gehlpmb);
+        	prfmsg(HLPINDEX);
+        	outprfge(ALWAYS,usrnum);
+        	return;
+        	}
+	}
 
+setmbk(gehlpmb);
 
 if (margc < 2 || margc > 3)
 	{
@@ -460,6 +475,7 @@ if (genearas(margv[1],"class"))
 		return;
 		}
 	}
+
 ndx = 0;
 while (gehlp[ndx].command != NULL)
 	{
@@ -4132,11 +4148,9 @@ void  FUNC cmd_buy()
 
 int i;
 
-
 if (warsptr->where < 10)
 	{
 	prfmsg(BUY1);
-	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
@@ -4679,17 +4693,6 @@ outprfge(ALWAYS,usrnum);
 
 /**************************************************************************
 ** SYSOP commands                                                        **
-**    sysop get <n> <itemname>
-**    sysop kill userid
-**    sysop cash <n>
-**    sysop cyborg <n>
-**    sysop cyborgoff
-**    sysop cybmine <n>
-**    sysop class <n>
-**    sysop shieldtype <n>
-**    sysop phasertype <n>
-**    sysop cybhalt
-**    sysop cybstart
 **************************************************************************/
 
 
@@ -4708,29 +4711,17 @@ if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY))))
 if ((!syscmds) || (sysonly && !(usrptr->flags&ISYSOP)))
 #endif
 	{
-	prf("Huh?\r");
+	prfmsg(INVCMD);
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
 if (sameas("help",margv[1]) && margc == 2)
 	{
-	prf("***\r\nSysop Command List\r");
-	prf("sys help                    - Produces this list\r");
-	prf("sys get nnn <itemname>      - Creates items on this ship\r");
-	prf("sys kill <username>         - Kills the ship commanded by username\r");
-	prf("sys cash nnn                - Creates nnn cash\r");
-	prf("sys goto xsector ysector    - Teleports ship to sector\r");
-	prf("sys class nnn               - Changes ship to class number nnn\r");
-	prf("sys shieldtype nnn          - Changes shields to class number nnn\r");
-	prf("sys phasertype nnn          - Changes phaser to class number nnn\r");
-	prf("sys maint                   - Starts FAST maintenance\r");
-	prf("sys unjam                   - Clears jamming\r");
-	prf("sys list nn                 - Lists 50 ships in game beginning with nn\r");
-	prf("sys classlist               - Lists index of ship classes\r");
-	prf("sys cybpause nnn            - pauses the cybertrons for nnn secs\r");
-	prf("\r");
+	setmbk(gehlpmb);
+	prfmsg(gehlp[37].helptxt);
 	outprfge(ALWAYS,usrnum);
+	return;
 	}
 else
 if (sameas("get",margv[1]) && margc == 4)
@@ -4744,7 +4735,9 @@ if (sameas("get",margv[1]) && margc == 4)
 				if ((amt = atol(margv[2])) > 0)
 					{
 					warsptr->items[i] += amt;
-					done();
+					sprintf(gechrbuf,"%ld",amt);
+					prfmsg(SYSGET,gechrbuf,item_name[i]);
+					outprfge(ALWAYS,usrnum);
 					return;
 					}
 				}
@@ -4761,30 +4754,24 @@ if (sameas("kill",margv[1]) && margc == 3)
 		if (genearas(margv[2],warshpoff(othusn)->userid))
 			{
 			warshpoff(othusn)->damage = 101;
-			prf("Killed %s\r\n",warshpoff(othusn)->userid);
+			prfmsg(SYSKILL,warshpoff(othusn)->userid);
+			outprfge(ALWAYS,usrnum);
 			gotone = TRUE;
 			}
 		}
 	if (!gotone)
 		{
-		prf("Not found\r");
+		prfmsg(SYSKILN);
 		outprfge(ALWAYS,usrnum);
-		return;
 		}
-	done();
+	return;
 	}
 else
 if (sameas("cash",margv[1]) && margc == 3)
 	{
 	waruptr->cash += atol(margv[2]);
-	done();
-	return;
-	}
-else
-if (sameas("points",margv[1]) && margc == 3)
-	{
-	waruptr->score += atol(margv[2]);
-	done();
+	prfmsg(SYSCASH,atol(margv[2]));
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 else
@@ -4802,19 +4789,22 @@ if (sameas("goto",margv[1]) && margc == 4)
 		j = atoi(margv[3]);
 		if (abs(i) <= univmax && abs(j) <= univmax)
 			{
-			warsptr->where = 0;
+			setsect(warsptr);
+			if (warsptr->where != 1)
+				warsptr->where = 0;
 			warsptr->hostile = 0;
 			warsptr->coord.xcoord = (double)i + .5;
 			warsptr->coord.ycoord = (double)j + .5;
 
 			plnum = 0;
 			getplanetdat(usrnum);
-			done();
+			prfmsg(MOVE1,xsect,ysect,i,j);
+			outprfge(ALWAYS,usrnum);
 			return;
 			}
 		}
 	}
-#ifdef NOTHING
+/*
 else
 if (sameas("cyborg",margv[1]))
 	{
@@ -4822,14 +4812,12 @@ if (sameas("cyborg",margv[1]))
 	warsptr->shpclass = atoi(margv[2]);
 	warsptr->cybmine = (byte)99;
 	warsptr->emulate = (byte)1;
-	done();
 	return;
 	}
 else
 if (sameas("cyborgoff",margv[1]))
 	{
 	warsptr->emulate = (byte)0;
-	done();
 	return;
 	}
 else
@@ -4838,11 +4826,10 @@ if (sameas("cybmine",margv[1]) && margc == 3)
 	if (atoi(margv[2]) < nships)
 		{
 		warsptr->cybmine = atoi(margv[2]);
-		done();
 		return;
 		}
 	}
-#endif
+*/
 else
 if (sameas("class",margv[1]) && margc == 3)
 	{
@@ -4850,8 +4837,8 @@ if (sameas("class",margv[1]) && margc == 3)
 		{
 		warsptr->shpclass = atoi(margv[2])-1;
 		warsptr->topspeed = shipclass[warsptr->shpclass].max_warp;
-
-		done();
+		prfmsg(SYSCLS,warsptr->shipname,shipclass[warsptr->shpclass].typename);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	}
@@ -4861,7 +4848,8 @@ if (sameas("shieldtype",margv[1]) && margc == 3)
 	if (atoi(margv[2]) < 255)
 		{
 		warsptr->shieldtype = atoi(margv[2]);
-		done();
+		prfmsg(NEW7,"0",warsptr->shieldtype);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	}
@@ -4872,7 +4860,8 @@ if (sameas("phasertype",margv[1]) && margc == 3)
 	if (atoi(margv[2]) < 255)
 		{
 		warsptr->phasrtype = atoi(margv[2]);
-		done();
+		prfmsg(NEW10,"0",warsptr->phasrtype);
+		outprfge(ALWAYS,usrnum);
 		return;
 		}
 	}
@@ -4881,15 +4870,16 @@ if (sameas("maint",margv[1]))
 	{
 	warsptr->repair = 1;
 	prfmsg(MAINT5);
+	outprfge(ALWAYS,usrnum);
 	repairship(warsptr,usrnum);
-	done();
 	return;
 	}
 else
 if (sameas("unjam",margv[1]))
 	{
 	warsptr->jammer = 0;
-	done();
+	prfmsg(JAMMER5);
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 else
@@ -4900,7 +4890,7 @@ if (sameas("list",margv[1]))
 	else
 		i = atoi(margv[2]);
 
-	prf("Chn Name xsect ysect damage tick cybmine\r");
+	prfmsg(SYSLST);
 	if (nships>i+50)
 		j = i+50;
 	else
@@ -4912,55 +4902,42 @@ if (sameas("list",margv[1]))
 		if (ptr->status != GESTAT_AVAIL)
 			{
 			setsect(ptr);
-			prf("%3d %-30s %5d %5d %3d %3d %3d\r",i,username(ptr),xsect,ysect,(int)(ptr->damage),(int)(ptr->tick),(int)(ptr->cybmine));
-			outprfge(ALWAYS,usrnum);
+			prf("%3d %-30s %5d %5d %6d %4d %7d\r",i,username(ptr),xsect,ysect,(int)(ptr->damage),(int)(ptr->tick),(int)(ptr->cybmine));
 			}
 		}
-	done();
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 else
 if (sameas("classlist",margv[1]))
 	{
-	prf("Class Sname cybs_can_attk No_to_chase\r");
+	prfmsg(SYSCLL);
 	for(i=0;i<tot_classes;++i)
 		{
 		if (shipclass[i].max_type != CLASSTYPE_NONE)
 			{
-			prf("%3d %-30s %5d %5d \r",i+1,
+			prf("%3d %-34s %5d %10d \r",i+1,
 				shipclass[i].typename,
 				shipclass[i].cybs_can_att,
 				shipclass[i].noclaim);
 			}
 		}
-	done();
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 else
 if (sameas("cybpause",margv[1])&& margc == 3)
 	{
 	i = atoi(margv[2]);
-	prf("Cybertrons paused for %d seconds\r",i);
+	prfmsg(SYSCYB,i);
+	outprfge(ALWAYS,usrnum);
 	cybhaltflg = i;
-	done();
 	return;
 	}
 
-
-
-
-prf("Huh?\r");
+prfmsg(FORMAT,"SYS");
 outprfge(ALWAYS,usrnum);
 }
-
-void done()
-{
-prf("Done!\r");
-outprfge(ALWAYS,usrnum);
-}
-
-
-
 
 /**************************************************************************
 ** Rename the ship command..                                             **

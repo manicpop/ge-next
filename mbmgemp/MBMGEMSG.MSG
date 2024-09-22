@@ -3555,6 +3555,38 @@ TOORICH {
 than [0;33m%lu[1;36m in the bank.[1;37m
 } T 
 
+SYSGET {
+[1;37m%s %s[1;36m granted.[1;37m
+} T 
+
+SYSKILL {
+[0;36m%s[1;36m killed.[1;37m
+} T 
+
+SYSKILN {
+[1;36mNo user by that name found.[1;37m
+} T 
+
+SYSCASH {
+[0;33m%lu[1;36m granted.[1;37m
+} T 
+
+SYSCLS {
+[1;36mThe [0;36m%s[1;36m is now a %s.[1;37m
+} T 
+
+SYSLST {
+[1;36mChn Name                           Xsect Ysect Damage Tick Cybmine[1;37m
+} T
+
+SYSCLL {
+[1;36mCls Name                        Cybs attack?   How many[1;37m
+} T
+
+SYSCYB {
+[1;36mCybertrons paused for %d seconds.[1;37m
+} T
+
 MAIL1 {
    You have no messages waiting...
 } T 

@@ -63,6 +63,11 @@ ge-next RELEASE NOTES
   wraps to the correct sector (e.g. 300 to -300).
 * changed the CYBNEW and DROIDNEW announcments to show the sector
   of the newly created ship, as opposed to the (fake) bearing.
+* changed "spy" to be "spies" so it's plural like all other items.
+  also changed the amount of letters you have to use to buy/sell/
+  transfer spies to two, so you can now enter or "spy" or "spies."
+* cleaned up the sysop commands and moved the messages from them
+  into the MSG files.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
