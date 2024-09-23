@@ -66,7 +66,7 @@
 /* LOCAL GLOBAL DEFS *****************************************************/
 
 WORMTAB	wormtab[MAXPLANETS];
-int		wormnum;
+int	wormnum;
 
 
 

@@ -58,7 +58,7 @@
 
 #define GEFUNCS 1
 
-#include        "geglobal.h"
+#include "geglobal.h"
 
 /* LOCAL GLOBAL DEFS *****************************************************/
 
@@ -202,51 +202,51 @@ while (flag == 1)
 			}
 		}
 	}
-tmpshp.heading  = rndm(359.99);
-tmpshp.head2b   = tmpshp.heading;
+tmpshp.heading		= rndm(359.99);
+tmpshp.head2b		= tmpshp.heading;
 
-tmpshp.shpclass = type;
-tmpshp.speed    = 0;
-tmpshp.phasr    = 100;
-tmpshp.speed    = 0;
-tmpshp.speed2b  = 0;
-tmpshp.damage   = 0.0;
-tmpshp.lastfired = -1;
-tmpshp.energy   = 50000L;
-tmpshp.tactical = 0;
-tmpshp.helm             = 0;
-tmpshp.cloak    = 0;
-tmpshp.shieldstat       = SHIELDDN;
-tmpshp.shield   = 0;
-tmpshp.shieldtype = 1;
-tmpshp.phasrtype = 1;
-tmpshp.train    = 0;
-tmpshp.where    = 0;
-tmpshp.hostile          = 0;
-tmpshp.repair           = 0;
-tmpshp.hypha                    = 0;
-tmpshp.firecntl         = 0;
-tmpshp.cantexit         = 0;
-tmpshp.items[I_TORPEDO] = 0;
-tmpshp.items[I_MISSILE] = 0;
-tmpshp.items[I_FLUXPOD] = 3;
-tmpshp.items[I_FOOD]            = 0;
-tmpshp.items[I_DECOYS]  = 0;
-tmpshp.items[I_FIGHTER] = 0;
-tmpshp.items[I_MEN]      = 0;
-tmpshp.items[I_IONCANNON]= 0;
-tmpshp.items[I_TROOPS]  = 0;
-tmpshp.items[I_ZIPPERS] = 0;
-tmpshp.items[I_JAMMERS] = 0;
-tmpshp.items[I_MINE]            = 0;
-tmpshp.items[I_GOLD]   = 0;
+tmpshp.shpclass		= type;
+tmpshp.speed		= 0;
+tmpshp.phasr		= 100;
+tmpshp.speed		= 0;
+tmpshp.speed2b		= 0;
+tmpshp.damage		= 0.0;
+tmpshp.lastfired	= -1;
+tmpshp.energy		= 50000L;
+tmpshp.tactical		= 0;
+tmpshp.helm		= 0;
+tmpshp.cloak		= 0;
+tmpshp.shieldstat	= SHIELDDN;
+tmpshp.shield		= 0;
+tmpshp.shieldtype	= 1;
+tmpshp.phasrtype	= 1;
+tmpshp.train		= 0;
+tmpshp.where		= 0;
+tmpshp.hostile		= 0;
+tmpshp.repair		= 0;
+tmpshp.hypha		= 0;
+tmpshp.firecntl		= 0;
+tmpshp.cantexit		= 0;
+tmpshp.items[I_TORPEDO]	= 0;
+tmpshp.items[I_MISSILE]	= 0;
+tmpshp.items[I_FLUXPOD]	= 3;
+tmpshp.items[I_FOOD]	= 0;
+tmpshp.items[I_DECOYS]	= 0;
+tmpshp.items[I_FIGHTER]	= 0;
+tmpshp.items[I_MEN]	= 0;
+tmpshp.items[I_IONCANNON]	= 0;
+tmpshp.items[I_TROOPS]	= 0;
+tmpshp.items[I_ZIPPERS]	= 0;
+tmpshp.items[I_JAMMERS]	= 0;
+tmpshp.items[I_MINE]	= 0;
+tmpshp.items[I_GOLD]	= 0;
 
-tmpshp.destruct         = 0;
-tmpshp.status                   = 0;
-tmpshp.cybmine                  = 0;
-tmpshp.cybskill         = 0;
-tmpshp.cybupdate                = 0;
-tmpshp.emulate                  = 0;
+tmpshp.destruct		= 0;
+tmpshp.status		= 0;
+tmpshp.cybmine		= 0;
+tmpshp.cybskill		= 0;
+tmpshp.cybupdate	= 0;
+tmpshp.emulate		= 0;
 
 
 tmpshp.shipno = waruptr->topshipno+1;
@@ -273,20 +273,20 @@ char    *userid;
 {
 
 strncpy(tmpusr.userid,userid,UIDSIZ); /* BJ CHANGED TO UIDSIZ */
-tmpusr.kills    	= 0;
-tmpusr.planets  	= 0;
-tmpusr.debt     	= 0;
-tmpusr.noships 	= 0;
-tmpusr.score 		= 0;
-tmpusr.plscore 	= 0;
-tmpusr.klscore 	= 0;
-tmpusr.rospos  	= 0;
-tmpusr.teamcode	= 0;
-tmpusr.population = 0;
+tmpusr.kills		= 0;
+tmpusr.planets		= 0;
+tmpusr.debt		= 0;
+tmpusr.noships		= 0;
+tmpusr.score		= 0;
+tmpusr.plscore		= 0;
+tmpusr.klscore		= 0;
+tmpusr.rospos		= 0;
+tmpusr.teamcode		= 0;
+tmpusr.population	= 0;
 
-tmpusr.cash 		= startcash;
+tmpusr.cash		= startcash;
 
-tmpusr.topshipno 	= 0;
+tmpusr.topshipno	= 0;
 
 tmpusr.options[0]	= TRUE; /* scannames default */
 tmpusr.options[2]	= TRUE; /* scanfull default */
@@ -1534,11 +1534,11 @@ int           usrn;
 {
 int i,j,flag,power;
 
-MISSILE 			*mptr;
-TORPEDO 			*tptr;
+MISSILE				*mptr;
+TORPEDO				*tptr;
 unsigned			*dptr;
-char 				tmpbuf[20];
-double			damfact;
+char				tmpbuf[20];
+double				damfact;
 
 /* flag hyper-phasers ready again */
 if (ptr->hypha > 0)
@@ -2644,12 +2644,12 @@ else
 }
 
 double  FUNC ton_fact(ptr,damfact)
-WARSHP  	*ptr;
+WARSHP	*ptr;
 double	damfact;
 
 {
 
-double 	temp;
+double	temp;
 
 temp = damfact / ((double)(shipclass[ptr->shpclass].damfact)/100.0);
 

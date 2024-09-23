@@ -263,30 +263,29 @@ double				tor_fact,
 				plattrt2,
 				plattrt3;
 
-long		plantock;
+long				plantock;
 
-SHPKEY		shpkey;
-MAILKEY		mailkey;
+SHPKEY				shpkey;
+MAILKEY				mailkey;
 
-SHIP			*shipclass;
+SHIP				*shipclass;
 
-S00			*s00;
-int			s00plnum;
+S00				*s00;
+int				s00plnum;
 
-SCANTAB		*scantab;
+SCANTAB				*scantab;
 
-long			shieldprice[TOPSHIELD];
-long 			phaserprice[TOPPHASOR];
-unsigned		baseprice[NUMITEMS];
+long				shieldprice[TOPSHIELD];
+long				phaserprice[TOPPHASOR];
+unsigned			baseprice[NUMITEMS];
 
 /* Maximum items a planet can hold (adjusted later)*/
 
-double   maxpl[NUMITEMS];
+double maxpl[NUMITEMS];
 
 /* the net weight of each item */
 
 long weight[NUMITEMS];
-
 
 /* the net score value of each item on the planet */
 
@@ -294,7 +293,7 @@ long value[NUMITEMS];
 
 /* the number of items produced by 1000 men a day */
 
-long   manhours[NUMITEMS];
+long manhours[NUMITEMS];
 
 #define MENU struct _menu
 MENU {
@@ -366,7 +365,7 @@ long	numrecs;
 
 int	class_tab[50];
 
-gemb 			= opnmsg(GEMSG);
+gemb			= opnmsg(GEMSG);
 endmark		= stgopt(ENDMARK);
 if (!sameas(endmark,"ENDMARK"))
 	{
@@ -381,21 +380,21 @@ gemail		= stgopt(GEMAIL);
 geshipcl	= stgopt(GESHIPCL);
 
 gemaxplrs	= numopt(MAXPLRS,1,256);
-gefreebies 	= numopt(FREEBIES,0,1);
-gemaxlist 	= numopt(MAXLIST,3,50);
-maxships 	= numopt(MAXSHIPS,1,50);
-se100dam 	= numopt(SE100DAM,1,101);
-showopt    	= numopt(SHOWOPT,0,5);
-trans_opt 	= ynopt(TRANSOPT);
-syscmds 	= ynopt(SYSCMDS);
-sysonly 	= ynopt(SYSONLY);
-max_plnts 	= numopt(MAXPLNTS,1,256);
-plantock 	= lngopt(PLANTOCK,1,32760)*60L;
-numships 	= numopt(NUMSHIPS,1,500);
+gefreebies	= numopt(FREEBIES,0,1);
+gemaxlist	= numopt(MAXLIST,3,50);
+maxships	= numopt(MAXSHIPS,1,50);
+se100dam	= numopt(SE100DAM,1,101);
+showopt		= numopt(SHOWOPT,0,5);
+trans_opt	= ynopt(TRANSOPT);
+syscmds		= ynopt(SYSCMDS);
+sysonly		= ynopt(SYSONLY);
+max_plnts	= numopt(MAXPLNTS,1,256);
+plantock	= lngopt(PLANTOCK,1,32760)*60L;
+numships	= numopt(NUMSHIPS,1,500);
 maxdroids	= numopt(MAXDROID,0,500);
 plodds		= numopt(PLODDS,1,20);
 wormodds	= numopt(WORMODDS,1,100);
-univmax 	= numopt(UNIVMAX,10,32767);
+univmax		= numopt(UNIVMAX,10,32767);
 univwrap	= ynopt(UNIVWRAP);
 s00plnum	= numopt(S00PLNUM,3,9);
 maxplanets	= numopt(MAXPLSE,1,9);
@@ -403,7 +402,7 @@ teambonus	= numopt(TEAMBONU,0,32000)*100L;
 team_max	= numopt(TEAMMAX,0,32000);
 meneat		= ynopt(MENEAT);
 
-profon  	= ynopt(PROFON);
+profon		= ynopt(PROFON);
 logflag		= ynopt(LOGFLG);
 
 if (logflag)
@@ -423,7 +422,7 @@ torpsped	= numopt(TORPSPED,1,10000);
 mislsped	= numopt(MISLSPED,1,10000);
 
 nummines	= numopt(NUMMINES,1,200);
-usermines 	= numopt(USRMINES,1,200);
+usermines	= numopt(USRMINES,1,200);
 
 decodds		= numopt(DECODDS,1,20);
 
@@ -436,7 +435,7 @@ mdammax		= (double)numopt(MDAMMAX,1,100);
 idammax		= (double)numopt(IDAMMAX,1,100);
 minedammax	= (double)numopt(MNDAMMAX,1,200);
 repairrate	= (double)numopt(REPAIRRT,1,50);
-repairrate 	= repairrate/100.0;
+repairrate	= repairrate/100.0;
 
 tooclose	= (double)numopt(TOOCLOSE,1,32000);
 
@@ -659,7 +658,7 @@ setmbk(gemb);
 cyb_class = 0;
 
 /* load the ship class table */
-geshmb 			= opnmsg(geshipcl);
+geshmb		= opnmsg(geshipcl);
 setmbk(geshmb);
 
 #define NCL 28
@@ -720,27 +719,27 @@ for (n=0; n<tot_classes; ++n)
 	shipclass[i].max_torps = ynopt(++classbase);
 	shipclass[i].max_missl = ynopt(++classbase);
 	shipclass[i].has_decoy = ynopt(++classbase);
-	shipclass[i].has_jam   = ynopt(++classbase);
-	shipclass[i].has_zip   = ynopt(++classbase);
-	shipclass[i].has_mine  = ynopt(++classbase);
-	shipclass[i].max_attk  = ynopt(++classbase);
+	shipclass[i].has_jam = ynopt(++classbase);
+	shipclass[i].has_zip = ynopt(++classbase);
+	shipclass[i].has_mine = ynopt(++classbase);
+	shipclass[i].max_attk = ynopt(++classbase);
 	shipclass[i].max_cloak = ynopt(++classbase);
 	shipclass[i].max_accel = numopt(++classbase,0,32767);
-	shipclass[i].max_warp  = numopt(++classbase,0,255);
-	shipclass[i].max_tons  = lngopt(++classbase,1,2000000000L);
+	shipclass[i].max_warp = numopt(++classbase,0,255);
+	shipclass[i].max_tons = lngopt(++classbase,1,2000000000L);
 	shipclass[i].max_price = lngopt(++classbase,1,2000000000L);
-	shipclass[i].max_points= numopt(++classbase,1,32767);
+	shipclass[i].max_points = numopt(++classbase,1,32767);
 	shipclass[i].scanrange = lngopt(++classbase,1,9999999L);
 	shipclass[i].cybs_can_att = ynopt(++classbase);
-	shipclass[i].noclaim   = numopt(++classbase,0,255);
+	shipclass[i].noclaim = numopt(++classbase,0,255);
 	shipclass[i].lowest_to_attk = numopt(++classbase,0,255);
 	shipclass[i].tot_to_create = numopt(++classbase,0,255);
 	shipclass[i].tough_factor = numopt(++classbase,0,1);
-	shipclass[i].damfact 	= numopt(++classbase,0,32767);
+	shipclass[i].damfact = numopt(++classbase,0,32767);
 	shipclass[i].res_flag_2 = numopt(++classbase,0,32767);
 	shipclass[i].res_flag_3 = numopt(++classbase,0,32767);
 
-	shipclass[i].hlpmsg    = ++classbase;
+	shipclass[i].hlpmsg = ++classbase;
 
 	shipclass[i].init_func = NULL;
 	shipclass[i].tick_func = NULL;
@@ -787,17 +786,17 @@ for (i=0; i<s00plnum; ++i)
 	if (!n)
 		catastro(spr("GE:ERR:Sect00 Table Error %d Msg # %d",i+1,S00P1DEF+(i*NPL)));
 
-	s00[i].name 	= stgopt(++classbase);
-	s00[i].owner 	= stgopt(++classbase);
-	s00[i].type		= numopt(++classbase,0,3);
+	s00[i].name	= stgopt(++classbase);
+	s00[i].owner	= stgopt(++classbase);
+	s00[i].type	= numopt(++classbase,0,3);
 
 	s00[i].xcoord	= (double)(numopt(++classbase,100,9900));
 	s00[i].xcoord	= s00[i].xcoord/10000.0;
 	s00[i].ycoord	= (double)(numopt(++classbase,100,9900));
 	s00[i].ycoord	= s00[i].ycoord/10000.0;
 
-	s00[i].env		= numopt(++classbase,0,3);
-	s00[i].res		= numopt(++classbase,0,3);
+	s00[i].env	= numopt(++classbase,0,3);
+	s00[i].res	= numopt(++classbase,0,3);
 
 	geshocst(1,spr("GE:INF:I/S00 %d %s",s00[i].type,s00[i].name));
 	}
@@ -841,9 +840,9 @@ for (j=0;j<nships;++j)
 fse_state=-1;
 for(i=0;i<nmods;i++)
 	{
-  	if((sameas((char *)(module[i]->descrp),"Editor")) == TRUE)
+	if((sameas((char *)(module[i]->descrp),"Editor")) == TRUE)
 		fse_state=i;
-  	}
+	}
 }
 
 /**************************************************************************
@@ -1631,7 +1630,7 @@ if (plnum > 0 && plnum <= MAXPLANETS)
 				for (i=0;i<BEACONMSGSZ;++i)
 					{
 					if (plptr->beacon[i] < ' ' || plptr->beacon[i] > '~')
-		 				{
+						{
 						plptr->beacon[0] = 0;
 						bbad = TRUE;
 						break;
@@ -1727,7 +1726,7 @@ if ((mzfp=fopen("MBMGETEA.DAT","r")) != NULL)
 	}
 }
 
-void 	 FUNC update_team_tab()
+void	FUNC update_team_tab()
 
 {
 
@@ -1784,9 +1783,9 @@ static unsigned int plntpop = 0;
 static unsigned int sectcnt = 0;
 static unsigned int wormcnt = 0;
 
-int     	flag, tic, plnt_type, not_done;
-int	  	firstime = FALSE;
-int 		i;
+int		flag, tic, plnt_type, not_done;
+int		firstime = FALSE;
+int		i;
 
 #define MAXTIC	20
 
@@ -2175,7 +2174,7 @@ if (ticktock2 >= 30 && ticktock1 < nships)
 			}
 
 		/* should also add a random factor to choose a auto class even if the
-   		class is full */
+		class is full */
 
 		if (gernd()%100 == 0 || class == -1)
 			{
@@ -2236,7 +2235,7 @@ if (cybhaltflg <= 0)
 				{
 				--wptr->tick;
 				}
-	 		}
+			}
 		}
 	}
 else
@@ -2278,7 +2277,7 @@ void  FUNC warrti2a(void)
 int zothusn;            /* general purpose other-user channel number */
 WARSHP  *wptr;
 
-static 	int 	clicker = 0;
+static int	clicker = 0;
 
 logthis("TICK:PWarrti2 entered");
 

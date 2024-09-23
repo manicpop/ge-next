@@ -94,15 +94,15 @@ char *item_name[NUMITEMS] = {						"men",
 									"spies"};
 
 
-void cmd_gehelp(), cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
-	cmd_report(), cmd_rotate(), cmd_send(), cmd_scan(), cmd_shields(),
-	cmd_warp(), cmd_torp(), cmd_missl(), cmd_decoy(), cmd_flux(), cmd_set(),
-	cmd_orbit(), cmd_transfer(), cmd_admin(), cmd_attack(), cmd_geroster(),
-	cmd_buy(), cmd_price(), cmd_planet(), cmd_maint(), cmd_new(),
-	cmd_sell(), cmd_sysop(), cmd_rename(), cmd_destruct(), cmd_abort(),
-	cmd_jammer(), cmd_mine(), cmd_abandon(), cmd_zipper(), cmd_lock(),
-	cmd_navigate(), cmd_who(), cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(),
-	cmd_team(), cmd_spy(), cmd_jettison();
+void	cmd_gehelp(), cmd_cloak(), cmd_impulse(), cmd_phas(), cmd_report(),
+	cmd_rotate(), cmd_send(), cmd_scan(), cmd_shields(), cmd_warp(),
+	cmd_torp(), cmd_missl(), cmd_decoy(), cmd_flux(), cmd_set(), cmd_orbit(),
+	cmd_transfer(), cmd_admin(), cmd_attack(), cmd_geroster(), cmd_buy(),
+	cmd_price(), cmd_planet(), cmd_maint(), cmd_new(), cmd_sell(), cmd_sysop(),
+	cmd_rename(), cmd_destruct(), cmd_abort(), cmd_jammer(), cmd_mine(),
+	cmd_abandon(), cmd_zipper(), cmd_lock(), cmd_navigate(), cmd_who(),
+	cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(), cmd_team(), cmd_spy(),
+	cmd_jettison();
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
@@ -117,7 +117,7 @@ struct  cmd     gecmds[]={
 			{"buy",	cmd_buy,	0},
 			{"clo",	cmd_cloak,	1},
 			{"cls",	cmd_clear,	0},
-          		{"dat",	cmd_data,	0},
+			{"dat",	cmd_data,	0},
 			{"dec",	cmd_decoy,	1},
 			{"des",	cmd_destruct,	1},
 			{"flu",	cmd_flux,	1},
@@ -147,7 +147,7 @@ struct  cmd     gecmds[]={
 			{"shi",	cmd_shields,	1},
 			{"spy",	cmd_spy,	1},
 			{"sys",	cmd_sysop,	1},
-          		{"tea", cmd_team,	1},
+			{"tea", cmd_team,	1},
 			{"tor",	cmd_torp,	1},
 			{"tra",	cmd_transfer,	0},
 			{"war",	cmd_warp,	1},
@@ -160,10 +160,10 @@ struct  cmd     gecmds[]={
 	name to the list and the name of the message in the MSG file. Also add the
 	command to the list in the message HLPINDEX                Mike           */
 
-struct  hlpcmd {
-			char *command;
-			int  helptxt;
-};
+struct hlpcmd	{
+		char *command;
+		int  helptxt;
+		};
 
 struct hlpcmd gehlp[] = {
 		{"abandon",			HLPABA},
@@ -353,12 +353,12 @@ if (genearas(margv[1],"sys"))
 #else
 	if ((!syscmds) || (sysonly && !(usrptr->flags&ISYSOP)))
 #endif
-        	{
+		{
 		setmbk(gehlpmb);
-        	prfmsg(HLPINDEX);
-        	outprfge(ALWAYS,usrnum);
-        	return;
-        	}
+		prfmsg(HLPINDEX);
+		outprfge(ALWAYS,usrnum);
+		return;
+		}
 	}
 
 setmbk(gehlpmb);
@@ -379,31 +379,31 @@ if (genearas(margv[1],"class"))
 			{
 			if (shipclass[i].max_type == CLASSTYPE_USER)
 				{
-		  		if (shipclass[i].max_tons >999999L)
+				if (shipclass[i].max_tons >999999L)
 					sprintf(gechrbuf,"%ldm",shipclass[i].max_tons/1000000L);
 				else
-		  		if (shipclass[i].max_tons >999)
+				if (shipclass[i].max_tons >999)
 					sprintf(gechrbuf,"%ldk",shipclass[i].max_tons/1000);
 				else
 					sprintf(gechrbuf,"%ld",shipclass[i].max_tons);
 
-		  		if (shipclass[i].max_price >999999L)
+				if (shipclass[i].max_price >999999L)
 					sprintf(gechrbuf2,"%ldm",shipclass[i].max_price/1000000L);
 				else
-		  		if (shipclass[i].max_price >999)
+				if (shipclass[i].max_price >999)
 					sprintf(gechrbuf2,"%ldk",shipclass[i].max_price/1000);
 				else
 					sprintf(gechrbuf2,"%ld",shipclass[i].max_price);
 
-		  		if (shipclass[i].scanrange >999999L)
+				if (shipclass[i].scanrange >999999L)
 					sprintf(gechrbuf3,"%ldm",shipclass[i].scanrange/1000000L);
 				else
-		  		if (shipclass[i].scanrange >999)
+				if (shipclass[i].scanrange >999)
 					sprintf(gechrbuf3,"%ldk",shipclass[i].scanrange/1000);
 				else
 					sprintf(gechrbuf3,"%ld",shipclass[i].scanrange);
 
-		  		if (shipclass[i].max_accel >999)
+				if (shipclass[i].max_accel >999)
 					sprintf(gechrbuf4,"%dk",shipclass[i].max_accel/1000);
 				else
 					sprintf(gechrbuf4,"%d",shipclass[i].max_accel);
@@ -3577,7 +3577,7 @@ unsigned long num;
 double r;
 int won = 0;
 int	ii;
-unsigned long 	i,
+unsigned long	i,
 					j,
 					left1,
 					left2,
@@ -3741,7 +3741,7 @@ unsigned long num;
 
 double r;
 int won = 0;
-unsigned long 	j,
+unsigned long	j,
 					left1,
 					left2,
 					kill1,
@@ -4941,6 +4941,7 @@ if (sameas("cybpause",margv[1])&& margc == 3)
 	{
 	i = atoi(margv[2]);
 	prfmsg(SYSCYB,i);
+	outprfge(ALWAYS,usrnum);
 	cybhaltflg = i;
 	return;
 	}
@@ -5685,7 +5686,7 @@ if (sameas(margv[1],"newpass"))
 				/* get the password - make sure it is less than 10 char */
 				if (strlen(margv[3]) > 10)
 					{
-				 	prfmsg(TEAMBPSS);
+					prfmsg(TEAMBPSS);
 					outprfge(ALWAYS,usrnum);
 					return;
 					}
@@ -5731,7 +5732,7 @@ if (sameas(margv[1],"newname"))
 				rstrin();
 				if (strlen(margv[3]) < 5)
 					{
-				 	prfmsg(TEAMBNAM);
+					prfmsg(TEAMBNAM);
 					outprfge(ALWAYS,usrnum);
 					return;
 					}
