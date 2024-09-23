@@ -426,6 +426,12 @@ draws during each tick cycle.
 
 CLENGUSE {How much does Cloak draw each tick: 5000} N 1 32000
 
+This option controls whether or not men eat food like
+troops do. YES is default for ge-next, set to NO to
+use the behavior from Galactic Empire 3.2e.
+
+MENEAT {Do men eat? YES} B
+
 This option controls how many days mail messages
 are queued before deletion.
 

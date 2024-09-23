@@ -185,7 +185,7 @@ double qty,men,rate,hrs,fact,tfact,taxfact,maxf;
 long max,cnt;
 unsigned long temp;
 
-/* kill off half the troops if no food  (troops eat first)*/
+/* kill off 1/8th the troops if no food */
 
 if ((plptr->items[I_TROOPS].qty/100)> plptr->items[I_FOOD].qty)
 	{
@@ -202,7 +202,7 @@ if ((plptr->items[I_TROOPS].qty/100)> plptr->items[I_FOOD].qty)
 	mailit(0);
 	}
 
-/* eat the food */
+/* troops eat first */
 temp = plptr->items[I_FOOD].qty;
 if (temp > plptr->items[I_TROOPS].qty/100)
 	{
@@ -213,7 +213,7 @@ if (temp > plptr->items[I_TROOPS].qty/100)
 else
 	plptr->items[I_FOOD].qty = 0;
 
-/* kill off half the men if no food */
+/* kill off 1/8th the men if no food */
 
 if ((plptr->items[I_MEN].qty/100)> plptr->items[I_FOOD].qty)
 	{
@@ -236,6 +236,20 @@ if ((plptr->items[I_MEN].qty/100)> plptr->items[I_FOOD].qty)
 	mail.int2 = plptr->ysect;
 	mail.long1 = cnt;
 	mailit(0);
+	}
+
+/* men eat */
+if (meneat)
+	{
+	temp = plptr->items[I_FOOD].qty;
+	if (temp > plptr->items[I_MEN].qty/100)
+		{
+		temp -= plptr->items[I_MEN].qty/100;
+
+		plptr->items[I_FOOD].qty = temp;
+		}
+	else
+		plptr->items[I_FOOD].qty = 0;
 	}
 
 taxfact = 1-((float)plptr->taxrate/120.0);
@@ -296,7 +310,7 @@ for (i=0;i<NUMITEMS;++i)
 
 	logthis(gechrbuf);
 
-	if (plptr->items[i].qty <= max && temp >= max)
+	if (temp > max)
 		{
 		logthis("Mailing production report");
 		temp = max;
@@ -311,10 +325,6 @@ for (i=0;i<NUMITEMS;++i)
 		logthis("Mail sent");
 		}
 
-	if (temp > max)
-		{
-		temp = max;
-		}
 	plptr->items[i].qty = temp;
 	}
 

@@ -70,6 +70,15 @@ ge-next RELEASE NOTES
   into the MSG files.
 * helm now announces your new sector after you pass through a
   wormhole.
+* if you are damaged by the enforcer planet or the galactic boundary,
+  the message will display the actual level of damage applied.
+* men now eat every planetary cycle as troops do. this obviously
+  changes the amount of food that planet owners need to grow.
+  you can set MENEAT in MBMGEMS.MSG to NO to revert to the 
+  Galactic Empire 3.2e behavior.
+* if you reach the planetary maximum on an item, you will stop
+  getting messages that you've reached the maximum once you
+  set production for that item to 0.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
