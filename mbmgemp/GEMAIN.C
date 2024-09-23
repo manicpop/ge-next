@@ -3452,6 +3452,8 @@ if (hdl != (FILE *)0)
 			logthis("optdisp: hit eof - fpos set back to 0");
 			usrptr->substt = OPTDISP2;
 			btuinj(usrnum,CYCLE);
+			fclose(hdl);		/* be kind rewind */
+			hdl = (FILE *)0;
 			return;
 			}
 		opttbl[usrnum]=ftell(hdl);
