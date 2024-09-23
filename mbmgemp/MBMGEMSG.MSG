@@ -1406,7 +1406,11 @@ required to create items on a planet. This value is not
 absolute as it is adjusted by many other factors affecting
 planet production at update time. 
 
-ITMMH06 {10K ManWeeks of work creates n Food: 8000} N 0 201288837
+Default for ge-next is 12000, default for GE 3.2e was 8000.
+If you set MENEAT to OFF, you may want to bring this back down
+to 8000 as well.
+
+ITMMH06 {10K ManWeeks of work creates n Food: 12000} N 0 201288837
 
 This Value controls the amount of work in 10,000 ManWeeks
 required to create items on a planet. This value is not
@@ -3597,6 +3601,14 @@ SYSCLL {
 
 SYSCYB {
 [1;36mCybertrons paused for %d seconds.[1;37m
+} T
+
+SYSPOP {
+[1;36m%d planetary cycles run.[1;37m
+} T
+
+SYSNP {
+[1;36mThis planet is unowned or has no population -- skipped.[1;37m
 } T
 
 MAIL1 {

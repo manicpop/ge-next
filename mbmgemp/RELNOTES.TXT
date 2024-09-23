@@ -76,9 +76,13 @@ ge-next RELEASE NOTES
   changes the amount of food that planet owners need to grow.
   you can set MENEAT in MBMGEMS.MSG to NO to revert to the 
   Galactic Empire 3.2e behavior.
+* default rate of food production raised by 1.5x since men are
+  eating now.
 * if you reach the planetary maximum on an item, you will stop
   getting messages that you've reached the maximum once you
   set production for that item to 0.
+* new sysop command: SYS MULTIPLY -- run planetary cycle for
+  planet you are orbiting, up to 50 times.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

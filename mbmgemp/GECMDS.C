@@ -4941,8 +4941,39 @@ if (sameas("cybpause",margv[1])&& margc == 3)
 	{
 	i = atoi(margv[2]);
 	prfmsg(SYSCYB,i);
-	outprfge(ALWAYS,usrnum);
 	cybhaltflg = i;
+	return;
+	}
+else
+if (sameas("multiply",margv[1]) && (margc > 1 && margc < 4))
+	{
+	if (warsptr->where < 10)
+		{
+		prfmsg(ADMIN1);
+		outprfge(ALWAYS,usrnum);
+		return;
+		}
+	if (plptr->items[0].qty > 0 && plptr->userid[0] != 0)
+		{
+		plnum = warsptr->where - 10;
+		getplanetdat(usrnum);
+		if (margc == 3)
+			j = atoi(margv[2]);
+		else
+			j = 1;
+		if (j > 50)
+			j = 50;			/* be nice to system resources */
+		for (i=0;i<j;++i)
+			{
+		multiply();
+			}
+		gesdb(GEUPDATE,(PKEY *)&planet,(GALSECT *)&planet);
+		prfmsg(SYSPOP,j);
+		outprfge(ALWAYS,usrnum);
+		return;
+		}
+	prfmsg(SYSNP);
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
