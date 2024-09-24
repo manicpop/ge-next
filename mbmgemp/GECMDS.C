@@ -4275,15 +4275,20 @@ void FUNC buy(item)
 int item;
 {
 long amt,avail;
-long tot;
+long tot,space;
 unsigned long ptot;
 
 if (plptr->userid[0] != 0)
 	{
-	if ((amt = atol(margv[1])) > 0)
+	if ((amt = atol(margv[1])) > 0 || sameas("MAX",margv[1]))
 		{
 		if (sameas(plptr->userid,warsptr->userid) || plptr->items[item].sell == 'Y')
 			{
+			if (sameas("MAX",margv[1]))
+				{
+				space = shipclass[warsptr->shpclass].max_tons - calcweight(warsptr);
+				amt = space/(weight[item]/100L);
+				}
 			if (chkweight(warsptr,item,amt))
 				{
 				avail = amt4sale(item);
@@ -4963,10 +4968,10 @@ if (sameas("multiply",margv[1]) && (margc > 1 && margc < 4))
 		outprfge(ALWAYS,usrnum);
 		return;
 		}
+	plnum = warsptr->where - 10;
+	getplanetdat(usrnum);
 	if (plptr->items[0].qty > 0 && plptr->userid[0] != 0)
 		{
-		plnum = warsptr->where - 10;
-		getplanetdat(usrnum);
 		if (margc == 3)
 			j = atoi(margv[2]);
 		else

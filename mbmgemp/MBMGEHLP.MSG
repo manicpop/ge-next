@@ -483,9 +483,9 @@ HLPBUY {
 [1;36mUse the [1;37mBUY[1;36m command to purchase goods from a planet. Issue the command as
 follows:
 
-  [1;37mbuy [1;32m[amount] [item] [password]
+  [1;37mbuy [1;32m[[1;37mmax[1;32m/amount] [item] [password]
 
-  amount[1;36m = the amount you want to buy
+  amount[1;36m = the amount you want to buy (or [1;37mmax[1;36m to fill your ship to capacity)
 
   [1;32mitem[1;36m:
     [1;37mmen[1;36m = buy men
@@ -862,7 +862,9 @@ a small transfer tax on each transaction.
 
 Issue the command as follows:
 
-[1;37m  sell [1;32m[amount] [item]
+[1;37m  sell [1;32m[[1;37mall[1;32m/amount] [item]
+
+  amount[1;36m = the amount you want to sell (or [1;37mall[1;36m to sell all onboard)
 
   item:
 [1;37m    men[1;36m = sell men
