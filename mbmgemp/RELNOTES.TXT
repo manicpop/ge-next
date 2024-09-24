@@ -83,6 +83,8 @@ ge-next RELEASE NOTES
   set production for that item to 0.
 * new sysop command: SYS MULTIPLY -- run planetary cycle for
   planet you are orbiting, up to 50 times.
+* the sell command now takes "all" as an argument like the
+  jettison command does.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

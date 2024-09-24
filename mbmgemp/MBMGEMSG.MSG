@@ -3566,6 +3566,10 @@ SELL4 {
 [1;36mZygor will not process such a large transaction. Try a smaller amount.[1;37m
 } T 
 
+SELL5 {
+[1;36mThere are no [1;37m%s[1;36m on-board.[1;37m
+} T 
+
 TOORICH {
 [1;36mDue to the Galactic Financial Reform Act of 3264, no individual can have more
 than [0;33m%lu[1;36m in the bank.[1;37m
