@@ -85,6 +85,10 @@ ge-next RELEASE NOTES
   planet you are orbiting, up to 50 times.
 * the sell command now takes "all" as an argument like the
   jettison command does.
+* the buy command now takes "max" as an argument. fill your
+  ship to maximum capacity with the specified item.
+* the acceleration routine has been modified to work with ships
+  with acceleration rates under 1000 (planetary transport).
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

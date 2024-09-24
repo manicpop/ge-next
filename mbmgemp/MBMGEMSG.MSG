@@ -2108,7 +2108,7 @@ PCLOKUP {
 } T 
 
 WARP {***
-[1;33mHelm reports warp [1;37m%d[1;33m....[1;37m
+[1;33mHelm reports warp [1;37m%f[1;33m....[1;37m
 } T 
 
 DEADSTOP {***

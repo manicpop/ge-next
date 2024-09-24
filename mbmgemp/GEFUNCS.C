@@ -494,9 +494,9 @@ if (ptr->speed < ptr->speed2b)
 			usage = ACCENGAMT;
 		if (useenergy(ptr,usrn,usage) == 1)
 			{
-			if ((int)(ptr->speed/1000) != (int)((ptr->speed + accelrate)/1000))
+			if ((int)(ptr->speed/accelrate) != (int)((ptr->speed + accelrate)/accelrate))
 				{
-				prfmsg(WARP,(int)((ptr->speed + accelrate)/1000));
+				prfmsg(WARP,((ptr->speed + accelrate)/1000));
 				outprfge(FILTER,usrn);
 
 				/* if we passed warp 4-8 kill any missiles */
@@ -541,7 +541,7 @@ if (ptr->speed > ptr->speed2b)
 		ptr->speed = ptr->speed2b;
 		if (ptr->speed > 0)
 			{
-			prfmsg(SPEEDIS, showarp(ptr->speed));
+			prfmsg(SPEEDIS,showarp(ptr->speed));
 			outprfge(FILTER,usrn);
 			}
 		else
@@ -552,11 +552,11 @@ if (ptr->speed > ptr->speed2b)
 		}
 	else
 		{
-		if ((int)(ptr->speed/1000) != (int)((ptr->speed - decelrate)/1000))
+		if ((int)(ptr->speed/decelrate) != (int)((ptr->speed - decelrate)/decelrate))
 			{
 			if (ptr->speed > 0 )
 				{
-				prfmsg(WARP,(int)((ptr->speed-decelrate)/1000)+1);
+				prfmsg(WARP,(float)((ptr->speed-decelrate)/1000));
 				outprfge(FILTER,usrn);
 				}
 			else
