@@ -1101,6 +1101,8 @@ available for the use of sysops, game administrators, or their designees:
 [1;37m  sys list [1;32m[number][1;36m -- list 50 ships in the game beginning with specified number
 [1;37m  sys classlist [1;36m -- show complete list of ship classes, including NPCs
 [1;37m  sys cybpause [1;32m[number][1;36m -- pause the Cybertrons for the specified amount of seconds
+[1;37m  sys multiply [1;32m[number][1;36m -- run the planetary update cycle of the orbited planet
+[1;37m  sys orbit [1;32m[number][1;36m -- orbit the planet in the current sector, even if not close
 [1;37m
 } T 
 

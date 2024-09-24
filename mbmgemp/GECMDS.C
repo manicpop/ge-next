@@ -4977,6 +4977,58 @@ if (sameas("multiply",margv[1]) && (margc > 1 && margc < 4))
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
+else
+if (sameas("orbit",margv[1]) && (margc == 3))
+	{
+	if (warsptr->where >= 10)
+		{
+		prfmsg(ORBIT3);
+		outprfge(ALWAYS,usrnum);
+		return;
+		}
+
+	plnum = (atoi(margv[2]));
+
+	if (plnum <= MAXPLANETS && plnum > 0)
+		{
+		i = getplanetdat(usrnum);
+		if (i)
+			{
+			if (plptr->type == PLTYPE_WORM)
+				{
+				prfmsg(ORBIT0);
+				outprfge(ALWAYS,usrnum);
+				return;
+				}
+			if (strlen(plptr->name) == 0)
+				{
+				prfmsg(ORBIT1N,plnum);
+				}
+			else
+				{
+				prfmsg(ORBIT1,plnum,plptr->name);
+				}
+			outprfge(ALWAYS,usrnum);
+			warsptr->where = 10 + plnum;
+			warsptr->speed = 0;
+			warsptr->speed2b = 0;
+			return;
+			}
+		else
+			{
+			prfmsg(NOPLNT);
+			outprfge(ALWAYS,usrnum);
+			return;
+			}
+		}
+	else
+		{
+		prfmsg(NOPLNT);
+		outprfge(ALWAYS,usrnum);
+		return;
+		}
+	}
+else
 
 prfmsg(FORMAT,"SYS");
 outprfge(ALWAYS,usrnum);
