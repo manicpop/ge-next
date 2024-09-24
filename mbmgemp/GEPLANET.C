@@ -310,7 +310,7 @@ for (i=0;i<NUMITEMS;++i)
 
 	logthis(gechrbuf);
 
-	if (temp > max)
+	if (temp > max && !(plptr->xsect == 0 && plptr->ysect == 0)) /* don't mail for neutral zone */
 		{
 		logthis("Mailing production report");
 		temp = max;
