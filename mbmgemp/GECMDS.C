@@ -718,9 +718,16 @@ if (*margv[1] == '@') /* turn absolute */
 			deg = atoi(margv[1]);
 			if (deg < 360)
 				{
-				prfmsg(NOWTURN,deg);
+				if (deg == warsptr->heading)
+					{
+					prfmsg(NOWALRD,deg);
+					}
+				else
+					{
+					prfmsg(NOWTURN,deg);
+					warsptr->head2b   = (double)deg;
+					}
 				outprfge(ALWAYS,usrnum);
-				warsptr->head2b   = (double)deg;
 				}
 			else
 				{
@@ -748,10 +755,17 @@ if (valdegree(margv[1]))
 		{
 		if (useenergy(warsptr,usrnum,ROTENGUSE) == 1)
 			{
-			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-			prfmsg(NOWTURN,deg);
+			if (warsptr->degrees == 0)
+				{
+				prfmsg(NOWALRD,warsptr->heading);
+				}
+			else
+				{
+				deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+				prfmsg(NOWTURN,deg);
+				warsptr->head2b   = (double)deg;
+				}
 			outprfge(ALWAYS,usrnum);
-			warsptr->head2b   = (double)deg;
 			}
 		else
 			{

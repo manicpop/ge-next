@@ -100,6 +100,8 @@ ge-next RELEASE NOTES
 * if your ship is in the process of rotating, and you enter a warp
   or impulse command without a heading change, the rotation in
   process will continue.
+* if you try to rotate to a heading that you are already heading,
+  the helm will report you're already heading that heading.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

@@ -2188,6 +2188,10 @@ NOWTURN {
 [1;33mShip is now turning to [1;37m%u[1;33m degrees.[1;37m
 } T 
 
+NOWALRD {
+[0;37mHelm reports ship is already at [1;37m%u[0;37m degrees.[1;37m
+} T 
+
 NOWTHER {***
 [1;32mHelm reports ship now heading [1;37m%d[1;32m degrees.[1;37m
 } T 
