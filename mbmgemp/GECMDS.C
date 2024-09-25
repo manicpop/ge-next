@@ -546,10 +546,13 @@ if (valpcnt(margv[1],0,99))
 			warsptr->where = 0;
 			warsptr->repair = 0;
 			}
-		if (*gechrbuf2 != '@' && warsptr->degrees != 0)
-			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-		if (warsptr->degrees == 0)
-			deg = warsptr->head2b;
+		if (*gechrbuf2 != '@')
+			{
+			if (warsptr->degrees != 0)
+				deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+			else
+				deg = warsptr->head2b;
+			}
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * ((double)warsptr->percent/100.0);
@@ -669,10 +672,13 @@ else
 			warsptr->repair = 0;
 			}
 
-		if (*gechrbuf2 != '@' && warsptr->degrees != 0)
-			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-		if (warsptr->degrees == 0)
-			deg = warsptr->head2b;
+		if (*gechrbuf2 != '@')
+			{
+			if (warsptr->degrees != 0)
+				deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+			else
+				deg = warsptr->head2b;
+			}
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * (float)speed;
