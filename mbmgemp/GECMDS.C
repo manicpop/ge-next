@@ -4390,7 +4390,14 @@ if (plptr->userid[0] != 0)
 				}
 			else
 				{
-				prfmsg(BUY8);
+				if (strncmp(margv[0],"buy",3) == 0)
+					prfmsg(BUY8);
+				else
+					{
+					sprintf(gechrbuf2,"%lu",amt);
+					sprintf(gechrbuf,"%lu",price(item,amt));
+					prfmsg(PRICE2,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
+					}
 				}
 			}
 		else

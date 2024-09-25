@@ -95,6 +95,8 @@ ge-next RELEASE NOTES
   when you own the planet.
 * you can now use absolute rotation "@" with the WARP and IMPULSE
   commands. 
+* the PRICE command will tell you the price of the specified
+  amount of items even if you can't hold that many.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

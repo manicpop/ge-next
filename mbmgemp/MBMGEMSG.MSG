@@ -3026,6 +3026,11 @@ PRICE1 {
 [1;37m%s %s[1;36m are going to cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m.[1;37m
 } T 
 
+PRICE2 {
+[1;37m%s %s[1;36m would cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m, but
+there is not enough space available for that many items.[1;37m
+} T 
+
 FORHELP {
 [1;36mType [1;37m?[1;36m for help.[1;37m
 } T 
