@@ -4396,7 +4396,14 @@ if (plptr->userid[0] != 0)
 					{
 					sprintf(gechrbuf2,"%lu",amt);
 					sprintf(gechrbuf,"%lu",price(item,amt));
-					prfmsg(PRICE2,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
+					if (sameas(plptr->userid, warsptr->userid))
+						{
+						prfmsg(PRICE2,gechrbuf2,item_name[item],baseprice[item],gechrbuf);
+						}
+					else
+						{
+						prfmsg(PRICE2,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
+						}
 					}
 				}
 			}
