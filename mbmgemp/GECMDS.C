@@ -520,12 +520,25 @@ if (margc == 3)
 	strcpy(gechrbuf,margv[2]);
 else
 	strcpy(gechrbuf,"0");
+strcpy(gechrbuf2,gechrbuf);
+if (*gechrbuf == '@')
+	{
+	*gechrbuf = '+';
+	deg = atoi(gechrbuf);
+	if (deg > 359)
+		{
+		prfmsg(FORMAT,"IMPULSE");
+		outprfge(ALWAYS, usrnum);
+		return;
+		}
+	}
 
-
-if (valpcnt(margv[1],0,99) && valdegree(gechrbuf))
+if (valpcnt(margv[1],0,99))
 	{
 	if (warsptr->helm == 0)
 		{
+		if (*gechrbuf2 != '@')
+			valdegree(gechrbuf);
 		if (warsptr->where >= 10)
 			{
 			refresh(warsptr,usrnum);
@@ -533,7 +546,8 @@ if (valpcnt(margv[1],0,99) && valdegree(gechrbuf))
 			warsptr->where = 0;
 			warsptr->repair = 0;
 			}
-		deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+		if (*gechrbuf2 != '@')
+			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * ((double)warsptr->percent/100.0);
@@ -622,31 +636,42 @@ else
 		strcpy(gechrbuf,margv[2]);
 	else
 		strcpy(gechrbuf,"0");
-
+	strcpy(gechrbuf2,gechrbuf);
+	if (*gechrbuf == '@')
+		{
+		*gechrbuf = '+';
+		deg = atoi(gechrbuf);
+		if (deg > 359)
+			{
+			prfmsg(FORMAT,"WARP");
+			outprfge(ALWAYS, usrnum);
+			return;
+			}
+		}
 	if (warsptr->helm == 0)
 		{
-		if (valdegree(gechrbuf))
+		if (*gechrbuf2 != '@')
+			valdegree(gechrbuf);
+		if (speed > topspeed)
 			{
-			if (speed > topspeed)
-				{
-				prfmsg(WARP04,topspeed);
-				outprfge(ALWAYS,usrnum);
-				}
-
-			if (warsptr->where >= 10)
-				{
-				refresh(warsptr,usrnum);
-				prfmsg(LEAVEORB);
-				warsptr->where = 0;
-				warsptr->repair = 0;
-				}
-
-			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
-			prfmsg(ENGFIRE,deg);
+			prfmsg(WARP04,topspeed);
 			outprfge(ALWAYS,usrnum);
-			warsptr->speed2b = 1000.0 * (float)speed;
-			warsptr->head2b   = (double)deg;
 			}
+
+		if (warsptr->where >= 10)
+			{
+			refresh(warsptr,usrnum);
+			prfmsg(LEAVEORB);
+			warsptr->where = 0;
+			warsptr->repair = 0;
+			}
+
+		if (*gechrbuf2 != '@')
+			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+		prfmsg(ENGFIRE,deg);
+		outprfge(ALWAYS,usrnum);
+		warsptr->speed2b = 1000.0 * (float)speed;
+		warsptr->head2b   = (double)deg;
 		}
 	else
 		{

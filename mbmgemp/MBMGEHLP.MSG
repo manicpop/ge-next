@@ -576,16 +576,19 @@ HLPIMP {
 [1;36mThe [1;37mIMPULSE[1;36m command directs your impulse (sub-light) engines and sets your
 course and speed. Issue the impulse command as follows:
 
-[1;37mimpulse [1;32m[speed] [heading]
+  [1;37mimpulse [1;32m[speed] [degrees/[1;37m@[1;32mheading]
 
   [1;32mspeed [1;36m= the impulse speed between 0 and 99 (99 is .99 light speed)
-  [1;32mheading [1;36m= the heading from your current direction
+  [1;32mdegrees [1;36m= degrees to rotate to port (negative) or starboard (positive)
+  [1;32mheading [1;36m= the absolute direction regardless of your current heading
 
 Examples: [1;37mimpulse 5     [1;36malter the speed to warp 0.05, not changing the heading
           [1;37mimpulse 10 5  [1;36malter the speed to warp 0.10 and turn the ship
                         5 degrees to the starboard (right)
           [1;37mimp 20 -25    [1;36malter the speed to warp 0.20 and turn the ship
                         25 degrees to the port (left)
+          [1;37mimp 50 @140   [1;36malter the speed to warp 0.50 and turn the ship
+                        140 degrees absolute
 [1;37m} T 
 
 HLPJAM {
@@ -981,16 +984,19 @@ HLPWAR {
 [1;36mThe [1;37mWARP[1;36m command starts the warp drives (provided your type of ship has them)
 and directs your course and speed. Issue the command as follows:
 
-  [1;37mwarp [1;32m[speed] [heading]
+  [1;37mwarp [1;32m[speed] [degrees/[1;37m@[1;32mheading]
 
   [1;32mspeed [1;36m= the warp speed
-  [1;32mheading [1;36m= the heading from your current direction
+  [1;32mdegrees [1;36m= degrees to rotate to port (negative) or starboard (positive)
+  [1;32mheading [1;36m= the absolute direction regardless of your current heading
 
 Examples: [1;37mwarp 5     [1;36malters the speed to warp 5 and does not change the heading
           [1;37mwarp 10 5  [1;36malters the speed to warp 10 and turns the ship 5 degrees
                      to the starboard (right).
           [1;37mwar 20 -10 [1;36malters the speed to warp 20 and turns the ship 10 degrees
                      to the port (left).
+          [1;37mwar 8 @90  [1;36malters the speed to warp 8 and turns the ship to 10
+                     degrees absolute.
 [1;37m} T 
 
 HLPZIP {

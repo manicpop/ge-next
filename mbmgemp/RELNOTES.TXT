@@ -93,6 +93,8 @@ ge-next RELEASE NOTES
   of typing out "up" or "down."
 * the PRICE command now properly shows the base price of an item
   when you own the planet.
+* you can now use absolute rotation "@" with the WARP and IMPULSE
+  commands. 
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source
