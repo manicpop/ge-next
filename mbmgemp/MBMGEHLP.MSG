@@ -483,9 +483,11 @@ HLPBUY {
 [1;36mUse the [1;37mBUY[1;36m command to purchase goods from a planet. Issue the command as
 follows:
 
-  [1;37mbuy [1;32m[[1;37mmax[1;32m/amount] [item] [password]
+  [1;37mbuy [1;32m[[1;37mall[1;32m/[1;37mmax[1;32m/amount] [item] [password]
 
-  amount[1;36m = the amount you want to buy (or [1;37mmax[1;36m to fill your ship to capacity)
+  amount[1;36m = the amount you want to buy
+           [1;37mall[1;36m to buy all of the planet's available stock
+           [1;37mmax[1;36m to fill your ship to capacity
 
   [1;32mitem[1;36m:
     [1;37mmen[1;36m = buy men
@@ -506,7 +508,8 @@ follows:
   [1;32mpassword[1;36m = optional trade password may be required by planet
 
 Examples: [1;37mbuy 1000 men
-          buy 3 ion
+          buy max ion
+          buy all jam
           buy 500 foo drowssap
 } T 
 
@@ -866,7 +869,7 @@ Issue the command as follows:
 
   amount[1;36m = the amount you want to sell (or [1;37mall[1;36m to sell all onboard)
 
-  item:
+  [1;32mitem[1;36m:
 [1;37m    men[1;36m = sell men
 [1;37m    tro[1;36m = sell troops
 [1;37m    mis[1;36m = sell missiles
@@ -882,10 +885,9 @@ Issue the command as follows:
 [1;37m    gol[1;36m = sell gold
 [1;37m    spy[1;36m = sell spies
 
-Examples:
-[1;37m  sell 1000 men
-  sell 3 ion
-  sel 500 foo 
+Examples:[1;37m sell 1000 men
+          sel 3 ion
+          sell all gol 
 } T 
 
 HLPSEN {
@@ -947,26 +949,32 @@ HLPTRA {
 [1;36mThe [1;37mTRANSFER[1;36m command permits you to transfer goods from your ship to a planet
 or from a planet to your ship. Issue the command as follows:
 
-[1;37m  transfer [1;32m[up/down] [amount] [item]
+[1;37m  transfer [1;32m[u(p)/d(own)] [amount/[1;37mall[1;32m/[1;37mmax[1;32m] [item]
 
-[1;32m  item[1;36m:
-[1;37m  men [1;36m= transfer men
-[1;37m  tro [1;36m= transfer troops
-[1;37m  mis [1;36m= transfer missiles
-[1;37m  tor [1;36m= transfer torpedoes
-[1;37m  ion [1;36m= transfer ion cannons
-[1;37m  flu [1;36m= transfer flux pods
-[1;37m  foo [1;36m= transfer food
-[1;37m  fig [1;36m= transfer fighters
-[1;37m  dec [1;36m= transfer decoys
-[1;37m  min [1;36m= transfer mines
-[1;37m  jam [1;36m= transfer jammers
-[1;37m  zip [1;36m= transfer zippers
-[1;37m  gol [1;36m= transfer gold
-[1;37m  spy [1;36m= transfer spies
+  amount[1;36m = the amount you want to transfer
+           [1;37mall[1;36m to transfer up all on the planet / transfer down all onboard
+           [1;37mmax[1;36m to fill your ship to capacity (up only)
 
-Examples:[1;37m  transfer up 3 ion 
-           tra down 500 foo 
+  [1;32mitem[1;36m:
+[1;37m    men [1;36m= transfer men
+[1;37m    tro [1;36m= transfer troops
+[1;37m    mis [1;36m= transfer missiles
+[1;37m    tor [1;36m= transfer torpedoes
+[1;37m    ion [1;36m= transfer ion cannons
+[1;37m    flu [1;36m= transfer flux pods
+[1;37m    foo [1;36m= transfer food
+[1;37m    fig [1;36m= transfer fighters
+[1;37m    dec [1;36m= transfer decoys
+[1;37m    min [1;36m= transfer mines
+[1;37m    jam [1;36m= transfer jammers
+[1;37m    zip [1;36m= transfer zippers
+[1;37m    gol [1;36m= transfer gold
+[1;37m    spy [1;36m= transfer spies
+
+Examples:[1;37m transfer up 3 ion 
+          tra down 500 foo
+          tra u max foo
+          tra d all mis
 } T 
 
 HLPWAR {

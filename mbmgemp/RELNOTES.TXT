@@ -83,12 +83,16 @@ ge-next RELEASE NOTES
   set production for that item to 0.
 * new sysop command: SYS MULTIPLY -- run planetary cycle for
   planet you are orbiting, up to 50 times.
-* the sell command now takes "all" as an argument like the
-  jettison command does.
-* the buy command now takes "max" as an argument. fill your
-  ship to maximum capacity with the specified item.
 * the acceleration routine has been modified to work with ships
   with acceleration rates under 1000 (planetary transport).
+* the BUY, SELL, and TRANSFER commands now take "all" and "max"
+  as arguments in addition to numerical amounts. "all" is for
+  all onboard or on a planet, whereas "max" will fill your
+  ship.
+* the TRANSFER command now lets you specify "u" or "d" instead
+  of typing out "up" or "down."
+* the PRICE command now properly shows the base price of an item
+  when you own the planet.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

@@ -3260,10 +3260,10 @@ if (margc == 4)
 		{
 		if (genearas(kwrd[i],margv[3]))
 			{
-			if (sameas("up",margv[1]))
+			if (genearas("u",margv[1]))
 				trans_up(i);
 			else
-			if (sameas("down",margv[1]))
+			if (genearas("d",margv[1]))
 				trans_down(i);
 			else
 				prfmsg(FORMAT,"TRANSFER");
@@ -3289,8 +3289,10 @@ getplanetdat(usrnum);
 
 if (trans_opt || sameas(plptr->userid,warsptr->userid))
 	{
-	if ((amt = atol(margv[2])) > 0L)
+	if ((amt = atol(margv[2])) > 0L || sameas("ALL",margv[2]))
 		{
+		if (sameas("ALL",margv[2]) && warsptr->items[item] > 0L)
+			amt = warsptr->items[item];
 		if (warsptr->items[item] >= amt)
 			{
 			warsptr->items[item] -= amt;
@@ -3333,8 +3335,12 @@ getplanetdat(usrnum);
 
 if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0)
 	{
-	if ((amt = atol(margv[2])) > 0L)
+	if ((amt = atol(margv[2])) > 0L || sameas("MAX",margv[2]) || sameas("ALL",margv[2]))
 		{
+		if (sameas("MAX",margv[2]))
+			amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/(weight[item]/100L);
+		if (sameas("ALL",margv[2]))
+			amt = plptr->items[item].qty;
 		if (chkweight(warsptr,item,amt))
 			{
 			if (plptr->items[item].qty >= amt)
@@ -4275,20 +4281,19 @@ void FUNC buy(item)
 int item;
 {
 long amt,avail;
-long tot,space;
+long tot;
 unsigned long ptot;
 
 if (plptr->userid[0] != 0)
 	{
-	if ((amt = atol(margv[1])) > 0 || sameas("MAX",margv[1]))
+	if ((amt = atol(margv[1])) > 0 || sameas("MAX",margv[1]) || sameas("ALL",margv[1]))
 		{
 		if (sameas(plptr->userid,warsptr->userid) || plptr->items[item].sell == 'Y')
 			{
 			if (sameas("MAX",margv[1]))
-				{
-				space = shipclass[warsptr->shpclass].max_tons - calcweight(warsptr);
-				amt = space/(weight[item]/100L);
-				}
+				amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/(weight[item]/100L);
+			if (sameas("ALL",margv[1]))
+				amt = amt4sale(item);
 			if (chkweight(warsptr,item,amt))
 				{
 				avail = amt4sale(item);
@@ -4335,7 +4340,14 @@ if (plptr->userid[0] != 0)
 							{
 							sprintf(gechrbuf,"%lu",tot);
 							sprintf(gechrbuf2,"%lu",amt);
-							prfmsg(PRICE1,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
+							if (sameas(plptr->userid, warsptr->userid))
+								{
+								prfmsg(PRICE1,gechrbuf2,item_name[item],baseprice[item],gechrbuf);
+								}
+							else
+								{
+								prfmsg(PRICE1,gechrbuf2,item_name[item],plptr->items[item].markup2a,gechrbuf);
+								}
 							}
 						}
 					else
