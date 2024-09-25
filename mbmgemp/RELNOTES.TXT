@@ -97,6 +97,9 @@ ge-next RELEASE NOTES
   commands. 
 * the PRICE command will tell you the price of the specified
   amount of items even if you can't hold that many.
+* if your ship is in the process of rotating, and you enter a warp
+  or impulse command without a heading change, the rotation in
+  process will continue.
 
 === 0.09 === 2024-09-06:
 Version 0.09 is not for release and is the initial publication of source

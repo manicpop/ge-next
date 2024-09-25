@@ -546,12 +546,15 @@ if (valpcnt(margv[1],0,99))
 			warsptr->where = 0;
 			warsptr->repair = 0;
 			}
-		if (*gechrbuf2 != '@')
+		if (*gechrbuf2 != '@' && warsptr->degrees != 0)
 			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+		if (warsptr->degrees == 0)
+			deg = warsptr->head2b;
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * ((double)warsptr->percent/100.0);
-		warsptr->head2b   = (double)deg;
+		if (warsptr->degrees != 0)
+			warsptr->head2b   = (double)deg;
 		/* if I am cloaked tell the closer ones */
 		if (warsptr->cloak == 10 && warsptr->speed2b > (rndm(200.0)+10.0))
 			{
@@ -594,14 +597,14 @@ void  FUNC cmd_warp()
 unsigned deg;
 int	speed,topspeed;
 
-if (shipclass[warsptr->shpclass].max_warp == 0)
+if (shipclass[warsptr->shpclass].max_warp == 0 && atoi(margv[1]) != 0)
 	{
 	prfmsg(WARP01);
 	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
-if (warsptr->topspeed == 0)
+if (warsptr->topspeed == 0 && atoi(margv[1]) != 0)
 	{
 	prfmsg(WARPSPD2);
 	outprfge(ALWAYS,usrnum);
@@ -666,12 +669,15 @@ else
 			warsptr->repair = 0;
 			}
 
-		if (*gechrbuf2 != '@')
+		if (*gechrbuf2 != '@' && warsptr->degrees != 0)
 			deg = (unsigned)normal(warsptr->heading + (double)warsptr->degrees);
+		if (warsptr->degrees == 0)
+			deg = warsptr->head2b;
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * (float)speed;
-		warsptr->head2b   = (double)deg;
+		if (warsptr->degrees != 0)
+			warsptr->head2b   = (double)deg;
 		}
 	else
 		{
