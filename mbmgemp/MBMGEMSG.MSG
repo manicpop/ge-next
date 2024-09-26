@@ -3031,8 +3031,8 @@ PRICE1 {
 } T 
 
 PRICE2 {
-[1;37m%s %s[1;36m would cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m, but
-there is not enough space available for that many items.[1;37m
+[1;37m%s %s[1;36m would cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m, but there
+is not enough space available for that many items.[1;37m
 } T 
 
 FORHELP {
@@ -3573,12 +3573,12 @@ SELL3 {
 [1;36mThere are not that many [1;37m%s[1;36m on-board.[1;37m
 } T 
 
-SELL4 {
-[1;36mZygor will not process such a large transaction. Try a smaller amount.[1;37m
-} T 
-
 SELL5 {
 [1;36mThere are no [1;37m%s[1;36m on-board.[1;37m
+} T 
+
+TOOMUCH {
+[1;36mThis is too of a large transaction to process at once. Try a smaller amount.[1;37m
 } T 
 
 TOORICH {

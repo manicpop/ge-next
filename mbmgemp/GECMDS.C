@@ -4167,7 +4167,7 @@ if ((amt = atol(margv[1])) > 0L || sameas("ALL",margv[1]))
 		{
 		if (amt > SLCAP / baseprice[item])
 			{
-			prfmsg(SELL4);
+			prfmsg(TOOMUCH);
 			return;
 			}
 		else
@@ -4339,6 +4339,11 @@ if (plptr->userid[0] != 0)
 	{
 	if ((amt = atol(margv[1])) > 0 || sameas("MAX",margv[1]) || sameas("ALL",margv[1]))
 		{
+		if (amt > SLCAP / baseprice[item])
+			{
+			prfmsg(TOOMUCH);
+			return;
+			}
 		if (sameas(plptr->userid,warsptr->userid) || plptr->items[item].sell == 'Y')
 			{
 			if (sameas("MAX",margv[1]))
