@@ -4347,7 +4347,7 @@ if (plptr->userid[0] != 0)
 		if (sameas(plptr->userid,warsptr->userid) || plptr->items[item].sell == 'Y')
 			{
 			if (sameas("MAX",margv[1]))
-				amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/(weight[item]/100L);
+				amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/((double)weight[item]/100.0);
 			if (sameas("ALL",margv[1]))
 				amt = amt4sale(item);
 			if (chkweight(warsptr,item,amt))
