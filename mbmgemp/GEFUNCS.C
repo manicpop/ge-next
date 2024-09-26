@@ -2534,12 +2534,12 @@ long    total = 0;
 
 for (i=0; i<NUMITEMS; ++i)
 	{
-	total += (wptr->items[i]*weight[i])/100L;
+	total += (wptr->items[i]*((double)weight[i]/100L));
 	}
-total += (amt*weight[itm])/100;
+total += (amt*(double)weight[itm]/100);
 
 return ((total <= shipclass[wptr->shpclass].max_tons)
-		&& (wptr->items[itm]+amt < 0xEFFFFFFFL));
+		&& (wptr->items[itm] <= ULCAP - amt));
 }
 
 /* tell the total weight on board */
@@ -2552,7 +2552,7 @@ long    total = 0;
 
 for (i=0; i<NUMITEMS; ++i)
 	{
-	total += (wptr->items[i]*weight[i])/100L;
+	total += (wptr->items[i]*((double)weight[i]/100L));
 	}
 return (total);
 }

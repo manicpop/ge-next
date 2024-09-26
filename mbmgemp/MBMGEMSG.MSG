@@ -3177,7 +3177,7 @@ REP35 {[1;37mNavigational report:
 REP36 {[1;37mSystems report:
 } T 
 
-REP37 {[1;37mTotal cargo weight... %s tons
+REP37 {[1;37mTotal cargo weight.... %s tons
 } T 
 
 REP38 {[1;37mInventory report:
