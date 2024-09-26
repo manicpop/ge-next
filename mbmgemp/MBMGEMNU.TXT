@@ -1,50 +1,126 @@
 [1;33;44mÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ[0m
-[1;33;44m³ [37mGALACTIC EMPIRE ge-next 0.02  [1;31;44mşşşşşşşşş What's new this release şşşşşşşşş  [1;33m³[0m
+[1;33;44m³ [37mGALACTIC EMPIRE ge-next 0.1   [1;31;44mşşşşşşşşş What's new this release şşşşşşşşş  [1;33m³[0m
 [1;33;44mÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ[0m
 [1;37m
-2024-09-05: Version 0.02 released. This fixes some color bugs in the admin
-screen. This will probably be the last release before 0.1, which will be
-the first version compiled from source. 0.01 release notes are below:
+ge-next RELEASE NOTES
 
-Welcome to the initial release of ge-next, an updated and expanded version of
-the classic MajorBBS game Galactic Empire.
+ge-next is an updated and expanded version of the classic Galactic Empire
+by Mike Murdock.
 
-As of now, ge-next is simply a drop-in replacement of configuration files that
-run on a standard installation of Galactic Empire 3.2e. Future versions will
-be compiled from source and contain bugfixes, optimizations, quality of life
-improvements, and new features.
+https://manicpop.org/ge-next  https://github.com/manicpop/ge-next
+https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
+Please contact with me thoughts and suggestions.
 
-Please take a look at what's new and share your feedback. Thanks to testers
-Archwiki and zaphbeeble.
+=== 0.1 === 2024-09-26:
 
-https://manicpop.org/ge-next/    anthony@manicpop.org
+PLANETS:
+* All ships can now attack with troops. Attacking with fighters remains
+limited to certain classes of ships only.
+* Men now eat every planetary cycle as troops do, which didn't happen in
+GE classic although it was apparently the intended behavior. This obviously
+changes the amount of food that planet owners need to grow. You can set
+MENEAT in MBMGEMS.MSG to NO to revert to the Galactic Empire 3.2e behavior.
+* Default rate of food production raised by 1.5x since men are eating now.
+* If you reach the planetary maximum on an item, you will stop getting
+messages that you've reached the maximum once you set production for
+that item to 0.
+* Planetary cash and tax are capped at 4,294,967,295 and can no longer
+overflow.
+* When ADMINing a planet for the first time, all items automatically have
+their price set to base prices.
+* When ADMINing a planet that has been previously owned and abandoned,
+the exisiting settings are kept.
+* When editing an item on the admin screen, it will show you the existing
+value and you can now press enter to keep the current value.
 
-What's new:
+ITEMS:
+* The BUY, SELL, and TRANSFER commands now take "ALL" and "MAX" as arguments
+in addition to numerical amounts. "ALL" is for all onboard or on a planet,
+whereas "MAX" will fill your ship.
+* The TRANSFER command now lets you specify "u" or "d" instead of typing out
+"up" or "down."
+* The PRICE command now properly shows the base price of an item when you
+own the planet.
+* The PRICE command will tell you the price of the specified amount of
+items even if you can't hold that many.
+* Several checks and improvements to how large amounts of items and weights
+are handled and displayed.
 
-A brand new collection of user ships, 16 in total. I've tried to make each ship
-unique and useful, and to have interesting options for both players who are
-starting out and players that have accumulated loads of cash. (I have not
-reworked the Cybertrons yet, but that's coming.)
+NAVIGATION:
+* You can now use absolute rotation (@) with the WARP and IMPULSE commands. 
+* If your ship is in the process of rotating, and you enter a warp or
+impulse command without a heading change, the rotation in process will
+continue.
+* The acceleration routine has been modified to work with ships with
+acceleration rates under 1000 (e.g. Planetary Transport). 
+* Helm will announce the new sector when you go through a wormhole or use SYS
+GOTO.
+* Bug that showed "helm is damaged" (when it's not) if entering an invalid
+degree value with the WARP command fixed.
+* Orbit planet message will not try to display the name of an unnamed planet.
+* Your ship name will now display in messages such as the "entering
+hyperspace" message.
+* If you try to rotate to a heading that you are already heading, the helm
+will report you're already heading that heading.
 
-A complete reworking of the game messages and color codes for a more uniform
-appearance. All messages have explicitly set color codes which will prevent
-the text fading and other color bugs in the original. Spelling and
-punctuation fixes. Messages from the ship are labeled "ERROR," "CAUTION,"
-and "WARNING!" as appropriate. (The helm officer has retired.)
+REPORTS:
+* All reports have been cleaned up with proper spacing and alignment.
+* Ships without phasers or shields don't list them in reports.
+* Warp engine damage, fire control damage, and phaser damage now listed in
+REP SYS.
 
-A new game instruction screen and backstory, setting this game 30 years beyond
-the original. Future versions of ge-next will expand the backstory a bit.
+SCANS:
+* For planets, the population for planets you don't own is now represented as
+thousands, hundreds of thousands, millions, etc.
+* Mine stockpile size is shown instead of food.
+* If you are orbiting an unowned planet, the scan will show the entire
+inventory just like it does when you own it.
+* The amounts that are considered moderate and large stockpiles were raised.
 
-Reformatted and updated all the help screens, including the HELP CLASS xx
-screens for each user ship type. A lot of the help screens in 3.2e had
-outdated information that changed during the game's development, so I did a bit
-of rewriting but tried not to stray too much from the original.
+COMBAT:
+* If phasers are damaged, hyperphasers are also inoperable.
+* If phasers are damaged and you try to use them, a message will now be
+displayed indicating they are damaged instead of just saying they have
+insufficient power.
+* If you have enough torpedoes, mines, etc. deployed that you can't deploy
+any more, the error message will now tell you what the maximum is.
 
-Slightly lowered shield and phaser prices so they would all fit under the
-200m limit, and updated HELP NEWPRICE to match.
+MISC:
+* A brand new, much more readable, HELP CLASS screen.
+* SCANNAMES and SCANFULL settings are now ON by default when a new player
+enters. They can still be turned off.
+* Cash is now displayed as unsigned, meaning cash can be a value of up to
+4,294,967,295. The SELL command, NEW command, cash awarded after user kill,
+and tax collection from a planet now all have checks to make sure you don't
+exceed this amount.
+* If you've been traveling over the recommended warp speed long enough that
+your top speed has been lowered, and you change speed, you're now only
+lowered to the new top speed if you choose a speed over the new top speed.
+* Roster cleaned up and re-spaced so huge population values won't explode
+the columns. "ROS ALL" now also shows users with 0 score.
+* You can now enter "x" at the ship selection screen to go back to the main
+menu in case you decide you don't want to play after all.
+* Cleaned up how the galactic perimeter is established. You can now travel
+all the way to (default) 300 300, you are only bounced back after trying to
+pass that. If you have wraparound on, it now wraps to the correct sector
+(e.g. 300 to -300).
+* Changed the CYBNEW and DROIDNEW announcments to show the sector of the
+newly created ship, as opposed to the (fake) bearing.
+* Changed "spy" to be "spies" so it's plural like all other items. Also
+changed the amount of letters you have to use to buy/sell/ transfer spies
+to two, so you can now enter or "spy" or "spies."
+* If you are damaged by the enforcer planet or the galactic boundary, the
+message will display the actual level of damage applied.
 
-Other little tweaks ;)
-
-No changes are set in stone so please contact me with your thoughts.
+COMING IN FUTURE VERSIONS:
+* New bad guys and improved behavior
+* Refinements to planetary attack
+* Refinements to planetary item production
+* Refinements to combat
+* New capabilities for owned planets that can be purchased with planet cash
+(e.g. remote administration)
+* Lots of item balancing to keep long running games competitive
+* Much, much more
 
 
+

@@ -2529,16 +2529,16 @@ int             itm;
 long            amt;
 
 {
-int     i;
-long    total = 0;
+int	i;
+double 	total = 0.0;
 
 for (i=0; i<NUMITEMS; ++i)
 	{
-	total += (wptr->items[i]*((double)weight[i]/100L));
+	total += ((double)wptr->items[i]*((double)weight[i]/100.0));
 	}
-total += (amt*(double)weight[itm]/100);
+total += ((double)amt*(double)weight[itm]/100);
 
-return ((total <= shipclass[wptr->shpclass].max_tons)
+return ((total <= (double)shipclass[wptr->shpclass].max_tons)
 		&& (wptr->items[itm] <= ULCAP - amt));
 }
 
