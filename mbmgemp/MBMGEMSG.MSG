@@ -3189,7 +3189,8 @@ REP39 {[1;37mRoster position....... %d
 REP40 {[1;37mCyborg: %d, Cybmine: %d, Cybskill: %d, Cybupdate: %d
 } T 
 
-SCAN01 {[0;37mScanning the [1;34m%s
+SCAN01 {[0;37m
+Scanning the [1;34m%s[0;37m:
 } T 
 
 SCAN01A {[0;37mShip class: %s
@@ -3251,10 +3252,12 @@ SCAN15 {[1;37mVery good
 
 SCAN16 {[0;37mResources: } T 
 
-SCAN24 {[1;37m   Range Scan Dist:%s (s:%d %d)
+SCAN24 {[0;37m
+Scanning range %s from sector [1;34m%d %d[0;37m:[1;37m
 } T 
 
-SCAN25 {[1;37m   Sector Scan mag:1x (s:%d %d)
+SCAN25 {[0;37m
+Scanning sector [1;34m%d %d[0;37m:[1;37m
 } T 
 
 SCAN28 {[0;37mPopulation: [1;37m%s
@@ -3282,11 +3285,10 @@ SCANWRM {
 [0;37mScanning wormhole [1;34m%d[0;37m: [1;34m%s[1;37m
 } T 
 
-PLUSDASH { [1;37m  +------------------------------+
+PLUSDASH { [0;31m  +------------------------------+[1;37m
 } T 
 
-
-PLUSFULL { [1;37m  +------------------------------+  Shp Distance Bearing Heading Speed
+PLUSFULL { [0;31m  +------------------------------+  [0;37mShip Distance Bearing Heading Speed[1;37m
 } T 
 
 ADMIN01 {

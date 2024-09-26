@@ -995,7 +995,7 @@ Examples: [1;37mwarp 5     [1;36malters the speed to warp 5 and does not chang
                      to the starboard (right).
           [1;37mwar 20 -10 [1;36malters the speed to warp 20 and turns the ship 10 degrees
                      to the port (left).
-          [1;37mwar 8 @90  [1;36malters the speed to warp 8 and turns the ship to 10
+          [1;37mwar 8 @90  [1;36malters the speed to warp 8 and turns the ship to 90
                      degrees absolute.
 [1;37m} T 
 

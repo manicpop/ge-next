@@ -3023,24 +3023,24 @@ int i,j;
 prfmsg(PLUSDASH);
 for (i=0; i<MAXY; ++i)
 	{
-	prf("   |");
+	prf("   \33[0;31m|");
 	for (j=0; j<MAXX; ++j)
 		{
 		if (mapc[i][j] == '1')
 			{
-			prf("\33[31m%c\33[37m",map[i][j]);
+			prf("\33[1;31m%c\33[0;31m",map[i][j]);
 			}
 		else
 		if (mapc[i][j] == '2')
 			{
-			prf("\33[33m%c\33[37m",map[i][j]);
+			prf("\33[1;33m%c\33[0;31m",map[i][j]);
 			}
 		else
 			{
-			prf("%c",map[i][j]);
+			prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
-	prf("|\r");
+	prf("|\33[1;37m\r");
 	}
 
 prfmsg(PLUSDASH);
@@ -3067,30 +3067,30 @@ sptr = &scantab[usrnum];
 prfmsg(PLUSFULL);
 for (i=0; i<MAXY; ++i)
 	{
-	prf("   |");
+	prf("   \33[0;31m|");
 	for (j=0; j<MAXX; ++j)
 		{
 		if (mapc[i][j] == '1')
 			{
-			prf("\33[31m%c\33[37m",map[i][j]);
+			prf("\33[1;31m%c\33[0;31m",map[i][j]);
 			}
 		else
 		if (mapc[i][j] == '2')
 			{
-			prf("\33[33m%c\33[37m",map[i][j]);
+			prf("\33[1;33m%c\33[0;31m",map[i][j]);
 			}
 		else
 			{
-			prf("%c",map[i][j]);
+			prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
-	prf("| ");
+	prf("| \33[1;37m");
 	if (sptr->ship[shp].flag == 1)
 		{
 		othusn = sptr->ship[shp].shipno;
 		if (ff == 0)
 			{
-			prf("  %c  %s   %4d    %4d    %s\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
+			prf("    %c   %s    %4d    %4d     %s\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
 				sptr->ship[shp].bearing,sptr->ship[shp].heading,showarp(sptr->ship[shp].speed));
 
 			if (!waruptr->options[SCANNAMES])
@@ -3101,14 +3101,14 @@ for (i=0; i<MAXY; ++i)
 			}
 		else
 			{
-			prf("     %s\r",username(warshpoff(othusn)));
+			prf("     \33[0;36m%s\r",username(warshpoff(othusn)));
 			shp++;
 			ff = 0;
 			}
 		}
 	else
 		{
-		prf("                                        \r");
+		prf("\r");
 		}
 	}
 
