@@ -3389,7 +3389,7 @@ if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0)
 	if ((amt = atol(margv[2])) > 0L || sameas("MAX",margv[2]) || sameas("ALL",margv[2]))
 		{
 		if (sameas("MAX",margv[2]))
-			amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/(weight[item]/100L);
+			amt = (shipclass[warsptr->shpclass].max_tons - calcweight(warsptr))/((double)weight[item]/100.0);
 		if (sameas("ALL",margv[2]))
 			amt = plptr->items[item].qty;
 		if (chkweight(warsptr,item,amt))
