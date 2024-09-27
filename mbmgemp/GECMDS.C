@@ -2614,7 +2614,7 @@ setsect(warsptr);
 range = (double)((shipclass[warsptr->shpclass].scanrange)/((10-x)*(10-x)));
 
 if (waruptr->options[SCANHOME])
-	ansifunc(HOMEY);
+	ansifunc(CLEAR);
 
 prfmsg(SCAN24,spr("%ld",(long)range),xsect,ysect);
 
@@ -2689,7 +2689,7 @@ WARSHP  *wptr;
 MINE            *mptr;
 
 if (waruptr->options[SCANHOME])
-	ansifunc(HOMEY);
+	ansifunc(CLEAR);
 
 refresh(warsptr,usrnum);
 
@@ -2772,7 +2772,7 @@ setsect(warsptr);
 range = (double)(shipclass[warsptr->shpclass].scanrange)*10.0;
 
 if (waruptr->options[SCANHOME])
-	ansifunc(HOMEY);
+	ansifunc(CLEAR);
 
 prfmsg(SCAN24,spr("%ld",(long)range),xsect,ysect);
 
@@ -5950,12 +5950,8 @@ void  FUNC ansifunc(int func)
 {
 switch (func)
 	{
-	case	HOMEY:
-		prf("\33[0;0H");
-		break;
-
 	case	CLEAR:
-		prf("\33[2J");
+		prf("\33[2J\33[0;0H");
 		break;
 	}
 }

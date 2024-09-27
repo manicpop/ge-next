@@ -827,7 +827,7 @@ follows:
 [1;37m  set [1;32m[option/[1;37m?[1;32m] [[1;37mon[1;32m/[1;37moff[1;32m]
 [1;36m
   [1;32moptions[1;36m:
-[1;37m    scanhome  [1;36m-- home the screen before displaying scan
+[1;37m    scanhome  [1;36m-- clear and home the screen before displaying scan
 [1;37m    scanfull  [1;36m-- full screen scans with ship detail
 [1;37m    scannames [1;36m-- show user names in range scans (scanfull must be ON too)
 [1;37m    filter    [1;36m-- filters out 80% of the battle messages  
