@@ -496,7 +496,8 @@ if (ptr->speed < ptr->speed2b)
 			{
 			if ((int)(ptr->speed/accelrate) != (int)((ptr->speed + accelrate)/accelrate))
 				{
-				prfmsg(WARP,((ptr->speed + accelrate)/1000));
+				sprintf(gechrbuf,"%.2f",(ptr->speed + accelrate)/1000.0);
+				prfmsg(WARP,gechrbuf);
 				outprfge(FILTER,usrn);
 
 				/* if we passed warp 4-8 kill any missiles */
@@ -556,7 +557,8 @@ if (ptr->speed > ptr->speed2b)
 			{
 			if (ptr->speed > 0 )
 				{
-				prfmsg(WARP,(float)((ptr->speed-decelrate)/1000));
+				sprintf(gechrbuf,"%.2f",(ptr->speed - decelrate)/1000.0);
+				prfmsg(WARP,gechrbuf);
 				outprfge(FILTER,usrn);
 				}
 			else

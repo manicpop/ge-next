@@ -757,7 +757,7 @@ if (valdegree(margv[1]))
 			{
 			if (warsptr->degrees == 0)
 				{
-				prfmsg(NOWALRD,warsptr->heading);
+				prfmsg(NOWALRD,(int)(warsptr->heading+.5));
 				}
 			else
 				{
