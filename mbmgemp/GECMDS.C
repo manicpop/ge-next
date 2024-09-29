@@ -4154,15 +4154,16 @@ long	doll,fee;
 
 if ((amt = atol(margv[1])) > 0L || sameas("ALL",margv[1]))
 	{
-	if (sameas("ALL",margv[1]) && warsptr->items[item] > 0L)
-		{
-		amt = warsptr->items[item];
-		}
-	else
-		{
-		prfmsg(SELL5,item_name[item]);
-		return;
-		}
+	if (sameas("ALL",margv[1]))
+		if (warsptr->items[item] == 0L)
+			{
+			prfmsg(SELL5,item_name[item]);
+			return;
+			}
+		else
+			{
+			amt = warsptr->items[item];
+			}
 	if (warsptr->items[item] >= amt)
 		{
 		if (amt > SLCAP / baseprice[item])
