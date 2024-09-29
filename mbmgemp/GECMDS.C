@@ -3040,7 +3040,7 @@ for (i=0; i<MAXY; ++i)
 			prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
-	prf("|\33[1;37m\r");
+	prf("|\r");
 	}
 
 prfmsg(PLUSDASH);
@@ -3084,13 +3084,13 @@ for (i=0; i<MAXY; ++i)
 			prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
-	prf("| \33[1;37m");
+	prf("|");
 	if (sptr->ship[shp].flag == 1)
 		{
 		othusn = sptr->ship[shp].shipno;
 		if (ff == 0)
 			{
-			prf("    %c   %s    %4d    %4d     %s\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
+			prf("\33[1;37m    %c   %s    %4d    %4d     %s\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
 				sptr->ship[shp].bearing,sptr->ship[shp].heading,showarp(sptr->ship[shp].speed));
 
 			if (!waruptr->options[SCANNAMES])
