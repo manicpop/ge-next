@@ -556,7 +556,7 @@ if (valpcnt(margv[1],0,99))
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * ((double)warsptr->percent/100.0);
-		if (warsptr->degrees != 0)
+		if (deg != warsptr->head2b)
 			warsptr->head2b   = (double)deg;
 		/* if I am cloaked tell the closer ones */
 		if (warsptr->cloak == 10 && warsptr->speed2b > (rndm(200.0)+10.0))
@@ -682,7 +682,7 @@ else
 		prfmsg(ENGFIRE,deg);
 		outprfge(ALWAYS,usrnum);
 		warsptr->speed2b = 1000.0 * (float)speed;
-		if (warsptr->degrees != 0)
+		if (deg != warsptr->head2b)
 			warsptr->head2b   = (double)deg;
 		}
 	else
