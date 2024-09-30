@@ -3023,7 +3023,7 @@ int i,j;
 prfmsg(PLUSDASH);
 for (i=0; i<MAXY; ++i)
 	{
-	prf("   \33[0;31m|");
+	prf("   |");
 	for (j=0; j<MAXX; ++j)
 		{
 		if (mapc[i][j] == '1')
@@ -3037,13 +3037,17 @@ for (i=0; i<MAXY; ++i)
 			}
 		else
 			{
-			prf("\33[1;37m%c\33[0;31m",map[i][j]);
+			if (map[i][j] == ' ')
+				prf(" ");               /* prevent excessive color codes */
+			else
+				prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
 	prf("|\r");
 	}
 
 prfmsg(PLUSDASH);
+prf("\33[1;37m");
 
 }
 
@@ -3067,7 +3071,7 @@ sptr = &scantab[usrnum];
 prfmsg(PLUSFULL);
 for (i=0; i<MAXY; ++i)
 	{
-	prf("   \33[0;31m|");
+	prf("   |");
 	for (j=0; j<MAXX; ++j)
 		{
 		if (mapc[i][j] == '1')
@@ -3081,7 +3085,10 @@ for (i=0; i<MAXY; ++i)
 			}
 		else
 			{
-			prf("\33[1;37m%c\33[0;31m",map[i][j]);
+			if (map[i][j] == ' ')
+				prf(" ");
+			else
+				prf("\33[1;37m%c\33[0;31m",map[i][j]);
 			}
 		}
 	prf("|");
@@ -3090,7 +3097,7 @@ for (i=0; i<MAXY; ++i)
 		othusn = sptr->ship[shp].shipno;
 		if (ff == 0)
 			{
-			prf("\33[1;37m    %c   %s    %4d    %4d     %s\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
+			prf("\33[1;37m    %c   %s    %4d    %4d     %s\33[0;31m\r",sptr->ship[shp].letter,spr("%6ld",(long)(sptr->ship[shp].dist)),
 				sptr->ship[shp].bearing,sptr->ship[shp].heading,showarp(sptr->ship[shp].speed));
 
 			if (!waruptr->options[SCANNAMES])
@@ -3101,7 +3108,7 @@ for (i=0; i<MAXY; ++i)
 			}
 		else
 			{
-			prf("     \33[0;36m%s\r",username(warshpoff(othusn)));
+			prf("     \33[0;36m%s\33[0;31m\r",username(warshpoff(othusn)));
 			shp++;
 			ff = 0;
 			}
@@ -3113,6 +3120,7 @@ for (i=0; i<MAXY; ++i)
 	}
 
 prfmsg(PLUSDASH);
+prf("\33[1;37m");
 
 }
 

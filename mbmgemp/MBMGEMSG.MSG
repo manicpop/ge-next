@@ -3285,10 +3285,10 @@ SCANWRM {
 [0;37mScanning wormhole [1;34m%d[0;37m: [1;34m%s[1;37m
 } T 
 
-PLUSDASH { [0;31m  +------------------------------+[1;37m
+PLUSDASH { [0;31m  +------------------------------+
 } T 
 
-PLUSFULL { [0;31m  +------------------------------+  [0;37mShip Distance Bearing Heading Speed[1;37m
+PLUSFULL { [0;31m  +------------------------------+  [0;37mShip Distance Bearing Heading Speed[0;31m
 } T 
 
 ADMIN01 {
