@@ -4229,6 +4229,7 @@ int i;
 if (warsptr->where < 10)
 	{
 	prfmsg(BUY1);
+	outprfge(ALWAYS,usrnum);
 	return;
 	}
 
