@@ -2550,12 +2550,15 @@ long  FUNC calcweight(wptr)
 WARSHP  *wptr;
 {
 int     i;
-long    total = 0;
+double	totald = 0.0;
+long	total = 0;
 
 for (i=0; i<NUMITEMS; ++i)
 	{
-	total += (wptr->items[i]*((double)weight[i]/100L));
+	totald += (wptr->items[i]*((double)weight[i]/100L));
 	}
+
+total = (long)ceil(totald);
 return (total);
 }
 
