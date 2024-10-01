@@ -7,6 +7,14 @@ https://manicpop.org/ge-next  https://github.com/manicpop/ge-next
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact with me thoughts and suggestions.
 
+=== 0.1.1 === 2026-09-30:
+
+Some silly bugs involving the sell command, wrong degrees showing,
+absolute rotation not working with warp command, and a few other
+things fixed.
+
+printmap and printmapfull use color codes more efficiently.
+
 === 0.1 ===
 
 Welcome to the first release of ge-next built from source.
