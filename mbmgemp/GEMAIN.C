@@ -74,11 +74,11 @@
 
 
 #ifdef GETRAINER
-#define VERSION "ge-next 0.1.1 Trainer"
+#define VERSION "ge-next 0.2-pre Trainer"
 #define GEHELP			"MBMG2HLP.MCV"
 #define GEMSG			"MBMG2MSG.MCV"
 #else
-#define VERSION "ge-next 0.1.1"
+#define VERSION "ge-next 0.2-pre"
 #define GEHELP			"MBMGEHLP.MCV"
 #define GEMSG			"MBMGEMSG.MCV"
 #endif

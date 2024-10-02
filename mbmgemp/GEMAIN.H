@@ -151,8 +151,6 @@
 #define COUNTDOWN 20		/* self destruct countdown */
 
 #define CYBSLO 3		/* slows down the cyborgs reaction time */
-#define CYB_ALLOW 35		/* how much allowance per tick          */
-#define CYB_MAXCASH 2000000L	/* maximum cash cybertrons can hold */
 #define CYB_BE_NICE 30		/* 30 kills grace before we get tough */
 #define CYB_BE_EASY 60		/* 60 kills till we get really mean */
 #define CYB_BREAKOFF 500	/* 1 in x chance that cyb will break off attk */

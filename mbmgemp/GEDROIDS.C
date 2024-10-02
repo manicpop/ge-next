@@ -175,8 +175,6 @@ logthis(spr("GE:%s Lives",droidname)); */
 /* reset the ticker to 255 to cause it to recalc */
 ptr->tick = 255;
 
-warusroff(usrn)->cash += CYB_ALLOW;
-
 if(sameas(shipclass[ptr->shpclass].typename,"Lydorian Garbage Scow"))
 	droid_act_class_10(ptr,usrn);    /* Lydorian Garbage Scow */
 else

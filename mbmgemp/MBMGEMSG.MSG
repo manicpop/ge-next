@@ -1872,7 +1872,7 @@ LEVEL6{}
 
 INTRO {
 [1;33m                        Galactic Empire ([1;31m%s[1;33m) [1;36m
-       (C) Copyright 2024 ManicPop.org, https://www.manicpop.org/ge-next/
+         (C) Copyright 2024 ManicPop.org, https://manicpop.org/ge-next/
                         Based on Galactic Empire 3.2e
               (C) Copyright 1992,93,94 M.B. Murdock & Associates
 } T 

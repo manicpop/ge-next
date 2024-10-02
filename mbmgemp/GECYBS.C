@@ -106,9 +106,6 @@ if (geudb(GELOOKUP,cybname, waruptr))
 	{
 	geudb(GEGET,cybname, waruptr);
 
-	if (waruptr->cash > CYB_MAXCASH)
-		waruptr->cash = CYB_MAXCASH;
-
 	logthis(spr("GE:INF:Load %s user",waruptr->userid));
 
 	if (gepdb(GELOOKUPNAME,cybname,0,ptr))
@@ -213,9 +210,6 @@ ptr->tick = 255;
 
 /* save off the topspeed in 1000's */
 d_topspeed = (double)ptr->topspeed*1000.0;
-
-/* allowance money for cybertrons */
-warusroff(usrn)->cash += CYB_ALLOW;
 
 /* countdown to database update */
 
