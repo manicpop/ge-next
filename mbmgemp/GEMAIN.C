@@ -2937,6 +2937,9 @@ return(1);
 int  FUNC mnu_admenu2e()
 {
 int     i;
+plnum = warsptr->where - 10;
+getplanetdat(usrnum);
+
 for (i=0; i<NUMITEMS; ++i) /* skip notused */
 	{
 	if (genearas(kwrd[i],margv[0]))
@@ -2961,6 +2964,8 @@ return(1);
 int  FUNC mnu_admenu2f1()
 {
 unsigned amt;
+plnum = warsptr->where - 10;
+getplanetdat(usrnum);
 amt = atoi(margv[0]);
 
 if (margc == 0)
@@ -2989,6 +2994,8 @@ return(1);
 int  FUNC mnu_admenu2f2()
 {
 unsigned amt;
+plnum = warsptr->where - 10;
+getplanetdat(usrnum);
 amt = atoi(margv[0]);
 
 if (margc == 0)
@@ -3017,6 +3024,8 @@ return(1);
 
 int  FUNC mnu_admenu2f3()
 {
+plnum = warsptr->where - 10;
+getplanetdat(usrnum);
 
 if (margc == 0)
 	{
@@ -3044,6 +3053,8 @@ return(1);
 int  FUNC mnu_admenu2f4()
 {
 unsigned amt;
+plnum = warsptr->where - 10;
+getplanetdat(usrnum);
 amt = atoi(margv[0]);
 
 if (margc == 0)
