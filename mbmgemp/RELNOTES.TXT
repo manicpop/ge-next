@@ -7,6 +7,15 @@ https://manicpop.org/ge-next  https://github.com/manicpop/ge-next
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact with me thoughts and suggestions.
 
+=== 0.2 === in progress
+
+0.2 will focus on NPC behavior:
+* A legacy Galactic Empire bug that keeps Cybs from pursuing you if
+  you are the only player logged in should be resolved.
+
+A bug that sometimes showed the wrong defaults in the planetary
+administration menu should be resolved.
+
 === 0.1.1 === 2026-09-30:
 
 Some silly bugs involving the sell command, wrong degrees showing,

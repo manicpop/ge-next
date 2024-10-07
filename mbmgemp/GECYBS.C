@@ -348,7 +348,7 @@ nc=0;
 for (zothusn=nterms ; zothusn < nships ;zothusn++)
 	{
 	wptr=warshpoff(zothusn);
-	if (wptr->status == GESTAT_AUTO && wptr->cybmine == (byte)usrn)
+	if (wptr->status == GESTAT_AUTO && shipclass[wptr->shpclass].max_type == CLASSTYPE_CYBORG && wptr->cybmine == (byte)usrn)
 		++nc;
 	}
 /*DEBUG
