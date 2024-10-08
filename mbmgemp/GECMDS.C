@@ -527,7 +527,7 @@ if (*gechrbuf == '@')
 	deg = atoi(gechrbuf);
 	if (deg > 359)
 		{
-		prfmsg(FORMAT,"IMPULSE");
+		prfmsg(NUMOOR,0,359);
 		outprfge(ALWAYS, usrnum);
 		return;
 		}
@@ -538,7 +538,8 @@ if (valpcnt(margv[1],0,99))
 	if (warsptr->helm == 0)
 		{
 		if (*gechrbuf2 != '@')
-			valdegree(gechrbuf);
+			if (!valdegree(gechrbuf))
+				return;
 		if (warsptr->where >= 10)
 			{
 			refresh(warsptr,usrnum);
@@ -649,7 +650,7 @@ else
 		deg = atoi(gechrbuf);
 		if (deg > 359)
 			{
-			prfmsg(FORMAT,"WARP");
+			prfmsg(NUMOOR,0,359);
 			outprfge(ALWAYS, usrnum);
 			return;
 			}
@@ -657,7 +658,8 @@ else
 	if (warsptr->helm == 0)
 		{
 		if (*gechrbuf2 != '@')
-			valdegree(gechrbuf);
+			if (!valdegree(gechrbuf))
+				return;
 		if (speed > topspeed)
 			{
 			prfmsg(WARP04,topspeed);
