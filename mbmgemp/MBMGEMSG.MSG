@@ -2042,7 +2042,7 @@ EXIWAR2 {***
 } T 
 
 WARHUP {***
-[0;37mCommander [0;36m%s[0;37m's ship just vanished![1;37m
+[1;36mCommander [0;36m%s[1;36m's ship just vanished![1;37m
 } T 
 
 NOSHPS {
@@ -2071,11 +2071,11 @@ and transported back to their next stop, Zygor!
 } T 
 
 DIED {***
-[0;37mThe [0;36m%s[0;37m, commanded by [0;36m%s[0;37m, has been destroyed![1;37m
+[1;36mThe [0;36m%s[1;36m, commanded by [0;36m%s[1;36m, has been destroyed![1;37m
 } T 
 
 KILLEDBY {***
-[0;37mCommander [0;36m%s[0;37m's ship was destroyed by [0;36m%s[0;37m![1;37m
+[1;36mCommander [0;36m%s[1;36m's ship was destroyed by [0;36m%s[1;36m![1;37m
 } T 
 
 PHITHIM {
@@ -2512,7 +2512,7 @@ SCAN3 {***
 } T 
 
 ENTWAR {***
-[0;37mA %s, the [0;36m%s[0;37m, just appeared in this star system![1;37m
+[1;36mA %s, the [0;36m%s[1;36m, just appeared in this star system![1;37m
 } T 
 
 FIRSTIME {
