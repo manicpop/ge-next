@@ -257,14 +257,14 @@ void FUNC cyb_init P((WARSHP *ptr , int usrn , int class));
 void FUNC assign_cybs P((int usrnum , int call));
 int FUNC cyb_fast P((WARSHP *ptr));
 void FUNC cyb_lives P((WARSHP *ptr , int usrn));
-void FUNC cyb_won P((WARSHP *ptr , int usrn));
-void FUNC cyb_died P((WARSHP *ptr));
+void FUNC cyb_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
+void FUNC cyb_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 
 /* gedroids.c */
 void FUNC droid_init P((WARSHP *ptr , int usrn , int class));
 void FUNC droid_lives P((WARSHP *ptr , int usrn));
-void FUNC droid_won P((WARSHP *ptr , int usrn));
-void FUNC droid_died P((WARSHP *ptr));
+void FUNC droid_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
+void FUNC droid_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 
 /* geplanet.c */
 void FUNC check_spy P((void ));

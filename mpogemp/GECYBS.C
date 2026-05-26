@@ -1156,8 +1156,9 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 ** Handle cyb victory cleanup                                            **
 **************************************************************************/
 
-void FUNC cyb_won(WARSHP *ptr, int usrn)
+void FUNC cyb_won(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
+	wptr = wptr;
 	npc_cruise(ptr, usrn, 0);
 	ptr->cybupdate = 0;
 }
@@ -1166,7 +1167,9 @@ void FUNC cyb_won(WARSHP *ptr, int usrn)
 ** Handle cyb death cleanup                                              **
 **************************************************************************/
 
-void FUNC cyb_died(WARSHP *ptr)
+void FUNC cyb_died(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
+	usrn = usrn;
+	wptr = wptr;
 	ptr->status = GESTAT_AVAIL;
 }

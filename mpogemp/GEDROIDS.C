@@ -1047,8 +1047,9 @@ static void droid_act_6(WARSHP *ptr, int usrn)
 ** Droid Won Function                                                    **
 **************************************************************************/
 
-void FUNC droid_won(WARSHP *ptr, int usrn)
+void FUNC droid_won(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
+	wptr = wptr;
 	npc_cruise(ptr, usrn, 0);
 }
 
@@ -1057,8 +1058,10 @@ void FUNC droid_won(WARSHP *ptr, int usrn)
 **************************************************************************/
 
 
-void FUNC droid_died(WARSHP *ptr)
+void FUNC droid_died(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
+	usrn = usrn;
+	wptr = wptr;
 	ptr->status = GESTAT_AVAIL;
 	logthis(spr("GE:INF:%s Died!", ptr->userid));
 }
