@@ -592,19 +592,19 @@ typedef struct _galplnt {
 /*102*/
 	char filler2[UIDSIZ-1];		/* unused                                  */
 /*131*/
-	ITEM items[NUMITEMS];		/* 195                                     */
-/*355*/
+	ITEM items[NUMITEMS];		/* 210                                     */
+/*341*/
 	char beacon[BEACONMSGSZ];	/* beacon message                          */
-/*430*/
+/*416*/
 	char spyowner[UIDSIZ];		/* userid of current spy owner             */
-/*460*/
+/*446*/
 	unsigned int plantimesave;	/* saved planet update tick interval       */
-/*462*/
+/*448*/
 	unsigned long teamcode;		/* team lock/access code                   */
-/*466*/
+/*452*/
 	unsigned long nebseed;		/* random seed for nebula map (Zygor only) */
-/*470*/
-	char filler[23];		/* pad GALPLNT to the real 493-byte record */
+/*456*/
+	char filler[37];		/* pad GALPLNT to the real 493-byte record */
 } GALPLNT;
 
 typedef struct galworm {
