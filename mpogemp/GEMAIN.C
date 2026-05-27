@@ -659,14 +659,13 @@ void FUNC iniwara(void)
 	}
 	geshocst(1, spr("GE:INF:Ship Mem: %ld", nships * sizeof(WARSHP)));
 
-	/* these next ones are only for users (nterms) */
 	/* allocate memory for planet table */
-	ptab = (PLANETAB *)alcmem(n = nterms * sizeof(PLANETAB));
+	ptab = (PLANETAB *)alcmem(n = nships * sizeof(PLANETAB));
 	setmem(ptab, n, 0);
 	geshocst(1, spr("GE:INF:Planet Table Mem: %d", n));
 
 	/* allocate memory for a temporary item table */
-	titems = (ITEM *)alcmem(n = nterms * sizeof(ITEM));
+	titems = (ITEM *)alcmem(n = nships * sizeof(ITEM));
 	setmem(titems, n, 0);
 	geshocst(1, spr("GE:INF:Temp Items Mem: %d", n));
 
@@ -675,7 +674,7 @@ void FUNC iniwara(void)
 	geshocst(1, spr("GE:INF:Team Tab Mem: %d", n));
 
 	/* allocate memory for scan table */
-	scantab = (SCANTAB *)alcmem(n = nterms * sizeof(SCANTAB));
+	scantab = (SCANTAB *)alcmem(n = nships * sizeof(SCANTAB));
 	setmem(scantab, n, 0);
 	geshocst(1, spr("GE:INF:Scantab Mem: %d", n));
 
