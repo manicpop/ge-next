@@ -119,7 +119,7 @@ int FUNC lockon(WARSHP *ptr, int type, int ship, int usrn)
 		if (fact > .7) {
 			if (wptr->status == GESTAT_AUTO) {	/* if npc... */
 				wptr->cybmine = usrn;	/* engage user */
-				wptr->cyb_grace = CYBGRACE;
+				wptr->track_grace = CYBGRACE;
 				wptr->tick = 2;		/* do it fast */
 				wptr->npcmsg = 255;	/* reset annoy msg tracking */
 			}
@@ -762,7 +762,7 @@ void FUNC firep(WARSHP *ptr, int usrn)
 							}
 							if (wptr->status == GESTAT_AUTO) {	/* if npc... */
 								wptr->cybmine = usrn;	/* engage user */
-								wptr->cyb_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
+								wptr->track_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
 								wptr->tick = 2;		/* do it fast */
 								wptr->npcmsg = 255;	/* reset annoy msg tracking */
 							}
@@ -938,7 +938,7 @@ void FUNC firehp(WARSHP *ptr, int usrn)
 									set_dislike(uptr,shipclass[wptr->shpclass].faction,(int)factor);
 									if (wptr->status == GESTAT_AUTO) {	/* if npc... */
 										wptr->cybmine = usrn;	/* engage user */
-										wptr->cyb_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
+										wptr->track_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
 										wptr->tick = 2;		/* do it fast */
 										wptr->npcmsg = 255;	/* reset annoy msg tracking */
 									}
@@ -2085,7 +2085,7 @@ void FUNC moveship(WARSHP *ptr, int usrn)
 	int overamt, intspeed, zothusn, movenergy;
 	double ddist;
 	float newtop;
-	unsigned long overadd;
+	unsigned overadd;
 	byte ptr_neb, oth_neb;
 
 	neutsect.xcoord = 0.50001;
@@ -2268,9 +2268,9 @@ void FUNC moveship(WARSHP *ptr, int usrn)
 					/* for every 10% over cruising speed, increase potential random damage */
 					overamt = (intspeed * 100 / newtop) - 100;
 					if (ptr->upgrade & NCORE)
-						overadd = (unsigned long)(r % ((overamt / 2) + 1));
+						overadd = (unsigned)(r % ((overamt / 2) + 1));
 					else
-						overadd = (unsigned long)(r % (overamt + 1));
+						overadd = (unsigned)(r % (overamt + 1));
 					ptr->overspeed += overadd;
 
 					/* if over twice new cruising speed, blow up the engines */
@@ -2281,12 +2281,12 @@ void FUNC moveship(WARSHP *ptr, int usrn)
 						ptr->speed2b = 0;
 						ptr->damage += r % 20;
 					}
-					else if (overamt != ptr->npcmsg) {
-						if (overamt >= 60 && overamt / 10 != ptr->npcmsg / 10) {
+					else if (overamt != ptr->warpmsg) {
+						if (overamt >= 60 && overamt / 10 != ptr->warpmsg / 10) {
 							prfmsg(WARPFAST + (int)((overamt / 10) - 6));
 							outprfge(FLT_NONE, usrn);
 						}
-						ptr->npcmsg = overamt;
+						ptr->warpmsg = overamt;
 					}
 				}
 			}
@@ -3576,7 +3576,7 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 				outprfge(FLT_NONE,ptr->lock);
 			}
 			ptr->lock = -1;
-			ptr->lock_grace = 0;
+			ptr->track_grace = 0;
 			prfmsg(LOCK01);
 			outprfge(FLT_NONE,usrn);
 		}
@@ -3611,7 +3611,7 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 
 	if (ptr->lock >= nships) {
 		ptr->lock = -1;
-		ptr->lock_grace = 0;
+		ptr->track_grace = 0;
 		prfmsg(LOCK01);
 		outprfge(FLT_NONE, usrn);
 		return;
@@ -3623,7 +3623,7 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 	/* stale lock target: clear both the lock and its grace period */
 	if (!ingegame(lockee) || lptr->status == GESTAT_AVAIL) {
 		ptr->lock = -1;
-		ptr->lock_grace = 0;
+		ptr->track_grace = 0;
 		return;
 	}
 
@@ -3631,7 +3631,7 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 
 	if (dist > (double)ship_scanrange(ptr)) {
 		ptr->lock = -1;
-		ptr->lock_grace = 0;
+		ptr->track_grace = 0;
 		prfmsg(LOCK05);
 		outprfge(FLT_NONE, usrn);
 		prfmsg(LOCK04, shpltr(lockee, usrn));
@@ -3640,12 +3640,12 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 	}
 
 	if (lptr->cloak >= 10) {
-		if (ptr->lock_grace > 0) {
-			--ptr->lock_grace;
+		if (ptr->track_grace > 0) {
+			--ptr->track_grace;
 			return;
 		}
 		ptr->lock = -1;
-		ptr->lock_grace = 0;
+		ptr->track_grace = 0;
 		prfmsg(LOCK05);
 		outprfge(FLT_NONE, usrn);
 		prfmsg(LOCK04, shpltr(lockee, usrn));
@@ -3657,12 +3657,12 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 	lockee_neb = (byte)innebula(coord1(lptr->coord.xcoord), coord1(lptr->coord.ycoord));
 	if (locker_neb || lockee_neb) {
 		if (!(locker_neb && lockee_neb && dist < (double)NEBRNG)) {
-			if (ptr->lock_grace > 0) {
-				--ptr->lock_grace;
+			if (ptr->track_grace > 0) {
+				--ptr->track_grace;
 				return;
 			}
 			ptr->lock = -1;
-			ptr->lock_grace = 0;
+			ptr->track_grace = 0;
 			prfmsg(LOCK05);
 			outprfge(FLT_NONE, usrn);
 			prfmsg(LOCK04, shpltr(lockee, usrn));
@@ -3671,7 +3671,7 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 		}
 	}
 
-	ptr->lock_grace = LOCKGRACE;
+	ptr->track_grace = LOCKGRACE;
 }
 
 /**************************************************************************
@@ -5210,11 +5210,11 @@ void FUNC update_scantab(WARSHP *ptr, int usrn)
 			flag = 0;
 			if (ddistance < ship_scanrange(ptr)) {
 				if ((ptr_neb || oth_neb) && !(ptr_neb && oth_neb && ddistance < (double)NEBRNG)) {
-					if (othusn == ptr->lock && ptr->lock_grace > 0)
+					if (othusn == ptr->lock && ptr->track_grace > 0)
 						flag = 2;
 				}
 				else if (wptr->cloak >= 10) {
-					if (othusn == ptr->lock && ptr->lock_grace > 0)
+					if (othusn == ptr->lock && ptr->track_grace > 0)
 						flag = 2;
 				}
 				else

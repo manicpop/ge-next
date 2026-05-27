@@ -12,7 +12,9 @@ Please contact with me thoughts and suggestions.
 
 ge-next's main executable is now MPOGEMP.DLL and all MBM*
 filenames have been moved to MPO*. ge-next should now run
-alongside classic Galactic Empire.
+alongside classic Galactic Empire. There have been significant
+structural changes since 0.3 RC2, previous saved games are not
+compatible.
 
 The main focus of 0.3 is enhancements for user ships:
 * A new "overspeed" routine has been implemented that will

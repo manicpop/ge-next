@@ -990,7 +990,7 @@ void FUNC cmd_torp(void)
 	} else if (shpnum == usrnum) {
 		if (margv[1][0] == '@') {
 			warsptr->lock = -1;
-			warsptr->lock_grace = 0;
+			warsptr->track_grace = 0;
 			prfmsg(NOLOCK);
 		} else {
 			update_scantab(warsptr,usrnum);
@@ -1086,7 +1086,7 @@ void FUNC cmd_missl(void)
 	} else if (shpnum == usrnum) {
 		if (margv[1][0] == '@') {
 			warsptr->lock = -1;
-			warsptr->lock_grace = 0;
+			warsptr->track_grace = 0;
 			prfmsg(NOLOCK);
 		} else {
 			update_scantab(warsptr,usrnum);
@@ -1141,7 +1141,7 @@ int FUNC findshp(char *ptr, int type) /* 0 = this sector only, 1 = everywhere */
 		/* resolve current lock target, clearing stale locks as needed */
 		if (warsptr->lock < 0 || warsptr->lock >= nships) {
 			warsptr->lock = -1;
-			warsptr->lock_grace = 0;
+			warsptr->track_grace = 0;
 			prfmsg(NOLOCK);
 			return -1;
 		}
@@ -1149,7 +1149,7 @@ int FUNC findshp(char *ptr, int type) /* 0 = this sector only, 1 = everywhere */
 			shpnum = warsptr->lock;
 			if (!ingegame(shpnum)) {
 				warsptr->lock = -1;
-				warsptr->lock_grace = 0;
+				warsptr->track_grace = 0;
 				prfmsg(NOLOCK);
 				return -1;
 			}
@@ -1157,7 +1157,7 @@ int FUNC findshp(char *ptr, int type) /* 0 = this sector only, 1 = everywhere */
 			dist = cdistance(&warsptr->coord,&(wptr->coord));
 			if ((dist*10000) > (double)ship_scanrange(warsptr)) {
 				warsptr->lock = -1;
-				warsptr->lock_grace = 0;
+				warsptr->track_grace = 0;
 				prfmsg(NOLOCK);
 				shpnum = -1;
 			} else {
@@ -2469,8 +2469,8 @@ void FUNC cmd_abandon(void)
 		plptr->userid[0] = 0;
 		plptr->password[0] = 0;
 		plptr->teamcode = 0;
-		if (--waruptr->planets < 0)
-			waruptr->planets = 0;
+		if (waruptr->planets > 0)
+			--waruptr->planets;
 		geudb(GEUPDATE,waruptr->userid,waruptr);
 
 		setsect(warsptr); /* build PKEY */
@@ -3035,7 +3035,7 @@ void FUNC cmd_geroster(void)
 				++i;
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);
-				prf("%-29s%s%6u%6u%4d%s\r", tmpusr.userid, gechrbuf, tmpusr.kills, tmpusr.ukills, tmpusr.planets, gechrbuf2);
+				prf("%-29s%s%6u%6u%4u%s\r", tmpusr.userid, gechrbuf, tmpusr.kills, tmpusr.ukills, tmpusr.planets, gechrbuf2);
 				if (target != 0 && absbtv() == target)
 					rank = i;
 				if (i % 5 == 0)
@@ -4282,7 +4282,7 @@ void FUNC cmd_lock(void)
 			outprfge(FLT_NONE, warsptr->lock);
 		}
 		warsptr->lock = -1;
-		warsptr->lock_grace = 0;
+		warsptr->track_grace = 0;
 		prfmsg(LOCK01);
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -4321,12 +4321,12 @@ void FUNC cmd_lock(void)
 			return;
 		}
 		warsptr->lock = shpnum;
-		warsptr->lock_grace = LOCKGRACE;
+		warsptr->track_grace = LOCKGRACE;
 		if (warshpoff(shpnum)->status == GESTAT_AUTO
 			&& shipclass[warshpoff(shpnum)->shpclass].max_type == CLASSTYPE_CYBORG
 			&& warshpoff(shpnum)->cybmine == 255) {
 			warshpoff(shpnum)->cybmine = usrnum;	/* engage user */
-			warshpoff(shpnum)->cyb_grace = CYBGRACE;
+			warshpoff(shpnum)->track_grace = CYBGRACE;
 			warshpoff(shpnum)->tick = 2;		/* do it fast */
 			warshpoff(shpnum)->npcmsg = 255;	/* reset annoy msg tracking */
 		}
@@ -5297,7 +5297,7 @@ void FUNC cmd_data(void)
 	}
 
 	if (sameas(margv[2],"report")) {
-		prf("UD1:%s,%d,%d,%d*\r",
+		prf("UD1:%s,%u,%u,%u*\r",
 			waruptr->userid,
 			waruptr->noships,
 			waruptr->kills,
@@ -5321,7 +5321,7 @@ void FUNC cmd_data(void)
 			spr("%ld",(long)warsptr->damage),
 			spr("%ld",(long)warsptr->energy));
 
-		prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+		prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
 			spr("%ld",(long)warsptr->phasr),
 			warsptr->phasrtype,
 			warsptr->kills,
@@ -5332,7 +5332,6 @@ void FUNC cmd_data(void)
 			warsptr->cloak,
 			warsptr->tactical,
 			warsptr->helm,
-			warsptr->train,
 			warsptr->where);
 
 		prf("SD4:");

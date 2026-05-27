@@ -118,8 +118,8 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 				ptr->status = GESTAT_AUTO;
 				ptr->shield = 40 + (ptr->shieldtype * 10);
 				ptr->phasr = 100;
-				ptr->cyb_grace = 0;
-				ptr->freq = 255;
+				ptr->track_grace = 0;
+				ptr->npcstate = 255;
 				ptr->npcmsg = (byte)255;
 				ptr->holdcourse = 0;
 				ptr->cantexit = 0;
@@ -177,9 +177,9 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 				ptr->shieldtype = 0;
 
 			ptr->cybmine = (byte)255;
-			ptr->cyb_grace = 0;
+			ptr->track_grace = 0;
 			ptr->distress = (byte)255;
-			ptr->freq = 255;
+			ptr->npcstate = 255;
 			ptr->npcmsg = (byte)255;
 			ptr->holdcourse = 0;
 			ptr->cantexit = 0;
@@ -329,7 +329,7 @@ void FUNC assign_cybs(int usrnum, int call)
 
 		ptr = warshpoff(low_ship);
 		ptr->cybmine = usrnum;
-		ptr->cyb_grace = CYBGRACE;
+		ptr->track_grace = CYBGRACE;
 	}
 }
 
@@ -614,7 +614,7 @@ static void cyb_check_damage(WARSHP *ptr, int usrn)
 			jam(ptr, usrn);
 		if (ptr->holdcourse == 1) {
 			ptr->cybmine = 255;
-			ptr->freq = 255;
+			ptr->npcstate = 255;
 			ptr->npcmsg = 255;
 		}
 		if (ptr->holdcourse == 0) {
@@ -757,11 +757,11 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 
 	if (zothusn >= nships) {
 		ptr->cybmine = (byte)255;
-		ptr->cyb_grace = 0;
+		ptr->track_grace = 0;
 		ptr->npcmsg = 255;
 	} else {
 		if (!ingegame(zothusn)) {
-			ptr->cyb_grace = 0;
+			ptr->track_grace = 0;
 			npc_cruise(ptr, usrn, 0);
 			return;
 		}
@@ -769,17 +769,17 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 		wptr = warshpoff(zothusn);
 
 		if (!isvisible(ptr, wptr)) {
-			if (ptr->cyb_grace > 0) {
-				--ptr->cyb_grace;
+			if (ptr->track_grace > 0) {
+				--ptr->track_grace;
 			} else {
 				ptr->cybmine = 255;
-				ptr->cyb_grace = 0;
-				ptr->freq = 255;
+				ptr->track_grace = 0;
+				ptr->npcstate = 255;
 				ptr->npcmsg = 255;
 			}
 			return;
 		}
-		ptr->cyb_grace = CYBGRACE;
+		ptr->track_grace = CYBGRACE;
 
 		low_ship = zothusn;
 		low_dist = cdistance(&ptr->coord, &(wptr->coord));
@@ -811,16 +811,16 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 
 		if (low_ship == -1 || low_ship >= nships) {
 		ptr->cybmine = 255;
-		ptr->cyb_grace = 0;
-		ptr->freq = 255;
+		ptr->track_grace = 0;
+		ptr->npcstate = 255;
 		ptr->npcmsg = 255;
 	} else {
 		if (ptr->cybmine != (byte)low_ship) {
 			ptr->npcmsg = 255;
-			ptr->freq = 255;
+			ptr->npcstate = 255;
 		}
 		ptr->cybmine = (byte)low_ship;
-		ptr->cyb_grace = CYBGRACE;
+		ptr->track_grace = CYBGRACE;
 		wptr = warshpoff(low_ship);
 		if (low_dist >= hyperdist1) {
 			ptr->speed2b = ((int)(low_dist / hyperdist1)) * FARSPEED;
@@ -847,9 +847,9 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 				spr("%ld",(long)hyperdist1),spr("%ld",(long)hyperdist2),spr("%ld",(long)low_dist));
 			outwar(ALWAYS,usrn,0); */
 			if (low_dist * 10000 < shipclass[wptr->shpclass].scanrange &&
-				ptr->freq != (unsigned)low_ship) {
+				ptr->npcstate != (unsigned)low_ship) {
 				cyb_annoy(ptr, low_ship, APPROACH);
-				ptr->freq = low_ship;
+				ptr->npcstate = low_ship;
 			}
 		} else if (low_dist >= 2.85 + (.175 * (d_topspeed / shipclass[ptr->shpclass].max_accel))) {
 			/* fast ships with low accel brake earlier */
@@ -867,9 +867,9 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 				spr("%ld",(long)hyperdist1),spr("%ld",(long)hyperdist2),spr("%ld",(long)low_dist));
 			outwar(ALWAYS,usrn,0); */
 			if (low_dist * 10000 < shipclass[wptr->shpclass].scanrange &&
-				ptr->freq != (unsigned)low_ship) {
+				ptr->npcstate != (unsigned)low_ship) {
 				cyb_annoy(ptr, low_ship, APPROACH);
-				ptr->freq = low_ship;
+				ptr->npcstate = low_ship;
 			}
 		} else if (wptr->where == 1 && d_topspeed >= 1000) {
 			inbound = FALSE;
@@ -1028,7 +1028,7 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 	/* if cyb loses scanning ability, kick back and chill until fixed */
 	if (ptr->tactical < 0) {
 		ptr->cybmine = 255;
-		ptr->freq = 255;
+		ptr->npcstate = 255;
 		ptr->npcmsg = 255;
 		ptr->holdcourse = 0;
 		if (shipclass[ptr->shpclass].max_accel > 0)
@@ -1071,7 +1071,7 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 						!neutral(&wptr->coord) &&
 						/* if target is NPC, and not traveling to neutral zone or is already targeting me */
 						((wptr->status == GESTAT_AUTO &&
-						((wptr->freq < 2 || wptr->freq > 7) || wptr->cybmine == usrn) &&
+						((wptr->npcstate < 2 || wptr->npcstate > 7) || wptr->cybmine == usrn) &&
 						/* ...and is attackable class and i've already targeted it or decide to do so */
 						(shipclass[wptr->shpclass].cybs_can_att &&
 						(ptr->cybmine == zothusn || cyb_pick_fight(zothusn, 0)))) ||
