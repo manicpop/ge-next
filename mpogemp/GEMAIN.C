@@ -887,6 +887,8 @@ void FUNC gemidnighta(void)
 
 	geshocst(0, spr("GE:INF:Begin Cleanup"));
 
+	prune_stale_auto_records();
+
 	/* clear out planet counter */
 	geshocst(1, spr("GE:INF:Cleanup Phase-1"));
 	setbtv(gebb5);

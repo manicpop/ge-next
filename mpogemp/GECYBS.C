@@ -67,6 +67,92 @@ int cybhaltflg = 0;
 double d_topspeed;
 
 /**************************************************************************
+** Validate a saved cyborg ship record for the current cyb slot          **
+**************************************************************************/
+
+static int valid_cyb_ship(WARSHP *ptr, int usrn, int class)
+{
+	if (strncmp(ptr->userid, cybname, UIDSIZ) != 0)
+		return FALSE;
+
+	if (ptr->shipno <= 0)
+		return FALSE;
+
+	if (!VALID_SHPCLASS(ptr->shpclass))
+		return FALSE;
+
+	if (shipclass[ptr->shpclass].max_type != CLASSTYPE_CYBORG)
+		return FALSE;
+
+	return ptr->shpclass == class && cyb_user_slot(ptr->userid) == usrn;
+}
+
+/**************************************************************************
+** Load one valid cyb ship and delete invalid or duplicate records       **
+**************************************************************************/
+
+static int load_cyb_ship(WARSHP *ptr, int usrn, int class)
+{
+	int deleted;
+	int have_ship;
+	int keep_shipno;
+
+	have_ship = FALSE;
+	keep_shipno = -1;
+
+	do {
+		deleted = FALSE;
+		setbtv(gebb1);
+		if (qeqbtv(cybname, 0)) {
+			do {
+				gcrbtv(&tmpshp, 0);
+				if (strncmp(tmpshp.userid, cybname, UIDSIZ) != 0)
+					break;
+
+				if (valid_cyb_ship(&tmpshp, usrn, class)) {
+					if (!have_ship) {
+						memcpy(ptr, &tmpshp, sizeof(WARSHP));
+						keep_shipno = tmpshp.shipno;
+						have_ship = TRUE;
+						logthis(spr("GE:INF:Load %s ship %d",
+							ptr->userid, ptr->shipno));
+					} else if (tmpshp.shipno != keep_shipno) {
+						geshocst(1, spr("GE:INF:CYBDUPSHP uid=%s shipno=%d keep=%d",
+							tmpshp.userid, tmpshp.shipno, keep_shipno));
+						if (!gepdb(GEDELETE, tmpshp.userid, tmpshp.shipno, &tmpshp)) {
+							geshocst(0, spr("GE:ERR:CYBDELSHP uid=%s shipno=%d",
+								tmpshp.userid, tmpshp.shipno));
+						} else {
+							deleted = TRUE;
+							break;
+						}
+					}
+				} else {
+					if (VALID_SHPCLASS(tmpshp.shpclass) &&
+						shipclass[tmpshp.shpclass].max_type == CLASSTYPE_CYBORG &&
+						cyb_user_slot(tmpshp.userid) == usrn) {
+						geshocst(1, spr("GE:INF:CYBSHPRECLS usn=%d old=%d new=%d shipno=%d uid=%s",
+							usrn, tmpshp.shpclass, class, tmpshp.shipno, tmpshp.userid));
+					} else {
+						geshocst(0, spr("GE:ERR:BADCYBSHP usn=%d cls=%d shipno=%d uid=%s",
+							usrn, tmpshp.shpclass, tmpshp.shipno, tmpshp.userid));
+					}
+					if (!gepdb(GEDELETE, tmpshp.userid, tmpshp.shipno, &tmpshp)) {
+						geshocst(0, spr("GE:ERR:CYBDELSHP uid=%s shipno=%d",
+							tmpshp.userid, tmpshp.shipno));
+					} else {
+						deleted = TRUE;
+						break;
+					}
+				}
+			} while (qnxbtv());
+		}
+	} while (deleted);
+
+	return have_ship;
+}
+
+/**************************************************************************
 ** Initialize or load a cyborg ship                                      **
 **************************************************************************/
 
@@ -76,11 +162,19 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 	int i, goldwin, goldspin, goldtry, zothusn;
 	double ddist;
 	int have_ship = FALSE;
+	int expected_class;
 
 	logthis(spr("@Cyb_init usrn=%d,class=%d", usrn, class));
 
 	if (usrn < 0 || usrn >= nships) {
 		logthis(spr("CYB_INIT:bad usrn [%d]",usrn));
+		return;
+	}
+
+	expected_class = cyb_slot_class(usrn);
+	if (expected_class != class) {
+		geshocst(0, spr("GE:ERR:CYBSLOTCLS usn=%d cls=%d exp=%d",
+			usrn, class, expected_class));
 		return;
 	}
 
@@ -104,30 +198,19 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 
 		logthis(spr("GE:INF:Load %s user", waruptr->userid));
 
-		if (gepdb(GELOOKUPNAME, cybname, 0, ptr)) {
-			gcrbtv(ptr, 0);
-			logthis(spr("GE:INF:Load %s ship", ptr->userid));
-			if (!VALID_SHPCLASS(ptr->shpclass) ||
-				shipclass[ptr->shpclass].max_type != CLASSTYPE_CYBORG) {
-				geshocst(0, spr("GE:ERR:BADCYBSHPCLS usn=%d cls=%d shipno=%d uid=%s",
-					usrn, ptr->shpclass, ptr->shipno, ptr->userid));
-				if (!gepdb(GEDELETE, ptr->userid, ptr->shipno, ptr))
-					geshocst(0, spr("GE:ERR:CYBDELSHP uid=%s shipno=%d",
-						ptr->userid, ptr->shipno));
-			} else {
-				ptr->status = GESTAT_AUTO;
-				ptr->shield = 40 + (ptr->shieldtype * 10);
-				ptr->phasr = 100;
-				ptr->track_grace = 0;
-				ptr->npcstate = 255;
-				ptr->npcmsg = (byte)255;
-				ptr->holdcourse = 0;
-				ptr->cantexit = 0;
-				npc_cruise(ptr, usrn, 0);
-				ptr->cybupdate = 100 + gernd() % 20;
-				ptr->tick = CYBTICKTIME + gernd() % (CYBTICKTIME * 5);
-				have_ship = TRUE;
-			}
+		if (load_cyb_ship(ptr, usrn, class)) {
+			ptr->status = GESTAT_AUTO;
+			ptr->shield = 40 + (ptr->shieldtype * 10);
+			ptr->phasr = 100;
+			ptr->track_grace = 0;
+			ptr->npcstate = 255;
+			ptr->npcmsg = (byte)255;
+			ptr->holdcourse = 0;
+			ptr->cantexit = 0;
+			npc_cruise(ptr, usrn, 0);
+			ptr->cybupdate = 100 + gernd() % 20;
+			ptr->tick = CYBTICKTIME + gernd() % (CYBTICKTIME * 5);
+			have_ship = TRUE;
 		}
 
 		if (!have_ship) {

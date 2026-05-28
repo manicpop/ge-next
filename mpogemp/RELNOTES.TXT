@@ -13,8 +13,8 @@ Please contact with me thoughts and suggestions.
 ge-next's main executable is now MPOGEMP.DLL and all MBM*
 filenames have been moved to MPO*. ge-next should now run
 alongside classic Galactic Empire. There have been significant
-structural changes since 0.3 RC2, previous saved games are not
-compatible.
+structural changes starting with 0.3 RC2, previous saved games
+are not compatible.
 
 The main focus of 0.3 is enhancements for user ships:
 * A new "overspeed" routine has been implemented that will
@@ -74,8 +74,8 @@ The main focus of 0.3 is enhancements for user ships:
 * Phasers have been overhauled:
   - In classic GE, the spread of the phaser beam is biased to
     to the port side. It's now realigned and centered.
-  - In classic GE, even-numbered phaser classes are no powerful
-    than the previous odd class (e.g. phaser 6 is just as
+  - In classic GE, even-numbered phaser classes are no more
+    powerful than the previous odd class (e.g. phaser 6 is just as
     powerful as phaser 5). That missing half step has been added.
   - The routine that determines phaser damage has reworked with
     more floating point math. Phaser range is now smoother and
@@ -287,6 +287,13 @@ Other stuff:
   fixed all at once during the final maintenance tick.
 * Ship names are now optional. Ships with no names will display as
   "username's ship" instead of " <NO NAME> ".
+* Cybertron generation/loading has been overhauled. The routine
+  will now delete Cyb records that are invalid or are not the
+  expected class. That means admins can now change the amount of
+  Cybertron ships that spawn in each class without resetting the
+  game. Any saved Cyb records that will no longer be loaded or
+  are saved in a slot that now belongs to a different class will
+  be deleted automatically.
 
 === 0.2.6 === 2025-08-15
 
@@ -483,7 +490,7 @@ Other stuff:
   the X boundary and Y boundary at the same time), but will be bounced in both
   directions. The ship will also be pointed directly toward sector 0 0 after
   the bounce. This should keep NPCs from destroying themselves by repeatedly
-   running into the barrier.
+  running into the barrier.
 * If you destroy another ship while you are low on space, gold is now
   prioritized, and you will collect as much as you can hold. You will also now
   collect the entire amount of gold (space permitting) from the ship you

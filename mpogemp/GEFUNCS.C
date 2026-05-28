@@ -1603,6 +1603,143 @@ int FUNC valid_user_ship(WARSHP *ptr)
 }
 
 /**************************************************************************
+** Map an in-memory automaton slot to its configured ship class          **
+**************************************************************************/
+
+static int auto_slot_class(int usrn)
+{
+	int clscnt;
+	int i;
+
+	if (usrn < nterms || usrn >= nships)
+		return -1;
+
+	clscnt = usrn - nterms;
+	for (i = 0; i < tot_classes; ++i) {
+		if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
+			shipclass[i].max_type == CLASSTYPE_DROID) {
+			if (clscnt < shipclass[i].tot_to_create)
+				return i;
+			clscnt -= shipclass[i].tot_to_create;
+		}
+	}
+
+	return -1;
+}
+
+/**************************************************************************
+** Return the expected cyborg class for a slot, or -1 if it is not Cyb   **
+**************************************************************************/
+
+int FUNC cyb_slot_class(int usrn)
+{
+	int class;
+
+	class = auto_slot_class(usrn);
+	if (class < 0)
+		return -1;
+
+	if (shipclass[class].max_type != CLASSTYPE_CYBORG)
+		return -1;
+
+	return class;
+}
+
+/**************************************************************************
+** Parse a saved @Cybrg-N userid into its slot number                    **
+**************************************************************************/
+
+int FUNC cyb_user_slot(char *userid)
+{
+	int i;
+	int usrn;
+
+	if (strncmp(userid, "@Cybrg-", 7) != 0)
+		return -1;
+
+	if (userid[7] < '0' || userid[7] > '9')
+		return -1;
+
+	usrn = 0;
+	for (i = 7; i < UIDSIZ && userid[i] != 0; ++i) {
+		if (userid[i] < '0' || userid[i] > '9')
+			return -1;
+		usrn = (usrn * 10) + (userid[i] - '0');
+		if (usrn >= nships)
+			return -1;
+	}
+
+	return usrn;
+}
+
+/**************************************************************************
+** Check whether a userid names a currently configured Cyb slot          **
+**************************************************************************/
+
+static int valid_cyb_userid(char *userid)
+{
+	int usrn;
+
+	usrn = cyb_user_slot(userid);
+	if (usrn < 0)
+		return FALSE;
+
+	return cyb_slot_class(usrn) >= 0;
+}
+
+/**************************************************************************
+** Remove saved @ records that cannot belong to current Cyb slots        **
+**************************************************************************/
+
+void FUNC prune_stale_auto_records(void)
+{
+	int deleted;
+	int shipdel;
+	int userdel;
+
+	shipdel = 0;
+	do {
+		deleted = FALSE;
+		setbtv(gebb1);
+		if (qlobtv(0)) {
+			do {
+				gcrbtv(&tmpshp, 0);
+				if (tmpshp.userid[0] == '@' && !valid_cyb_userid(tmpshp.userid)) {
+					geshocst(1, spr("GE:INF:AUTOSHPDEL uid=%s shipno=%d",
+						tmpshp.userid, tmpshp.shipno));
+					delbtv();
+					++shipdel;
+					deleted = TRUE;
+					break;
+				}
+			} while (qnxbtv());
+		}
+	} while (deleted);
+
+	userdel = 0;
+	do {
+		deleted = FALSE;
+		setbtv(gebb5);
+		if (qlobtv(0)) {
+			do {
+				gcrbtv(&tmpusr, 0);
+				if (tmpusr.userid[0] == '@' && !valid_cyb_userid(tmpusr.userid)) {
+					geshocst(1, spr("GE:INF:AUTOUSRDEL uid=%s", tmpusr.userid));
+					delbtv();
+					++userdel;
+					deleted = TRUE;
+					break;
+				}
+			} while (qnxbtv());
+		}
+	} while (deleted);
+
+	if (shipdel != 0 || userdel != 0)
+		geshocst(1, spr("GE:INF:Auto cleanup removed %d ships, %d users",
+			shipdel, userdel));
+}
+
+/**************************************************************************
 ** find and list all the ships a single user has                         **
 **************************************************************************/
 
