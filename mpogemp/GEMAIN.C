@@ -181,6 +181,7 @@ unsigned long			nebseed;	/* nebula random seed */
 int				gemaxplrs,	/* max simultaneous GE players */
 				gefreebies,	/* free-account/newbie access toggle */
 				gemaxlist,	/* max roster/list output count */
+				gerostxt,	/* nightly roster text-file export toggle */
 				maxships,	/* max ships per user */
 				se100dam,	/* enforcer planet damage per violation */
 				profon,		/* profanity checking */
@@ -349,6 +350,7 @@ void FUNC iniwara(void)
 	gemaxplrs = numopt(MAXPLRS, 1, 256);	/* max simultaneous GE players */
 	gefreebies = numopt(FREEBIES, 0, 1);	/* allow non-paying/freebie access */
 	gemaxlist = numopt(MAXLIST, 3, 50);	/* max entries shown in GE lists */
+	gerostxt = ynopt(GEROSTXT);		/* nightly roster text-file export enabled */
 	maxships = numopt(MAXSHIPS, 1, 60);	/* max ships allowed per user */
 	se100dam = numopt(SE100DAM, 1, 101);	/* enforcer planet damage per violation */
 	showopt = numopt(SHOWOPT, 0, 5);	/* log level to console */
@@ -1037,6 +1039,9 @@ void FUNC gemidnighta(void)
 		} while (qnxbtv());
 	}
 
+	if (gerostxt)
+		dump_roster_file();
+
 	/* remove any teams with no players */
 	for (i = 0; i < MAXTEAMS; ++i) {
 		if (teamtab[i].teamcode > 0
@@ -1055,6 +1060,51 @@ void FUNC gemidnighta(void)
 	update_team_tab();
 
 	geshocst(0, spr("GE:INF:End Cleanup"));
+}
+
+/**************************************************************************
+** Write nightly top roster export                                       **
+**************************************************************************/
+
+void FUNC dump_roster_file(void)
+{
+	FILE *hdl;
+	int i;
+
+	hdl = fopen("MPOGEROS.TXT", "wt");
+	if (hdl == NULL) {
+		geshocst(0, "GE:ERR:MPOGEROS.TXT open failed");
+		return;
+	}
+
+	setmbk(gemb);
+	clrprf();
+	prfmsg(ROSTER2, gemaxlist);
+	fputs(prfbuf, hdl);
+	clrprf();
+
+	i = 0;
+	setbtv(gebb5);
+	if (qhibtv(1)) {
+		do {
+			gcrbtv(&tmpusr, 1);
+			if (tmpusr.score > 0 && tmpusr.userid[0] != '@') {
+				sprintf(gechrbuf, "%11lu", tmpusr.score);
+				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);
+				fprintf(hdl, "%-29s%s%6u%6u%4u%s\n",
+					tmpusr.userid,
+					gechrbuf,
+					tmpusr.kills,
+					tmpusr.ukills,
+					tmpusr.planets,
+					gechrbuf2);
+				++i;
+			}
+		} while (qprbtv() && i < gemaxlist);
+	}
+
+	fclose(hdl);
+	geshocst(1, "GE:INF:MPOGEROS.TXT updated");
 }
 
 /* determine the net worth of a planet */

@@ -165,6 +165,13 @@ the MPOGESHP.DAT and MPOGEUSR.DAT databases.
 
 GESHIPCL {MPOGESHP.MCV} S 28 GE Ship Class Message Filename
 
+This option will make ge-next dump the roster to a text
+file, MPOGEROS.TXT, every night during midnight cleanup,
+in case a Sysop would like to display it somewhere outside
+of the game.
+
+GEROSTXT {Dump roster to MPOGEROS.TXT nightly? YES} B
+
 This option controls if a player is allowed to transfer
 goods to a planet which they do not own. If YES a player
 can transfer goods to another players planets. This could

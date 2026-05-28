@@ -49,6 +49,7 @@ void FUNC gedeletea P((char *uid));
 void FUNC pgemidnight P((void));
 int FUNC gemidnight P((void));
 void FUNC gemidnighta P((void));
+void FUNC dump_roster_file P((void));
 void FUNC calc_networth P((void));
 unsigned FUNC long value_pl P((void));
 int FUNC pwarlof P((void));
