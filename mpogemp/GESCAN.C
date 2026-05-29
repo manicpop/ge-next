@@ -1054,8 +1054,8 @@ static void scan_ra(void)
 	double xf, yf, x1, y1, range;
 	double minx, miny;
 	double xfactor, yfactor;
-	double cell_center_x, cell_center_y;
-	double cell_half_x, cell_half_y;
+	double origin_x, origin_y;
+	double cell_left, cell_right, cell_top, cell_bottom;
 	double gal_min, gal_max;
 	double shiftx = 0.0, shifty = 0.0;
 
@@ -1105,11 +1105,8 @@ static void scan_ra(void)
 	minx = x1 - range / 10000.0;
 	miny = y1 - range / 10000.0;
 
-	cell_half_x = xfactor / 2.0;
-	cell_half_y = yfactor / 2.0;
-
 	gal_min = -((double)univmax);
-	gal_max = (double)univmax + 0.99;
+	gal_max = (double)univmax + 1.0;
 
 	/* determine shift for X if player would fall one left of center */
 	if ((int)((x1 - minx) / xfactor) == (MAXX/2) - 1)
@@ -1119,14 +1116,19 @@ static void scan_ra(void)
 	if ((int)((y1 - miny) / yfactor) == (MAXY/2) - 1)
 		shifty = yfactor;
 
+	origin_x = minx - shiftx;
+	origin_y = miny - shifty;
+
 	/* mark out-of-bounds areas */
 	for (y = 0; y < MAXY; y++) {
 		for (x = 0; x < MAXX; x++) {
-			cell_center_x = minx + x * xfactor + shiftx;
-			cell_center_y = miny + y * yfactor + shifty;
+			cell_left = origin_x + x * xfactor;
+			cell_right = cell_left + xfactor;
+			cell_top = origin_y + y * yfactor;
+			cell_bottom = cell_top + yfactor;
 
-			if ((cell_center_x + cell_half_x < gal_min) || (cell_center_x - cell_half_x > gal_max) ||
-				(cell_center_y + cell_half_y < gal_min) || (cell_center_y - cell_half_y > gal_max)) {
+			if (cell_right <= gal_min || cell_left >= gal_max ||
+				cell_bottom <= gal_min || cell_top >= gal_max) {
 				map[y][x] = '.';
 				mapc[y][x] = '4';
 			}
@@ -1303,8 +1305,8 @@ static void scan_lo(void)
 	double minx, miny;
 	double xfactor, yfactor;
 	double sx, sy;
-	double cell_center_x, cell_center_y;
-	double cell_half_x, cell_half_y;
+	double origin_x, origin_y;
+	double cell_left, cell_right, cell_top, cell_bottom;
 	double gal_min, gal_max;
 	double shiftx = 0.0;
 
@@ -1335,7 +1337,7 @@ static void scan_lo(void)
 	y1 = warsptr->coord.ycoord * 10000.0;
 
 	gal_min = -(double)univmax * 10000.0;
-	gal_max = ((double)univmax * 10000.0) + 9999.0;
+	gal_max = ((double)univmax + 1.0) * 10000.0;
 
 	/* will this scan touch all four corners of the galaxy? */
 	fullgal = (range >= (x1 - gal_min) && range >= (gal_max - x1) &&
@@ -1364,18 +1366,19 @@ static void scan_lo(void)
 		shiftx *= xfactor;  /* convert from cells to units */
 	}
 
-	cell_half_x = xfactor / 2.0;
-	cell_half_y = yfactor / 2.0;
+	origin_x = minx - shiftx;
+	origin_y = miny;
 
 	/* mark outside of galaxy */
 	for (y = 0; y < MAXY; y++) {
 		for (x = 0; x < MAXX; x++) {
-			cell_center_x = minx + (x + 0.5) * xfactor + shiftx;
-			cell_center_y = miny + (y + 0.5) * yfactor;
+			cell_left = origin_x + x * xfactor;
+			cell_right = cell_left + xfactor;
+			cell_top = origin_y + y * yfactor;
+			cell_bottom = cell_top + yfactor;
 
-			/* if the entire cell lies outside galaxy bounds */
-			if ((cell_center_x + cell_half_x < gal_min) || (cell_center_x - cell_half_x > gal_max) ||
-				(cell_center_y + cell_half_y < gal_min) || (cell_center_y - cell_half_y > gal_max)) {
+			if (cell_right <= gal_min || cell_left >= gal_max ||
+				cell_bottom <= gal_min || cell_top >= gal_max) {
 				map[y][x]  = '.';
 				mapc[y][x] = '4';
 			}
