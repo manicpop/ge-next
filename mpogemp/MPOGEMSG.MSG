@@ -2915,7 +2915,7 @@ FLUXLOAD {***
 } T GE flux pod loaded message
 
 MSGSNT1 {***
-[0;37m%s message from the [0;36m%s[0;37m's ship, the [0;36m%s
+[0;37m%s message from [0;36m%s[0;37m's ship, the [0;36m%s
 [1;36m<[1;37m %s [1;36m>[1;37m
 } T GE message received with name message
 

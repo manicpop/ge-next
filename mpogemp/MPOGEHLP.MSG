@@ -855,7 +855,8 @@ will stop the impulse engines.
 Issue the command as follows:
 
 [1;37m  orbit [1;32m[planet number]
-[1;36m You must be within 250 subsectors of a planet to establish an orbit.
+[1;36m
+You must be within 250 subsectors of a planet to establish an orbit.
 [1;37m} T GE help orbit message
 
 HLPPHA {
