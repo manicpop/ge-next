@@ -4211,11 +4211,11 @@ SYSNP {
 
 SYSACY {
 [1;36mClosest Cybertrons assigned.[1;37m
-} GE sysop assign cybs message
+} T GE sysop assign cybs message
 
 SYSTEAM {
 [1;36m Code  Team name                      Mbers   Del date       Pswd      FPswd [1;37m
-} GE team dump header
+} T GE team dump header
 
 MAIL1 {
    You have no messages waiting...
