@@ -1633,16 +1633,16 @@ static int auto_slot_class(int usrn)
 
 int FUNC cyb_slot_class(int usrn)
 {
-	int class;
+	int cls;
 
-	class = auto_slot_class(usrn);
-	if (class < 0)
+	cls = auto_slot_class(usrn);
+	if (cls < 0)
 		return -1;
 
-	if (shipclass[class].max_type != CLASSTYPE_CYBORG)
+	if (shipclass[cls].max_type != CLASSTYPE_CYBORG)
 		return -1;
 
-	return class;
+	return cls;
 }
 
 /**************************************************************************
@@ -4699,33 +4699,33 @@ int FUNC samesect(COORD *pointb, COORD *pointa)
 ** MAIL functions                                                        **
 **************************************************************************/
 
-int FUNC mailscan(char *userid, int class)
+int FUNC mailscan(char *userid, int cls)
 {
 	strncpy(mailkey.userid,userid,UIDSIZ);
-	mailkey.class = class;
+	mailkey.mailclass = cls;
 
 	setbtv(gebb4);
 
-	/* if class = 0 scan if user has ANY mail */
-	if (class == 0) {
+	/* if cls = 0 scan if user has ANY mail */
+	if (cls == 0) {
 		if (qeqbtv(userid,0)) {
 			/* DEBUG
-			prf("mail.userid=%s\rmail.class=%d\rmail.type=%d\r",mail.userid,mail.class,mail.type);*/
+			prf("mail.userid=%s\rmail.mailclass=%d\rmail.type=%d\r",mail.userid,mail.mailclass,mail.type);*/
 			return TRUE;
 		}
 	}
 	else
-	/* otherwize see if he has this class of mail */
+	/* otherwise see if he has this class of mail */
 	if (qeqbtv(&mailkey,1)) {
 		return TRUE;
 	}
 	return FALSE;
 }
 
-int FUNC mailread(char *userid, int class)
+int FUNC mailread(char *userid, int cls)
 {
 	strncpy(mailkey.userid,userid,UIDSIZ);
-	mailkey.class = class;
+	mailkey.mailclass = cls;
 	mailkey.msgno = 0;
 
 	setbtv(gebb4);
@@ -4854,7 +4854,7 @@ int FUNC sendit(void)
 	strcpy(gemsg->topic,mail.topic);
 	gemsg->auxtpc[0] = 0;
 
-	gemsg->flags = mail.class;
+	gemsg->flags = mail.mailclass;
 
 	gemsg->crdate=today();
 	gemsg->crtime=now();

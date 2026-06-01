@@ -70,7 +70,7 @@ double d_topspeed;
 ** Validate a saved cyborg ship record for the current cyb slot          **
 **************************************************************************/
 
-static int valid_cyb_ship(WARSHP *ptr, int usrn, int class)
+static int valid_cyb_ship(WARSHP *ptr, int usrn, int cls)
 {
 	if (strncmp(ptr->userid, cybname, UIDSIZ) != 0)
 		return FALSE;
@@ -84,14 +84,14 @@ static int valid_cyb_ship(WARSHP *ptr, int usrn, int class)
 	if (shipclass[ptr->shpclass].max_type != CLASSTYPE_CYBORG)
 		return FALSE;
 
-	return ptr->shpclass == class && cyb_user_slot(ptr->userid) == usrn;
+	return ptr->shpclass == cls && cyb_user_slot(ptr->userid) == usrn;
 }
 
 /**************************************************************************
 ** Load one valid cyb ship and delete invalid or duplicate records       **
 **************************************************************************/
 
-static int load_cyb_ship(WARSHP *ptr, int usrn, int class)
+static int load_cyb_ship(WARSHP *ptr, int usrn, int cls)
 {
 	int deleted;
 	int have_ship;
@@ -109,7 +109,7 @@ static int load_cyb_ship(WARSHP *ptr, int usrn, int class)
 				if (strncmp(tmpshp.userid, cybname, UIDSIZ) != 0)
 					break;
 
-				if (valid_cyb_ship(&tmpshp, usrn, class)) {
+				if (valid_cyb_ship(&tmpshp, usrn, cls)) {
 					if (!have_ship) {
 						memcpy(ptr, &tmpshp, sizeof(WARSHP));
 						keep_shipno = tmpshp.shipno;
@@ -132,7 +132,7 @@ static int load_cyb_ship(WARSHP *ptr, int usrn, int class)
 						shipclass[tmpshp.shpclass].max_type == CLASSTYPE_CYBORG &&
 						cyb_user_slot(tmpshp.userid) == usrn) {
 						geshocst(1, spr("GE:INF:CYBSHPRECLS usn=%d old=%d new=%d shipno=%d uid=%s",
-							usrn, tmpshp.shpclass, class, tmpshp.shipno, tmpshp.userid));
+							usrn, tmpshp.shpclass, cls, tmpshp.shipno, tmpshp.userid));
 					} else {
 						geshocst(0, spr("GE:ERR:BADCYBSHP usn=%d cls=%d shipno=%d uid=%s",
 							usrn, tmpshp.shpclass, tmpshp.shipno, tmpshp.userid));
@@ -156,7 +156,7 @@ static int load_cyb_ship(WARSHP *ptr, int usrn, int class)
 ** Initialize or load a cyborg ship                                      **
 **************************************************************************/
 
-void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
+void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 {
 	WARSHP *wptr;
 	int i, goldwin, goldspin, goldtry, zothusn;
@@ -164,7 +164,7 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 	int have_ship = FALSE;
 	int expected_class;
 
-	logthis(spr("@Cyb_init usrn=%d,class=%d", usrn, class));
+	logthis(spr("@Cyb_init usrn=%d,cls=%d", usrn, cls));
 
 	if (usrn < 0 || usrn >= nships) {
 		logthis(spr("CYB_INIT:bad usrn [%d]",usrn));
@@ -172,9 +172,9 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 	}
 
 	expected_class = cyb_slot_class(usrn);
-	if (expected_class != class) {
+	if (expected_class != cls) {
 		geshocst(0, spr("GE:ERR:CYBSLOTCLS usn=%d cls=%d exp=%d",
-			usrn, class, expected_class));
+			usrn, cls, expected_class));
 		return;
 	}
 
@@ -198,7 +198,7 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 
 		logthis(spr("GE:INF:Load %s user", waruptr->userid));
 
-		if (load_cyb_ship(ptr, usrn, class)) {
+		if (load_cyb_ship(ptr, usrn, cls)) {
 			ptr->status = GESTAT_AUTO;
 			ptr->shield = 40 + (ptr->shieldtype * 10);
 			ptr->phasr = 100;
@@ -215,16 +215,16 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 
 		if (!have_ship) {
 			/* make me a Cybertron */
-			logthis(spr("GE:INF:Adding %s ship - %d", cybname, class));
+			logthis(spr("GE:INF:Adding %s ship - %d", cybname, cls));
 
-			initshp(cybname, class);
+			initshp(cybname, cls);
 			if (!gepdb(GEADD, tmpshp.userid, tmpshp.shipno, &tmpshp))
 				geshocst(0, spr("GE:ERR:CYBADDSHP uid=%s shipno=%d",
 					tmpshp.userid, tmpshp.shipno));
 			memcpy(ptr, &tmpshp, sizeof(WARSHP));	/* make is the current ship */
 
-			logthis(spr("GE:INF:Add shp,cls=%d/%d", class, ptr->shpclass));
-			strncpy(ptr->shipname, shipclass[class].npcprefx, sizeof(ptr->shipname) - 1);
+			logthis(spr("GE:INF:Add shp,cls=%d/%d", cls, ptr->shpclass));
+			strncpy(ptr->shipname, shipclass[cls].npcprefx, sizeof(ptr->shipname) - 1);
 			ptr->shipname[sizeof(ptr->shipname) - 1] = 0;
 			sprintf(gechrbuf, "%u", usrn * usrn + gernd() % (2 * usrn + 1) + 1000);
 			strncat(ptr->shipname, gechrbuf,
@@ -247,15 +247,15 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 			}
 
 			/* phaser and shields between 50 and 100% of max */
-			if (shipclass[class].max_phasr > 0)
-				ptr->phasrtype = (shipclass[class].max_phasr / 2) +
-					(gernd() % (shipclass[class].max_phasr / 2 + 1));
+			if (shipclass[cls].max_phasr > 0)
+				ptr->phasrtype = (shipclass[cls].max_phasr / 2) +
+					(gernd() % (shipclass[cls].max_phasr / 2 + 1));
 			else
 				ptr->phasrtype = 0;
 
-			if (shipclass[class].max_shlds > 0)
-				ptr->shieldtype = (shipclass[class].max_shlds / 2) +
-					(gernd() % (shipclass[class].max_shlds / 2 + 1));
+			if (shipclass[cls].max_shlds > 0)
+				ptr->shieldtype = (shipclass[cls].max_shlds / 2) +
+					(gernd() % (shipclass[cls].max_shlds / 2 + 1));
 			else
 				ptr->shieldtype = 0;
 
@@ -465,7 +465,7 @@ static int notclaimed(WARSHP *ptr, int usrn)
 			noclaim = 5;
 	}
 
-	logthis(spr("notclaimed: nc = %d, class = %d, class.noclaim = %d",
+	logthis(spr("notclaimed: nc = %d, cls = %d, shipclass.noclaim = %d",
 		nc, ptr->shpclass, noclaim));
 	return nc < noclaim;
 }

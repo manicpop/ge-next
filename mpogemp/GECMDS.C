@@ -2747,7 +2747,7 @@ static int attack_men(unsigned long num)
 		}
 
 		strcpy(mail.name1, plptr->name);
-		mail.class = MAIL_CLASS_DISTRESS;
+		mail.mailclass = MAIL_CLASS_DISTRESS;
 		mail.int1 = sector.xsect;
 		mail.int2 = sector.ysect;
 		mail.long1 = num;
@@ -2876,7 +2876,7 @@ static int attack_fig(unsigned long num)
 	plptr->items[I_FIGHTER].qty = left2;
 
 	if (ratio > 2 || won == 1) {
-		mail.class = MAIL_CLASS_DISTRESS;
+		mail.mailclass = MAIL_CLASS_DISTRESS;
 		mail.type = MESG04;
 		strncpy(mail.userid, plptr->userid, UIDSIZ);
 		mail.userid[UIDSIZ - 1] = 0;
@@ -2887,7 +2887,7 @@ static int attack_fig(unsigned long num)
 		}
 
 		strcpy(mail.name1, plptr->name);
-		mail.class = MAIL_CLASS_DISTRESS;
+		mail.mailclass = MAIL_CLASS_DISTRESS;
 		mail.int1 = sector.xsect;
 		mail.int2 = sector.ysect;
 		mail.long1 = num;
@@ -3874,7 +3874,7 @@ void FUNC cmd_sysop(void)
 	int i, j;
 	unsigned long amt;
 	int gotone;
-	int count, class, clscnt;
+	int count, cls, clscnt;
 	WARSHP *ptr;
 
 #ifdef PHARLAP
@@ -3908,19 +3908,19 @@ void FUNC cmd_sysop(void)
 			ptr = warshpoff(j);
 			if (ptr->status == GESTAT_AVAIL) {
 				clscnt = j - nterms;
-				class = -1;
+				cls = -1;
 				for (i = 0; i < tot_classes; ++i) {
 					if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
 						shipclass[i].max_type == CLASSTYPE_DROID) {
 						if (clscnt < shipclass[i].tot_to_create) {
-							class = i;
+							cls = i;
 							break;
 						}
 						clscnt -= shipclass[i].tot_to_create;
 					}
 				}
-				if (class > -1 && shipclass[class].init_func != NULL) {
-					(*(shipclass[class].init_func))(ptr, j, class);
+				if (cls > -1 && shipclass[cls].init_func != NULL) {
+					(*(shipclass[cls].init_func))(ptr, j, cls);
 					++count;
 				}
 			}

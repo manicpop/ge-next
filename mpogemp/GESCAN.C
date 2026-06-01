@@ -350,7 +350,7 @@ static void print_map_row(int i, int maptype)
 				if (map[i][j] == ' ') { /* scramble empty spaces and blanked objects */
 					if (rseed%(80/warsptr->jam_sev) == (byte)0) {
 						map[i][j] = (byte)((rseed%94)+33); /* printable ascii range */
-						if (maptype != LONG && rseed%6 == 0)	/* add color speckles if not sca lo */
+						if (maptype != MAP_LONG && rseed%6 == 0)	/* add color speckles if not sca lo */
 							mapc[i][j] = (byte)((rseed%7)+48); /* ascii 0-6 */
 					}
 				}
@@ -1434,6 +1434,6 @@ static void scan_lo(void)
 		mapc[MAXY/2][MAXX/2] = '0';
 	}
 
-	printmap(LONG,0L);
+	printmap(MAP_LONG,0L);
 	outprfge(FLT_NONE,usrnum);
 }

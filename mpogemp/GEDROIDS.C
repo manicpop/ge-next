@@ -94,7 +94,7 @@ static void droid_zyg_loadout(WARSHP *ptr)
 ** Droid Init Function                                                   **
 **************************************************************************/
 
-void FUNC droid_init(WARSHP *ptr, int usrn, int class)
+void FUNC droid_init(WARSHP *ptr, int usrn, int cls)
 {
 	WARSHP *wptr;
 	int zothusn;
@@ -118,12 +118,12 @@ void FUNC droid_init(WARSHP *ptr, int usrn, int class)
 	memcpy(waruptr, &tmpusr, sizeof(WARUSR));	/* make it the current user */
 
 	/* make me a Ship */
-	logthis(spr("GE:INF:Adding %s ship - %d", droidname, class));
+	logthis(spr("GE:INF:Adding %s ship - %d", droidname, cls));
 
-	initshp(droidname, class);
+	initshp(droidname, cls);
 
 	memcpy(ptr, &tmpshp, sizeof(WARSHP));	/* make is the current ship */
-	strncpy(ptr->shipname, shipclass[class].npcprefx, sizeof(ptr->shipname) - 1);
+	strncpy(ptr->shipname, shipclass[cls].npcprefx, sizeof(ptr->shipname) - 1);
 	ptr->shipname[sizeof(ptr->shipname) - 1] = 0;
 	sprintf(gechrbuf, "%u", usrn * usrn + gernd() % (2 * usrn + 1) + 1000);
 	strncat(ptr->shipname, gechrbuf,
@@ -188,12 +188,12 @@ void FUNC droid_init(WARSHP *ptr, int usrn, int class)
 	ptr->status = GESTAT_AUTO;
 	ptr->tick = (CYBTICKTIME + gernd() % CYBTICKTIME) * 5;
 
-	if (shipclass[class].max_phasr > 1)
-		ptr->phasrtype = (gernd() % shipclass[class].max_phasr) + 1;
+	if (shipclass[cls].max_phasr > 1)
+		ptr->phasrtype = (gernd() % shipclass[cls].max_phasr) + 1;
 	else
 		ptr->phasrtype = 1;
-	if (shipclass[class].max_shlds > 1)
-		ptr->shieldtype = (gernd() % shipclass[class].max_shlds) + 1;
+	if (shipclass[cls].max_shlds > 1)
+		ptr->shieldtype = (gernd() % shipclass[cls].max_shlds) + 1;
 	else
 		ptr->shieldtype = 1;
 

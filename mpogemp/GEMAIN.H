@@ -253,7 +253,7 @@
 #define RANGEFULL 3
 #define RANGENAMES 4
 #define RANGEEXTRA 5
-#define LONG 6
+#define MAP_LONG 6
 #define RANGENOMAP 7
 #define SECTORNOMAP 8
 
@@ -633,14 +633,14 @@ typedef struct _wormtab {
 
 typedef struct _mailkey {
 	char userid[UIDSIZ];		/* mail owner userid                       */
-	int class;			/* mail class                              */
+	int mailclass;			/* mail class                              */
 	long msgno;			/* mail message number                     */
 } MAILKEY;
 
 typedef struct _mail {
 	char userid[UIDSIZ];		/* GE mail recipient userid                */
 /*30*/
-	int class;			/* GE mail class / stored message flags    */
+	int mailclass;			/* GE mail class / stored message flags    */
 /*32*/
 	int type;			/* GE message template id                  */
 /*34*/
@@ -678,7 +678,7 @@ typedef struct _mail {
 typedef struct _mailstat {
 	char userid[UIDSIZ];		/* production-report recipient userid      */
 /*30*/
-	int class;			/* GE mail class / stored message flags    */
+	int mailclass;			/* GE mail class / stored message flags    */
 /*32*/
 	int type;			/* GE message template id                  */
 /*34*/

@@ -943,7 +943,7 @@ void FUNC gemidnighta(void)
 						/* now go create the Status Record */
 						strncpy(tmpstat.userid, tmpusr.userid, UIDSIZ);
 						tmpstat.userid[UIDSIZ - 1] = 0;
-						tmpstat.class = MAIL_CLASS_PRODRPT;
+						tmpstat.mailclass = MAIL_CLASS_PRODRPT;
 						tmpstat.type = MESG20;
 						tmpstat.stamp = cofdat(today());
 						sprintf(tmpstat.dtime, "%s - %.5s", ncedat(today()), nctime(now()));
@@ -2001,7 +2001,7 @@ void FUNC autortia(void)
 
 	static int ticktock1 = 0;
 	static int ticktock2 = 0;
-	int count, class, clscnt, i;
+	int count, cls, clscnt, i;
 
 	logthis("TICK:autorti entered");
 
@@ -2026,14 +2026,14 @@ void FUNC autortia(void)
 		if (wptr->status == GESTAT_AVAIL) {
 			/* map this non-user slot back to its configured automaton class range */
 			clscnt = ticktock1 - nterms;
-			class = -1;
+			cls = -1;
 			logthis("Chan Stat = GESTAT_AVAIL");
 			for (i = 0; i < tot_classes; ++i) {
 				if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
 					shipclass[i].max_type == CLASSTYPE_DROID) {
 					/* is this slot within class i */
 					if (clscnt < shipclass[i].tot_to_create) {
-						class = i;
+						cls = i;
 						break;
 					}
 					/* no... check next class */
@@ -2041,14 +2041,14 @@ void FUNC autortia(void)
 				}
 			}
 
-			logthis(spr("picked class - %d", class));
+			logthis(spr("picked cls - %d", cls));
 
 			/* initialize the non-user ship areas */
-			if (class > -1 && shipclass[class].init_func != NULL) {
-				logthis(spr("Calling init_func 4 cls %d", class));
-				logthis(spr("   Name: %s", shipclass[i].typename));
+			if (cls > -1 && shipclass[cls].init_func != NULL) {
+				logthis(spr("Calling init_func 4 cls %d", cls));
+				logthis(spr("   Name: %s", shipclass[cls].typename));
 
-				(*(shipclass[class].init_func))(wptr, zothusn, class);
+				(*(shipclass[cls].init_func))(wptr, zothusn, cls);
 			}
 		}
 
@@ -2210,14 +2210,14 @@ void FUNC warrti3a(void)
 ** OUTPRF special, apply filters, don't send to NPCs                     **
 **************************************************************************/
 
-void FUNC outprfge(int class, int shpno)
+void FUNC outprfge(int cls, int shpno)
 {
 	byte msgfilter;
 
 	if (shpno >= 0 && shpno < nterms) {
 		if (user[shpno].state == gestt) {
 			msgfilter = warusroff(shpno)->options[MSG_FILTER];
-			switch (class) {
+			switch (cls) {
 			case FLT_NONE:
 				outprf(shpno);
 				return;

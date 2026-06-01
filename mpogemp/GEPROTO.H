@@ -83,7 +83,7 @@ void FUNC warrti2a P((void));
 void FUNC pwarrti3 P((void));
 int FUNC warrti3 P((void));
 void FUNC warrti3a P((void));
-void FUNC outprfge P((int class , int shpno));
+void FUNC outprfge P((int cls , int shpno));
 void FUNC outsect P((int filter , COORD *coordptr , unsigned exclude));
 void FUNC outrange P((int filter , COORD *coordptr));
 int FUNC ingegame P((int shpno));
@@ -173,8 +173,8 @@ double FUNC pdamage P((WARSHP *wptr , double dist , int foc));
 void FUNC setsect P((WARSHP *ptr));
 void FUNC movecoord P((COORD *pointb , COORD *pointa));
 int FUNC samesect P((COORD *pointb , COORD *pointa));
-int FUNC mailscan P((char *userid , int class));
-int FUNC mailread P((char *userid , int class));
+int FUNC mailscan P((char *userid , int cls));
+int FUNC mailread P((char *userid , int cls));
 void FUNC mailit P((int flag));
 int FUNC sendit P((void));
 void FUNC prf2tx P((void));
@@ -257,7 +257,7 @@ void FUNC cmd_spy P((void));
 void FUNC cmd_jettison P((void));
 
 /* gecybs.c */
-void FUNC cyb_init P((WARSHP *ptr , int usrn , int class));
+void FUNC cyb_init P((WARSHP *ptr , int usrn , int cls));
 void FUNC assign_cybs P((int usrnum , int call));
 int FUNC cyb_fast P((WARSHP *ptr));
 void FUNC cyb_lives P((WARSHP *ptr , int usrn));
@@ -265,7 +265,7 @@ void FUNC cyb_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
 void FUNC cyb_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 
 /* gedroids.c */
-void FUNC droid_init P((WARSHP *ptr , int usrn , int class));
+void FUNC droid_init P((WARSHP *ptr , int usrn , int cls));
 void FUNC droid_lives P((WARSHP *ptr , int usrn));
 void FUNC droid_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
 void FUNC droid_died P((WARSHP *ptr , int usrn , WARSHP *wptr));

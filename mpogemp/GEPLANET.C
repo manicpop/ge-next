@@ -101,7 +101,7 @@ void FUNC check_spy(void)
 					prfmsg(SPYC1, plptr->name, xsect, ysect);
 					strcpy(mail.userid, plptr->spyowner);
 					strcpy(mail.topic, "** Official Protest **");
-					mail.class = MAIL_CLASS_DISTRESS;
+					mail.mailclass = MAIL_CLASS_DISTRESS;
 					sendit();
 
 					/* mail message to the planet owner informing him that a spy was caught */
@@ -109,7 +109,7 @@ void FUNC check_spy(void)
 					prfmsg(SPYC2, plptr->name, xsect, ysect, plptr->spyowner, plptr->spyowner);
 					strcpy(mail.userid, plptr->userid);
 					strcpy(mail.topic, "** Official Protest **");
-					mail.class = MAIL_CLASS_DISTRESS;
+					mail.mailclass = MAIL_CLASS_DISTRESS;
 					sendit();
 					clrprf();
 
@@ -155,7 +155,7 @@ void FUNC check_spy(void)
 						spr("%ld", itemcnt));
 					strcpy(mail.userid, plptr->spyowner);
 					strcpy(mail.topic, "Intelligence Report");
-					mail.class = MAIL_CLASS_DISTRESS;
+					mail.mailclass = MAIL_CLASS_DISTRESS;
 
 					sendit();
 					clrprf();
@@ -178,7 +178,7 @@ void FUNC multiply(int final_mult)
 		plptr->items[I_TROOPS].qty -= cnt;
 
 		if (final_mult == TRUE) {
-			mail.class = MAIL_CLASS_DISTRESS;
+			mail.mailclass = MAIL_CLASS_DISTRESS;
 			mail.type = MESG06;
 			strncpy(mail.userid, plptr->userid, UIDSIZ);
 			mail.userid[UIDSIZ - 1] = 0;
@@ -212,7 +212,7 @@ void FUNC multiply(int final_mult)
 		plptr->items[I_MEN].qty = temp;
 
 		if (final_mult == TRUE) {
-			mail.class = MAIL_CLASS_DISTRESS;
+			mail.mailclass = MAIL_CLASS_DISTRESS;
 			mail.type = MESG07;
 			strncpy(mail.userid, plptr->userid, UIDSIZ);
 			mail.userid[UIDSIZ - 1] = 0;
@@ -288,7 +288,7 @@ void FUNC multiply(int final_mult)
 		if (final_mult == TRUE && temp > max) {
 			logthis("Mailing production report");
 			temp = max;
-			mail.class = MAIL_CLASS_PRODRPT;
+			mail.mailclass = MAIL_CLASS_PRODRPT;
 			mail.type = MESG08 + i;
 			strncpy(mail.userid, plptr->userid, UIDSIZ);
 			mail.userid[UIDSIZ - 1] = 0;
@@ -335,7 +335,7 @@ void FUNC multiply(int final_mult)
 				}
 				setbtv(gebb2);
 
-				mail.class = MAIL_CLASS_DISTRESS;
+				mail.mailclass = MAIL_CLASS_DISTRESS;
 				mail.type = MESG30;
 				strncpy(mail.userid, plptr->userid, UIDSIZ);
 				mail.userid[UIDSIZ - 1] = 0;
