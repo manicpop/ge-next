@@ -2617,7 +2617,7 @@ static int attack_men(unsigned long num)
 
 	/* take troops off ship */
 	warsptr->items[I_TROOPS] -= num;
-	sprintf(gechrbuf, "%ld", num);
+	sprintf(gechrbuf, "%lu", num);
 
 	/* tell him they're gone*/
 	prfmsg(ATTACKM1, gechrbuf);
@@ -2635,7 +2635,7 @@ static int attack_men(unsigned long num)
 		kill1 = i * (plptr->items[I_FIGHTER].qty);
 		if (kill1 > left1)
 			kill1 = left1;
-		sprintf(gechrbuf, "%ld", kill1);
+		sprintf(gechrbuf, "%lu", kill1);
 		prfmsg(ATTACKM8, gechrbuf);
 	}
 
@@ -2670,8 +2670,8 @@ static int attack_men(unsigned long num)
 	if (kill2 > left2)
 		kill2 = left2;
 
-	sprintf(gechrbuf, "%ld", kill1);
-	sprintf(gechrbuf2, "%ld", kill2);
+	sprintf(gechrbuf, "%lu", kill1);
+	sprintf(gechrbuf2, "%lu", kill2);
 
 	prfmsg(ATTACKM2, gechrbuf2, gechrbuf);
 
@@ -2681,7 +2681,7 @@ static int attack_men(unsigned long num)
 	if (left2 > 0 && left2 < (left1 / 4) && !won) {
 		if (waruptr->planets < max_plnts) {
 			won = 1;
-			sprintf(gechrbuf, "%ld", left2);
+			sprintf(gechrbuf, "%lu", left2);
 			prfmsg(ATTACKM3, gechrbuf);
 		}
 		else
@@ -2689,7 +2689,7 @@ static int attack_men(unsigned long num)
 	}
 
 	if (left1 > 0 && left1 < (left2 / 4)) {
-		sprintf(gechrbuf, "%ld", left1);
+		sprintf(gechrbuf, "%lu", left1);
 		prfmsg(ATTACKM4, gechrbuf);
 		plptr->items[I_TROOPS].qty += left1;
 		left1 = 0;
@@ -2704,7 +2704,7 @@ static int attack_men(unsigned long num)
 				j = plptr->items[ii].qty;
 
 			if (j >= 1) {
-				sprintf(gechrbuf, "%ld", j);
+				sprintf(gechrbuf, "%lu", j);
 				prfmsg(ATTACKM5, gechrbuf, item_name[ii]);
 				plptr->items[ii].qty -= j;
 			}
@@ -2780,7 +2780,7 @@ static int attack_fig(unsigned long num)
 	unsigned long j, left1, left2, kill1, kill2, ratio;
 
 	warsptr->items[I_FIGHTER] -= num;
-	sprintf(gechrbuf, "%ld", num);
+	sprintf(gechrbuf, "%lu", num);
 	prfmsg(ATTACKF1, gechrbuf);
 	outprfge(FLT_NONE, usrnum);
 
@@ -2827,8 +2827,8 @@ static int attack_fig(unsigned long num)
 		if (kill2 > left2)
 			kill2 = left2;
 
-		sprintf(gechrbuf, "%ld", kill2);
-		sprintf(gechrbuf2, "%ld", kill1);
+		sprintf(gechrbuf, "%lu", kill2);
+		sprintf(gechrbuf2, "%lu", kill1);
 
 		prfmsg(ATTACKF2, gechrbuf, gechrbuf2);
 		left1 -= kill1;
@@ -2844,7 +2844,7 @@ static int attack_fig(unsigned long num)
 				j = plptr->items[ii].qty;
 
 			if (j > 0 && ii != I_FIGHTER) {
-				sprintf(gechrbuf, "%ld", j);
+				sprintf(gechrbuf, "%lu", j);
 				prfmsg(ATTACKF5, gechrbuf, item_name[ii]);
 				plptr->items[ii].qty -= j;
 			}
@@ -2861,7 +2861,7 @@ static int attack_fig(unsigned long num)
 
 	if (left1 > 0L) {
 		warsptr->items[I_FIGHTER] += left1;
-		sprintf(gechrbuf, "%ld", left1);
+		sprintf(gechrbuf, "%lu", left1);
 		prfmsg(ATTACKF6, gechrbuf);
 	}
 
@@ -3374,7 +3374,7 @@ static void buy(int item)
 						prfmsg(BUY8);
 					else {
 						sprintf(gechrbuf2, "%lu", amt);
-						sprintf(gechrbuf, "%lu", price(item, amt));
+						sprintf(gechrbuf, "%ld", price(item, amt));
 						if (sameas(plptr->userid, warsptr->userid)) {
 							prfmsg(PRICE2, gechrbuf2, item_name[item], baseprice[item], gechrbuf);
 						} else {
@@ -3934,7 +3934,7 @@ void FUNC cmd_sysop(void)
 				if (sameto(kwrd[i],margv[3])) {
 					if ((amt = atol(margv[2])) > 0) {
 						warsptr->items[i] += amt;
-						sprintf(gechrbuf,"%ld",amt);
+						sprintf(gechrbuf,"%lu",amt);
 						prfmsg(SYSGET,gechrbuf,item_name[i]);
 						outprfge(FLT_NONE, usrnum);
 						return;
@@ -5266,7 +5266,7 @@ static void scan_data2(void)
 	refresh(warsptr, usrnum);
 
 	setsect(warsptr);
-	prf("Datascan: Sector X:%u Y:%u\r",xsect,ysect);
+	prf("Datascan: Sector X:%d Y:%d\r",xsect,ysect);
 
 	getsector(&warsptr->coord);
 
@@ -5275,7 +5275,7 @@ static void scan_data2(void)
 		if (sector.ptab[i].coord.xcoord != 0) {
 			x = coord2(sector.ptab[i].coord.xcoord);
 			y = coord2(sector.ptab[i].coord.ycoord);
-			prf("Pl#%d: Xcoord:%d, Ycoord:%d, Type:%d\r",i+1,x,y,sector.ptab[i].type);
+			prf("Pl#%d: Xcoord:%u, Ycoord:%u, Type:%d\r",i+1,x,y,sector.ptab[i].type);
 		}
 	}
 }
@@ -5314,7 +5314,7 @@ void FUNC cmd_data(void)
 			(warsptr->status == GESTAT_USER && warsptr->shipname[0] == 0 ? warsptr->userid : warsptr->shipname),
 			warsptr->shpclass);
 
-		prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
+		prf("SD2:%s,%s,%d,%d,%u,%u,%s,%s*\r",
 			spr("%ld",(long)warsptr->heading),
 			spr("%ld",(long)warsptr->speed),
 			xsect,ysect,xcord,ycord,
@@ -5346,7 +5346,7 @@ void FUNC cmd_data(void)
 
 		prf("SD6:");
 		for (i=0; i<NUMITEMS; ++i)
-			prf("I%d:%s,",i,spr("%ld",warsptr->items[i]));
+			prf("I%d:%s,",i,spr("%lu",warsptr->items[i]));
 		prf("*\r");
 
 		j = 0;
