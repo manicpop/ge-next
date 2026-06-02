@@ -411,7 +411,7 @@ void FUNC assign_cybs(int usrnum, int call)
 			return;
 
 		ptr = warshpoff(low_ship);
-		ptr->cybmine = usrnum;
+		ptr->cybmine = (byte)usrnum;
 		ptr->track_grace = CYBGRACE;
 	}
 }
@@ -541,7 +541,7 @@ static void cyb_annoy(WARSHP *ptr, int usrn, int msgtype)
 		msgtype = CYBBASEB;
 
 	/* let some of these through on occasion */
-	if ((msgtype == NEUTRAL || msgtype == IGNORE) &&
+	if ((msgtype == NEUTRAL || msgtype == CYBIGNORE) &&
 		gernd() % (16 + (shipclass[ptr->shpclass].tough_factor * 2)) == 0)
 		ptr->npcmsg = 255;	/* adjust for tougher ships going faster */
 
@@ -1057,7 +1057,7 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 				/* otherwise drift across the target's front instead of creeping straight in */
 				ptr->head2b = normal(vector(&ptr->coord, &wptr->coord) + 30.0 + rndm(60.0));
 			if (shipclass[wptr->shpclass].cybs_can_att == 0)
-				cyb_annoy(ptr, low_ship, IGNORE);
+				cyb_annoy(ptr, low_ship, CYBIGNORE);
 			else if (neutral(&wptr->coord))
 				cyb_annoy(ptr, low_ship, NEUTRAL);
 			ptr->holdcourse = (gernd() % 3) + 2;

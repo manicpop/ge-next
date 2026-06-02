@@ -118,7 +118,7 @@ int FUNC lockon(WARSHP *ptr, int type, int ship, int usrn)
 
 		if (fact > .7) {
 			if (wptr->status == GESTAT_AUTO) {	/* if npc... */
-				wptr->cybmine = usrn;	/* engage user */
+				wptr->cybmine = (byte)usrn;	/* engage user */
 				wptr->track_grace = CYBGRACE;
 				wptr->tick = 2;		/* do it fast */
 				wptr->npcmsg = 255;	/* reset annoy msg tracking */
@@ -170,7 +170,7 @@ static int maint_steps(WARSHP *ptr)
 	if (ptr->tactical < 0)
 		steps += -ptr->tactical;
 	if (ptr->phasr < 0)
-		steps += -ptr->phasr;
+		steps += (int)-ptr->phasr;
 	if (ptr->torpcntl > 0)
 		steps += ptr->torpcntl;
 	if (ptr->mislcntl > 0)
@@ -319,7 +319,7 @@ static void repair_systems(WARSHP *ptr, int usrn, int steps, int domaint)
 		}
 
 		if (ptr->phasr < 0) {
-			fix = (steps < -ptr->phasr) ? steps : -ptr->phasr;
+			fix = (steps < (int)-ptr->phasr) ? steps : (int)-ptr->phasr;
 			ptr->phasr += fix;
 			steps -= fix;
 			if (ptr->phasr == 0) {
@@ -761,7 +761,7 @@ void FUNC firep(WARSHP *ptr, int usrn)
 								ptr->cantexit = FIRETICKS;
 							}
 							if (wptr->status == GESTAT_AUTO) {	/* if npc... */
-								wptr->cybmine = usrn;	/* engage user */
+								wptr->cybmine = (byte)usrn;	/* engage user */
 								wptr->track_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
 								wptr->tick = 2;		/* do it fast */
 								wptr->npcmsg = 255;	/* reset annoy msg tracking */
@@ -937,7 +937,7 @@ void FUNC firehp(WARSHP *ptr, int usrn)
 										wptr->damage += factor;
 									set_dislike(uptr,shipclass[wptr->shpclass].faction,(int)factor);
 									if (wptr->status == GESTAT_AUTO) {	/* if npc... */
-										wptr->cybmine = usrn;	/* engage user */
+										wptr->cybmine = (byte)usrn;	/* engage user */
 										wptr->track_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
 										wptr->tick = 2;		/* do it fast */
 										wptr->npcmsg = 255;	/* reset annoy msg tracking */
@@ -1039,7 +1039,7 @@ int FUNC torp(WARSHP *ptr, int usrn, int shpnum)
 		prfmsg(TFIRE2,shpltr(shpnum,usrn));
 		outprfge(FLT_NONE,shpnum);
 		/* store the initial travel distance plus a small offset for some reason */
-		wptr->ltorps[slot].distance = (unsigned)(cdistance(&ptr->coord,&(wptr->coord))*10000);
+		wptr->ltorps[slot].distance = (unsigned)(cdistance(&ptr->coord, &(wptr->coord)) * 10000);
 		wptr->ltorps[slot].distance += 20;	/* why? */
 		wptr->ltorps[slot].channel = (byte)usrn;
 		wptr->cantexit = FIRETICKS;
@@ -1133,10 +1133,10 @@ int FUNC misl(WARSHP *ptr, int usrnum, int shpnum, unsigned energy, unsigned eng
 		prfmsg(MFIRE2,shpltr(shpnum,usrnum));
 		outprfge(FLT_NONE,shpnum);
 		/* store the initial travel distance plus a small offset, along with the missile's payload energy */
-		wptr->lmissl[slot].distance = (unsigned)(cdistance(&ptr->coord,&(wptr->coord))*10000);
+		wptr->lmissl[slot].distance = (unsigned)(cdistance(&ptr->coord, &(wptr->coord)) * 10000);
 		wptr->lmissl[slot].distance += 20;
 		wptr->lmissl[slot].channel = (byte)usrnum;
-		wptr->lmissl[slot].energy = energy;
+		wptr->lmissl[slot].energy = (unsigned)energy;
 		wptr->cantexit = FIRETICKS;
 		ptr->cantexit = FIRETICKS;
 		return 1;
@@ -2714,7 +2714,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 	WARUSR *wuptr;
 	WARSHP *disptr;
 	WARSHP *nearptr;
-	unsigned i;
+	int i;
 	unsigned long room100;
 	int who, comma, full, lospos, winpos, nearby;
 	long scr, amt, bonus1, bonus2, ded_amt;
@@ -2762,7 +2762,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 		else
 			prfmsg(KILLGOT1,ptr->shipname);
 
-		if (shipclass[wptr->shpclass].max_tons <= calcweight(wptr)) {
+		if ((unsigned long)shipclass[wptr->shpclass].max_tons <= calcweight(wptr)) {
 			full = TRUE;
 			comma = TRUE;
 			prf(" nothing");
@@ -2851,7 +2851,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 			ded_amt = (amt * score_f2) / 100L;
 
 			/* if loss exceeds total score, kill is worth nothing */
-			if (ded_amt > waruptr->score) {
+			if ((unsigned long)ded_amt > waruptr->score) {
 				ded_amt = 0;
 				amt = 0;
 				scr = 0;
@@ -2865,7 +2865,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 		}
 
 		/* cap deduction to combat-earned score */
-		if (ded_amt > waruptr->klscore)
+		if ((unsigned long)ded_amt > waruptr->klscore)
 			ded_amt = waruptr->klscore;
 
 		waruptr->klscore -= ded_amt;
@@ -2904,7 +2904,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 			&& ptr->status == GESTAT_USER
 			&& wptr->status == GESTAT_USER) {
 			amt = (waruptr->cash / 100L) * (long)chgloser;
-			if (amt > waruptr->cash)
+			if ((unsigned long)amt > waruptr->cash)
 				amt = waruptr->cash;
 
 			if (amt > 0) {
@@ -4113,7 +4113,7 @@ int FUNC valpcnt(char *ptr, unsigned minnum, unsigned maxnum)
 		for (inpptr = ptr; isdigit((unsigned char)*inpptr); inpptr++) {
 		}
 		if (*inpptr == 0 || *inpptr == ' ') {
-			if ((val = atoi(ptr)) >= minnum && val <= maxnum) {
+			if ((unsigned)(val = atoi(ptr)) >= minnum && (unsigned)val <= maxnum) {
 				warsptr->percent = val;
 				return 1;
 			}

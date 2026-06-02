@@ -33,8 +33,12 @@
   * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            *
   *************************************************************************/
 
+#ifndef TRUE
 #define TRUE 1
+#endif
+#ifndef FALSE
 #define FALSE 0
+#endif
 
 /* if this is the trainer version this define needs to be made */
 /* #define GETRAINER 1 */
@@ -238,7 +242,7 @@
 #define APPROACH 0
 #define LOATTACK 1
 #define HIATTACK 2
-#define IGNORE 3
+#define CYBIGNORE 3
 #define NEUTRAL 4
 #define TAUNT 5
 #define CYBTORP 6
