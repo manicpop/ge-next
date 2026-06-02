@@ -2715,6 +2715,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 	WARSHP *disptr;
 	WARSHP *nearptr;
 	int i;
+	unsigned long loot_amt;
 	unsigned long room100;
 	int who, comma, full, lospos, winpos, nearby;
 	long scr, amt, bonus1, bonus2, ded_amt;
@@ -2769,16 +2770,16 @@ void FUNC killem(WARSHP *ptr, int usrn)
 		}
 		else {
 			/* get gold drop first, complete amount */
-			amt = ptr->items[I_GOLD];
-			if (amt > 0) {
-				if (!chkweight(wptr,I_GOLD,amt)) {
+			loot_amt = ptr->items[I_GOLD];
+			if (loot_amt > 0) {
+				if (!chkweight(wptr,I_GOLD,loot_amt)) {
 					room100 = ((unsigned long)shipclass[wptr->shpclass].max_tons * 100UL) - cargo_weight100(wptr);
-					amt = (long)(room100 / (unsigned long)weight[I_GOLD]);
+					loot_amt = room100 / (unsigned long)weight[I_GOLD];
 					full = TRUE;
 				}
-				if (amt > 0) {
-					wptr->items[I_GOLD] += amt;
-					sprintf(gechrbuf2,"%ld",amt);
+				if (loot_amt > 0) {
+					wptr->items[I_GOLD] += loot_amt;
+					sprintf(gechrbuf2,"%lu",loot_amt);
 					prf(" %s %s",gechrbuf2,item_name[I_GOLD]);
 					comma = TRUE;
 				}
@@ -2789,17 +2790,17 @@ void FUNC killem(WARSHP *ptr, int usrn)
 					break;
 				if (i != I_MEN && i != I_TROOPS && i != I_SPY && i != I_GOLD &&
 					!(shipclass[ptr->shpclass].max_type == CLASSTYPE_CYBORG && i == I_FOOD)) {
-					amt = ptr->items[i] / (r % 5 + 1);
+					loot_amt = ptr->items[i] / (r % 5 + 1);
 					/* only collect as much as we can hold */
-					if (amt > 0) {
-						if (!chkweight(wptr,i,amt)) {
+					if (loot_amt > 0) {
+						if (!chkweight(wptr,i,loot_amt)) {
 							room100 = ((unsigned long)shipclass[wptr->shpclass].max_tons * 100UL) - cargo_weight100(wptr);
-							amt = (long)(room100 / (unsigned long)weight[i]);
+							loot_amt = room100 / (unsigned long)weight[i];
 							full = TRUE;
 						}
-						if (amt > 0) {
-							wptr->items[i] += amt;
-							sprintf(gechrbuf2,"%ld",amt);
+						if (loot_amt > 0) {
+							wptr->items[i] += loot_amt;
+							sprintf(gechrbuf2,"%lu",loot_amt);
 							if (comma == TRUE)
 								prf(", %s %s",gechrbuf2,item_name[i]);
 							else {
@@ -5018,13 +5019,13 @@ unsigned long FUNC cargo_weight100(WARSHP *wptr)
 
 /* check if the goods to be added will cause weight to be exceeded */
 
-int FUNC chkweight(WARSHP *wptr, int itm, long amt)
+int FUNC chkweight(WARSHP *wptr, int itm, unsigned long amt)
 {
 	unsigned long total;
 	unsigned long add;
 
 	total = cargo_weight100(wptr);
-	add = (unsigned long)amt * (unsigned long)weight[itm];
+	add = amt * (unsigned long)weight[itm];
 
 	return (total + add) <= ((unsigned long)shipclass[wptr->shpclass].max_tons * 100UL)
 		&& (wptr->items[itm] <= ULCAP - amt);

@@ -3962,25 +3962,32 @@ void FUNC cmd_sysop(void)
 			outprfge(FLT_NONE, usrnum);
 		}
 		return;
-	} else if (sameas("cash",margv[1]) && margc == 3) {
+	} else if (sameas("cash",margv[1]) && (margc == 2 || margc == 3)) {
 		long delta;
 		unsigned long amount;
 
-		delta = atol(margv[2]);
-		if (delta < 0L) {
-			amount = (unsigned long)(-(delta + 1L)) + 1UL;
-			if (amount > waruptr->cash)
-				waruptr->cash = 0;
-			else
-				waruptr->cash -= amount;
+		if (margc == 2) {
+			amount = ULCAP;
 		} else {
+			delta = atol(margv[2]);
+			if (delta < 0L) {
+				amount = (unsigned long)(-(delta + 1L)) + 1UL;
+				if (amount > waruptr->cash)
+					waruptr->cash = 0;
+				else
+					waruptr->cash -= amount;
+				sprintf(gechrbuf,"-%lu",amount);
+				prfmsg(SYSCASH,gechrbuf);
+				outprfge(FLT_NONE, usrnum);
+				return;
+			}
 			amount = (unsigned long)delta;
-			if (amount > ULCAP - waruptr->cash)
-				waruptr->cash = ULCAP;
-			else
-				waruptr->cash += amount;
 		}
-		sprintf(gechrbuf,"%ld",delta);
+
+		if (waruptr->cash > ULCAP - amount)
+			amount = ULCAP - waruptr->cash;
+		waruptr->cash += amount;
+		sprintf(gechrbuf,"%lu",amount);
 		prfmsg(SYSCASH,gechrbuf);
 		outprfge(FLT_NONE, usrnum);
 		return;

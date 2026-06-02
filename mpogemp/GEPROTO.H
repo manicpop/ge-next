@@ -186,7 +186,7 @@ void FUNC shieldrep P((WARSHP *wptr , int usrn));
 void FUNC shieldchg P((WARSHP *wptr , int usrn));
 void FUNC charge P((WARSHP *wptr , int *max , int *pct));
 unsigned long FUNC cargo_weight100 P((WARSHP *wptr));
-int FUNC chkweight P((WARSHP *wptr , int itm , long amt));
+int FUNC chkweight P((WARSHP *wptr , int itm , unsigned long amt));
 unsigned long FUNC calcweight P((WARSHP *wptr));
 char FUNC shpltr P((int usrn , int ship));
 char *FUNC username P((WARSHP *ptr));
