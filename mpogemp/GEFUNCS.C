@@ -145,6 +145,9 @@ static int entrypend_empty(int usrn)
 	int i;
 	byte *pendptr;
 
+	if (usrn < 0 || usrn >= nterms)
+		return TRUE;
+
 	/* each user owns a fixed-width slice of the shared pending-entry buffer */
 	pendptr = entrypend + (usrn * entrybytes);
 
@@ -1325,6 +1328,9 @@ static void send_exitmsg(int entrant, int recipient)
 
 static void clear_entrymsg(int usrn)
 {
+	if (usrn < 0 || usrn >= nterms)
+		return;
+
 	entrytab[usrn].active = 0;
 	entrytab[usrn].ticks = 0;
 	setmem(entrysent + (usrn * entrybytes), entrybytes, 0);
@@ -1342,6 +1348,9 @@ void FUNC start_entrymsg(int usrn)
 	int mode;
 	byte *sentptr, *pendptr;
 	byte mask;
+
+	if (usrn < 0 || usrn >= nterms)
+		return;
 
 	clear_entrymsg(usrn);
 	sentptr = entrysent + (usrn * entrybytes);
@@ -1438,6 +1447,9 @@ void FUNC exit_entrymsg(int usrn)
 	int zothusn;
 	byte *sentptr;
 	byte mask;
+
+	if (usrn < 0 || usrn >= nterms)
+		return;
 
 	sentptr = entrysent + (usrn * entrybytes);
 
