@@ -947,7 +947,8 @@ void FUNC gemidnighta(void)
 						tmpstat.type = MESG20;
 						tmpstat.stamp = cofdat(today());
 						sprintf(tmpstat.dtime, "%s - %.5s", ncedat(today()), nctime(now()));
-						strcpy(tmpstat.name1, planet.name);
+						strncpy(tmpstat.name1, planet.name, sizeof(tmpstat.name1));
+						tmpstat.name1[sizeof(tmpstat.name1) - 1] = 0;
 						tmpstat.int1 = planet.xsect;
 						tmpstat.int2 = planet.ysect;
 						tmpstat.cash = planet.cash;
@@ -983,10 +984,8 @@ void FUNC gemidnighta(void)
 		do {
 			gcrbtv(gemsg, 0);
 			/* GE-owned mail uses nreply as its saved day stamp for retention checks */
-			if (gemsg->nreply < i) /* we robbed nreply for the stamp */
-				delbtv();
-			/* purge mail addressed to deleted/non-live players */
-			if (gemsg->userto[0] == '*') /* non-live player */
+			/* purge mail older than maildays or addressed to deleted/non-live players */
+			if (gemsg->nreply < i || gemsg->userto[0] == '*')
 				delbtv();
 
 			} while (qnxbtv());

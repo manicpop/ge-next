@@ -4861,10 +4861,14 @@ int FUNC sendit(void)
 
 	gemsg->msgno = 0;
 
-	strcpy(gemsg->userto,mail.userid);
-	strcpy(gemsg->from,"** Galactic Empire **");
-	strcpy(gemsg->to,mail.userid);
-	strcpy(gemsg->topic,mail.topic);
+	strncpy(gemsg->userto, mail.userid, sizeof(gemsg->userto));
+	gemsg->userto[sizeof(gemsg->userto) - 1] = 0;
+	strncpy(gemsg->from, "** Galactic Empire **", sizeof(gemsg->from));
+	gemsg->from[sizeof(gemsg->from) - 1] = 0;
+	strncpy(gemsg->to, mail.userid, sizeof(gemsg->to));
+	gemsg->to[sizeof(gemsg->to) - 1] = 0;
+	strncpy(gemsg->topic, mail.topic, sizeof(gemsg->topic));
+	gemsg->topic[sizeof(gemsg->topic) - 1] = 0;
 	gemsg->auxtpc[0] = 0;
 
 	gemsg->flags = mail.mailclass;
