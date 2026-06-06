@@ -2883,7 +2883,7 @@ DECOY1 {
 } T GE no decoys at warp message
 
 DECOYREL {
-[0;37m[[1;31mERROR[0;37m] The decoy loader is reloading.[1;37m
+[0;37m[[1;31mERROR[0;37m] The decoy launcher is reloading.[1;37m
 } T GE no decoys at warp message
 
 TORDEST {***
@@ -2924,19 +2924,19 @@ MSGSNT1O {***
 [1;36m<[1;37m %s [1;36m>[1;37m
 } T GE message received without name message
 
-MSGSNT2 {***
+MSGSNT2 {
 [0;37m%s message sent.[1;37m
 } T GE message received with name message
 
-MSGSNT3 {***
+MSGSNT3 {
 [0;37mEncoded message sent on frequency %u.[1;37m
 } T GE message received with name message
 
-MSGSNT4 {***
+MSGSNT4 {
 [0;37mEncoded communications are set to frequency %u.[1;37m
 } T GE message received with name message
 
-MSGSNT4N {***
+MSGSNT4N {
 [0;37mEncoded communications are turned off.[1;37m
 } T GE message received with name message
 
