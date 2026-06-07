@@ -96,6 +96,10 @@ static char *geuser,		/* configured user database name */
 
 static char *endmark;		/* startup message/config integrity marker */
 
+#ifdef MBBSEMU
+static char *geprfsav;		/* preserve prfbuf around mbbsemu outprf() */
+#endif
+
 int numwar = 0;		/* number of users in game */
 int decpass = 0;	/* decoy expiry batching pass counter */
 
@@ -120,6 +124,10 @@ GALWORM worm;		/* temporary wormhole-record workspace */
 
 static int mnu_admenu1a(void);
 static int mnu_menug(void);
+#ifdef MBBSEMU
+static void save_prf_mbbsemu(void);
+static void restore_prf_mbbsemu(void);
+#endif
 
 PLANETAB *ptab;		/* base pointer to per-user planet scan tables */
 
@@ -709,6 +717,9 @@ void FUNC iniwara(void)
 	gechrbuf2 = (char *)alcmem(20);
 	gechrbuf3 = (char *)alcmem(20);
 	warpbuf = (char *)alcmem(40);
+#ifdef MBBSEMU
+	geprfsav = (char *)alcmem(OUTSIZ);
+#endif
 
 	/* init empty mine field */
 	for (n = 0; n < nummines; ++n)
@@ -1289,21 +1300,34 @@ void FUNC outwar(int filter, unsigned exclude, unsigned channel, int mode)
 {
 	int zothusn;
 
+#ifdef MBBSEMU
+	save_prf_mbbsemu();
+#endif
+
 	for (zothusn = 0; zothusn < nships; ++zothusn) {
 		if (zothusn != exclude && ingegame(zothusn)) {
 			if (mode == 0) {
 				/* send to every in-game ship except the excluded one */
+#ifdef MBBSEMU
+				restore_prf_mbbsemu();
+#endif
 				outprfge(filter, zothusn);
 			}
 			else if (mode == 1) {
 				/* send only to ships tuned to the requested frequency */
 				if (channel == warshpoff(zothusn)->freq) {
+#ifdef MBBSEMU
+					restore_prf_mbbsemu();
+#endif
 					outprfge(filter, zothusn);
 				}
 			}
 			else if (mode == 2) {
 				/* send only to members of the requested team */
 				if (channel == warusroff(zothusn)->teamcode) {
+#ifdef MBBSEMU
+					restore_prf_mbbsemu();
+#endif
 					outprfge(filter, zothusn);
 				}
 			}
@@ -2221,6 +2245,26 @@ void FUNC warrti3a(void)
 ** OUTPRF special, apply filters, don't send to NPCs                     **
 **************************************************************************/
 
+#ifdef MBBSEMU
+static void save_prf_mbbsemu(void)
+{
+	if (geprfsav == NULL)
+		return;
+
+	/* mbbsemu clears prfbuf in outprf(); real MajorBBS leaves it intact. */
+	stzcpy(geprfsav, prfbuf, OUTSIZ);
+}
+
+static void restore_prf_mbbsemu(void)
+{
+	if (geprfsav == NULL)
+		return;
+
+	stzcpy(prfbuf, geprfsav, OUTSIZ);
+	prfptr = prfbuf + strlen(prfbuf);
+}
+#endif
+
 void FUNC outprfge(int cls, int shpno)
 {
 	byte msgfilter;
@@ -2301,6 +2345,10 @@ void FUNC outsect(int filter, COORD *coordptr, unsigned exclude)
 
 	src_neb = (byte)innebula(coord1(coordptr->xcoord), coord1(coordptr->ycoord));
 
+#ifdef MBBSEMU
+	save_prf_mbbsemu();
+#endif
+
 	for (zothusn = 0; zothusn < nterms; ++zothusn) {
 		if (ingegame(zothusn) && zothusn != exclude) {
 			wptr = warshpoff(zothusn);
@@ -2313,6 +2361,9 @@ void FUNC outsect(int filter, COORD *coordptr, unsigned exclude)
 					if (!(src_neb && oth_neb && ddist < (double)NEBRNG))
 						continue;
 				}
+#ifdef MBBSEMU
+				restore_prf_mbbsemu();
+#endif
 				outprfge(filter, zothusn);
 			}
 		}
@@ -2333,6 +2384,10 @@ void FUNC outrange(int filter, COORD *coordptr)
 
 	src_neb = (byte)innebula(coord1(coordptr->xcoord), coord1(coordptr->ycoord));
 
+#ifdef MBBSEMU
+	save_prf_mbbsemu();
+#endif
+
 	for (zothusn = 0; zothusn < nships; ++zothusn) {
 		wptr = warshpoff(zothusn);
 		if (ingegame(zothusn) && shipclass[wptr->shpclass].max_type == CLASSTYPE_USER) {
@@ -2341,8 +2396,12 @@ void FUNC outrange(int filter, COORD *coordptr)
 			oth_neb = (byte)innebula(coord1(wptr->coord.xcoord), coord1(wptr->coord.ycoord));
 			if ((src_neb || oth_neb) && !(src_neb && oth_neb && ddist < (double)NEBRNG))
 				continue;
-			if (ddist > 1 && ddist < (double)ship_scanrange(wptr))
+			if (ddist > 1 && ddist < (double)ship_scanrange(wptr)) {
+#ifdef MBBSEMU
+				restore_prf_mbbsemu();
+#endif
 				outprfge(filter, zothusn);
+			}
 		}
 	}
 	clrprf();
