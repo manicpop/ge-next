@@ -4895,17 +4895,28 @@ int FUNC sendit(void)
 
 void FUNC prf2tx(void)		/* xfer prfbuf contents to message text area */
 {
-	char *cp;
+	char *src, *dst;
 
 	stpans(prfbuf);
 	if (strlen(prfbuf) >= GEMSGSIZ) {
 		prfbuf[GEMSGSIZ-1]=0;
 	}
-	for (cp = prfbuf; *cp != 0; cp++) {
-		if (*cp == '\n') {
-			*cp='\r';
+	src = prfbuf;
+	dst = prfbuf;
+	while (*src != 0) {
+		if (*src == '\r' || *src == '\n') {
+			*dst++ = '\r';
+			if ((src[0] == '\r' && src[1] == '\n') ||
+				(src[0] == '\n' && src[1] == '\r')) {
+				++src;
+			}
+			++src;
+		}
+		else {
+			*dst++ = *src++;
 		}
 	}
+	*dst = 0;
 	strcpy(gemsg->text,prfbuf);
 	clrprf();
 }
