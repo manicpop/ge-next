@@ -1260,6 +1260,17 @@ int FUNC galemp(void)
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
 
+#ifdef MBBSEMU
+	if (usrptr->substt >= FIGHTSUB && warsptr->where == -1) {
+		disp_main_menu();
+		outprfge(FLT_NONE, usrnum);
+		usrptr->substt = 1;
+		btupmt(usrnum, 0);
+		clrprf();
+		return 1;
+	}
+#endif
+
 	for (i = 0; i < MENUNUM; ++i) {
 		if (menu[i].substt == usrptr->substt) {
 			rtn = menu[i].func();
