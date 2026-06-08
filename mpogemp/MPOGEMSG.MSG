@@ -2210,6 +2210,10 @@ PCLOKUP {
 [0;37m[[1;31mERROR[0;37m] %s inoperable while cloaking is on.[1;37m
 } T GE cannot do that while cloaked message
 
+PCLOKUP2 {
+[0;37m[[1;31mERROR[0;37m] %s coming back online after decloaking.[1;37m
+} T GE cannot do that while cloaked message
+
 WARP {***
 [1;33mHelm reports warp [1;37m%s[1;33m....[1;37m
 } T GE warp speed changing message

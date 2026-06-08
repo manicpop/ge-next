@@ -123,6 +123,7 @@ double FUNC ship_accel P((WARSHP *ptr));
 long FUNC ship_scanrange P((WARSHP *ptr));
 void FUNC npc_cruise P((WARSHP *ptr , int usrn , int call));
 void FUNC npc_lay_decoys P((WARSHP *ptr));
+void FUNC prf_cloak_blocked P((WARSHP *ptr , char *system));
 void FUNC firep P((WARSHP *ptr , int usrn));
 void FUNC firehp P((WARSHP *ptr , int usrn));
 int FUNC torp P((WARSHP *ptr , int usrn , int shpnum));
