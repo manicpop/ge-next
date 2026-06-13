@@ -1,12 +1,13 @@
 
 ge-next RELEASE NOTES
 
-ge-next is an updated and expanded version of the classic Galactic Empire
-by Mike Murdock.
+ge-next is developed by ManicPop.org and based on Galactic Empire,
+copyright (c) 2025 Elwynor Technologies.
 
 https://manicpop.org/ge-next  https://github.com/manicpop/ge-next
+https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
-Please contact with me thoughts and suggestions.
+Please contact me with thoughts and suggestions.
 
 === 0.3 === (in progress)
 

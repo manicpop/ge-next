@@ -1916,9 +1916,9 @@ LEVEL6 {}
 
 INTRO {
 [1;33m                        Galactic Empire ([1;31m%s[1;33m) [1;36m
-      (C) Copyright 2024-2026 ManicPop.org, https://manicpop.org/ge-next/
-                        Based on Galactic Empire 3.2e
-              (C) Copyright 1992,93,94 M.B. Murdock & Associates
+       ge-next developed by ManicPop.org, https://manicpop.org/ge-next/
+            Based on Galactic Empire (c) 2025 Elwynor Technologies
+            Original game by M.B. Murdock & Associates (1988-1994)
 } T GE beginning of menu
 
 
@@ -1987,14 +1987,15 @@ MENUG2 {
 
 
 COINFO {
-GE-Next is an updated version of Galactic Empire, copyright M.B. Murdock and
-Associates.
+ge-next is developed by ManicPop.org and based on Galactic Empire.
+Galactic Empire is copyright (c) 2025 Elwynor Technologies.
 
 https://manicpop.org/ge-next/
 https://github.com/manicpop/ge-next/
+https://github.com/elwynor/elwge/
+https://www.elwynor.com/
 
-Galactic Empire and ge-next are free software released under the GPLv2 license.
-https://opensource.org/license/gpl-2-0
+ge-next is free software released under the AGPLv3 license.
 
 <Press ENTER>} T GE copyright info
 

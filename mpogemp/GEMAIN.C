@@ -1,38 +1,53 @@
-
-/***************************************************************************
- *                                                                         *
- *   GEMAIN.C                                                              *
- *                                                                         *
- *   Copyright (C) 1988, 89, 90, 91, 92 Michael B. Murdock                 *
- *                                                                         *
- *   This is the source for the Galactic Empire game module                *
- *                                                                         *
- *                                         M. Murdock     03/17/92         *
- *                                                                         *
- *   ge-next                                                               *
- *                                                                         *
- *   Copyright (C) 2024-2026 Anthony Schmidt, anthony@manicpop.org         *
- *                                                                         *
- *   https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next    *
- *                                                                         *
- ***************************************************************************/
-
- /**************************************************************************
-  * This program is free software; you can redistribute it and/or modify   *
-  * under the terms of the GNU General Public License as published by the  *
-  * Free Software Foundation; either version 2 of the License, or (at your *
-  * option) any later version.                                             *
-  *                                                                        *
-  * This program is distributed in the hope that it will be useful,        *
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU       *
-  * General Public License for more details.                               *
-  *                                                                        *
-  * You should have received a copy of the GNU General Public License      *
-  * along with this program; if not, write to the Free Software Foundation,*
-  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            *
-  *************************************************************************/
-
+/*****************************************************************************
+ * ge-next GEMAIN.C                                                          *
+ *                                                                           *
+ * ge-next modifications by Anthony Schmidt / ManicPop.org                   *
+ * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
+ *                                                                           *
+ * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
+ *                                                                           *
+ * All development through v3.2e         M. Murdock     03/17/1992           *
+ * Worldgroup 3.2 Conversion v3.3        R. Hadsall     04/03/2021           *
+ * Major BBS v10  Conversion v3.4        R. Hadsall     12/05/2025           *
+ *                                                                           *
+ * Copyright (C) 2006-2025 Rick Hadsall.  All Rights Reserved.               *
+ *                                                                           *
+ * This program is free software: you can redistribute it and/or modify      *
+ * it under the terms of the GNU Affero General Public License as published  *
+ * by the Free Software Foundation, either version 3 of the License, or      *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * This program is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the              *
+ * GNU Affero General Public License for more details.                       *
+ *                                                                           *
+ * You should have received a copy of the GNU Affero General Public License  *
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.     *
+ *                                                                           *
+ * Additional Terms for Contributors:                                        *
+ * 1. By contributing to this project, you agree to assign all right, title, *
+ *    and interest, including all copyrights, in and to your contributions   *
+ *    to Rick Hadsall and Elwynor Technologies.                              *
+ * 2. You grant Rick Hadsall and Elwynor Technologies a non-exclusive,       *
+ *    royalty-free, worldwide license to use, reproduce, prepare derivative  *
+ *    works of, publicly display, publicly perform, sublicense, and          *
+ *    distribute your contributions                                          *
+ * 3. You represent that you have the legal right to make your contributions *
+ *    and that the contributions do not infringe any third-party rights.     *
+ * 4. Rick Hadsall and Elwynor Technologies are not obligated to incorporate *
+ *    any contributions into the project.                                    *
+ * 5. This project is licensed under the AGPL v3, and any derivative works   *
+ *    must also be licensed under the AGPL v3.                               *
+ * 6. If you create an entirely new project (a fork) based on this work, it  *
+ *    must also be licensed under the AGPL v3, you assign all right, title,  *
+ *    and interest, including all copyrights, in and to your contributions   *
+ *    to Rick Hadsall and Elwynor Technologies, and you must include these   *
+ *    additional terms in your project's LICENSE file(s).                    *
+ *                                                                           *
+ * By contributing to this project, you agree to these terms.                *
+ *                                                                           *
+ *****************************************************************************/
 
 #ifdef PHARLAP
 
@@ -315,11 +330,7 @@ MENU menu[] = {
 #ifdef PHARLAP
 void EXPORT init__galemp(void)
 {
-#ifdef GETRAINER
-	stzcpy(mpoge.descrp, gmdnam("MPOG2.MDF"), MNMSIZ);
-#else
 	stzcpy(mpoge.descrp, gmdnam("MPOGEMP.MDF"), MNMSIZ);
-#endif
 
 	iniwara();
 	gestt = register_module(&mpoge);

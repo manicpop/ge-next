@@ -1,0 +1,26 @@
+
+# Contributing to this project
+
+Thank you for your interest in contributing to this project!
+
+## Contribution Agreement
+
+By contributing to this project, you agree to the following terms:
+
+1. You assign all right, title, and interest, including all copyrights, in and to your contributions to Rick Hadsall and Elwynor Technologies.
+2. You grant Rick Hadsall and Elwynor Technologies a non-exclusive, royalty-free, worldwide license to use, reproduce, prepare derivative works of, publicly display, publicly perform, sublicense, and distribute your contributions.
+3. You represent that you have the legal right to make your contributions and that the contributions do not infringe any third-party rights.
+4. Rick Hadsall and Elwynor Technologies are not obligated to incorporate any contributions into the project.
+5. This project is licensed under the AGPL v3, and any derivative works must also be licensed under the AGPL v3.
+6. If you create an entirely new project (a fork) based on this work, it must also be licensed under the AGPL v3, you assign all right, title, and interest, including all copyrights, in and to your contributions to Rick Hadsall and Elwynor Technologies, and you must include these additional terms in your project's LICENSE file.
+
+By submitting your contributions, you agree to these terms.
+
+## How to Contribute
+
+1. Fork the repository.
+2. Create a new branch for your changes.
+3. Make your changes and commit them with clear commit messages.
+4. Submit a pull request with a description of your changes.
+
+Thank you for your contributions!
