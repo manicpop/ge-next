@@ -799,8 +799,12 @@ void FUNC firep(WARSHP *ptr, int usrn)
 							/* unshielded targets take hull damage; shielded targets only get shield effects/messages */
 							if (wptr->shieldstat != SHIELDUP) {
 								damstr((int)factor);
-								if (nebmask)
-									prfmsg(PHITHIMN,gechrbuf,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+								if (nebmask) {
+									if (targ_neb)
+										prfmsg(PHITHIMN,gechrbuf,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+									else
+										prfmsg(PHITHIMS,gechrbuf);
+								}
 								else if (wptr->cloak == 10)
 									prfmsg(PHITHIMC,gechrbuf);
 								else if (wptr->status == GESTAT_AUTO)
@@ -831,8 +835,12 @@ void FUNC firep(WARSHP *ptr, int usrn)
 								shmsg = shieldhit(wptr,(int)factor); /* modify the damage */
 								/* shielded hits still aggravate the faction, but only by a small fixed amount */
 								set_dislike(uptr,shipclass[wptr->shpclass].faction,2);
-								if (nebmask)
-									prfmsg(PDEFLECN,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+								if (nebmask) {
+									if (targ_neb)
+										prfmsg(PDEFLECN,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+									else
+										prfmsg(PDEFLECS);
+								}
 								else if (wptr->cloak == 10)
 									prfmsg(PDEFLECC);
 								else if (wptr->status == GESTAT_AUTO)
@@ -935,8 +943,12 @@ void FUNC firehp(WARSHP *ptr, int usrn)
 									/* nebulae still mask the messaging even though the hit occurs entirely in hyperspace */
 									nebmask = (byte)((src_neb || targ_neb) && !(src_neb && targ_neb && ddistance < (double)NEBRNG));
 
-									if (nebmask)
-										prfmsg(HPHITNEB,gechrbuf,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+									if (nebmask) {
+										if (targ_neb)
+											prfmsg(HPHITNEB,gechrbuf,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+										else
+											prfmsg(HPHITSEC,gechrbuf);
+									}
 									else if (wptr->status == GESTAT_AUTO)
 										prfmsg(HPHITN,gechrbuf,username(wptr));
 									else

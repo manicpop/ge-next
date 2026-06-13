@@ -2148,6 +2148,10 @@ PHITHIMN {
 [0;37mThe phasers caused [0;31m%s[0;37m damage to a ship in [1;32mnebula [1;34m%d %d[0;37m![1;37m
 } T GE phaser hit someone message
 
+PHITHIMS {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to a ship outside the nebula![1;37m
+} T GE phaser hit someone message
+
 PHITNPC {
 [0;37mThe phasers caused [0;31m%s[0;37m damage to [0;36m%s[0;37m![1;37m
 } T GE phaser hit someone message
@@ -2174,6 +2178,10 @@ PDEFLECC {
 
 PDEFLECN {
 [0;37mThe phasers were deflected by a ship in [1;32mnebula [1;34m%d %d[0;37m's shields![1;37m
+} T GE phasers you fired deflected message
+
+PDEFLECS {
+[0;37mThe phasers were deflected by a ship's shields outside the nebula![1;37m
 } T GE phasers you fired deflected message
 
 PDEFNEUT {
@@ -3825,6 +3833,10 @@ HPHITM {
 
 HPHITNEB {
 [0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to a ship in [1;32mnebula [1;34m%d %d[0;37m![1;37m
+} T GE you hit a ship with hyperphaser message
+
+HPHITSEC {
+[0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to a ship outside the nebula![1;37m
 } T GE you hit a ship with hyperphaser message
 
 HPHITN {
