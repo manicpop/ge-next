@@ -9,7 +9,7 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
-=== 0.3 === (in progress)
+=== 0.3 === 2026-06-16:
 
 ge-next's main executable is now MPOGEMP.DLL and all MBM*
 filenames have been moved to MPO*. ge-next should now run
