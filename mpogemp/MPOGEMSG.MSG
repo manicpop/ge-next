@@ -1099,151 +1099,151 @@ This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT01 {Weight of 100 Men: 100} N 1 2147483647
+ITMWT01 {Weight of 100 Men: 100} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT02 {Weight of 100 Missile: 500} N 1 2147483647
+ITMWT02 {Weight of 100 Missile: 500} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT03 {Weight of 100 Torpedos: 300} N 1 2147483647
+ITMWT03 {Weight of 100 Torpedos: 300} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT04 {Weight of 100 Ion Cannons: 25000} N 1 2147483647
+ITMWT04 {Weight of 100 Ion Cannons: 25000} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT05 {Weight of 100 Flux Pods: 2000} N 1 2147483647
+ITMWT05 {Weight of 100 Flux Pods: 2000} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT06 {Weight of 100 Food: 200} N 1 2147483647
+ITMWT06 {Weight of 100 Food: 200} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT07 {Weight of 100 Fighters: 1500} N 1 2147483647
+ITMWT07 {Weight of 100 Fighters: 1500} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT08 {Weight of 100 Decoys: 300} N 1 2147483647
+ITMWT08 {Weight of 100 Decoys: 300} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT09 {Weight of 100 Troops: 200} N 1 2147483647
+ITMWT09 {Weight of 100 Troops: 200} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT10 {Weight of 100 Zippers: 500} N 1 2147483647
+ITMWT10 {Weight of 100 Zippers: 500} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT11 {Weight of 100 Jammers: 400} N 1 2147483647
+ITMWT11 {Weight of 100 Jammers: 400} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT12 {Weight of 100 Mines: 500} N 1 2147483647
+ITMWT12 {Weight of 100 Mines: 500} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT13 {Weight of 100 Gold: 50} N 1 2147483647
+ITMWT13 {Weight of 100 Gold: 50} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT14 {Weight of 100 Spy: 100} N 1 2147483647
+ITMWT14 {Weight of 100 Spy: 100} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT15 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT15 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT16 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT16 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT17 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT17 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT18 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT18 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT19 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT19 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT20 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT20 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT21 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT21 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT22 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT22 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT23 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT23 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT24 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT24 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
 
-ITMWT25 {Weight of 100 Reserved: 0} N 1 2147483647
+ITMWT25 {Weight of 100 Reserved: 0} N 1 1000000
 
 This option controls the point value of each 
 multiple of PLTVDIV of an item. 

@@ -66,7 +66,7 @@
 /* hopefully not necessary much longer */
 /* #define MBBSEMU 1 */
 
-#define VERSION "ge-next 0.3"
+#define VERSION "ge-next 0.3.1b"
 #define GEHELP  "MPOGEHLP.MCV"
 #define GEMSG   "MPOGEMSG.MCV"
 

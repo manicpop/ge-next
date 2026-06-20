@@ -458,7 +458,7 @@ void FUNC iniwara(void)
 		maxpl[i] = (double)lngopt(ITMPL01 + i, 0L, 201228378L);
 		logthis(spr("Itm #%d maxpl=%ld", i, (long)maxpl[i]));
 
-		weight[i] = lngopt(ITMWT01 + i, 1L, 201228378L);
+		weight[i] = lngopt(ITMWT01 + i, 1L, 1000000L);
 		logthis(spr("Itm #%d weight=%ld", i, weight[i]));
 
 		value[i] = lngopt(ITMVAL01 + i, 0L, 201228378L);
