@@ -59,14 +59,17 @@
 /* if FASTPLANET defined updates happen every 3 seconds */
 /* #define FASTPLANET 1 */
 
-/* the DATA command is currently in disrepair and disabled */
-/* #define DATACMD 1 */
-
 /* workarounds for mbbsemu math functions */
 /* hopefully not necessary much longer */
 /* #define MBBSEMU 1 */
 
-#define VERSION "ge-next 0.3.1b"
+#define PROJECT_NAME "ge-next"
+#define PROJECT_VERSION "0.3.1"
+#ifdef MBBSEMU
+#define PROJECT_ARCH "mbbsemu"
+#else
+#define PROJECT_ARCH "16-bit"
+#endif
 #define GEHELP  "MPOGEHLP.MCV"
 #define GEMSG   "MPOGEMSG.MCV"
 
@@ -227,6 +230,10 @@
 #define	FLT_ENTRY 6
 #define	FLT_SHIP 7
 #define	FLT_NONE 8
+
+/* per-session DATA state flags */
+#define GEDATA_ACCESS 0x01
+#define GEDATA_METADATA 0x02
 
 /* how many seconds to delay 'reduced' entry messages */
 #define	ENTRYWAIT 30

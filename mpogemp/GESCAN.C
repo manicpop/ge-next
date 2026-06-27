@@ -229,10 +229,24 @@ static void print_ship_name(int othusn)
 		prf(" %s%s", CLR_CYAN1, gechrbuf);
 }
 
+static void scramble_tail_digits(char *buf, unsigned int seed)
+{
+	int digits, i, len, limit;
+
+	limit = (((int)warsptr->jam_sev < 6)
+		? (int)warsptr->jam_sev / 2 : (int)warsptr->jam_sev - 2) + 1;
+	digits = seed % limit;
+	len = strlen(buf);
+	if (digits > len)
+		digits = len;
+	for (i = len - digits; i < len; ++i)
+		if (buf[i] != '-')
+			buf[i] = '?';
+}
+
 static int print_planet_line(int shp)
 {
 	unsigned int rseed = gernd();
-	int jam_digits, len, k;
 	int orbit = (warsptr->where - 11 == shp);
 	int owned = owned_planet[shp];
 
@@ -258,22 +272,8 @@ static int print_planet_line(int shp)
 
 	/* if jammed, mess up the numbers */
 	if (warsptr->jam_sev > (byte)2 && warsptr->where - 11 != shp) {
-		jam_digits = rseed % ((((int)warsptr->jam_sev < 6) ?
-			((int)warsptr->jam_sev / 2) : ((int)warsptr->jam_sev - 2)) + 1);
-		len = strlen(gechrbuf2);
-		if (jam_digits > len)
-			jam_digits = len;
-		for (k = len - jam_digits; k < len; k++)
-			gechrbuf2[k] = '?';
-
-		jam_digits = (rseed >> 4) % ((((int)warsptr->jam_sev < 6) ?
-			((int)warsptr->jam_sev / 2) : ((int)warsptr->jam_sev - 2)) + 1);
-		len = strlen(gechrbuf3);
-		if (jam_digits > len)
-			jam_digits = len;
-		for (k = len - jam_digits; k < len; k++)
-			if (gechrbuf3[k] != '-')	/* always keep negative symbol */
-				gechrbuf3[k] = '?';
+		scramble_tail_digits(gechrbuf2,rseed);
+		scramble_tail_digits(gechrbuf3,rseed >> 4);
 	}
 
 	prf("     %s%s %8s %7s", gechrbuf, CLR_WHITE2, gechrbuf2, gechrbuf3);
@@ -1452,5 +1452,831 @@ static void scan_lo(void)
 	}
 
 	printmap(MAP_LONG,0L);
+	outprfge(FLT_NONE,usrnum);
+}
+
+
+/**************************************************************************
+** DATA scan helpers                                                     **
+**************************************************************************/
+
+static void data_text(const char *text)
+{
+	while (*text) {
+		switch (*text) {
+			case '%':
+				prf("%%25");
+				break;
+			case ',':
+				prf("%%2C");
+				break;
+			case '*':
+				prf("%%2A");
+				break;
+			case '\r':
+				prf("%%0D");
+				break;
+			case '\n':
+				prf("%%0A");
+				break;
+			default:
+				prf("%c",*text);
+		}
+		++text;
+	}
+}
+
+static void data_scan_name(WARSHP *ptr, int marker)
+{
+	int len, maxlen, show;
+
+	maxlen = marker == 0 ? 36 : 34;
+	if (ptr->status == GESTAT_AUTO)
+		stzcpy(gechrbuf,ptr->shipname,maxlen + 1);
+	else if (ptr->shipname[0] == 0)
+		stzcpy(gechrbuf,ptr->userid,maxlen + 1);
+	else if ((int)(strlen(ptr->userid) + strlen(ptr->shipname) + 3) <= maxlen)
+		sprintf(gechrbuf,"%s (%s)",ptr->userid,ptr->shipname);
+	else {
+		show = maxlen - (int)strlen(ptr->userid) - 6;
+		if (show < 1)
+			stzcpy(gechrbuf,ptr->userid,maxlen + 1);
+		else {
+			sprintf(gechrbuf,"%s (",ptr->userid);
+			len = strlen(gechrbuf);
+			memcpy(gechrbuf + len,ptr->shipname,show);
+			strcpy(gechrbuf + len + show,"...)");
+		}
+	}
+}
+
+static void data_scan_scramble(char *buf, int keep_spaces)
+{
+	int i;
+
+	if (warsptr->jam_sev > (byte)7) {
+		for (i=0; buf[i]; ++i)
+			if (!keep_spaces || (buf[i] != ' ' && buf[i] != '-'))
+				buf[i] = '?';
+	}
+	else if (warsptr->jam_sev > (byte)2) {
+		for (i=0; buf[i]; ++i)
+			if ((!keep_spaces || (buf[i] != ' ' && buf[i] != '-'))
+				&& gernd() % (10 - warsptr->jam_sev) == 0)
+				buf[i] = '?';
+	}
+}
+
+static int data_ship_type(WARSHP *ptr)
+{
+	if (shipclass[ptr->shpclass].max_type == CLASSTYPE_CYBORG)
+		return 0;
+	if (shipclass[ptr->shpclass].max_type == CLASSTYPE_DROID)
+		return 1;
+	return 2;
+}
+
+static void data_ship_contact_prefix(char *record, SCANTAB *sptr, int ndx)
+{
+	WARSHP *wptr;
+	int marker;
+	char letter;
+
+	wptr = warshpoff(sptr->ship[ndx].shipno);
+	marker = 0;
+	if (warsptr->jam_sev < (byte)3) {
+		if (warsptr->lock == sptr->ship[ndx].shipno)
+			marker = 1;
+		else if (wptr->distress != 255)
+			marker = 2;
+	}
+
+	letter = sptr->ship[ndx].letter;
+	if (warsptr->jam_sev > (byte)2
+		&& gernd() % (10 / warsptr->jam_sev) == 0)
+		letter = '?';
+
+	prf("%s:%c,%d,",record,letter,marker);
+	if (letter == '?')
+		prf("?,");
+	else
+		prf("%d,",data_ship_type(wptr));
+
+	data_scan_name(wptr,marker);
+	data_scan_scramble(gechrbuf,FALSE);
+	data_text(gechrbuf);
+	prf(",");
+}
+
+static void data_scan(void)
+{
+	SCANTAB *sptr;
+	MINE *mptr;
+	double range, x1, y1, xfactor, yfactor, minx, miny;
+	double shiftx, shifty, xf, yf, minedist;
+	int i, count, minecount, minebearing;
+
+	setsect(warsptr);
+	if (innebula(xsect,ysect)) {
+		prf("SCAN:NEBULA*\r");
+		prf("STOP:SCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	range = (double)ship_scanrange(warsptr);
+	prf("SCAN:%s,%d,%d*\r",spr("%ld",(long)range),xsect,ysect);
+	update_scantab(warsptr,usrnum);
+	sptr = &scantab[usrnum];
+	count = 0;
+
+	for (i=0; i<NOSCANTAB; ++i) {
+		if (sptr->ship[i].flag == 0 || (long)sptr->ship[i].dist >= (long)range)
+			continue;
+		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+			continue;
+
+		data_ship_contact_prefix("SCANS",sptr,i);
+		if (sptr->ship[i].flag == 2) {
+			prf("?????,????,????,??.??*\r");
+			outprfge(FLT_NONE,usrnum);
+			++count;
+			continue;
+		}
+
+		sprintf(gechrbuf,"%ld",(long)sptr->ship[i].dist);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s,",gechrbuf);
+		sprintf(gechrbuf,"%d",sptr->ship[i].bearing);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s,",gechrbuf);
+		sprintf(gechrbuf,"%d",sptr->ship[i].heading);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s,",gechrbuf);
+		stzcpy(gechrbuf,showarp(sptr->ship[i].speed),20);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s*\r",gechrbuf);
+		outprfge(FLT_NONE,usrnum);
+		++count;
+	}
+
+	if (count == 0) {
+		prf("SCANS:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	minecount = 0;
+	x1 = warsptr->coord.xcoord;
+	y1 = warsptr->coord.ycoord;
+	xfactor = range / 5000.0 / (double)MAXX;
+	yfactor = range / 5000.0 / (double)MAXY;
+	minx = x1 - range / 10000.0;
+	miny = y1 - range / 10000.0;
+	shiftx = 0.0;
+	shifty = 0.0;
+	if ((int)((x1 - minx) / xfactor) == (MAXX/2) - 1)
+		shiftx = xfactor;
+	if ((int)((y1 - miny) / yfactor) == (MAXY/2) - 1)
+		shifty = yfactor;
+
+	for (i=0, mptr=mines; i<nummines; ++i, ++mptr) {
+		if (mptr->channel == 255)
+			continue;
+		xf = ((mptr->coord.xcoord - x1) / xfactor)
+			+ ((double)MAXX)/2.0 + shiftx / xfactor;
+		yf = ((mptr->coord.ycoord - y1) / yfactor)
+			+ ((double)MAXY)/2.0 + shifty / yfactor;
+		if (xf >= 0.0 && xf < (double)MAXX
+			&& yf >= 0.0 && yf < (double)MAXY) {
+			if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+				continue;
+			minedist = cdistance(&warsptr->coord,&mptr->coord) * 10000.0;
+			minebearing = cbearing(&warsptr->coord,&mptr->coord,warsptr->heading);
+			sprintf(gechrbuf,"%ld",(long)minedist);
+			data_scan_scramble(gechrbuf,TRUE);
+			prf("SCANM:%s,",gechrbuf);
+			sprintf(gechrbuf,"%d",minebearing);
+			data_scan_scramble(gechrbuf,TRUE);
+			prf("%s*\r",gechrbuf);
+			outprfge(FLT_NONE,usrnum);
+			++minecount;
+		}
+	}
+
+	if (minecount == 0)
+		prf("SCANM:*\r");
+	prf("STOP:SCAN*\r");
+	outprfge(FLT_NONE,usrnum);
+}
+
+static void data_sector(void)
+{
+	SCANTAB *sptr;
+	WARSHP *wptr;
+	MINE *mptr;
+	double dist;
+	unsigned int rseed;
+	int i, nebula, orbit, owned;
+	int objectcount, shipcount, minecount, objbearing;
+
+	refresh(warsptr,usrnum);
+	setsect(warsptr);
+	nebula = innebula(xsect,ysect);
+	prf("SECTOR:%d,%d,%d*\r",xsect,ysect,nebula);
+	getsector(&warsptr->coord);
+
+	objectcount = 0;
+	for (i=0; i<sector.numplan; ++i) {
+		if (sector.ptab[i].coord.xcoord == 0)
+			continue;
+		orbit = (warsptr->where - 11 == i);
+		owned = FALSE;
+		if (sector.ptab[i].type == PLTYPE_PLNT) {
+			plnum = i + 1;
+			if (getplanetdat(usrnum) && sameas(plptr->userid,warsptr->userid))
+				owned = TRUE;
+		}
+		dist = cdistance(&warsptr->coord,&sector.ptab[i].coord) * 10000.0;
+		if (nebula && dist > (double)NEBRNG && !orbit && !owned)
+			continue;
+
+		rseed = gernd();
+		if (rseed % (warsptr->jam_sev + 1) > (byte)6 && !orbit)
+			continue;
+		if (rseed % (warsptr->jam_sev + 1) > (byte)3 && !orbit)
+			strcpy(gechrbuf,"?");
+		else
+			sprintf(gechrbuf,"%d",i + 1);
+
+		objbearing = cbearing(&warsptr->coord,&sector.ptab[i].coord,warsptr->heading);
+		sprintf(gechrbuf2,"%ld",(long)dist);
+		sprintf(gechrbuf3,"%d",objbearing);
+		if (warsptr->jam_sev > (byte)2 && !orbit) {
+			scramble_tail_digits(gechrbuf2,rseed);
+			scramble_tail_digits(gechrbuf3,rseed >> 4);
+		}
+		prf("SECTORO:%s,",gechrbuf);
+		if (gechrbuf[0] == '?')
+			prf("?,");
+		else
+			prf("%d,",sector.ptab[i].type);
+		prf("%s,%s,%d*\r",gechrbuf2,gechrbuf3,orbit);
+		outprfge(FLT_NONE,usrnum);
+		++objectcount;
+	}
+	if (objectcount == 0) {
+		prf("SECTORO:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	update_scantab(warsptr,usrnum);
+	sptr = &scantab[usrnum];
+	shipcount = 0;
+	for (i=0; i<NOSCANTAB; ++i) {
+		if (sptr->ship[i].flag != 1)
+			continue;
+		wptr = warshpoff(sptr->ship[i].shipno);
+		if (!samesect(&wptr->coord,&warsptr->coord))
+			continue;
+		if (nebula && sptr->ship[i].dist > (double)NEBRNG)
+			continue;
+		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+			continue;
+
+		data_ship_contact_prefix("SECTORS",sptr,i);
+		sprintf(gechrbuf,"%ld",(long)sptr->ship[i].dist);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s,",gechrbuf);
+		sprintf(gechrbuf,"%d",sptr->ship[i].bearing);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s*\r",gechrbuf);
+		outprfge(FLT_NONE,usrnum);
+		++shipcount;
+	}
+	if (shipcount == 0) {
+		prf("SECTORS:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	minecount = 0;
+	for (i=0, mptr=mines; i<nummines; ++i, ++mptr) {
+		if (mptr->channel == 255 || !samesect(&mptr->coord,&warsptr->coord))
+			continue;
+		dist = cdistance(&warsptr->coord,&mptr->coord) * 10000.0;
+		if (nebula && dist > (double)NEBRNG)
+			continue;
+		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+			continue;
+		objbearing = cbearing(&warsptr->coord,&mptr->coord,warsptr->heading);
+		sprintf(gechrbuf,"%ld",(long)dist);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("SECTORM:%s,",gechrbuf);
+		sprintf(gechrbuf,"%d",objbearing);
+		data_scan_scramble(gechrbuf,TRUE);
+		prf("%s*\r",gechrbuf);
+		outprfge(FLT_NONE,usrnum);
+		++minecount;
+	}
+	if (minecount == 0)
+		prf("SECTORM:*\r");
+	prf("STOP:SECTOR*\r");
+	outprfge(FLT_NONE,usrnum);
+}
+
+static void data_inventory(void)
+{
+	int i;
+
+	prf("INV:");
+	for (i=0; i<NUMITEMS; ++i)
+		prf("I%d:%s,",i,spr("%lu",warsptr->items[i]));
+	prf("*\r");
+	sprintf(gechrbuf,"%lu",calcweight(warsptr));
+	sprintf(gechrbuf2,"%ld",shipclass[warsptr->shpclass].max_tons);
+	prf("INV2:%s,%s*\r",gechrbuf,gechrbuf2);
+	prf("STOP:INV*\r");
+}
+
+static void data_navigation(void)
+{
+	setsect(warsptr);
+	prf("NAV:%s,%s,%d,%d,%u,%u,%d*\r",
+		spr("%d",(int)(warsptr->heading + .5)),
+		spr("%ld",(long)warsptr->speed),
+		xsect,ysect,xcord,ycord,
+		warsptr->where);
+	prf("STOP:NAV*\r");
+}
+
+static void data_ordnance(void)
+{
+	WARSHP *ptr;
+	double ddist;
+	int i, zothusn, none, bearing;
+
+	none = TRUE;
+	for (i=0; i<MAXTORPS; ++i) {
+		if (warsptr->ltorps[i].distance != 0) {
+			none = FALSE;
+			if (warsptr->ltorps[i].channel < nships) {
+				ptr = warshpoff(warsptr->ltorps[i].channel);
+				prf("ORD1:");
+				data_text(username(ptr));
+				prf(",%d,",warsptr->lock == warsptr->ltorps[i].channel);
+			} else if (warsptr->ltorps[i].channel == 255)
+				prf("ORD1:destroyed,0,");
+			else
+				prf("ORD1:,0,");
+			if (warsptr->jam_sev <= (byte)2)
+				prf("%u",warsptr->ltorps[i].distance);
+			else
+				prf("?????");
+			prf("*\r");
+			outprfge(FLT_NONE,usrnum);
+		}
+	}
+	if (none == TRUE) {
+		prf("ORD1:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	none = TRUE;
+	for (i=0; i<MAXMISSL; ++i) {
+		if (warsptr->lmissl[i].distance != 0) {
+			none = FALSE;
+			if (warsptr->lmissl[i].channel < nships) {
+				ptr = warshpoff(warsptr->lmissl[i].channel);
+				prf("ORD2:");
+				data_text(username(ptr));
+				prf(",%d,",warsptr->lock == warsptr->lmissl[i].channel);
+			} else if (warsptr->lmissl[i].channel == 255)
+				prf("ORD2:destroyed,0,");
+			else
+				prf("ORD2:,0,");
+			if (warsptr->jam_sev <= (byte)2)
+				prf("%u",warsptr->lmissl[i].distance);
+			else
+				prf("?????");
+			prf("*\r");
+			outprfge(FLT_NONE,usrnum);
+		}
+	}
+	if (none == TRUE) {
+		prf("ORD2:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	none = TRUE;
+	if (shipclass[warsptr->shpclass].max_torps != 0) {
+		for (zothusn = 0; zothusn < nships; ++zothusn) {
+			if (ingegame(zothusn)) {
+				ptr = warshpoff(zothusn);
+				for (i=0; i<MAXTORPS; ++i) {
+					if (ptr->ltorps[i].distance != 0 && ptr->ltorps[i].channel == usrnum) {
+						none = FALSE;
+						prf("ORD3:");
+						data_text(username(ptr));
+						prf(",%d,",warsptr->lock == zothusn);
+						if (warsptr->jam_sev <= (byte)2)
+							prf("%u",ptr->ltorps[i].distance);
+						else
+							prf("?????");
+						prf("*\r");
+						outprfge(FLT_NONE,usrnum);
+					}
+				}
+			}
+		}
+	}
+	if (none == TRUE) {
+		prf("ORD3:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	none = TRUE;
+	if (shipclass[warsptr->shpclass].max_missl != 0) {
+		for (zothusn = 0; zothusn < nships; ++zothusn) {
+			if (ingegame(zothusn)) {
+				ptr = warshpoff(zothusn);
+				for (i=0; i<MAXMISSL; ++i) {
+					if (ptr->lmissl[i].distance != 0 && ptr->lmissl[i].channel == usrnum) {
+						none = FALSE;
+						prf("ORD4:");
+						data_text(username(ptr));
+						prf(",%d,",warsptr->lock == zothusn);
+						if (warsptr->jam_sev <= (byte)2)
+							prf("%u",ptr->lmissl[i].distance);
+						else
+							prf("?????");
+						prf("*\r");
+						outprfge(FLT_NONE,usrnum);
+					}
+				}
+			}
+		}
+	}
+	if (none == TRUE) {
+		prf("ORD4:*\r");
+		outprfge(FLT_NONE,usrnum);
+	}
+
+	none = 0;
+	for (i=0; i<MAXDECOY; ++i)
+		if (warsptr->decout[i] > 0)
+			++none;
+	prf("ORD5:%d*\r",none);
+
+	none = TRUE;
+	if (shipclass[warsptr->shpclass].has_mine != 0) {
+		for (i=0; i<nummines; ++i) {
+			if (mines[i].channel != (byte)usrnum)
+				continue;
+			none = FALSE;
+			ddist = cdistance(&warsptr->coord,&mines[i].coord) * 10000.0;
+			bearing = cbearing(&warsptr->coord,&mines[i].coord,warsptr->heading);
+			prf("ORD6:%d,%d,%u,",
+				(int)mines[i].coord.xcoord,
+				(int)mines[i].coord.ycoord,
+				mines[i].timer);
+			if (warsptr->jam_sev <= (byte)2)
+				prf("%d,%s*\r",bearing,spr("%ld",(long)ddist));
+			else
+				prf("????,?????*\r");
+			outprfge(FLT_NONE,usrnum);
+		}
+	}
+	if (none == TRUE)
+		prf("ORD6:*\r");
+	prf("STOP:ORD*\r");
+}
+
+static int data_damage_eta(WARSHP *ptr, int steps, int active, int fuzz)
+{
+	int secs;
+
+	/* Preserve why REPORT SYS omitted a numeric ETA without exposing steps. */
+	if (steps <= 0)
+		return 0;
+	if (ptr->repair > 0)
+		return -3;
+	if (!(ptr->upgrade & DAMCTRL))
+		return -1;
+	if (!active)
+		return -2;
+
+	secs = ((steps + 1) / 2) * TICKTIME + fuzz;
+	if (secs < TICKTIME)
+		secs = TICKTIME;
+	return secs;
+}
+
+static void data_systems(void)
+{
+	int active, cloakstate, fuzz, maxcharge, need;
+	int phaserstate, shieldpct, shieldstat, shieldtype;
+	int shfuzz, warpstate, warptop;
+
+	damstr((int)(warsptr->damage + .5));
+	prf("SYS1:%s,%s*\r",
+		gechrbuf,
+		spr("%u",(unsigned)(warsptr->energy + .5)));
+
+	shieldtype = 0;
+	shieldstat = 0;
+	shieldpct = -1;
+	if (shipclass[warsptr->shpclass].max_shlds != 0) {
+		if (warsptr->shieldstat == SHIELDUP
+			|| warsptr->shieldstat == SHIELDDN
+			|| warsptr->shieldstat == SHIELDDM) {
+			shieldtype = warsptr->shieldtype;
+			shieldstat = warsptr->shieldstat;
+		}
+		if (warsptr->shieldstat == SHIELDUP)
+			charge(warsptr,&maxcharge,&shieldpct);
+	}
+
+	phaserstate = 0;
+	if (shipclass[warsptr->shpclass].max_phasr != 0) {
+		if (warsptr->phasr >= PMINFIRE)
+			phaserstate = 1;
+		else if (warsptr->phasr >= 0)
+			phaserstate = 2;
+		else
+			phaserstate = 3;
+	}
+
+	cloakstate = 0;
+	if (shipclass[warsptr->shpclass].max_cloak == 1)
+		cloakstate = (warsptr->cloak > 0 && warsptr->cloak != 3) ? 2 : 1;
+
+	prf("SYS2:%d,%d,%d,%d,%d,%d*\r",
+		shieldtype,shieldstat,shieldpct,
+		phaserstate == 0 ? 0 : warsptr->phasrtype,
+		phaserstate,cloakstate);
+
+	active = TRUE;
+	fuzz = gernd();
+	shfuzz = (fuzz % 5) - 2;
+	fuzz = ((fuzz / 5) % 5) - 2;
+	prf("SYS3:");
+	/* Match the subsystem order used by show_rep_sysdam(). */
+	need = 0;
+	if (warsptr->shieldstat == SHIELDDM) {
+		need = 1 - warsptr->shield;
+		if (need <= 0)
+			need = 1;
+		need = (need + warsptr->shieldtype - 1) / warsptr->shieldtype;
+	}
+	prf("%d,",data_damage_eta(warsptr,need,TRUE,shfuzz));
+	need = warsptr->helm < 0 ? -warsptr->helm : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->tactical < 0 ? -warsptr->tactical : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->phasr < 0 ? (int)ceil(-warsptr->phasr) : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->torpcntl > 0 ? warsptr->torpcntl : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->mislcntl > 0 ? warsptr->mislcntl : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->cloak < 0 ? -warsptr->cloak : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->jamload < 0 ? -warsptr->jamload : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->decload < 0 ? -warsptr->decload : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->zipload < 0 ? -warsptr->zipload : 0;
+	prf("%d,",data_damage_eta(warsptr,need,active,fuzz));
+	if (need > 0)
+		active = FALSE;
+	need = warsptr->mineload < 0 ? -warsptr->mineload : 0;
+	prf("%d*\r",data_damage_eta(warsptr,need,active,fuzz));
+
+	warpstate = 0;
+	warptop = -1;
+	if (shipclass[warsptr->shpclass].max_warp != 0) {
+		if (warsptr->topspeed == 0)
+			warpstate = 1;
+		else if (warsptr->speed / 1000 > warsptr->topspeed)
+			warpstate = 2;
+		else if (warsptr->overspeed > 0) {
+			warpstate = 3;
+			warptop = warsptr->topspeed;
+		}
+	}
+	prf("SYS4:%d,%d,%u*\r",
+		warpstate,warptop,
+		warsptr->repair > 0 ? repair_eta(warsptr) : 0);
+	prf("STOP:SYS*\r");
+}
+
+static void data_user(void)
+{
+	char *tname;
+
+	tname = waruptr->teamcode > 0 ? teamname(waruptr) : NULL;
+	prf("USER1:");
+	data_text(waruptr->userid);
+	prf(",");
+	data_text(tname == NULL ? "" : tname);
+	prf(",%u,%u,%u,%u*\r",
+		waruptr->noships,
+		waruptr->kills,
+		waruptr->ukills,
+		waruptr->planets);
+	sprintf(gechrbuf,"%lu",waruptr->score);
+	sprintf(gechrbuf2,"%lu",waruptr->cash);
+	sprintf(gechrbuf3,"%lu",waruptr->population);
+	prf("USER2:%s,%s,%s*\r",gechrbuf,gechrbuf2,gechrbuf3);
+	prf("STOP:USER*\r");
+}
+
+static void data_messages(void)
+{
+	byte msgfilter;
+	int entry;
+
+	msgfilter = waruptr->options[MSG_FILTER];
+	entry = (msgfilter & MSGF_ENTRY_MASK) >> 5;
+	if (entry > 2)
+		entry = 2;
+	prf("MSG:%u,%u,%u,%u,%u,%u*\r",
+		(unsigned)(msgfilter & MSGF_CYBS_MASK),
+		(unsigned)((msgfilter & MSGF_DISTRESS) != 0),
+		(unsigned)((msgfilter & MSGF_BEACON) != 0),
+		(unsigned)((msgfilter & MSGF_HAIL) != 0),
+		(unsigned)entry,
+		(unsigned)((msgfilter & MSGF_SHIP) != 0));
+	prf("STOP:MSG*\r");
+}
+
+static void data_upgrades(void)
+{
+	prf("UPG:%u,%u*\r",
+		(unsigned)warsptr->upgrade,
+		(unsigned)warsptr->tponder);
+	prf("STOP:UPG*\r");
+}
+
+static void data_ship(void)
+{
+	prf("SHIP:");
+	data_text(warsptr->shipname);
+	prf(",");
+	data_text(shipclass[warsptr->shpclass].typename);
+	prf(",%u,%u,%u*\r",
+		warsptr->kills,
+		warsptr->ukills,
+		warsptr->freq);
+	prf("STOP:SHIP*\r");
+}
+
+static void data_capabilities(void)
+{
+	sprintf(gechrbuf,"%ld",(long)ship_accel(warsptr));
+	sprintf(gechrbuf2,"%ld",ship_scanrange(warsptr));
+	prf("CAP:%u,%u,%u,%u,%u,%u,%u,%s,%u,%s*\r",
+		(unsigned)shipclass[warsptr->shpclass].max_torps,
+		(unsigned)shipclass[warsptr->shpclass].max_missl,
+		(unsigned)shipclass[warsptr->shpclass].has_decoy,
+		(unsigned)shipclass[warsptr->shpclass].has_jam,
+		(unsigned)shipclass[warsptr->shpclass].has_zip,
+		(unsigned)shipclass[warsptr->shpclass].has_mine,
+		(unsigned)shipclass[warsptr->shpclass].max_cloak,
+		gechrbuf,
+		(unsigned)warsptr->topspeed,
+		gechrbuf2);
+	prf("STOP:CAP*\r");
+}
+
+void FUNC cmd_data(void)
+{
+	if (sameas(frontend,"OFF")) {
+		prfmsg(INVCMD);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (margc == 3 && sameas(margv[1],"ON")) {
+		if (sameas(frontend,"ALL") || strcmp(margv[2],frontend) == 0) {
+			data_enabled[usrnum] |= GEDATA_ACCESS;
+			prf("ON:");
+			data_text(margv[2]);
+			prf(",");
+			data_text(PROJECT_NAME);
+			prf(",");
+			data_text(PROJECT_VERSION);
+			prf(",");
+			data_text(PROJECT_ARCH);
+			prf("*\rSTOP:ON*\r");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
+		prfmsg(INVCMD);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (!sameas(frontend,"ALL")
+		&& !(data_enabled[usrnum] & GEDATA_ACCESS)) {
+		prfmsg(INVCMD);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (margc == 3 && sameas(margv[1],"METADATA")) {
+		if (sameas(margv[2],"ON")) {
+			prf("METADATA:ON*\rSTOP:METADATA*\r");
+			outprfge(FLT_NONE,usrnum);
+			data_enabled[usrnum] |= GEDATA_METADATA;
+			return;
+		}
+		if (sameas(margv[2],"OFF")) {
+			data_enabled[usrnum] &= (byte)~GEDATA_METADATA;
+			prf("METADATA:OFF*\rSTOP:METADATA*\r");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
+		prfmsg(INVCMD);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (margc != 2) {
+		prfmsg(INVCMD);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (sameas(margv[1],"cap")) {
+		data_capabilities();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"ship")) {
+		data_ship();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"user")) {
+		data_user();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"upg")) {
+		data_upgrades();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"msg")) {
+		data_messages();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"inv")) {
+		data_inventory();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"nav")) {
+		data_navigation();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"ord")) {
+		data_ordnance();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"sys")) {
+		data_systems();
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (sameas(margv[1],"scan")) {
+		data_scan();
+		return;
+	}
+	if (sameas(margv[1],"sector")) {
+		data_sector();
+		return;
+	}
+
+	prfmsg(INVCMD);
 	outprfge(FLT_NONE,usrnum);
 }

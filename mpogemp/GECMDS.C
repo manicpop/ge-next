@@ -128,7 +128,7 @@ static struct upgdef upgdefs[NUMUPGRADES] = {
 };
 
 void FUNC cmd_gehelp(void), cmd_cloak(void), cmd_impulse(void), cmd_phas(void),
-	cmd_report(void), cmd_rotate(void), cmd_send(void),
+	cmd_report(void), cmd_rotate(void), cmd_send(void), cmd_data(void),
 	cmd_shields(void), cmd_warp(void), cmd_torp(void), cmd_missl(void),
 	cmd_decoy(void), cmd_flux(void), cmd_set(void), cmd_orbit(void),
 	cmd_transfer(void), cmd_admin(void), cmd_attack(void), cmd_geroster(void),
@@ -138,10 +138,6 @@ void FUNC cmd_gehelp(void), cmd_cloak(void), cmd_impulse(void), cmd_phas(void),
 	cmd_abandon(void), cmd_zipper(void), cmd_lock(void), cmd_navigate(void),
 	cmd_who(void), cmd_clear(void), cmd_team(void), cmd_spy(void),
 	cmd_jettison(void), cmd_stop(void);
-
-#ifdef DATACMD
-void FUNC cmd_data(void);
-#endif
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
@@ -157,9 +153,7 @@ struct	cmd	gecmds[]={
 			{"buy",	cmd_buy,	0},
 			{"clo",	cmd_cloak,	1},
 			{"cls",	cmd_clear,	0},
-#ifdef DATACMD
 			{"dat",	cmd_data,	0},
-#endif
 			{"dec",	cmd_decoy,	1},
 			{"des",	cmd_destruct,	1},
 			{"flu",	cmd_flux,	1},
@@ -424,7 +418,7 @@ void FUNC cmd_gehelp(void)
 	}
 
 	if (sameto(margv[1], "version")) {
-		prf(VERSION);
+		prf("%s %s (%s)", PROJECT_NAME, PROJECT_VERSION, PROJECT_ARCH);
 		prf("\r\r");
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -1638,7 +1632,7 @@ void FUNC cmd_send(void)
 					prfmsg(MSGSNT1O,"Hailing",waruptr->userid,msgptr);
 				else
 					prfmsg(MSGSNT1,"Hailing",waruptr->userid,warsptr->shipname,msgptr);
-				outwar(FLT_NONE,usrnum,0,0);
+				outwar(FLT_HAIL,usrnum,0,0);
 				prfmsg(MSGSNT2,"Hailing");
 			}
 		} else if (sameto(margv[1],"team")) {
@@ -1665,7 +1659,7 @@ void FUNC cmd_send(void)
 						prfmsg(MSGSNT1O,"Team",waruptr->userid,margv[2]);
 					else
 						prfmsg(MSGSNT1,"Team",waruptr->userid,warsptr->shipname,margv[2]);
-					outwar(FLT_NONE,usrnum,waruptr->teamcode,2);
+					outwar(FLT_HAIL,usrnum,waruptr->teamcode,2);
 					prfmsg(MSGSNT2,"Team");
 				}
 			}
@@ -1681,7 +1675,7 @@ void FUNC cmd_send(void)
 						prfmsg(MSGSNT1O,"Encoded",waruptr->userid,margv[2]);
 					else
 						prfmsg(MSGSNT1,"Encoded",waruptr->userid,warsptr->shipname,margv[2]);
-					outwar(FLT_NONE,usrnum,warsptr->freq,1);
+					outwar(FLT_HAIL,usrnum,warsptr->freq,1);
 					prfmsg(MSGSNT3,warsptr->freq);
 				}
 			}
@@ -5254,185 +5248,6 @@ void FUNC cmd_clear(void)
 	prf("\33[2J\33[0;0H");
 	outprfge(FLT_NONE,usrnum);
 }
-
-#ifdef DATACMD
-
-/**************************************************************************
-** DATA scan helpers                                                     **
-**************************************************************************/
-
-static void scan_data1(void)
-{
-	SCANTAB *sptr;
-	WARSHP *wptr;
-	int i, j;
-	char mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s%s\r"};
-
-	prf("DataScan: Range: %s\r",spr("%6ld",shipclass[warsptr->shpclass].scanrange));
-
-	update_scantab(warsptr, usrnum);
-
-	sptr = &scantab[usrnum];
-
-	prf("Shp Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
-
-	setsect(warsptr);
-
-	prf(mask,'*',xsect,ysect,xcord,ycord,"0",0,
-		(int)warsptr->heading,showarp(warsptr->speed),
-		warsptr->shpclass,shipclass[warsptr->shpclass].typename,showupg(warsptr));
-
-	if (warsptr->jam_sev > (byte)2) {
-		prf("** Jammed **\r");
-		outprfge(FLT_NONE,usrnum);
-		return;
-	}
-
-	for (i=0; i<NOSCANTAB; ++i) {
-		if (sptr->ship[i].flag == 1) {
-			wptr = warshpoff(sptr->ship[i].shipno);
-
-			setsect(wptr);
-
-			j = wptr->shpclass;
-			prf(mask,sptr->ship[i].letter,xsect,ysect,xcord,ycord,spr("%ld",(long)(sptr->ship[i].dist)),
-				sptr->ship[i].bearing,sptr->ship[i].heading,showarp(sptr->ship[i].speed),
-				j,shipclass[j].typename,showupg(wptr));
-		}
-	}
-
-	outprfge(FLT_NONE,usrnum);
-}
-
-static void scan_data2(void)
-{
-	unsigned i, x, y;
-
-	refresh(warsptr, usrnum);
-
-	setsect(warsptr);
-	prf("Datascan: Sector X:%d Y:%d\r",xsect,ysect);
-
-	getsector(&warsptr->coord);
-
-	prf("NPlnts = %d\r",sector.numplan);
-	for (i=0; i < sector.numplan; ++i) {
-		if (sector.ptab[i].coord.xcoord != 0) {
-			x = coord2(sector.ptab[i].coord.xcoord);
-			y = coord2(sector.ptab[i].coord.ycoord);
-			prf("Pl#%d: Xcoord:%u, Ycoord:%u, Type:%d\r",i+1,x,y,sector.ptab[i].type);
-		}
-	}
-
-	outprfge(FLT_NONE,usrnum);
-}
-
-void FUNC cmd_data(void)
-{
-	int i, j;
-
-	if (margc != 3) {
-		prfmsg(INVCMD);
-		outprfge(FLT_NONE,usrnum);
-		return;
-	}
-
-	if (!sameas(margv[1],"qazwsx")) {
-		prfmsg(INVCMD);
-		outprfge(FLT_NONE,usrnum);
-		return;
-	}
-
-	if (sameas(margv[2],"report")) {
-		prf("UD1:%s,%u,%u,%u*\r",
-			waruptr->userid,
-			waruptr->noships,
-			waruptr->kills,
-			waruptr->planets);
-		sprintf(gechrbuf,"%lu",waruptr->score);
-		sprintf(gechrbuf2,"%lu",waruptr->cash);
-		sprintf(gechrbuf3,"%lu",waruptr->population);
-		prf("UD2:%s,%s,%s*\r",gechrbuf,gechrbuf2,gechrbuf3);
-		outprfge(FLT_NONE,usrnum);
-
-		setsect(warsptr);
-
-		prf("SD1:%s,%d*\r",
-			(warsptr->status == GESTAT_USER && warsptr->shipname[0] == 0 ? warsptr->userid : warsptr->shipname),
-			warsptr->shpclass);
-
-		prf("SD2:%s,%s,%d,%d,%u,%u,%s,%s*\r",
-			spr("%ld",(long)warsptr->heading),
-			spr("%ld",(long)warsptr->speed),
-			xsect,ysect,xcord,ycord,
-			spr("%ld",(long)warsptr->damage),
-			spr("%ld",(long)warsptr->energy));
-
-		prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-			spr("%ld",(long)warsptr->phasr),
-			warsptr->phasrtype,
-			warsptr->kills,
-			warsptr->lastfired,
-			warsptr->shieldtype,
-			warsptr->shieldstat,
-			warsptr->shield,
-			warsptr->cloak,
-			warsptr->tactical,
-			warsptr->helm,
-			warsptr->where);
-
-		prf("SD4:");
-		for (i=0; i<MAXTORPS; ++i)
-			prf("T%d:%u-%u,",i,warsptr->ltorps[i].channel,warsptr->ltorps[i].distance);
-		prf("*\r");
-
-		prf("SD5:");
-		for (i=0; i<MAXMISSL; ++i)
-			prf("M%d:%u-%u,",i,warsptr->lmissl[i].channel,warsptr->lmissl[i].distance);
-		prf("*\r");
-
-		prf("SD6:");
-		for (i=0; i<NUMITEMS; ++i)
-			prf("I%d:%s,",i,spr("%lu",warsptr->items[i]));
-		prf("*\r");
-
-		j = 0;
-		for (i=0; i<MAXDECOY; ++i)
-			if (warsptr->decout[i] > 0)
-				++j;
-
-		prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-			j,
-			(int)warsptr->jam_time,
-			warsptr->kills,
-			warsptr->freq,
-			warsptr->hostile,
-			warsptr->cantexit,
-			warsptr->repair,
-			warsptr->hypha,
-			(int)warsptr->torpcntl,
-			(int)warsptr->mislcntl,
-			warsptr->destruct,
-			warsptr->status);
-
-		outprfge(FLT_NONE,usrnum);
-		return;
-	}
-	if (sameas(margv[2],"scan")) {
-		scan_data1();
-		return;
-	}
-	if (sameas(margv[2],"sector")) {
-		scan_data2();
-		return;
-	}
-
-	prfmsg(INVCMD);
-	outprfge(FLT_NONE,usrnum);
-}
-
-#endif
-
 char *FUNC gedots(int numdots)
 {
 	int i;

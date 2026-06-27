@@ -1,0 +1,659 @@
+ge-next DATA Command Protocol
+=============================
+
+Overview
+--------
+
+The DATA command exposes player, ship, scanner, and sector information to
+an external frontend connected through the normal game session. It does not
+open a separate network service.
+
+The available commands are:
+
+    DATA ON <pairing-code>
+    DATA CAP
+    DATA SHIP
+    DATA USER
+    DATA MSG
+    DATA INV
+    DATA UPG
+    DATA NAV
+    DATA ORD
+    DATA SYS
+    DATA SCAN
+    DATA SECTOR
+    DATA METADATA ON
+    DATA METADATA OFF
+
+Command names and the ON keyword are case-insensitive. A configured pairing
+code is case-sensitive.
+
+Pairing enables DATA commands but does not automatically enable metadata tags
+in ordinary game messages. Metadata must be enabled separately for each
+session with DATA METADATA ON.
+
+
+FRONTEND Configuration
+----------------------
+
+Access is controlled by the FRONTEND option in MPOGEMSG.MSG.
+
+FRONTEND set to OFF:
+
+    The DATA command is completely disabled. Every DATA command behaves like
+    an invalid game command.
+
+FRONTEND set to ALL:
+
+    All DATA commands are immediately available. No pairing command is
+    required. DATA ON <string> is also accepted, but is unnecessary.
+
+FRONTEND set to any other string:
+
+    The session must first send the exact configured value:
+
+        DATA ON <pairing-code>
+
+    A successful pairing returns:
+
+        ON:<pairing-code>,<project-name>,<project-version>,<project-arch>*
+        STOP:ON*
+
+    Example:
+
+        ON:COOLBBS,ge-next,0.3.1b,16-bit*
+        STOP:ON*
+
+    An incorrect code and all other DATA commands behave like invalid game
+    commands until pairing succeeds. Pairing applies only to the current
+    terminal session and is cleared when the player leaves or disconnects
+    from the game.
+
+The configured FRONTEND value is limited to eight characters.
+
+The pairing code is an application-level association between a game and a
+frontend. It should not be treated as strong authentication by itself.
+
+
+DATA METADATA
+-------------
+
+After DATA access is available, metadata framing can be enabled with:
+
+    DATA METADATA ON
+
+The command returns the following unframed acknowledgement and then enables
+metadata for subsequent messages:
+
+    METADATA:ON*
+    STOP:METADATA*
+
+Disable framing with DATA METADATA OFF. It returns METADATA:OFF and
+STOP:METADATA without metadata framing. Metadata state applies only to the
+current terminal session and is cleared when the player leaves or disconnects
+from the game.
+
+Each message delivered through outprfge() is enclosed by unique plain-text
+markers:
+
+    Begin: {{GE;MSG;<type>;BEGIN}}
+    End:   {{GE;MSG;<type>;END}}
+
+The numeric message types match the game's filter classes:
+
+    0 = all cyborg hails besides 1 and 2
+    1 = cyborg battle hails
+    2 = cyborg approach hails
+    3 = distress calls
+    4 = planetary beacons
+    5 = hails from users
+    6 = ship entry and departure
+    7 = general ship activity
+    8 = unfiltered/catchall output; never framed
+
+Message types 0 through 7 are framed only after they pass the player's message
+filters. Filtered messages and type 8 unfiltered/catchall output produce
+neither a begin marker nor an end marker. A frontend must consume metadata
+markers from the raw session stream and remove them before displaying the
+enclosed game text.
+
+If a message plus both markers would exceed the MajorBBS output-buffer limit,
+the game sends that message without metadata framing rather than truncate it.
+
+A frontend can use these message classifications to give the user the option
+to redirect or duplicate those messages in a second window, adjustable by
+the user. The frontend can use DATA MSG to determine what types of messages
+are already filtered out by the user so those types could be unavailable
+or greyed out by the selector.
+
+General Record Format
+---------------------
+
+The record-based DATA commands emit records beginning with an identifier such
+as USER1, CAP, or SYS2. Fields are separated by commas. Each record ends with
+an asterisk and a carriage return:
+
+    RECORD:field,field,field*\r
+
+String fields use percent encoding for bytes that would conflict with the
+record format. The game emits the following substitutions:
+
+    %     = %25
+    comma = %2C
+    *     = %2A
+    CR    = %0D
+    LF    = %0A
+
+Frontends should split records and fields first, then decode percent-encoded
+string fields. Numeric fields are not percent encoded.
+
+Numeric values are decimal unless stated otherwise.
+
+Every successful section command ends with a section terminator:
+
+    STOP:<section>*\r
+
+For example, DATA SCAN ends with STOP:SCAN and DATA INV ends with STOP:INV.
+The terminator is emitted after all records for that section, including empty
+category records. Frontends should use it to determine when a complete
+snapshot has been received.
+
+
+DATA USER
+---------
+
+DATA USER emits two account records.
+
+USER1
+
+    USER1:<userid>,<team>,<ships>,<kills>,<user-kills>,<planets>*
+
+    userid       Player's MajorBBS user ID.
+    team         Team name, or an empty field when the player has no team.
+    ships        Number of ships currently owned by the player.
+    kills        Total kills credited to the player.
+    user-kills   Player-controlled ship kills credited to the player.
+    planets      Number of planets owned by the player.
+
+USER2
+
+    USER2:<score>,<cash>,<population>*
+
+    score        Player's score.
+    cash         Player's cash on hand.
+    population   Total population credited to the player.
+
+DATA MSG
+--------
+
+DATA MSG emits the player's message-display settings in unpacked form:
+
+    MSG:<cybs>,<distress>,<beacon>,<hail>,<entry>,<ship>*
+
+    cybs:
+        0 = all cyborg messages
+        1 = battle and approach messages
+        2 = approach messages only
+        3 = off
+
+    distress, beacon, hail, and ship:
+        0 = on
+        1 = off
+
+    entry:
+        0 = on
+        1 = reduced
+        2 = off
+
+
+DATA CAP
+--------
+
+DATA CAP emits one ship-capability record:
+
+    CAP:<torpedoes>,<missiles>,<decoys>,<jammers>,<zippers>,<mines>,
+        <cloak>,<acceleration>,<top-warp>,<scan-range>*
+
+    torpedoes     Maximum torpedo-launcher capability for this class.
+    missiles      Maximum missile-launcher capability for this class.
+    decoys        Nonzero if this class can deploy decoys.
+    jammers       Nonzero if this class can deploy jammers.
+    zippers       Nonzero if this class can deploy zippers.
+    mines         Nonzero if this class can deploy mines.
+    cloak         Nonzero if this class has a cloaking system.
+    acceleration  Effective acceleration, including Acceleration Boosters.
+    top-warp      Current recommended maximum cruising speed after engine
+                  damage. 0 means the warp engines are inoperable.
+    scan-range    Effective scan range, including Scan Range Boost.
+
+
+DATA SHIP
+---------
+
+DATA SHIP emits one current-ship identity and status record:
+
+    SHIP:<ship-name>,<class-name>,<ship-kills>,<ship-user-kills>,<frequency>*
+
+    ship-name     Ship name, or an empty field if the ship is unnamed.
+    class-name    Display name of the ship's class.
+    ship-kills    Total kills credited to this ship.
+    ship-user-kills
+                  Player-controlled ship kills credited to this ship.
+    frequency     Encoded-message frequency. 0 means no frequency is set.
+
+DATA INV
+--------
+
+DATA INV emits one inventory record:
+
+    INV:I0:<quantity>,I1:<quantity>,...,I13:<quantity>,*
+
+It then emits a cargo summary record:
+
+    INV2:<cargo-weight>,<cargo-capacity>*
+
+    cargo-weight  Current total cargo weight in tons.
+    cargo-capacity
+                  Maximum cargo capacity in tons.
+
+Every inventory item is included, including items with a quantity of zero.
+
+    I0   Men
+    I1   Missiles
+    I2   Torpedoes
+    I3   Ion cannons
+    I4   Flux pods
+    I5   Food cases
+    I6   Fighters
+    I7   Decoys
+    I8   Troops
+    I9   Zippers
+    I10  Jammers
+    I11  Mines
+    I12  Gold
+    I13  Spies
+
+
+DATA UPG
+--------
+
+DATA UPG emits one upgrade record:
+
+    UPG:<upgrades>,<transponder>*
+
+    upgrades      Installed-upgrade bitmask:
+                      1   Enhanced scanners
+                      2   Armor plating
+                      4   Acceleration boosters
+                      8   Scan range boost
+                      16  Enhanced lock
+                      32  Enhanced damage control
+                      64  Transponder control
+                      128 Reinforced neutron core
+                  Add the values for ships with multiple upgrades.
+    transponder   Transponder mode:
+                      0 = normal
+                      1 = low
+                      2 = high
+                  This field is meaningful when the Transponder Control
+                  upgrade is installed.
+
+
+DATA NAV
+--------
+
+DATA NAV emits one navigation record:
+
+    NAV:<heading>,<speed>,<sector-x>,<sector-y>,<local-x>,<local-y>,<where>*
+
+    heading       Current heading rounded to the displayed whole degree.
+    speed         Raw internal speed truncated to an integer. 1000 units is
+                  warp 1.00.
+    sector-x      Galactic sector X coordinate.
+    sector-y      Galactic sector Y coordinate.
+    local-x       Local coordinate within the sector.
+    local-y       Local coordinate within the sector.
+    where         Movement/location state:
+                      0     = impulse space
+                      1     = hyperspace
+                      10+n  = orbiting planet n
+
+
+DATA ORD
+--------
+
+DATA ORD emits six ordnance record types.
+
+ORD1 - Incoming Torpedoes
+
+    ORD1:<source>,<locked>,<distance>*
+
+One ORD1 record is emitted for each incoming torpedo.
+
+    source        NPC ship name or player user ID, "destroyed" if the source
+                  no longer exists, or empty if the source cannot be
+                  resolved.
+    locked        1 if the player is currently locked onto the source;
+                  otherwise 0.
+    distance      Current distance, or ????? when jammed.
+
+If there are no incoming torpedoes, the game emits ORD1:*.
+
+ORD2 - Incoming Missiles
+
+    ORD2:<source>,<locked>,<distance>*
+
+ORD2 follows the same rules as ORD1. If there are no incoming missiles, the
+game emits ORD2:*.
+
+ORD3 - Outgoing Torpedoes
+
+    ORD3:<target>,<locked>,<distance>*
+
+One ORD3 record is emitted for each live torpedo fired by this ship.
+
+    target        NPC ship name or player user ID.
+    locked        1 if the player is currently locked onto the target;
+                  otherwise 0.
+    distance      Current distance, or ????? when jammed.
+
+If there are no outgoing torpedoes, the game emits ORD3:*.
+
+ORD4 - Outgoing Missiles
+
+    ORD4:<target>,<locked>,<distance>*
+
+ORD4 follows the same rules as ORD3. If there are no outgoing missiles, the
+game emits ORD4:*.
+
+ORD5 - Deployed Decoys
+
+    ORD5:<deployed-decoys>*
+
+    deployed-decoys
+                  Number of this ship's decoys currently deployed.
+
+ORD6 - Deployed Mines
+
+    ORD6:<x>,<y>,<timer>,<bearing>,<distance>*
+
+One ORD6 record is emitted for each live mine deployed by this ship.
+
+    x             Mine X coordinate as displayed by REPORT ORDNANCE.
+    y             Mine Y coordinate as displayed by REPORT ORDNANCE.
+    timer         Remaining mine timer.
+    bearing       Relative bearing from the requesting ship, or ???? when
+                  jammed.
+    distance      Distance from the requesting ship, or ????? when jammed.
+
+If there are no deployed mines, or the current ship cannot deploy mines, the
+game emits ORD6:*.
+
+
+DATA SYS
+--------
+
+DATA SYS emits four systems records. It exposes the same information as
+REPORT SYSTEMS without exposing underlying damage counters or other hidden
+state.
+
+SYS1
+
+    SYS1:<damage>,<energy>*
+
+    damage        The same descriptive hull-damage string used in the game:
+                  no, negligible, very light, light, moderate, heavy, or
+                  severe.
+    energy        Available energy rounded to the displayed whole unit.
+
+SYS2
+
+    SYS2:<shield-type>,<shield-status>,<shield-percent>,<phaser-type>,
+         <phaser-status>,<cloak-status>*
+
+    shield-type   Installed shield Mark number.
+                  0 if the ship has no shields.
+    shield-status Shield state:
+                      0 = shields not available
+                      1 = up
+                      2 = down
+                      3 = damaged
+    shield-percent
+                  Shield-bank charge shown by REPORT SYSTEMS while shields
+                  are up. -1 when the charge is not displayed.
+    phaser-type   Installed phaser Mark number.
+                  0 if the ship has no phasers.
+    phaser-status Phaser state:
+                      0 = phasers not available
+                      1 = operative
+                      2 = charging
+                      3 = inoperable
+    cloak-status  Cloak state:
+                      0 = cloak not available
+                      1 = off
+                      2 = on
+
+SYS3
+
+    SYS3:<shields>,<helm>,<tactical>,<phasers>,<torpedoes>,<missiles>,
+         <cloak>,<jammer>,<decoy>,<zipper>,<mine>*
+
+Each field corresponds to a damaged-system line in REPORT SYSTEMS:
+
+     0 = the system is not reported damaged
+    -1 = damaged; no ETA is visible without Enhanced Damage Control
+    -2 = damaged; Enhanced Damage Control displays ETA: TBD
+    -3 = damaged; subsystem ETA is suppressed during active maintenance
+    >0 = visible ETA in seconds from Enhanced Damage Control
+
+Positive ETA values include the same small estimate variation used by REPORT
+SYSTEMS. The active subsystem follows the game's repair order: helm,
+tactical, phasers, torpedoes, missiles, cloak, jammer, decoy, zipper, and
+mine. Damaged shields are repaired on a separate track and can therefore
+have a visible ETA at the same time as the active subsystem.
+
+SYS4
+
+    SYS4:<warp-status>,<recommended-warp>,<maintenance-eta>*
+
+    warp-status   Warp warning displayed by REPORT SYSTEMS:
+                      0 = no warp warning displayed
+                      1 = warp engines inoperable
+                      2 = above cruising speed
+                      3 = warp engines damaged; recommended speed displayed
+    recommended-warp
+                  Recommended maximum warp when warp-status is 3.
+                  -1 when REPORT SYSTEMS does not display this value.
+    maintenance-eta
+                  Visible maintenance ETA in seconds while maintenance is
+                  active; otherwise 0.
+
+Internal phaser charge, subsystem damage counters, launcher reload timers,
+cloak transition state, shield charge while shields are not up, and the warp
+overspeed accumulator are intentionally not exposed.
+
+
+Damage Information and Enhanced Damage Control
+----------------------------------------------
+
+The DATA protocol follows the game's Enhanced Damage Control information
+rules. SYS3 reports whether each system is damaged and whether its ETA is
+visible, queued as TBD, unavailable without the upgrade, or suppressed by
+active maintenance. It never sends the underlying repair magnitude.
+
+Hull damage remains a descriptive string in SYS1. Shield damage is represented
+by shield-status 3 and the shields field in SYS3. Warp information is sent
+only when REPORT SYSTEMS displays the corresponding warning.
+
+
+DATA SCAN
+---------
+
+DATA SCAN emits a structured equivalent of the default SCAN RANGE display.
+It uses the ship's full effective scan range, including Scan Range Boost.
+
+The header record is:
+
+    SCAN:<range>,<sector-x>,<sector-y>*
+
+    range          Effective scan range used for this scan.
+    sector-x      Requesting ship's current sector X coordinate.
+    sector-y      Requesting ship's current sector Y coordinate.
+
+If the requesting ship is in a nebula, range scanning is unavailable and the
+only data record before STOP:SCAN is:
+
+    SCAN:NEBULA*
+
+SCANS - Ship Contacts
+
+    SCANS:<letter>,<marker>,<type>,<name>,<distance>,<bearing>,<heading>,
+          <speed>*
+
+One SCANS record is emitted for each contact that SCAN RANGE can display.
+Contacts are sorted nearest first and limited to the same 15-contact scanner
+table used by the game. The requesting ship is not included.
+
+    letter        Current scanner letter.
+    marker        Contact marker:
+                      0 = normal
+                      1 = locked
+                      2 = distress
+                  Lock takes priority over distress.
+    type          Contact type:
+                      0 = cyborg
+                      1 = droid
+                      2 = user
+                  This field is ? when jamming hides the scanner letter and
+                  its color-coded type.
+    name          NPC ship name, user ID for an unnamed user ship, or
+                  "userid (ship name)" for a named user ship. The same
+                  display-length limit as SCAN RANGE is applied.
+    distance      Distance from the requesting ship.
+    bearing       Relative bearing from the requesting ship.
+    heading       Target heading relative to the requesting ship.
+    speed         Speed in the same displayed warp format used by SCAN RANGE.
+                  Certain special speeds display as ??.??.
+
+Normal visible contacts (`scantab.flag == 1`) are emitted with all available
+fields. A cloaked or nebula-hidden contact retained through lock grace
+(`scantab.flag == 2`) is also emitted, matching SCAN RANGE, but its distance,
+bearing, heading, and speed fields contain question marks.
+
+If there are no emitted contacts, the game emits:
+
+    SCANS:*
+
+Jamming applies the same information restrictions as SCAN RANGE. Lock and
+distress markers are suppressed at jamming severity 3 or higher. Names and
+numeric fields are progressively replaced with question marks. At heavy
+jamming levels, contacts may be omitted and remaining fields may be entirely
+unreadable.
+
+SCANM - Mine Contacts
+
+    SCANM:<distance>,<bearing>*
+
+One SCANM record is emitted for each live mine plotted within the SCAN RANGE
+map.
+
+    distance      Distance from the requesting ship.
+    bearing       Relative bearing from the requesting ship.
+
+Mine distance and bearing are subject to the same numeric jamming corruption
+as ship contacts. At heavy jamming levels, mine contacts may also be omitted.
+If no mine records are emitted, the game emits:
+
+    SCANM:*
+
+
+DATA SECTOR
+-----------
+
+DATA SECTOR emits a structured equivalent of SCAN SECTOR for the requesting
+ship's current sector.
+
+The header record is:
+
+    SECTOR:<sector-x>,<sector-y>,<nebula>*
+
+    sector-x      Current sector X coordinate.
+    sector-y      Current sector Y coordinate.
+    nebula        1 if the sector is a nebula; otherwise 0.
+
+SECTORO - Planetary Objects
+
+    SECTORO:<number>,<type>,<distance>,<bearing>,<orbiting>*
+
+One SECTORO record is emitted for each planet or wormhole visible under the
+same rules as SCAN SECTOR.
+
+    number        Object number used by sector and orbit displays.
+    type          2 for a planet or 3 for a wormhole.
+    distance      Distance from the requesting ship.
+    bearing       Relative bearing from the requesting ship.
+    orbiting      1 if the requesting ship is orbiting this object;
+                  otherwise 0.
+
+Inside a nebula, objects beyond nebula range are hidden unless the player is
+orbiting the object or owns the planet. Jamming may omit objects, obscure the
+object number and type with ?, and replace trailing distance or bearing
+digits with question marks. An object currently being orbited is not hidden
+or corrupted by jamming.
+
+If no planetary objects are emitted, the game emits:
+
+    SECTORO:*
+
+SECTORS - Ship Contacts
+
+    SECTORS:<letter>,<marker>,<type>,<name>,<distance>,<bearing>*
+
+Ship fields and marker/type values follow the SCANS rules documented under
+DATA SCAN. Only visible ships in the current sector are emitted. Inside a
+nebula, ships beyond nebula range are excluded.
+
+If no ship contacts are emitted, the game emits:
+
+    SECTORS:*
+
+SECTORM - Mine Contacts
+
+    SECTORM:<distance>,<bearing>*
+
+One SECTORM record is emitted for each live mine in the current sector that
+SCAN SECTOR can plot. Inside a nebula, mines beyond nebula range are hidden.
+Distance and bearing are subject to normal numeric jamming corruption, and
+heavy jamming may omit mine contacts.
+
+If no mine contacts are emitted, the game emits:
+
+    SECTORM:*
+
+
+Frontend Parsing Recommendations
+--------------------------------
+
+1. Treat DATA CAP, DATA SHIP, DATA USER, DATA MSG, DATA INV, DATA UPG,
+   DATA NAV, DATA ORD, DATA SYS, DATA SCAN, and DATA SECTOR as snapshots.
+   Request them again whenever current state is needed; the game does not
+   automatically push these records.
+
+2. Identify records by the text before the colon and terminate each record at
+   the asterisk. Use STOP:<section> to detect the end of a complete response.
+   Do not depend solely on network packet or read boundaries.
+
+3. Accept repeated ORD1, ORD2, ORD3, ORD4, ORD6, SCANS, SCANM, SECTORO,
+   SECTORS, and SECTORM records. An empty record means the corresponding
+   category currently has no entries.
+
+4. Treat any value containing ? as unavailable or jam-corrupted, not as zero.
+
+5. Use the DATA UPG bitmask for installed upgrades.
+
+6. Do not infer launcher damage from any positive jammer, decoy, zipper, or
+   mine launcher value. Positive values are normal reload states; only
+   negative values mean those launchers are damaged.
+
+7. Unknown future record identifiers or extra trailing fields should be
+   ignored when possible so that frontends remain forward-compatible.

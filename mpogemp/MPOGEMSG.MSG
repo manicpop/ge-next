@@ -23,6 +23,21 @@ Feel free to put any eight digit number here.
 
 REGNO {12345678} S 8 Registration Number
 
+The DATA command prints game data in a comma-delimited
+format for use by ge-next-compatible frontends. When a
+pairing code is configured, the client enables the DATA
+commands by running:
+
+DATA ON [STRING]
+
+Set this option to the string that the frontend will send.
+
+Set this option to OFF to disable the DATA command entirely.
+Set it to ALL to make the DATA commands available without
+pairing.
+
+FRONTEND {OFF} S 8 Frontend pairing code
+
 LEVEL4 {}
 
 This Option is maintained for backward compatibility and
