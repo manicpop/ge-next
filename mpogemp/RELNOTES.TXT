@@ -9,6 +9,15 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
+=== 0.3.1 === 2026-06-30:
+
+* Cargo size calculation routines were rewritten with separate
+  16-bit and 32-bit implementations. There were still some
+  overflow issues; should all be fixed now.
+* The DATA command has been rewritten. See FRONTEND.TXT for more
+  information on how to use this command.
+* A build specifically for MBBSEmu is now available.
+
 === 0.3 === 2026-06-16:
 
 ge-next's main executable is now MPOGEMP.DLL and all MBM*

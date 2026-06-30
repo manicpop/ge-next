@@ -21,6 +21,7 @@ The available commands are:
     DATA ORD
     DATA SYS
     DATA SCAN
+    DATA SHIPSCAN <target>
     DATA SECTOR
     DATA METADATA ON
     DATA METADATA OFF
@@ -232,10 +233,12 @@ DATA SHIP
 
 DATA SHIP emits one current-ship identity and status record:
 
-    SHIP:<ship-name>,<class-name>,<ship-kills>,<ship-user-kills>,<frequency>*
+    SHIP:<ship-name>,<class-name>,<shipno>,<ship-kills>,<ship-user-kills>,<frequency>*
 
     ship-name     Ship name, or an empty field if the ship is unnamed.
     class-name    Display name of the ship's class.
+    shipno        Per-user persistent ship number. This identifies the current
+                  ship for frontend per-ship settings.
     ship-kills    Total kills credited to this ship.
     ship-user-kills
                   Player-controlled ship kills credited to this ship.
@@ -567,6 +570,114 @@ If no mine records are emitted, the game emits:
     SCANM:*
 
 
+DATA SHIPSCAN
+-------------
+
+DATA SHIPSCAN is a structured equivalent of SCAN SHIP. It is an active scan,
+not passive telemetry. A frontend should call it only in response to a
+deliberate player action, not as a persistent polling command.
+
+The command syntax is:
+
+    DATA SHIPSCAN <target>
+
+The target is resolved with the same ship-targeting rules used by SCAN SHIP.
+The command follows the same range, jamming, nebula, cloak, lock, and enhanced
+scanner rules as SCAN SHIP. When SCAN SHIP would notify the scanned ship,
+DATA SHIPSCAN sends the same notification.
+
+Failure records:
+
+    SHIPSCAN:JAMMED*
+    SHIPSCAN:NEBULA*
+    SHIPSCAN:NOTFOUND*
+    SHIPSCAN:UNAVAILABLE*
+
+UNAVAILABLE means the requesting ship cannot currently scan because tactical
+systems are damaged or the ship is destroyed.
+
+Every result ends with:
+
+    STOP:SHIPSCAN*
+
+Successful scans emit SHIPSCAN1 through SHIPSCAN3. Some
+fields may contain question marks when jamming obscures the same values in
+SCAN SHIP. Frontends should treat bearing, heading, distance, galactic heading,
+sector, and speed as display fields, not guaranteed numeric fields.
+
+SHIPSCAN1 - Identity, Position, and Kills
+
+    SHIPSCAN1:<name>,<class>,<upgrade-suffix>,<commander>,<team>,<bearing>,
+              <heading>,<distance>,<gal-heading>,<sector>,<speed>,
+              <ship-kills>,<ship-user-kills>,<user-kills>,<user-user-kills>*
+
+    name            Ship display name, user ID for an unnamed user ship, or
+                    NPC ship name.
+    class           Ship class name. Empty when jamming would hide class
+                    details.
+    upgrade-suffix  Upgrade suffix string shown by SCAN SHIP. Empty when
+                    jamming would hide class details.
+    commander       User ID for a named user ship. Empty for NPCs, unnamed
+                    user ships, or when jamming hides commander details.
+    team            Team name for a user ship with a team. Empty otherwise.
+    bearing         Relative bearing from the requesting ship.
+    heading         Target heading relative to the requesting ship.
+    distance        Distance from the requesting ship.
+    gal-heading     Target's galactic heading.
+    sector          Target's sector as the same display string used by
+                    SCAN SHIP, for example "3 -1".
+    speed           Target speed in the same displayed warp format used by
+                    SCAN SHIP.
+    ship-kills      Total kills credited to this ship. Empty when jamming
+                    hides kill details.
+    ship-user-kills Player-controlled ship kills credited to this ship. Empty
+                    for NPCs or when jamming hides kill details.
+    user-kills      Total kills credited to the target user. Empty for NPCs or
+                    when jamming hides kill details.
+    user-user-kills Player-controlled ship kills credited to the target user.
+                    Empty for NPCs or when jamming hides kill details.
+
+SHIPSCAN2 - Damage, Shields, and Phasers
+
+    SHIPSCAN2:<damage>,<shield-status>,<shield-type>,<phaser-type>,
+              <phaser-status>*
+
+    damage          The same descriptive hull-damage string used by SCAN SHIP.
+    shield-status   0 = target has no shields, 1 = shields up, 2 = shields
+                    down or damaged. Empty when SCAN SHIP would show hull
+                    damage but not shield status.
+    shield-type     Installed shield Mark number, or 0 if none.
+    phaser-type     Installed phaser Mark number, or 0 if none.
+    phaser-status   0 = no phasers, 1 = operative, 2 = charging,
+                    3 = inoperable.
+
+If SCAN SHIP would not display damage/shield/phaser information, the game emits:
+
+    SHIPSCAN2:*
+
+If SCAN SHIP would show hull damage but not enhanced shield/phaser details,
+the enhanced fields are empty.
+
+SHIPSCAN3 - Enhanced Scanner System Damage
+
+    SHIPSCAN3:<shields>,<helm>,<tactical>,<phasers>,<torpedoes>,<missiles>,
+              <cloak>,<jammer>,<decoy>,<zipper>,<mine>*
+
+Each field reports whether SCAN SHIP would show that system as damaged:
+
+    0 = system is not reported damaged
+    1 = system is reported damaged
+
+Repair ETA details are visible only to the damaged ship itself through
+REPORT SYSTEMS and DATA SYS. Enhanced Scanners do not expose another ship's
+repair ETA.
+
+If the requesting ship does not have Enhanced Scanners, or SCAN SHIP would not
+display enhanced scanner details, the game emits:
+
+    SHIPSCAN3:*
+
+
 DATA SECTOR
 -----------
 
@@ -635,9 +746,11 @@ Frontend Parsing Recommendations
 --------------------------------
 
 1. Treat DATA CAP, DATA SHIP, DATA USER, DATA MSG, DATA INV, DATA UPG,
-   DATA NAV, DATA ORD, DATA SYS, DATA SCAN, and DATA SECTOR as snapshots.
-   Request them again whenever current state is needed; the game does not
-   automatically push these records.
+   DATA NAV, DATA ORD, DATA SYS, DATA SCAN, DATA SHIPSCAN, and DATA SECTOR
+   as complete response sections. Request passive state sections again
+   whenever current state is needed; the game does not automatically push
+   these records. DATA SHIPSCAN has scan side effects and should only be
+   requested for a deliberate player scan action.
 
 2. Identify records by the text before the colon and terminate each record at
    the asterisk. Use STOP:<section> to detect the end of a complete response.

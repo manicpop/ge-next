@@ -2874,10 +2874,6 @@ FRCTER {
 [0;37m[[1;31mERROR[0;37m] Fire control malfunction, weapons not fired.[1;37m
 } T GE fire control error message
 
-SCANER {
-[0;37m[[1;31mERROR[0;37m] Scanner malfunction.[1;37m
-} T GE scanner error message
-
 ATTKER {
 [0;37m[[1;31mERROR[0;37m] Attack aborted.[1;37m
 } T GE attack aborted message

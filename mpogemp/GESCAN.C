@@ -86,6 +86,8 @@ static void scan_pl(void);
 static void scan_ra(void);
 static void scan_se(void);
 static void scan_lo(void);
+static void data_shipscan(void);
+static void data_shipscan_systems(WARSHP *wptr);
 
 /**************************************************************************
 ** Functions for printmap()                                              **
@@ -711,9 +713,19 @@ static void scan_sh(void)
 		return;
 	}
 
+	/* you shouldn't be able to scan yourself */
 	if (shpnum == usrnum) {
-		prfmsg(SCANER);
+		/* stale lock points to self, clear it and pretend it never happened */
+		if (margv[2][0] == '@') {
+			warsptr->lock = -1;
+			warsptr->track_grace = 0;
+			prfmsg(NOLOCK);
+		}
+		/* this shouldn't happen, you should not be in your own scantab */
+		else
+			prfmsg(NOSHIP);
 		outprfge(FLT_NONE,usrnum);
+		return;
 	} else if (shpnum >= 0) {
 		char *tname;
 
@@ -805,7 +817,7 @@ static void scan_sh(void)
 							prfmsg(SCAN20, wptr->phasrtype);
 					}
 
-					show_rep_sysdam(wptr);
+					show_rep_sysdam(wptr,FALSE);
 				}
 
 				if (wptr->status == GESTAT_AUTO)
@@ -1954,7 +1966,7 @@ static int data_damage_eta(WARSHP *ptr, int steps, int active, int fuzz)
 {
 	int secs;
 
-	/* Preserve why REPORT SYS omitted a numeric ETA without exposing steps. */
+	/* preserve why REPORT SYS omitted a numeric ETA without exposing steps */
 	if (steps <= 0)
 		return 0;
 	if (ptr->repair > 0)
@@ -2019,7 +2031,7 @@ static void data_systems(void)
 	shfuzz = (fuzz % 5) - 2;
 	fuzz = ((fuzz / 5) % 5) - 2;
 	prf("SYS3:");
-	/* Match the subsystem order used by show_rep_sysdam(). */
+	/* match the subsystem order used by show_rep_sysdam() */
 	need = 0;
 	if (warsptr->shieldstat == SHIELDDM) {
 		need = 1 - warsptr->shield;
@@ -2085,6 +2097,277 @@ static void data_systems(void)
 	prf("STOP:SYS*\r");
 }
 
+static void data_shipscan_text(char *buf, unsigned int *rseed)
+{
+	if (warsptr->jam_sev > (byte)2)
+		jam_scramble(buf,warsptr->jam_sev,rseed);
+	data_text(buf);
+}
+
+static void data_shipscan_damage(WARSHP *wptr)
+{
+	int damage, phaserstate, shieldstat;
+	int show_shields, show_enhanced;
+
+	if (warsptr->jam_sev >= (byte)3
+		|| !((warsptr->upgrade & ENHSCAN) || (warsptr->where != 1 && wptr->where != 1))) {
+		prf("SHIPSCAN2:*\rSHIPSCAN3:*\r");
+		return;
+	}
+
+	show_shields = (!(warsptr->upgrade & ENHSCAN) && warsptr->where != 1 && wptr->where != 1)
+		|| ((warsptr->upgrade & ENHSCAN) && wptr->where != 1);
+	show_enhanced = (warsptr->upgrade & ENHSCAN) && wptr->where != 1;
+
+	damage = (int)(wptr->damage + .5);
+	damstr(damage);
+	prf("SHIPSCAN2:");
+	data_text(gechrbuf);
+
+	shieldstat = 0;
+	if (show_shields && shipclass[wptr->shpclass].max_shlds != 0) {
+		if (wptr->shieldstat == SHIELDUP)
+			shieldstat = 1;
+		else
+			shieldstat = 2;
+	}
+	prf(",");
+	if (show_shields)
+		prf("%d",shieldstat);
+
+	if (!show_enhanced) {
+		prf(",,,*\rSHIPSCAN3:*\r");
+		return;
+	}
+
+	phaserstate = 0;
+	if (shipclass[wptr->shpclass].max_phasr != 0) {
+		if (wptr->phasr >= PMINFIRE)
+			phaserstate = 1;
+		else if (wptr->phasr >= 0)
+			phaserstate = 2;
+		else
+			phaserstate = 3;
+	}
+
+	prf(",%d,%d,%d*\r",
+		shipclass[wptr->shpclass].max_shlds == 0 ? 0 : wptr->shieldtype,
+		phaserstate == 0 ? 0 : wptr->phasrtype,
+		phaserstate);
+
+	prf("SHIPSCAN3:");
+	data_shipscan_systems(wptr);
+}
+
+static void data_shipscan_systems(WARSHP *wptr)
+{
+	/* keep this order and damage predicates in sync with show_rep_sysdam() and SYS3 */
+	prf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+		wptr->shieldstat == SHIELDDM,
+		wptr->helm < 0,
+		wptr->tactical < 0,
+		wptr->phasr < 0,
+		wptr->torpcntl > 0,
+		wptr->mislcntl > 0,
+		wptr->cloak < 0,
+		wptr->jamload < 0,
+		wptr->decload < 0,
+		wptr->zipload < 0,
+		wptr->mineload < 0);
+}
+
+static void data_shipscan_notify(int shpnum, long scandist)
+{
+	char ltr;
+	int target_bearing;
+	WARSHP *wptr;
+
+	if (warsptr->jam_sev >= (byte)3 || warsptr->lock == shpnum)
+		return;
+
+	wptr = warshpoff(shpnum);
+	if ((long)scandist > shipclass[wptr->shpclass].scanrange) {
+		target_bearing = cbearing(&wptr->coord,&warsptr->coord,wptr->heading);
+		prfmsg(SCAN2,target_bearing);
+	}
+	else {
+		if (warsptr->cloak != 10) {
+			ltr = shpltr(shpnum,usrnum);
+			if (warsptr->shipname[0] == 0)
+				prfmsg(SCAN1O,ltr,waruptr->userid);
+			else
+				prfmsg(SCAN1,ltr,warsptr->shipname);
+		}
+		else
+			prfmsg(SCAN3);
+	}
+	outprfge(FLT_NONE,shpnum);
+}
+
+static void data_shipscan(void)
+{
+	WARSHP *wptr;
+	WARUSR *wuptr;
+	char *tname;
+	unsigned int rseed;
+	long scandist;
+	int bearing, gheading, heading, nebmask, shpnum, target_neb;
+
+	if (warsptr->tactical != 0 || warsptr->damage >= 100.0) {
+		prf("SHIPSCAN:UNAVAILABLE*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	rseed = gernd();
+	if (warsptr->jam_sev > (byte)7
+		|| (warsptr->jam_sev > (byte)2 && rseed % (9 - (int)warsptr->jam_sev) == 0)) {
+		prf("SHIPSCAN:JAMMED*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	setsect(warsptr);
+	nebmask = innebula(xsect,ysect);
+	if (margv[2][0] == '@') {
+		if (warsptr->lock < 0 || warsptr->lock >= nships) {
+			warsptr->lock = -1;
+			warsptr->track_grace = 0;
+			shpnum = -1;
+		}
+		else {
+			shpnum = warsptr->lock;
+			if (!ingegame(shpnum)) {
+				warsptr->lock = -1;
+				warsptr->track_grace = 0;
+				shpnum = -1;
+			}
+			else {
+				wptr = warshpoff(shpnum);
+				if ((cdistance(&warsptr->coord,&wptr->coord) * 10000.0) > (double)ship_scanrange(warsptr)) {
+					warsptr->lock = -1;
+					warsptr->track_grace = 0;
+					shpnum = -1;
+				}
+			}
+		}
+	}
+	else
+		shpnum = findshp(margv[2],1);
+
+	if (shpnum < 0 && margv[2][0] == '@') {
+		prf("SHIPSCAN:NOTFOUND*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (shpnum >= 0) {
+		wptr = warshpoff(shpnum);
+		scandist = (long)(cdistance(&warsptr->coord,&wptr->coord) * 10000);
+		target_neb = innebula(coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
+		if ((nebmask || target_neb) && !(nebmask && target_neb && scandist < (long)NEBRNG)) {
+			if (nebmask)
+				prf("SHIPSCAN:NEBULA*\r");
+			else
+				prf("SHIPSCAN:NOTFOUND*\r");
+			prf("STOP:SHIPSCAN*\r");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
+	}
+	else if (nebmask) {
+		prf("SHIPSCAN:NEBULA*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (shpnum == usrnum) {
+		if (margv[2][0] == '@') {
+			warsptr->lock = -1;
+			warsptr->track_grace = 0;
+		}
+		prf("SHIPSCAN:NOTFOUND*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	if (shpnum < 0) {
+		prf("SHIPSCAN:NOTFOUND*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	wptr = warshpoff(shpnum);
+	wuptr = warusroff(shpnum);
+	scandist = (long)(cdistance(&warsptr->coord,&wptr->coord) * 10000);
+	if (scandist >= ship_scanrange(warsptr)) {
+		prf("SHIPSCAN:NOTFOUND*\rSTOP:SHIPSCAN*\r");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	bearing = cbearing(&warsptr->coord,&wptr->coord,warsptr->heading);
+	heading = cbearing(&wptr->coord,&warsptr->coord,wptr->heading);
+	gheading = (int)(wptr->heading + .5);
+	setsect(wptr);
+
+	prf("SHIPSCAN1:");
+	if (wptr->status == GESTAT_USER && wptr->shipname[0] == 0)
+		sprintf(gechrbuf,"%s",wuptr->userid);
+	else
+		sprintf(gechrbuf,"%s",wptr->shipname);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+
+	if (warsptr->jam_sev < (byte)3) {
+		data_text(shipclass[wptr->shpclass].typename);
+		prf(",");
+		data_text(showupg(wptr));
+		prf(",");
+		if (wptr->status == GESTAT_USER && wptr->shipname[0] != 0)
+			data_text(username(wptr));
+		prf(",");
+		tname = NULL;
+		if (wptr->status == GESTAT_USER && wuptr->teamcode > 0)
+			tname = teamname(wuptr);
+		data_text(tname == NULL ? "" : tname);
+	}
+	else
+		prf(",,,");
+	prf(",");
+
+	sprintf(gechrbuf,"%d",bearing);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+	sprintf(gechrbuf,"%d",heading);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+	sprintf(gechrbuf,"%ld",scandist);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+	sprintf(gechrbuf,"%d",gheading);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+	sprintf(gechrbuf,"%d %d",xsect,ysect);
+	data_shipscan_text(gechrbuf,&rseed);
+	prf(",");
+	stzcpy(gechrbuf,showarp(wptr->speed),20);
+	data_shipscan_text(gechrbuf,&rseed);
+
+	if (warsptr->jam_sev < (byte)3) {
+		if (wptr->status == GESTAT_AUTO)
+			prf(",%u,0,0,0*\r",wptr->kills);
+		else
+			prf(",%u,%u,%u,%u*\r",wptr->kills,wptr->ukills,wuptr->kills,wuptr->ukills);
+	}
+	else
+		prf(",,,,*\r");
+
+	data_shipscan_damage(wptr);
+	prf("STOP:SHIPSCAN*\r");
+	outprfge(FLT_NONE,usrnum);
+	data_shipscan_notify(shpnum,scandist);
+}
+
 static void data_user(void)
 {
 	char *tname;
@@ -2139,7 +2422,8 @@ static void data_ship(void)
 	data_text(warsptr->shipname);
 	prf(",");
 	data_text(shipclass[warsptr->shpclass].typename);
-	prf(",%u,%u,%u*\r",
+	prf(",%d,%u,%u,%u*\r",
+		warsptr->shipno,
 		warsptr->kills,
 		warsptr->ukills,
 		warsptr->freq);
@@ -2214,6 +2498,11 @@ void FUNC cmd_data(void)
 		}
 		prfmsg(INVCMD);
 		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (margc == 3 && sameas(margv[1],"SHIPSCAN")) {
+		data_shipscan();
 		return;
 	}
 

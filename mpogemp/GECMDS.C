@@ -1795,7 +1795,7 @@ void FUNC cmd_report(void)
 		damstr(damage);
 
 		prfmsg(REP14,gechrbuf);
-		show_rep_sysdam(warsptr);
+		show_rep_sysdam(warsptr,TRUE);
 
 		if (shipclass[warsptr->shpclass].max_warp != 0) {
 			if (warsptr->topspeed == 0)
@@ -2042,10 +2042,10 @@ static char *repdmg_eta(WARSHP *ptr, int steps, int active, int fuzz)
 }
 
 /**************************************************************************
-** Show subsystem damage details for REPORT SYS                          **
+** Show subsystem damage details; optional repair ETAs                   **
 **************************************************************************/
 
-void FUNC show_rep_sysdam(WARSHP *ptr)
+void FUNC show_rep_sysdam(WARSHP *ptr, int showeta)
 {
 	int need;
 	int active;
@@ -2063,46 +2063,46 @@ void FUNC show_rep_sysdam(WARSHP *ptr)
 		if (need <= 0)
 			need = 1;
 		need = (need + ptr->shieldtype - 1) / ptr->shieldtype;
-		prfmsg(REP15,repdmg_eta(ptr,need,TRUE,shfuzz));
+		prfmsg(REP15,showeta ? repdmg_eta(ptr,need,TRUE,shfuzz) : "");
 	}
 	if (ptr->helm < 0) {
-		prfmsg(REP16,repdmg_eta(ptr,-ptr->helm,active,fuzz));
+		prfmsg(REP16,showeta ? repdmg_eta(ptr,-ptr->helm,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->tactical < 0) {
-		prfmsg(REP18,repdmg_eta(ptr,-ptr->tactical,active,fuzz));
+		prfmsg(REP18,showeta ? repdmg_eta(ptr,-ptr->tactical,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->phasr < 0) {
-		prfmsg(REP21,repdmg_eta(ptr,(int)ceil(-ptr->phasr),active,fuzz));
+		prfmsg(REP21,showeta ? repdmg_eta(ptr,(int)ceil(-ptr->phasr),active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->torpcntl > 0) {
-		prfmsg(REP22T,repdmg_eta(ptr,ptr->torpcntl,active,fuzz));
+		prfmsg(REP22T,showeta ? repdmg_eta(ptr,ptr->torpcntl,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->mislcntl > 0) {
-		prfmsg(REP22M,repdmg_eta(ptr,ptr->mislcntl,active,fuzz));
+		prfmsg(REP22M,showeta ? repdmg_eta(ptr,ptr->mislcntl,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->cloak < 0) {
-		prfmsg(REP17,repdmg_eta(ptr,-ptr->cloak,active,fuzz));
+		prfmsg(REP17,showeta ? repdmg_eta(ptr,-ptr->cloak,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->jamload < 0) {
-		prfmsg(REP22J,repdmg_eta(ptr,-ptr->jamload,active,fuzz));
+		prfmsg(REP22J,showeta ? repdmg_eta(ptr,-ptr->jamload,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->decload < 0) {
-		prfmsg(REP22D,repdmg_eta(ptr,-ptr->decload,active,fuzz));
+		prfmsg(REP22D,showeta ? repdmg_eta(ptr,-ptr->decload,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->zipload < 0) {
-		prfmsg(REP22Z,repdmg_eta(ptr,-ptr->zipload,active,fuzz));
+		prfmsg(REP22Z,showeta ? repdmg_eta(ptr,-ptr->zipload,active,fuzz) : "");
 		active = FALSE;
 	}
 	if (ptr->mineload < 0) {
-		prfmsg(REP22MN,repdmg_eta(ptr,-ptr->mineload,active,fuzz));
+		prfmsg(REP22MN,showeta ? repdmg_eta(ptr,-ptr->mineload,active,fuzz) : "");
 		active = FALSE;
 	}
 }

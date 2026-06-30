@@ -59,8 +59,7 @@
 /* if FASTPLANET defined updates happen every 3 seconds */
 /* #define FASTPLANET 1 */
 
-/* workarounds for mbbsemu math functions */
-/* hopefully not necessary much longer */
+/* enable to build with mbbsemu mitigations */
 /* #define MBBSEMU 1 */
 
 #define PROJECT_NAME "ge-next"

@@ -244,7 +244,7 @@ void FUNC cmd_mine P((void));
 int FUNC laymine P((WARSHP *ptr , int usrn , int timer));
 void FUNC cmd_send P((void));
 void FUNC cmd_report P((void));
-void FUNC show_rep_sysdam P((WARSHP *ptr));
+void FUNC show_rep_sysdam P((WARSHP *ptr , int showeta));
 void FUNC cmd_shields P((void));
 void FUNC cmd_cloak P((void));
 void FUNC cmd_transfer P((void));
