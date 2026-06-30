@@ -2287,14 +2287,15 @@ static void restore_prf_mbbsemu(void)
 static void outprf_metadata(int cls, int shpno)
 {
 	static char header[32], footer[32];
-	unsigned flen, hlen, len;
+	size_t flen, hlen, len, needed;
 
 	sprintf(header,"{{GE;MSG;%d;BEGIN}}",cls);
 	sprintf(footer,"{{GE;MSG;%d;END}}",cls);
 	hlen = strlen(header);
 	flen = strlen(footer);
 	len = strlen(prfbuf);
-	if (len + hlen + flen < OUTSIZ) {
+	needed = len + hlen + flen;
+	if (needed < (size_t)OUTSIZ) {
 		movmem(prfbuf,prfbuf + hlen,len + 1);
 		memcpy(prfbuf,header,hlen);
 		memcpy(prfbuf + hlen + len,footer,flen + 1);
