@@ -333,7 +333,7 @@ MENU menu[] = {
 #ifdef PHARLAP
 void EXPORT init__galemp(void)
 {
-	stzcpy(mpoge.descrp, gmdnam("MPOGEMP.MDF"), MNMSIZ);
+	stzcpy(mpoge.descrp, gmdnam(GEMDF), MNMSIZ);
 
 	iniwara();
 	gestt = register_module(&mpoge);

@@ -1,0 +1,20 @@
+\run286\bc3\lib\c0phdll  +
+\run286\bc3\lib\fpdmy +
+\wgserv\gaobj\gemain +
+\wgserv\gaobj\gefuncs +
+\wgserv\gaobj\gecmds +
+\wgserv\gaobj\gecybs +
+\wgserv\gaobj\gedroids +
+\wgserv\gaobj\geplanet +
+\wgserv\gaobj\gelib +
+\wgserv\gaobj\gescan
+\wgserv\mpoga
+/MAP:\wgserv\mpoga.map
+\run286\bc3\lib\phapi +
+\wgserv\dlib\galimp +
+\wgserv\dlib\msgimp +
+\wgserv\dlib\gsblimp +
+\bc45\lib\mathh /Twd /s /n 
+\wgserv\dlib\mathdef
+
+

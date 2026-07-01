@@ -1,0 +1,5659 @@
+Galactic Empire Standard Message File
+Version ge-arena 0.3
+
+LEVEL0 {}
+
+FILE01 {MPOGAMSG.MSG} Galactic Empire
+
+LEVEL3 {}
+
+Define the KEY the player must have to play GE.
+
+PLAYKEY {DEMO} S 15 Key required to play GE
+
+This defines the key required to use the special
+sysop commands. You can set this to something 
+other than SYSOP and then assign that key to
+specific GAMEOP's or players as needed.
+
+SYSKEY {SYSOP} S 15 Key required for sysop powers
+
+A registration number is not required for ge-next.
+Feel free to put any eight digit number here.
+
+REGNO {23456789} S 8 Registration Number
+
+The DATA command prints game data in a comma-delimited
+format for use by ge-arena-compatible frontends. When a
+pairing code is configured, the client enables the DATA
+commands by running:
+
+DATA ON [STRING]
+
+Set this option to the string that the frontend will send.
+
+Set this option to OFF to disable the DATA command entirely.
+Set it to ALL to make the DATA commands available without
+pairing.
+
+FRONTEND {OFF} S 8 Frontend pairing code
+
+LEVEL4 {}
+
+This Option is maintained for backward compatibility and
+has no effect in Version 6+ of MajorBBS. If you are using
+a 5.xx version set this to the descriptive name on the
+main menu you wish associated with GE.
+
+GEMNU {Galactic Empire} S 30 Main menu description
+
+This Option is maintained for backward compatibility and
+has no effect in Version 6+ of MajorBBS. If you are using
+a 5.xx version set this to the Selection Letter associated
+with GE.
+
+GESEL {The main menu selection: G} C
+
+Set this option on if you wish to enable the optional menu
+text page.
+ 
+OPTMENU {Enable the optional menu selection: YES} B
+
+This is the text of the menu description. The menu
+will appear as...
+
+   OPTCHR ... OPTTXT       or
+   C ... Chronicles of Zygor
+
+OPTTXT {Release notes} S 30 Text menu selection
+
+This is the menu selection character for the optional
+menu.
+
+OPTCHR {Optional menu character: N} C
+
+You can limit the number of players who can simultaneously
+play the game. You may with to set this value in order to
+keep your systems performance within an acceptable
+response.  The more players in the game the more CPU
+resources the game consumes.
+
+MAXPLRS {The maximum players in the game at once: 32} N 1 256
+
+This option controls if non-paying players can enter the
+game.  Set to 1 to allow non-paying players to pay, 0 to
+restrict.
+
+NOTE: In release 6.0 this field has no effect. Please
+control this feature with the PLAYKEY field in the
+Level 3 Security Options.
+
+FREEBIES {If 1 non-payers can play, otherwise set to 0: 0} N 0 1
+
+Set this value to control the number of TOP PLAYERS
+displayed in the roster.
+
+MAXLIST {The number of entries shown in the roster: 10} N 3 50
+
+Set this value to control the maximum number of ships a 
+player can have at the same. 
+
+MAXSHIPS {The maximum number of ships a player can own: 45} N 1 60
+
+Set this value to control the maximum number of planets a
+player can own at the same time. 
+
+MAXPLNTS {Maximum planets a single player can own? 200} N 1 256
+
+This value controls the maximum planets that will be
+created at one time in a sector. Reducing this number
+reduces the total planets in the game and the system load
+to create and manage them. If you are having performance
+problems when  planets are created you should reduce this
+number to limit the disk I/O each time. There is no problem
+changing this value AFTER a game has begun.
+
+MAXPLSE {Maximum planets in a sector? 4} N 1 9
+
+If a player tries to attack another player in the Neutral
+Zone they will be fired upon by the Enforcer planet. Set
+this to the amount of damage inflicted each time this 
+occurs.
+
+NOTE- set SE100DAM to 101 to kill violators in 1 shot
+
+SE100DAM {The amt of damage when hostile in Neutral: 10} N 0 101
+
+Set this option on if you wish the MajorBBS's profanity
+filters to be monitored during the game.
+
+PROFON {Do you want profanity checking on? NO} B
+
+This option turns on some optional logging generally used
+for debugging purposes. It is recommended that it remain 0
+unless instructed to change it by our support staff.
+
+0 = show minimal log messages
+1 = show operational information messages
+2 = show diagnostic messages
+3 = show debugging messages
+
+SHOWOPT {Show on log "GE:" messages at which level? 0} N 0 5
+
+This option turns on extended trace logging generally used
+for debugging purposes. It is recommended that it remain NO
+unless instructed to change it by our support staff.
+
+If enabled output is sent to GEOUT.LOG. Note, this file can
+grow quite large if this option is left on.
+
+LOGFLG {Enable extended trace logging? NO} B
+
+This option specifies the filename of the user database. It
+is provided to you in case you wish to store the datafiles
+in a separate directory.
+
+GEUSER {MPOGAUSR.DAT} S 40 GE User Filename
+
+This option specifies the filename of the Ship database. It
+is provided to you in case you wish to store the datafiles
+in a separate directory.
+
+GESHIP {MPOGASHP.DAT} S 40 GE Ship Filename
+
+This option specifies the filename of the Mail database. It
+is provided to you in case you wish to store the datafiles
+in a separate directory.
+
+GEMAIL {MPOGAMAL.DAT} S 40 GE Mail Filename
+
+This option specifies the filename of the planet database.
+It is provided to you in case you wish to store the
+datafiles in a separate directory.
+
+GEPLNT {MPOGAPLT.DAT} S 40 GE Planet Filename
+
+This option specifies the filename of the current active
+ship class table. Do not change this filename in the 
+middle of a contest. If you do change it you must reset
+the MPOGASHP.DAT and MPOGAUSR.DAT databases.
+
+GESHIPCL {MPOGASHP.MCV} S 28 GE Ship Class Message Filename
+
+This option will make ge-next dump the roster to a text
+file, MPOGAROS.TXT, every night during midnight cleanup,
+in case a Sysop would like to display it somewhere outside
+of the game.
+
+GEROSTXT {Dump roster to MPOGAROS.TXT nightly? YES} B
+
+This option controls if a player is allowed to transfer
+goods to a planet which they do not own. If YES a player
+can transfer goods to another players planets. This could
+give players with multiple USERID's an unfair advantage as
+they could transfer goods from multiple accounts to a
+single account giving that account an initial boost in the
+game. 
+
+Note: If you only permit paying accounts to play the game
+this is of less concern.
+
+TRANSOPT {Allow goods transfers to planets not owned? YES} B
+
+This option enables the special SYSOP commands. It is
+STRONGLY recommended that you only turn this on when
+specifically needed and leave it off otherwise.
+
+SYSCMDS {Allow sysop commands? YES} B
+
+If sysop commands are enabled are they restricted to
+players with SYSOP class only.
+
+SYSONLY {Allow sysop only to use sysop commands? YES} B
+
+This values controls how many times a planet is updated
+per day.
+
+PLANUPD {How many times a day to update all planets? 4} N 1 15
+
+This value controls the odds of a sector having 
+planets. The lower the number the more likely
+a sector will have planets.
+
+PLODDS {Frequency Factor for planets: 3} N 1 20
+
+This value controls the odds of a sector having
+a wormhole. The lower the number the more likely
+a sector will have a wormhole.
+
+WORMODDS {Frequency Factor for wormholes: 6} N 1 100
+
+This value controls the odds of a sector being a
+nebula. 0 disables nebulas.
+
+NEBODDS {Frequency Factor for nebulas: 3} N 0 10
+
+This value controls how far from the center (sector 0 0) 
+the galaxy extends. The Galaxy is square and UNIVMAX
+sectors in each direction (N,S,E,W).
+
+NOTE: The size has some pretty dramatic effects on the
+game. You may with to try various values in each of your
+campaigns to determine which works best for you. 
+
+DO NOT CHANGE THIS VALUE WITHOUT RESETTING ALL THE GALACTIC
+EMPIRE DATABASES AS UNEXPECTED PROBLEMS -WILL- OCCUR!!!
+
+UNIVMAX {The radius of the Virtual Galaxy: 300} N 10 32000
+
+
+This option controls whether the galaxy wraps or has a
+"bumper". If YES then it wraps around top to bottom, and
+side to side.
+
+UNIVWRAP {Does the Galaxy wrap around? NO} B
+
+This value controls how large the MPOGAPLT.DAT data file
+will grow to. Each time a sector is "terraformed" the 
+MPOGAPLT.DAT database grows by the following formula; 
+space added = (number planets * 512) + 512
+
+In order to prevent your disk from filling up you can
+specify the maximum size that the database will grow to in
+Kbytes. When the maximum is reached no more planets will be
+created. Note: a 32,767 database will hold 65,535 planets
+and sectors. That should keep most players busy for awhile.
+
+MAXPLREC {Max size of MPOGAPLT.DAT in Kbytes: 32767} N 10 32767
+
+This option controls the range of the Torpedo Lock-on
+function. It functions as a divisor to reduce the effective
+range down from the maximum possible range of 50,000. The
+specific formula for those who want to know is as follows;
+
+IF (1.2-(speed/5000))*((5-distance)/(TORFACT/10))
+IS GREATER THAN .7 LOCKON SUCCESSFUL
+
+speed = opponents speed
+distance = opponents distance (in sectors)
+
+NOTE: Valid range is between 1 and 50.
+
+TORFACT {Torpedo Lock-on divisor: 40} N 1 50
+
+This option sets the maximum damage % a torpedo can 
+do. It is factored in the game later with a random 
+multiplier between .5 and 1.0 giving each torpedo a
+damage factor between 50% and 100% of the value you 
+specify here.
+
+TDAMMAX {Torpedo Damage Maximum: 35} N 1 100
+
+This option controls the speed of a torpedo. 
+It is the distance the torpedo goes each "tic"
+which is about 5 seconds.
+
+TORPSPED {Speed of torpedo: 2441} N 1 10000
+
+This option controls the range of the Missile Lock-on
+function. It functions as a divisor to reduce the effective
+range down from the maximum possible range of 50,000. The
+specific formula for those who want to know is as follows;
+
+IF ((5-distance)/(MISFACT/10))
+IS GREATER THAN .7 LOCKON SUCCESSFUL
+
+speed = opponents speed
+distance = opponents distance 
+
+NOTE: Valid range is between 1 and 50.
+
+MISFACT {Missile Lock-on divisor: 21} N 1 50
+
+This option sets the maximum damage % a missile can 
+do. It is factored in the game later with a random 
+multiplier between .5 and 1.0 and the power of the
+missile. The exact formula is...
+damage = (MDAMMAX/100)*(50000/missile power)*
+         (random(.5)+.5);
+
+MDAMMAX {Missile Damage Maximum: 35} N 1 100
+
+This option controls the speed of a missile. 
+It is the distance the missile goes each "tic"
+(which is about 5 seconds) when carrying around
+5000 units of energy. More heavily charged missiles
+travel more slowly (down to 0.5x) and lighter
+missiles can travel up to 2x this value. Missiles
+speed up as they travel and burn energy.
+
+MISLSPED {Speed of missile: 2441} N 1 10000
+
+This option controls the maximum damage an Ion
+Cannon can do each shot. It is factored in the 
+game by a random multiplier of .5 to 1.0 giving
+a maximum damage of 50% to 100% of IDAMMAX.
+
+IDAMMAX {Maximum damage from Ion Cannon: 50} N 1 100
+
+This option specifies the maximum number of 
+mines which can be "ticking" at the same 
+time. 
+
+CAUTION: This option can dramatically effect 
+CPU usage. Change carefully.
+
+NUMMINES {Number of Mines "ticking": 18} N 1 200
+
+This option specifies the maximum number of 
+mines which a single user can lay at the same 
+time. 
+
+
+USRMINES {Number of Mines a user can lay: 3} N 1 200
+
+This option controls the maximum damage a Mine
+can do. It is factored later in the game by the 
+distance from the ship. 
+
+
+MNDAMMAX {Maximum damage a Mine can do: 75} N 1 200
+
+This option controls the odds of a decoy snagging
+a missile or torpedo. If the distance from the 
+incoming object is less than 5000 then there is a 
+one in DECODDS chance the decoy will snag it each
+tic (every 5 seconds) cycle.
+
+DECODDS {Odds of a decoy decoying: 11} N 1 20
+
+This option controls the rate at which spontaneous repairs
+occur to a damaged ship. The value is specified in 
+percent of damage reduced each cycle. 
+
+Values above 10 are not recommended as repairs would 
+occur so fast that it might be too difficult to kill
+a ship.
+
+REPAIRRT {Rate of repair in %: 6} N 1 50
+
+This option controls the effective distance of the 
+Hyperphasers. Decrease to extend their range, 
+increase to shorten.
+
+HPFIRDST {Hyperphaser distance factor: 5} N 1 20
+
+This option controls the amount of damage a hyperphaser
+does. Increase to cause more damage per shot, decrease
+to reduce. Because this is factored down by range and
+phaser type you can set the value to numbers greater
+than 100.
+
+HPDAMMAX {Hyperphaser maximum damage: 40} N 1 200
+
+This option controls the effective distance of the 
+Hyperphasers. Decrease to extend their range, 
+increase to shorten.
+
+PFIRDST {Phaser distance factor: 5} N 1 20
+
+This option controls the amount of damage a phaser
+does. Increase to cause more damage per shot, decrease
+to reduce. Because this is factored down by range and
+phaser type you can set the value to numbers greater
+than 100.
+
+PDAMMAX {Phaser maximum damage: 40} N 1 200
+
+This option controls what class of phasers can fire
+from Impulse to Warp. The default is 3. To make all
+classes of phasers have this capability set it to 0.
+To make none set it to 17.
+
+PHATOWRP {Phasers to Warp Minimum Type: 3} N 0 20
+
+This option controls the duration of a jammer.
+It is factored in the game by the distance 
+from the ship that launches it.
+
+JAMTIME {How long do Jammers last: 3} N 1 10
+
+This option specifies how much energy the cloaking system
+draws during each tick cycle. 
+
+CLENGUSE {How much does Cloak draw each tick: 5000} N 1 32000
+
+This option controls whether or not men eat food like
+troops do. YES is default for ge-next, set to NO to
+use the behavior from Galactic Empire 3.2e.
+
+MENEAT {Do men eat? YES} B
+
+This option controls how likely it is that a player that
+destroys another user player's ship will receive
+information about that player's planets, on a scale
+of 0 (never) to 10 (always). Default is 5.
+
+SHOWDOC {Likelihood of captured document? 5} N 0 10
+
+This option controls how often NPCs attack each other
+on a scale of 0 to 10. 0 means never, 10 means non-stop.
+Default is 5. Cybs will only attack non-Cyb NPCs with
+their CATK and NATK values set as such.
+
+CATTKD {Likelihood of Cybs attacking droids? 5} N 0 10
+
+This option controls how many days mail messages
+are queued before deletion.
+
+MAILDAYS {How many days to save mail: 3} N 1 7
+
+This option sets the amount of cash each player starts 
+with when they begin the game. It is specified in thousands.
+
+STRTCASH {How much cash does a player start with (in 1000's): 100} N 1 32000
+
+This value is used to calculate the amount of bonus
+that a user gets for taking out a player ranked
+higher than they are. It's mulitiplied by number
+of roster positions separating the two users, and
+divided by point differential between the users.
+
+SCRBONUS {User on user bonus value: 200} N 1 32700
+
+This factor calculates the percent of the winners 
+award to deduct from the loser. Example: If John
+kills Pete, and John gets 1000 points Pete will
+lose 350 points given the default value of 35%
+
+SCRFACT {Factor points to deduct from loser: 35} N 1 100
+
+This option will determine if and how much to charge
+a player as a fine when they lose a battle to another 
+player. This only happens when "live" players battle.
+The amount is a percent to charge the loser and award
+to the winner. The fee is deducted from the players
+cash. Setting to 0 disables this option.
+
+CHGLOSER {Percent to fine a loser: 2} N 0 100
+
+This option specifies the distance Cyb's will allow 
+non-combative classes of ships to approach before they
+consider the approach an aggressive act. This value is
+modified in the code using the following formula on a
+case by case basis.
+
+distance = TOOCLOSE + random(TOOCLOSE)
+
+The range is therefore TOOCLOSE to 2*TOOCLOSE
+
+TOOCLOSE {How close do Cybs allow players to get: 2500} N 1 32000
+
+This option specifies the upper limit of the 
+random gold given to a Cyb each time they
+are created. Increase this value if you 
+would like to put more value in shooting
+down cybs.
+
+CYBGOLD {Max amount of gold a cyb gets: 1200} N 0 32000
+
+This option controls when the cybertrons invoke
+hyperwarp. If the player is more than HYPDST1 sectors
+away the cybertron will go to hyperwarp to get
+there faster. 
+
+CAUTION: This number MUST be larger than HYPDST2.
+
+HYPDST1 {Max Cybertron Hyperwarp distance: 30} N 1 32000
+
+This option controls when the cybertrons drop out of
+hyperwarp. If the player is less than HYPDST2 sectors
+away the cybertron will drop to normal speed.
+
+CAUTION: This number MUST be smaller than HYPDST1.
+
+HYPDST2 {Min Cybertron Hyperwarp distance: 20} N 1 32000
+
+This option controls the bonus amount added to the
+team score for each member. It adds value to the 
+score for having more players in a team. The value
+specified below is in 100's.
+
+TEAMBONU {Team bonus added for each plyr: 5} N 0 32000
+
+This option specifies the maximum number of members on
+a given team. Keeping this number lower will prevent 
+everyone flocking to a popular team and winning by 
+sheer numbers alone. It also forces the existing team
+members to be selective on who they let join the team.
+
+TEAMMAX {Maximum members on a team: 10} N 0 32000
+
+This is the faction number of the planets in the neutral
+zone. If you attack ships of this faction, you will
+not be allowed to conduct business in the neutral zone
+for a few days. If you want to disable this behavior,
+set to 8. The default is 7.
+
+GCNUM {Faction number of neutral zone: 7} N 0 8
+
+This option specifies the number of planets in the neutral
+zone (sector 0 0). 
+
+Note: You need not change this unless you want more than 
+3 planets in the Neutral Zone. 
+
+If you turn on an additional planet you MUST change 
+this option to reflect the number of planets.
+The planets are only created the FIRST TIME a player
+scans the Neutral Zone.
+
+S00PLNUM {Number of Planets in Sector 0 0: 6} N 3 9
+
+Is planet # 1 defined? This should be set to YES
+in the default version. 
+
+S00P1DEF {Is planet #1 defined? YES} B
+
+This is the name of planet # 1 in the Neutral Zone.
+
+S00P1NM {Zygor} (S00P1DEF=YES) S 19 Planet #1 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P1OWN {*Galactic Command*} (S00P1DEF=YES) S 30 Owner of Planet #1
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P1TYP {Planet Type: 1} (S00P1DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P1X {X Coordinate of Planet: 5000} (S00P1DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P1Y {Y Coordinate of Planet: 5000} (S00P1DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P1ENV {Environment for planet: 3} (S00P1DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P1RES {Resources for planet: 3} (S00P1DEF=YES) N 0 3
+
+Is planet # 2 defined? This should be set to YES
+in the default version. 
+
+S00P2DEF {Is planet #2 defined? YES} B
+
+This is the name of planet # 2 in the Neutral Zone.
+
+S00P2NM {Tahanian Station} (S00P2DEF=YES) S 19 Planet #2 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P2OWN {*Galactic Command*} (S00P2DEF=YES) S 30 Owner of Planet #2
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P2TYP {Planet Type: 2} (S00P2DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P2X {X Coordinate of Planet: 7000} (S00P2DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P2Y {Y Coordinate of Planet: 7000} (S00P2DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P2ENV {Environment for planet: 3} (S00P2DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P2RES {Resources for planet: 3} (S00P2DEF=YES) N 0 3
+
+Is planet # 3 defined? This should be set to YES
+in the default version. 
+
+S00P3DEF {Is planet #3 defined? YES} B
+
+This is the name of planet # 3 in the Neutral Zone.
+
+S00P3NM {Enforcer Planet} (S00P3DEF=YES) S 19 Planet #3 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P3OWN {*Galactic Command*} (S00P3DEF=YES) S 30 Owner of Planet #3
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P3TYP {Planet Type: 0} (S00P3DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P3X {X Coordinate of Planet: 2000} (S00P3DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P3Y {Y Coordinate of Planet: 2000} (S00P3DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P3ENV {Environment for planet: 1} (S00P3DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P3RES {Resources for planet: 0} (S00P3DEF=YES) N 0 3
+
+Is planet # 4 defined? This should be set to NO
+in the default version. 
+
+S00P4DEF {Is planet #4 defined? YES} B
+
+This is the name of planet # 4 in the Neutral Zone.
+
+S00P4NM {Kayriez Portal} (S00P4DEF=YES) S 19 Planet #4 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P4OWN {*Galactic Command*} (S00P4DEF=YES) S 30 Owner of Planet #4
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P4TYP {Planet Type: 3} (S00P4DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P4X {X Coordinate of Planet: 1100} (S00P4DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P4Y {Y Coordinate of Planet: 6700} (S00P4DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P4ENV {Environment for planet: 0} (S00P4DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P4RES {Resources for planet: 0} (S00P4DEF=YES) N 0 3
+
+Is planet # 5 defined? This should be set to YES
+in the default version. 
+
+S00P5DEF {Is planet #5 defined? YES} B
+
+This is the name of planet # 5 in the Neutral Zone.
+
+S00P5NM {Lydorian Portal} (S00P5DEF=YES) S 19 Planet #5 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P5OWN {*Galactic Command*} (S00P5DEF=YES) S 30 Owner of Planet #5
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P5TYP {Planet Type: 3} (S00P5DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P5X {X Coordinate of Planet: 6700} (S00P5DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P5Y {Y Coordinate of Planet: 1500} (S00P5DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P5ENV {Environment for planet: 0} (S00P5DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P5RES {Resources for planet: 0} (S00P5DEF=YES) N 0 3
+
+Is planet # 6 defined? This should be set to YES
+in the default version. 
+
+S00P6DEF {Is planet #6 defined? YES} B
+
+This is the name of planet # 6 in the Neutral Zone.
+
+S00P6NM {Tryklon Portal} (S00P6DEF=YES) S 19 Planet #6 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P6OWN {*Galactic Command*} (S00P6DEF=YES) S 30 Owner of Planet #6
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P6TYP {Planet Type: 3} (S00P6DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P6X {X Coordinate of Planet: 5500} (S00P6DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P6Y {Y Coordinate of Planet: 7800} (S00P6DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P6ENV {Environment for planet: 0} (S00P6DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P6RES {Resources for planet: 0} (S00P6DEF=YES) N 0 3
+
+Is planet # 7 defined? This should be set to YES
+in the default version. 
+
+S00P7DEF {Is planet #7 defined? NO} B
+
+This is the name of planet # 7 in the Neutral Zone.
+
+S00P7NM {Planet 7} (S00P7DEF=YES) S 19 Planet #7 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P7OWN {*Galactic Command*} (S00P7DEF=YES) S 30 Owner of Planet #7
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P7TYP {Planet Type: 0} (S00P7DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P7X {X Coordinate of Planet: 2050} (S00P7DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P7Y {Y Coordinate of Planet: 2500} (S00P7DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P7ENV {Environment for planet: 1} (S00P7DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P7RES {Resources for planet: 0} (S00P7DEF=YES) N 0 3
+
+Is planet # 8 defined? This should be set to YES
+in the default version. 
+
+S00P8DEF {Is planet #8 defined? NO} B
+
+This is the name of planet # 8 in the Neutral Zone.
+
+S00P8NM {Planet 8} (S00P8DEF=YES) S 19 Planet #8 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P8OWN {*Galactic Command*} (S00P8DEF=YES) S 30 Owner of Planet #8
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P8TYP {Planet Type: 0} (S00P8DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P8X {X Coordinate of Planet: 2000} (S00P8DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P8Y {Y Coordinate of Planet: 2000} (S00P8DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P8ENV {Environment for planet: 1} (S00P8DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P8RES {Resources for planet: 0} (S00P8DEF=YES) N 0 3
+
+Is planet # 9 defined? This should be set to YES
+in the default version. 
+
+S00P9DEF {Is planet #9 defined? NO} B
+
+This is the name of planet # 9 in the Neutral Zone.
+
+S00P9NM {Planet 9} (S00P9DEF=YES) S 19 Planet #9 Name
+
+This field specifies the Owner of this planet. If
+desired you can specify a specific USERID and 
+that user will be able to administer this planet.
+
+S00P9OWN {*Galactic Command*} (S00P9DEF=YES) S 30 Owner of Planet #9
+
+Type of planet indicator. One planet in Sector 0 0
+-MUST- be each of the following types;
+
+0 = Nothing Special
+1 = Base trading planet (Zygor)
+2 = Population Planet (Tahanian Station)
+3 = Wormhole
+
+S00P9TYP {Planet Type: 0} (S00P9DEF=YES) N 0 3
+
+This value specifies the X coordinate of this planet.
+
+S00P9X {X Coordinate of Planet: 2000} (S00P9DEF=YES) N 100 9900
+
+This value specifies the Y coordinate of this planet.
+
+S00P9Y {Y Coordinate of Planet: 2000} (S00P9DEF=YES) N 100 9900
+
+This value specifies the Environment for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P9ENV {Environment for planet: 1} (S00P9DEF=YES) N 0 3
+
+This value specifies the Resources for this Planet.
+
+0 = Poor
+1 = Marginal
+2 = Good
+3 = Very Good
+
+S00P9RES {Resources for planet: 0} (S00P9DEF=YES) N 0 3
+
+The maximum an M M planet with no cash bonus can sustain.
+The true maximum is three times this amount (VG VG with bonus).
+
+ITMPL01 {Maximum Men on a planet: 201228378} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL02 {Maximum Missiles on a planet: 39633} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL03 {Maximum Torpedos on a planet: 59833} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL04 {Maximum Ion Cannons on a planet: 250} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL05 {Maximum Flux Pods on a planet: 923} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL06 {Maximum Food on a planet: 187312837} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL07 {Maximum Fighters on a planet: 579332} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL08 {Maximum Decoys on a planet: 5399} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL09 {Maximum Troops on a planet: 201228378} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL10 {Maximum Zippers on a planet: 5233} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL11 {Maximum Jammers on a planet: 25928} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL12 {Maximum Mines on a planet: 25867} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL13 {Maximum Gold on a planet: 10000} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL14 {Maximum Spys on a planet: 5} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL15 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL16 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL17 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL18 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL19 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL20 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL21 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL22 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL23 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL24 {Reserved for expansion: 0} N 0 2147483647
+
+The maximum an M M planet with no cash bonus can sustain.
+
+ITMPL25 {Reserved for expansion: 0} N 0 2147483647
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT01 {Weight of 100 Men: 100} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT02 {Weight of 100 Missile: 500} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT03 {Weight of 100 Torpedos: 300} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT04 {Weight of 100 Ion Cannons: 25000} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT05 {Weight of 100 Flux Pods: 2000} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT06 {Weight of 100 Food: 200} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT07 {Weight of 100 Fighters: 1500} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT08 {Weight of 100 Decoys: 300} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT09 {Weight of 100 Troops: 200} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT10 {Weight of 100 Zippers: 500} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT11 {Weight of 100 Jammers: 400} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT12 {Weight of 100 Mines: 500} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT13 {Weight of 100 Gold: 50} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT14 {Weight of 100 Spy: 100} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT15 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT16 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT17 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT18 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT19 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT20 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT21 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT22 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT23 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT24 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the weight of each 100 of an
+item. Adjusting this value adjusts the amount
+all ships can carry.
+
+ITMWT25 {Weight of 100 Reserved: 0} N 1 1000000
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL01 {Point Value of man: 10} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL02 {Point Value of missile: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL03 {Point Value of torpedo: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL04 {Point Value of ion cannon: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL05 {Point Value of flux pod: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL06 {Point Value of food: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL07 {Point Value of fighter: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL08 {Point Value of decoy: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL09 {Point Value of troop: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL10 {Point Value of zipper: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL11 {Point Value of jammer: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL12 {Point Value of mine: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL13 {Point Value of gold: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL14 {Point Value of spy: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL15 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL16 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL17 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL18 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL19 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL20 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL21 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL22 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL23 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL24 {Point Value of Reserved: 0} N 0 201288837
+
+This option controls the point value of each 
+multiple of PLTVDIV of an item. 
+
+ITMVAL25 {Point Value of Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH01 {10K ManWeeks of work creates n Men: 3500} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH02 {10K ManWeeks of work creates n Missile: 300} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH03 {10K ManWeeks of work creates n Torpedo: 500} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH04 {10K ManWeeks of work creates n Ion Cannon: 4} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH05 {10K ManWeeks of work creates n Flux Pod: 200} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+Default for ge-next is 12000, default for GE 3.2e was 8000.
+If you set MENEAT to OFF, you may want to bring this back
+down to 8000 as well.
+
+ITMMH06 {10K ManWeeks of work creates n Food: 12000} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH07 {10K ManWeeks of work creates n Fighters: 100} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH08 {10K ManWeeks of work creates n Decoys: 900} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH09 {10K ManWeeks of work creates n Troops: 200} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH10 {10K ManWeeks of work creates n Zippers: 100} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH11 {10K ManWeeks of work creates n Jammers: 300} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH12 {10K ManWeeks of work creates n Mines: 500} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH13 {10K ManWeeks of work creates n Gold: 30} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH14 {10K ManWeeks of work creates n Spy: 20} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH15 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH16 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH17 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH18 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH19 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH20 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH21 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH22 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH23 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH24 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This Value controls the amount of work in 10,000 ManWeeks
+required to create items on a planet. This value is not
+absolute as it is adjusted by many other factors affecting
+planet production at update time. 
+
+ITMMH25 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
+
+This value is the base price of each item.
+
+ITMPR01 {Base price for men: 2} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR02 {Base price for missiles: 20} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR03 {Base price for torpedos: 7} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR04 {Base price for ion cannons: 33} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR05 {Base price for flux pods: 200} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR06 {Base price for food: 2} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR07 {Base price for fighters: 50} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR08 {Base price for decoys: 18} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR09 {Base price for troops: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR10 {Base price for zippers: 99} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR11 {Base price for mines: 21} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR12 {Base price for jammers: 16} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR13 {Base price for gold: 1000} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR14 {Base price for spies: 100} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR15 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR16 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR17 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR18 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR19 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR20 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR21 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR22 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR23 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR24 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price of each item.
+
+ITMPR25 {Base price for <reserved>: 1} N 1 32000
+
+This value is the base price for each type of shield.
+
+SHLDPR01 {Price for Mark-1 shields: 5000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR02 {Price for Mark-2 shields: 10000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR03 {Price for Mark-3 shields: 40000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR04 {Price for Mark-4 shields: 100000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR05 {Price for Mark-5 shields: 220000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR06 {Price for Mark-6 shields: 400000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR07 {Price for Mark-7 shields: 650000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR08 {Price for Mark-8 shields: 900000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR09 {Price for Mark-9 shields: 1200000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR10 {Price for Mark-10 shields: 2000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR11 {Price for Mark-11 shields: 3800000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR12 {Price for Mark-12 shields: 5000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR13 {Price for Mark-13 shields: 7000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR14 {Price for Mark-14 shields: 9000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR15 {Price for Mark-15 shields: 15000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR16 {Price for Mark-16 shields: 30000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR17 {Price for Mark-17 shields: 60000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR18 {Price for Mark-18 shields: 100000000} N 0 201288837
+
+This value is the base price for each type of shield.
+
+SHLDPR19 {Price for Mark-19 shields: 200000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR01 {Price for Mark-1 phasers: 5000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR02 {Price for Mark-2 phasers: 10000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR03 {Price for Mark-3 phasers: 40000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR04 {Price for Mark-4 phasers: 90000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR05 {Price for Mark-5 phasers: 200000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR06 {Price for Mark-6 phasers: 360000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR07 {Price for Mark-7 phasers: 570000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR08 {Price for Mark-8 phasers: 750000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR09 {Price for Mark-9 phasers: 1000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR10 {Price for Mark-10 phasers: 1800000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR11 {Price for Mark-11 phasers: 3200000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR12 {Price for Mark-12 phasers: 4500000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR13 {Price for Mark-13 phasers: 6000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR14 {Price for Mark-14 phasers: 8000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR15 {Price for Mark-15 phasers: 14000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR16 {Price for Mark-16 phasers: 28000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR17 {Price for Mark-17 phasers: 55000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR18 {Price for Mark-18 phasers: 90000000} N 0 201288837
+
+This value is the base price for each type of phaser.
+
+PHSRPR19 {Price for Mark-19 phasers: 180000000} N 0 201288837
+
+This value is the price for upgrade 1 (Enhanced scanners).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR1 {Price for upgrade 1: 2000000} N 0 201288837
+
+This value is the price for upgrade 2 (Armor plating).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR2 {Price for upgrade 2: 5000000} N 0 201288837
+
+This value is the price for upgrade 3 (Acceleration boosters).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR3 {Price for upgrade 3: 3000000} N 0 201288837
+
+This value is the price for upgrade 4 (Scan range boost).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR4 {Price for upgrade 4: 1000000} N 0 201288837
+
+This value is the price for upgrade 5 (Enhanced lock).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR5 {Price for upgrade 5: 5000000} N 0 201288837
+
+This value is the price for upgrade 6 (Damage control upgrade).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR6 {Price for upgrade 6: 4000000} N 0 201288837
+
+This value is the price for upgrade 7 (Transponder control).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR7 {Price for upgrade 7: 500000} N 0 201288837
+
+This value is the price for upgrade 8 (Neutron core upgrade).
+This value is multiplied by DAMF/100 for each ship class.
+
+UPGRPR8 {Price for upgrade 8: 8000000} N 0 201288837
+
+This option specifies the divisor for each of the
+ITMVLnn options above. By adjusting the divisor 
+you can increase or decrease the point weight of 
+all items in the table uniformly
+
+The formula is as follows;
+
+Point = ((number items)/PLTVDIV) * ITMVLnn
+
+PLTVDIV {The divisor for each ITMVLnn : 10000} N 1 201288837
+
+This option specifies the points to be awarded to a 
+player for cash on a planet. Cash and Tax is added 
+together. The formula is as follows;
+
+Points = (cash+taxes)/(1000000/PLTVCASH)
+
+PLTVCASH {The point value of each 1,000,000 : 10} N 1 201288837
+
+This value specifies the efficiency of a planets troops 
+in shooting down fighters during an attack. The number 
+is used in a random function with an even spread between
+5% and PLATTRF1+5%. On each attack the selected random
+number of the attacking ships will be killed if there 
+are a large number of troops on a planet.
+
+
+PLATTRF1 {Max percent of fighters killed by troops: 18 } N 5 100
+
+This value specifies the planets fighter kill ratio. 
+It is the upper limit of a random function with a spread 
+between 20% and PLATTRF2+20%. On each attack the selected
+random ratio of attacking ships is killed. Example: If there
+are 1000 fighters on the planet and 1500 attackers and the
+random ratio selects 80% then 800 attackers are killed.
+(1000 * .80)
+
+PLATTRF2 {Max ratio of attackers killed by planet: 100 } N 5 1000
+
+This ratio specifies the effectiveness of the attacking
+fighters. It is the upper limit of a random function 
+with a spread between 20% and PLATTRF3+20%. On each 
+attack the selected random ratio of planets fighters 
+are killed. Example: if 1000 fighters attack a planet
+with 1500 fighters and the random ratio selects 50% then
+500 (1000 * 50%) of the planets fighters are killed.
+
+PLATTRF3 {Max ratio of planet killed by attackers: 55 } N 5 1000
+
+This value specifies the efficiency of a planets troops 
+in killing attacking troops. The number is used in a 
+random function with an even spread between 25% and 
+PLATTRF1+25%. On each attack the selected random
+number of the attacking troops will be killed if there 
+are a large number of troops on a planet.
+
+
+PLATTRT1 {Max percent of attackers killed by planet: 125 } N 5 1000
+
+This value specifies the efficiency of the attacking
+troops in killing planet troops. The number is used in a 
+random function with an even spread between 10% and 
+PLATTRF1+10%. On each attack the selected random
+number of the planet troops will be killed if there 
+are at least a 2 to 100 attacking ratio
+
+PLATTRT2 {Max percent of planets killed by attacker: 35 } N 5 1000
+
+
+LEVEL6 {}
+
+
+
+INTRO {
+[1;33m                        Galactic Empire ([1;31m%s[1;33m) [1;36m
+       ge-next developed by ManicPop.org, https://manicpop.org/ge-next/
+            Based on Galactic Empire (c) 2025 Elwynor Technologies
+            Original game by M.B. Murdock & Associates (1988-1994)
+} T GE beginning of menu
+
+
+MENUA {
+[1;36m   Galactic Empire Menu
+[0;31m   -----------------------------------------
+[1;34m   P ... Play Galactic Empire
+   G ... General instructions
+   R ... Top players roster} T GE menu 1
+
+
+MENUB1 {   
+[1;30m   M ... Hyperspace messages (none)[1;34m} T GE menu 2 no msg
+
+
+MENUB2 {   
+[1;34m   M ... Hyperspace messages ([1;37mNEW[1;34m)} T GE menu 2 w msg
+
+
+MENUC {
+[1;34m   I ... Information on game
+   ? ... Redisplay this menu
+   X ... Exit [1;36m
+
+   Enter your selection: [1;37m} T GE menu 3
+
+
+REPRMT {
+[1;34mSelect P, G, R, M, N, I, X to exit, or ? for menu : [1;37m} T GE menu select
+
+
+MENUD {
+[1;36m   Hyperspace messages
+[0;31m   -----------------------------------------
+[1;34m} T GE msg menu
+
+
+MENUE1 {
+[1;30m   1 ... Distress messages  (none)[1;34m} T GE distress no msg
+
+
+MENUE2 {
+[1;34m   1 ... Distress messages  ([1;37mNEW[1;34m)[1;34m} T GE distress w msg
+
+
+MENUF1 {
+[1;30m   2 ... Production reports (none)[1;34m} T GE prod report no msg
+
+
+MENUF2 {
+[1;34m   2 ... Production reports ([1;37mNEW[1;34m)[1;34m} T GE prod report w msg
+
+
+MENUG {
+[1;34m   X ... Exit to main menu [1;36m
+
+   Enter your selection :[1;37m} T GE msg menu 2
+
+
+MENUG1 {
+[1;36mPress N for NEXT or X to stop:[1;37m } T GE distress msg next prompt
+
+
+MENUG2 {
+[1;36mPress N for NEXT or X to stop:[1;37m } T GE prod msg next prompt
+
+
+COINFO {
+ge-next is developed by ManicPop.org and based on Galactic Empire.
+Galactic Empire is copyright (c) 2025 Elwynor Technologies.
+
+https://manicpop.org/ge-next/
+https://github.com/manicpop/ge-next/
+https://github.com/elwynor/elwge/
+https://www.elwynor.com/
+
+ge-next is free software released under the AGPLv3 license.
+
+<Press ENTER>} T GE copyright info
+
+Please do not move or remove this definition.
+
+OPTDISP {} T GE OPTDISP
+
+Please do not move or remove this definition.
+
+OPTDISP2 {} T GE OPTDISP2
+
+Please do not move or remove this definition.
+
+CHOOSESH {} T GE CHOOSESH
+
+This message is a place holder to distinguish between menu
+messages and game messages. Please do not remove or move.
+
+FIGHTSUB {} T GE FIGHTSUB placeholder
+
+EXPLAIN {
+[1;36mIt is the Standard Year 3285, 1010 years since man developed interplanetary
+space navigation, 447 years since neutron flux warp technology was perfected
+by the ship builders of Zygor, and 35 years since the creation of the neutral
+zone in the center of the galaxy by Zygor's Galactic Command.
+
+Since the neutral zone was established and became the de facto marketplace of
+the galaxy, ambitious individuals with piloting skills and business sense have
+traveled to Zygor to begin building their empires. Many of the planets outside
+the neutral zone are ideal for establishing colonies and producing goods.
+
+The Zygorians will provide you with a small ship to begin your quest, but it
+is up to you to procure the additional ships, weapons, colonists, and supplies
+that you will need to build your empire. You can seek to establish friendly
+relations with other ship commanders, or attempt to defeat them in both ship-
+to-ship and planetary battles. A poorly defended colony can be easily overrun
+and taken over by a commander eager to expand their own empire at your expense.
+
+Beware the dreaded Cybertrons, cybernetic automatons determined to destroy all
+organic life in the galaxy. Since the Cybertron-Sarten War of 3274 decimated
+the Sarten Empire, the Cybertrons have greatly expanded their power and reach.
+Cybertrons have no interest in planetary colonization or diplomacy, your only
+option is to evade or destroy them.
+
+Good luck!
+} T GE EXPLAIN text
+
+FORLIVE {
+[1;33mSorry, only "Live" users can play Galactic Empire.[1;37m
+For information on this exciting game select 2. For more information
+on becoming a live user contact your SYSOP.
+} T GE only live users
+
+FORPLAY {
+[1;33mSorry, only authorized users can play Galactic Empire.[1;37m
+Contact your SYSOP for more information.
+} T GE only authorized users
+
+NOCANDO {
+[1;33mYou have to have credits to do that![1;37m
+} T GE no credits
+
+GECALLS {
+[36mRULE THE GALAXY!!! If you can.......
+Your ship awaits you in GALACTIC EMPIRE. 
+P.S. Beware the dreaded Cybertrons!!![37m
+} T GE call 1
+
+GECALLS2 {
+[33mThe CYBERTRONS are waiting for you....
+Defend your property in GALACTIC EMPIRE.[37m
+} T GE call 2
+
+EXIWAR {
+[1;36mExiting Galactic Empire...[1;37m
+} T GE exit message
+
+CANTEXT {
+[1;36mYou can't exit during battle. (Type [1;37mHELP X[1;36m for more info.)[1;37m
+} T GE cannot exit message
+
+PEACEOUT {***
+[0;36m%s[1;36m's ship, the [0;36m%s[1;36m, has powered down.[1;37m
+} T GE ship enters game message
+
+PEACEONO {***
+[0;36m%s[1;36m's ship has powered down.[1;37m
+} T GE ship enters game message
+
+NOSHPS {
+[1;36mAll the ships have been assigned, please check back later.[1;37m
+} T GE all ships assigned message
+
+NUMOOR {
+[0;37m[[1;31mERROR[0;37m] Please enter a number in the range from %d to %d.[1;37m
+} T GE outside of numerical value message
+
+INVCMD {
+[0;37m[[1;31mERROR[0;37m] Invalid command, try again.[1;37m
+} T GE invalid command message
+
+YOURDEAD {***
+[0;31mWARNING! WARNING! WARNING! WARNING!
+
+Damage Control reports severe structural damage in critical systems!
+
+[1;36mYour private shuttle is waiting!
+
+You escape safely and are picked up by a Galactic Command freighter
+and transported back to their next stop, Zygor!
+} T GE you got blowed up message
+
+YRDEAD2 {
+[1;36mYou lost %s points.[1;37m
+} T GE points lost for dying message
+
+YRDEAD3 {
+[1;37m<Press ENTER>
+} T GE points lost for dying message
+
+DIED {***
+[1;36mThe [0;36m%s[1;36m, commanded by [0;36m%s[1;36m, has been destroyed![1;37m
+} T GE someone got blowed up message
+
+DIEDNO {***
+[1;36mThe ship commanded by [0;36m%s[1;36m has been destroyed![1;37m
+} T GE someone got blowed up message
+
+DIEDNPC {***
+[0;36m%s[1;36m has been destroyed![1;37m
+} T GE someone got blowed up message
+
+KILLEDBY {***
+[0;36m%s[1;36m's ship was destroyed by [0;36m%s[1;36m![1;37m
+} T GE someone was blowed up by someone message
+
+KILLDNPC {***
+[0;36m%s[1;36m was destroyed by [0;36m%s[1;36m![1;37m
+} T GE someone was blowed up by someone message
+
+PHITHIM {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to [0;36m%s[0;37m's ship![1;37m
+} T GE phaser hit someone message
+
+PHITHIMC {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to a cloaked ship![1;37m
+} T GE phaser hit someone message
+
+PHITHIMN {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to a ship in [1;32mnebula [1;34m%d %d[0;37m![1;37m
+} T GE phaser hit someone message
+
+PHITHIMS {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to a ship outside the nebula![1;37m
+} T GE phaser hit someone message
+
+PHITNPC {
+[0;37mThe phasers caused [0;31m%s[0;37m damage to [0;36m%s[0;37m![1;37m
+} T GE phaser hit someone message
+
+PHITYOU {***
+[0;37m[[0;31mWARNING![0;37m] Phaser hit from [0;36m%s[0;37m's ship, caused [0;31m%s[0;37m damage![1;37m
+} T GE phaser hit you message
+
+PHITYOUN {***
+[0;37m[[0;31mWARNING![0;37m] Phaser hit from a ship bearing %d, caused [0;31m%s[0;37m damage![1;37m
+} T GE phaser hit you message
+
+PNPCHIT {***
+[0;37m[[0;31mWARNING![0;37m] Phaser hit from [0;36m%s[0;37m, caused [0;31m%s[0;37m damage![1;37m
+} T GE phaser hit you message
+
+PDEFLECT {
+[0;37mThe phasers were deflected by [0;36m%s[0;37m's ship's shields![1;37m
+} T GE phasers you fired deflected message
+
+PDEFLECC {
+[0;37mThe phasers were deflected by a cloaked ship's shields![1;37m
+} T GE phasers you fired deflected message
+
+PDEFLECN {
+[0;37mThe phasers were deflected by a ship in [1;32mnebula [1;34m%d %d[0;37m's shields![1;37m
+} T GE phasers you fired deflected message
+
+PDEFLECS {
+[0;37mThe phasers were deflected by a ship's shields outside the nebula![1;37m
+} T GE phasers you fired deflected message
+
+PDEFNEUT {
+[0;37mThe neutral zone protected [0;36m%s[0;37m's ship from the phasers![1;37m
+} T GE phasers you fired deflected message
+
+PDEFLNPC {
+[0;37mThe phasers were deflected by [0;36m%s[0;37m's shields![1;37m
+} T GE phasers you fired deflected message
+
+PHITDEF {***
+[0;37m[[1;31mCAUTION[0;37m] Phaser hit from [0;36m%s[0;37m's ship, magnitude [0;31m%s[0;37m,
+was deflected by the shields![1;37m
+} T GE phaser fired at you deflected message
+
+PHITDEFN {***
+[0;37m[[1;31mCAUTION[0;37m] Phaser hit from a ship bearing %d, magnitude [0;31m%s[0;37m,
+was deflected by the shields![1;37m
+} T GE phaser fired at you deflected message
+
+PNPCDEF {***
+[0;37m[[1;31mCAUTION[0;37m] Phaser hit from [0;36m%s[0;37m, magnitude [0;31m%s[0;37m,
+was deflected by the shields![1;37m
+} T GE phaser fired at you deflected message
+
+PHSRUP {***
+[1;33mPhaser banks are now at minimum fire power![1;37m
+} T GE phasers at minimum message
+
+PHSRMAX {***
+[1;32mPhaser banks are now at full power![1;37m
+} T GE phasers at full message
+
+PCLOKUP {
+[0;37m[[1;31mERROR[0;37m] %s inoperable while cloaking is on.[1;37m
+} T GE cannot do that while cloaked message
+
+PCLOKUP2 {
+[0;37m[[1;31mERROR[0;37m] %s coming back online after decloaking.[1;37m
+} T GE cannot do that while cloaked message
+
+WARP {***
+[1;33mHelm reports warp [1;37m%s[1;33m....[1;37m
+} T GE warp speed changing message
+
+DEADSTOP {***
+[0;37mHelm reports dead stop.[1;37m
+} T GE dead stop message
+
+EMERSTOP {***
+[0;31mEmergency stop initiated![1;37m
+} T GE emergency stop message
+
+NOACCEL {***
+[0;37m[[0;31mWARNING![0;37m] Helm reports engine shutdown at warp [1;37m%d[0;37m![1;37m
+} T GE warp shutdown message
+
+WARP01 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with warp drive.[1;37m
+} T GE no warp drive message
+
+WARP03 {
+[0;37m[[1;31mERROR[0;37m] The warp drive can't operate at that speed.[1;37m
+} T GE cannot go that fast message
+
+WARP04 {
+[0;37m[[1;31mCAUTION[0;37m] The warp drive can only safely operate at warp [1;37m%d[0;37m.[1;37m
+} T GE over top cruising speed message
+
+WARPFAST {***
+[0;37m[[0;31mWARNING![0;37m] The warp drive is operating above recommended cruising speed![1;37m
+} T GE over top cruising speed warning 0
+
+WARPFST1 {***
+[0;37m[[0;31mWARNING![0;37m] The warp drive is exceeding recommended thermal levels![1;37m
+} T GE over top cruising speed warning 1
+
+WARPFST2 {***
+[0;37m[[0;31mWARNING![0;37m] The warp drive is overheating and won't hold up much longer![1;37m
+} T GE over top cruising speed warning 2
+
+WARPFST3 {***
+[0;37m[[0;31mWARNING![0;37m] The warp drive is beginning to melt the neutron shield![1;37m
+} T GE over top cruising speed warning 3
+
+WARPFST4 {***
+[0;37m[[0;31mWARNING![0;37m] SLOW DOWN NOW OR RISK A WARP DRIVE CONTAINMENT BREACH![1;37m
+} T GE over top cruising speed warning 4
+
+WARPBRK {***
+[0;31mDANGER! DANGER! WARP ENGINE CONTAINMENT BREACH. NEUTRON CORE EJECTED!![0;37m
+Warp engine damaged severely![1;37m
+} T GE warp engine destroyed message
+
+WARPSPD {
+[0;37m[[1;31mCAUTION[0;37m] The warp drive needs repair and can only safely operate at warp [1;37m%d[0;37m.[1;37m
+} T GE warp needs repair message
+
+WARPSPD2 {
+[0;37m[[1;31mERROR[0;37m] The warp drive needs repair and only impulse power is left.[1;37m
+} T GE warp really needs repair message
+
+WARPSPD3 {
+[0;37m[[1;31mERROR[0;37m] The warp drive needs repair and cannot exceed the current speed.[1;37m
+} T GE warp needs repair can't exceed current message
+
+WARPSPD4 {
+[0;37m[[1;31mERROR[0;37m] The warp drive needs repair and cannot exceed warp [1;37m%d[0;37m.[1;37m
+} T GE warp needs repair can't exceed limit message
+
+SPEEDIS {***
+[1;32mHelm reports speed is now warp [1;37m%s[1;32m![1;37m
+} T GE speed is now message
+
+PFIRED {
+[0;32mPhasers fired at [0;31m%d[0;32m percent power - focus [0;31m%d[0;32m![1;37m
+} T GE phasers fired message
+
+PHREPR {***
+[1;32mDamage Control reports phasers are now functional![1;37m
+} T GE phasers now functional message
+
+NOWTURN {
+[1;33mShip is now turning to [1;37m%u[1;33m degrees.[1;37m
+} T GE rotating message
+
+NOWALRD {
+[0;37mHelm reports ship is already at [1;37m%d[0;37m degrees.[1;37m
+} T GE already at this heading message
+
+NOWTHER {***
+[1;32mHelm reports ship now heading [1;37m%d[1;32m degrees.[1;37m
+} T GE now heading message
+
+NOWTRNP {***
+[1;33mHelm reports ship now heading [1;37m%d[1;33m degrees...[1;37m
+} T GE now heading in progress message
+
+ENGFIRE {
+[1;33mHelm reports engines firing, ship coming to [1;37m%u[1;33m degrees.[1;37m
+} T GE engines firing message
+
+SHLDCHP {
+[1;33mShields energizing![1;37m
+} T GE shields up message
+
+SHLDUP {***
+[1;32mShields are now fully charged![1;37m
+} T GE shields fully up message
+
+SHLDAT {***
+[1;33mShields are at %d percent charge....[1;37m
+} T GE shields charging message
+
+SHIELD0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with shields.[1;37m
+} T GE no shields on this ship message
+
+SHNOPWR {
+[0;37m[[1;31mERROR[0;37m] There is not enough power in the neutron flux to raise the shields.[1;37m
+} T GE not enough power for shields message
+
+SHNORPR {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the shields.[1;37m
+} T GE shields being repaired message
+
+SHLDDN {
+[0;37mShields are now down.[1;37m
+} T GE shields down message
+
+SHDNNOP {***
+[0;37m[[0;31mWARNING![0;37m] Shields have come down due to lack of power![1;37m
+} T GE shields down no power message
+
+SHDAMAG {[0;37mThe last hit damaged the shields! Damage Control notified.[1;37m
+} T GE shields knocked out message
+
+SHKNKDN {[0;37mThe last hit knocked the shields down, they are being restored now.[1;37m
+} T GE shields down but coming back up message
+
+SHREPR {***
+[1;32mDamage Control reports the shields have been repaired![1;37m
+} T GE shields repaired message
+
+SHLD1 {
+[0;37m[[1;31mERROR[0;37m] Shields are not functional in hyperspace.[1;37m
+} T GE no shields at warp message
+
+CLOK01 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a cloaking system.[1;37m
+} T GE no cloak on this ship message
+
+CLOKCOM {
+[0;37m[[1;31mERROR[0;37m] The cloaking system is already activated.[1;37m
+} T GE cloak already up message
+
+CLOKDWN {
+[0;37m[[1;31mERROR[0;37m] The cloaking system is already deactivated.[1;37m
+} T GE cloak already down message
+
+CLOKUP {***
+[1;32mThis ship is now completely invisible![1;37m
+} T GE your ship cloaked message
+
+CLOKON {
+[1;33mCloaking system is now activating![1;37m
+} T GE cloak activating message
+
+CLOKOFF {
+[0;37mCloaking system is now off, weapons coming back online.[1;37m
+} T GE cloak deactivated message
+
+CLOKDAM {
+[0;37m[[1;31mERROR[0;37m] The cloaking system is damaged.[1;37m
+} T GE cloak damaged message
+
+CLREPR {***
+[1;32mDamage Control reports that the cloaking system is now functional![1;37m
+} T GE cloak fixed message
+
+CLOKPWR {
+[0;37m[[1;31mERROR[0;37m] There is not enough power in the neutron flux for cloaking.[1;37m
+} T GE not enough power for cloak message
+
+CLOKNOP {***
+[0;37m[[0;31mWARNING![0;37m] The cloaking system has shut down due to lack of power![1;37m
+} T GE cloak shut down because no power message
+
+CLOK1 {
+[0;37m[[1;31mERROR[0;37m] The cloaking system does not function in hyperspace.[1;37m
+} T GE no cloak at warp message
+
+CLOK2 {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors indicate a ship decloaking nearby![1;37m
+} T GE ship decloaking message
+
+CLOK3 {***
+[0;37mSensors indicate some background ion field displacement bearing [1;37m%d[0;37m![1;37m
+} T GE ship cloaked near you message
+
+CLOKW {***
+[1;32mAll weapon systems are back online![1;37m
+} T GE ship cloaked near you message
+
+CLOKNORP {***
+[1;36mThe maintenance team has requested that cloaking stays off during maintenance.[1;37m
+} T GE ship cloaked near you message
+
+RNDITEM {[0;37m%d %s destroyed in the blast![1;37m
+} T GE missiles knocked out message
+
+RNDITEM2 {[0;37m%s lost![1;37m
+} T GE missiles knocked out message
+
+RNDMISL {[0;37mThe missile launchers have been damaged! Damage Control notified![1;37m
+} T GE missiles knocked out message
+
+RNDTORP {[0;37mThe torpedo launchers have been damaged! Damage Control notified![1;37m
+} T GE torpedoes knocked out message
+
+RNDDECY {[0;37mThe decoy launcher has been damaged! Damage Control notified![1;37m
+} T GE decoys knocked out message
+
+RNDZIPR {[0;37mThe zipper launcher has been damaged! Damage Control notified![1;37m
+} T GE zippers knocked out message
+
+RNDJAMR {[0;37mThe jammer launcher has been damaged! Damage Control notified![1;37m
+} T GE jammers knocked out message
+
+RNDMINE {[0;37mThe mine launcher has been damaged! Damage Control notified![1;37m
+} T GE mines knocked out message
+
+RNDPHSR {[0;37mThe phaser systems appear to be damaged! Damage Control notified![1;37m
+} T GE phasers knocked out message
+
+RNDCLOK {[0;37mThe cloaking system appears to be damaged! Damage Control notified![1;37m
+} T GE cloaking knocked out message
+
+RNDTACT {[0;37mThe tactical display has been damaged! Damage Control notified![1;37m
+} T GE tactical knocked out message
+
+RNDNAVG {[0;37mThe helm and navigational systems have been damaged! Damage Control notified![1;37m
+} T GE nav knocked out message
+
+RNDCRGO {[0;37mHull breach near the cargo bay! Damage Control notified![1;37m
+} T GE cargo item loss message
+
+RNDLVNG {[0;37mHull breach near the living quarters! Damage Control notified![1;37m
+} T GE living quarters men lost message
+
+RNDHEAD {[0;37mThe head has been damaged! Damage Control notified![1;37m
+} T GE head damaged
+
+RNDMESS {[0;37mThe mess hall has been damaged! Damage Control notified![1;37m
+} T GE mess hall damaged
+
+TAREPR {***
+[1;32mDamage Control reports the tactical display is functional![1;37m
+} T GE tactical fixed message
+
+HLREPR {***
+[1;32mDamage Control reports the helm and navigational controls are functional![1;37m
+} T GE helm fixed message
+
+TABROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the scanners.[1;37m
+} T GE scanners being repaired message
+
+HLBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the helm.[1;37m
+} T GE helm being repaired message
+
+HLBROKE2 {[0;37mType STOP to issue emergency engine shutdown.[1;37m
+} T GE helm being repaired message
+
+TRBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the torpedo launchers.[1;37m
+} T GE torpedoes being repaired message
+
+MIBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the missile launchers.[1;37m
+} T GE missiles being repaired message
+
+PHBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the phasers.[1;37m
+} T GE phasers being repaired message
+
+MNBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the mine launcher.[1;37m
+} T GE mines being repaired message
+
+ZPBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the zipper launcher.[1;37m
+} T GE zippers being repaired message
+
+JMBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the jammer launcher.[1;37m
+} T GE jammers being repaired message
+
+DEBROKE {
+[0;37m[[1;31mERROR[0;37m] Damage Control is repairing the decoy launcher.[1;37m
+} T GE decoys being repaired message
+
+FCREPRT {***
+[1;32mDamage Control reports the torpedo launchers are now functional![1;37m
+} T GE torpedoes fixed message
+
+FCREPRM {***
+[1;32mDamage Control reports the missile launchers are now functional![1;37m
+} T GE missiles fixed message
+
+REPRZ {***
+[1;32mDamage Control reports the zipper launcher is now functional![1;37m
+} T GE zippers fixed message
+
+REPRJ {***
+[1;32mDamage Control reports the jammer launcher is now functional![1;37m
+} T GE jammers fixed message
+
+REPRMN {***
+[1;32mDamage Control reports the mine launcher is now functional![1;37m
+} T GE mines fixed message
+
+REPRD {***
+[1;32mDamage Control reports the decoy launcher is now functional![1;37m
+} T GE decoys fixed message
+
+REPWARP {***
+[1;32mDamage Control reports the warp engines are restored to full functionality![1;37m
+} T GE decoys fixed message
+
+FCNONO {
+[0;37m[[1;31mERROR[0;37m] The fire control system can't lock onto a ship in the neutral zone.[1;37m
+} T GE can't fire into neutral zone message
+
+HYPERIN {***
+[1;35mHelm reports entering hyperspace.[1;37m
+} T GE entering hyperspace message
+
+HYPERIN2 {***
+[0;37mSensors detect the [0;36m%s[0;37m has gone to hyperspace![1;37m
+} T GE someone else entering hyperspace message
+
+HYPERIN3 {***
+[0;37mSensors detect [0;36m%s[0;37m's ship has gone to hyperspace![1;37m
+} T GE someone else entering hyperspace message
+
+HYPERINN {***
+[0;37mSensors detect [0;36m%s[0;37m has gone to hyperspace![1;37m
+} T GE someone else entering hyperspace message
+
+HYPEROUT {***
+[1;35mHelm reports leaving hyperspace.[1;37m
+} T GE leaving hyperspace message
+
+HYPEROU2 {***
+[0;37mSensors detect [0;36m%s[0;37m coming out of hyperspace.[1;37m
+} T GE someone else leaving hyperspace message
+
+HYPEROUN {***
+[0;37mSensors detect the [0;36m%s[0;37m coming out of hyperspace.[1;37m
+} T GE someone else leaving hyperspace message
+
+HYPERONO {***
+[0;37mSensors detect [0;36m%s[0;37m's ship coming out of hyperspace.[1;37m
+} T GE someone else leaving hyperspace message
+
+NOTORPS {
+[0;37m[[1;31mERROR[0;37m] There are no torpedoes on-board.[1;37m
+} T GE no torpedoes message
+
+NOSHIP {
+[0;37m[[1;31mERROR[0;37m] The scanners cannot locate that ship.[1;37m
+} T GE no such ship message
+
+TFIRE1 {
+[0;32mTorpedo fired![1;37m
+} T GE torpedoes fired message
+
+TFIRE2 {***
+[0;37m[[0;31mWARNING![0;37m] Incoming torpedo from ship [0;36m%c[1;37m.
+} T GE incoming torpedo message
+
+TORMANY {
+[0;37m[[1;31mERROR[0;37m] Only %d torpedoes can lock onto a ship at once.[1;37m
+} T GE too many torpedoes message
+
+TORMANY2 {[0;37m%s also firing on this ship.[1;37m
+} T GE too many torpedoes extra context message
+
+TORP2 {
+[0;37m[[1;31mERROR[0;37m] Torpedoes are not functional in hyperspace.[1;37m
+} T GE no torpedoes in hyperspace message
+
+TORP3 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with any torpedo launchers.[1;37m
+} T GE no torpedo launcher on this ship message
+
+TORPRELS {
+[0;37m[[1;31mERROR[0;37m] The torpedo launcher is reloading.[1;37m
+} T GE no torpedo launcher on this ship message
+
+TORPRELM {
+[0;37m[[1;31mERROR[0;37m] All torpedo launchers are reloading.[1;37m
+} T GE no torpedo launcher on this ship message
+
+NOMISSL {
+[0;37m[[1;31mERROR[0;37m] There are no hyper-missiles on-board.[1;37m
+} T GE no missiles message
+
+MFIRE1 {
+[0;32mHyper-missile charged to %u and fired![1;37m
+} T GE missiles fired message
+
+MFIRE2 {***
+[0;37m[[0;31mWARNING![0;37m] Incoming hyper-missile from ship [0;36m%c[0;37m.[1;37m
+} T GE missiles fired at you message
+
+MISMANY {
+[0;37m[[1;31mERROR[0;37m] Only %d hyper-missiles can lock onto a ship at once.[1;37m
+} T GE too many missiles message
+
+MISMANY2 {[0;37m%s also firing on this ship.[1;37m
+} T GE too many missiles extra context message
+
+MISS01 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with any missile launchers.[1;37m
+} T GE no missile launcher on this ship message
+
+MISSRELS {
+[0;37m[[1;31mERROR[0;37m] The missile launcher is reloading.[1;37m
+} T GE no torpedo launcher on this ship message
+
+MISSRELM {
+[0;37m[[1;31mERROR[0;37m] All missile launchers are reloading.[1;37m
+} T GE no torpedo launcher on this ship message
+
+FCNOLOCK {
+[0;37m[[1;31mERROR[0;37m] Fire control scanners cannot get a positive lock on ship [0;36m%c[0;37m![1;37m
+} T GE cannot lock on message
+
+THIT1 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by a torpedo, caused [0;31m%s[0;37m damage!
+Shields deflected some of the blast.[1;37m
+} T GE hit by torp with shields message
+
+THIT2 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by a torpedo, caused [0;31m%s[0;37m damage![1;37m
+} T GE hit by torp without shields message
+
+THIT3 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by %d torpedoes, caused [0;31m%s[0;37m damage!
+Shields deflected some of the blast.[1;37m
+} T GE multi-hit by torps with shields message
+
+THIT4 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by %d torpedoes, caused [0;31m%s[0;37m damage![1;37m
+} T GE multi-hit by torps without shields message
+
+MHIT1 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by a hyper-missile, caused [0;31m%s[0;37m damage!
+Shields deflected most of the blast.[1;37m
+} T GE hit by missile with shields message
+
+MHIT2 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by a hyper-missile, caused [0;31m%s[0;37m damage![1;37m
+} T GE hit by missile without shields message
+
+MHIT3 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by %d hyper-missiles, caused [0;31m%s[0;37m damage!
+Shields deflected most of the blast.[1;37m
+} T GE multi-hit by missiles with shields message
+
+MHIT4 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit by %d hyper-missiles, caused [0;31m%s[0;37m damage![1;37m
+} T GE multi-hit by missiles without shields message
+
+MTACC1 {***
+[0;37mSensors indicate a torpedo has hit ship [0;36m%c[0;37m, the [0;36m%s[0;37m.[1;37m
+} T GE your torp hit message
+
+MTACC2 {***
+[0;37mSensors indicate a hyper-missile has hit ship [0;36m%c[0;37m, the [0;36m%s[0;37m.[1;37m
+} T GE your missile hit message
+
+MTACC1N {***
+[0;37mSensors indicate a torpedo has hit ship [0;36m%c[0;37m, [0;36m%s[0;37m.[1;37m
+} T GE your torp hit npc message
+
+MTACC2N {***
+[0;37mSensors indicate a hyper-missile has hit ship [0;36m%c[0;37m, [0;36m%s[0;37m.[1;37m
+} T GE your missile hit npc message
+
+MTACC1NO {***
+[0;37mSensors indicate a torpedo has hit ship [0;36m%c[0;37m, [0;36m%s[0;37m's ship.[1;37m
+} T GE your torp hit npc message
+
+MTACC2NO {***
+[0;37mSensors indicate a hyper-missile has hit ship [0;36m%c[0;37m, [0;36m%s[0;37m's ship.[1;37m
+} T GE your missile hit npc message
+
+MTACC3 {***
+[0;37mSensors indicate %d torpedoes have hit ship [0;36m%c[0;37m, the [0;36m%s[0;37m.[1;37m
+} T GE your torp multi-hit message
+
+MTACC4 {***
+[0;37mSensors indicate %d hyper-missiles have hit ship [0;36m%c[0;37m, the [0;36m%s[0;37m.[1;37m
+} T GE your missile multi-hit message
+
+MTACC3N {***
+[0;37mSensors indicate %d torpedoes have hit ship [0;36m%c[0;37m, [0;36m%s[0;37m.[1;37m
+} T GE your torp multi-hit npc message
+
+MTACC4N {***
+[0;37mSensors indicate %d hyper-missiles have hit ship [0;36m%c[0;37m, [0;36m%s[0;37m.[1;37m
+} T GE your missile multi-hit npc message
+
+MTACC3NO {***
+[0;37mSensors indicate %d torpedoes have hit ship [0;36m%c[0;37m, [0;36m%s[0;37m's ship.[1;37m
+} T GE your torp multi-hit npc message
+
+MTACC4NO {***
+[0;37mSensors indicate %d hyper-missiles have hit ship [0;36m%c[0;37m, [0;36m%s[0;37m's ship.[1;37m
+} T GE your missile multi-hit npc message
+
+MISMISS {***
+[0;37mSensors indicate a hyper-missile fired at ship [0;36m%c[0;37m has been lost![1;37m
+} T GE your missile lost message
+
+MISMISS2 {***
+[0;37mSensors indicate all hyper-missiles fired at ship [0;36m%c[0;37m have been lost![1;37m
+} T GE all your missiles lost message
+
+TORMISS {***
+[0;37mSensors indicate a torpedo fired at ship [0;36m%c[0;37m has been lost![1;37m
+} T GE your torpedo lost message
+
+TORMISS2 {***
+[0;37mSensors indicate all torpedoes fired at ship [0;36m%c[0;37m have been lost![1;37m
+} T GE all your torpedoes lost message
+
+TORENF {***
+[1;36mThe Enforcer Planet shot down %d incoming torpedoes![1;37m
+} T GE incoming torpedoes got shot down message
+
+TORENF1 {***
+[1;36mThe Enforcer Planet shot down an incoming torpedo![1;37m
+} T GE incoming torpedo got shot down message
+
+MISENF {***
+[1;36mThe Enforcer Planet shot down %d incoming missiles![1;37m
+} T GE incoming missiles got shot down message
+
+MISENF1 {***
+[1;36mThe Enforcer Planet shot down an incoming missile![1;37m
+} T GE incoming missile got shot down message
+
+TORP1 {***
+[0;37m[[0;31mWARNING![0;37m] Tracking incoming torpedo![1;37m
+} T GE tracking torp message
+
+TORP4 {***
+[0;37m[[0;31mWARNING![0;37m] Tracking %d incoming torpedoes![1;37m
+} T GE tracking multiple torps message
+
+MISSL1 {***
+[0;37m[[0;31mWARNING![0;37m] Tracking incoming hyper-missile![1;37m
+} T GE tracking missile message
+
+MISSL3 {***
+[0;37m[[0;31mWARNING![0;37m] Tracking %d incoming hyper-missiles![1;37m
+} T GE tracking multiple missiles message
+
+MISSL2 {***
+[0;37mAn incoming missile has lost lockon and self-destructed![1;37m
+} T GE incoming missile got lost message
+
+MISSL4 {***
+[0;37m%d incoming missiles have lost lockon and self-destructed![1;37m
+} T GE incoming missiles got lost message
+
+SCAN1 {***
+[0;37mSensors indicate this ship is being scanned by ship [0;36m%c[0;37m, the [0;36m%s[0;37m.[1;37m
+} T GE you are being scanned message
+
+SCAN1O {***
+[0;37mSensors indicate this ship is being scanned by ship [0;36m%c[0;37m, [0;36m%s[0;37m's ship.[1;37m
+} T GE you are being scanned message
+
+SCAN2 {***
+[0;37mSensors indicate this ship is being scanned by a ship beyond scanner range,
+bearing [1;37m%d[0;37m.[1;37m
+} T GE you are being scanned from far away message
+
+SCAN3 {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors indicate this ship is being scanned by a cloaked ship.[1;37m
+} T GE you are being scanned by cloaked ship message
+
+ENTWAR {***
+[0;37mThe [0;36m%s[0;37m just appeared in this sector![1;37m
+} T GE ship just appeared message
+
+ENTWARNO {***
+[0;36m%s[0;37m's ship just appeared in this sector![1;37m
+} T GE ship just appeared message
+
+FIRSTIME {
+[1;36mSince you don't have a ship, the Zygorians are graciously offering you this
+Interceptor-class vessel free of charge.[1;37m
+} T GE get free ship message
+
+ENTSHP {
+[1;36mYou are being transported to your waiting ship, Commander [0;36m%s.[1;37m
+} T GE boarding ship message
+
+WELCOM {
+[0;37mWelcome aboard, Commander [0;36m%s[0;37m, the con is yours...
+Type [1;37m?[0;37m if you need assistance.[1;37m
+} T GE welcome user message
+
+ANNOUN {***
+[1;36mThe %s%s [0;36m%s[1;36m, commanded by [0;36m%s[1;36m,
+has been detected cruising the galaxy.[1;37m
+} T GE ship enters game message
+
+ANNOUNO {***
+[0;36m%s[1;36m's %s%s has been detected cruising the galaxy.[1;37m
+} T GE ship enters game message
+
+NOPLNT {
+[0;37m[[1;31mERROR[0;37m] There is no such planet in this sector.[1;37m
+} T GE no such planet message
+
+FRCTER {
+[0;37m[[1;31mERROR[0;37m] Fire control malfunction, weapons not fired.[1;37m
+} T GE fire control error message
+
+ATTKER {
+[0;37m[[1;31mERROR[0;37m] Attack aborted.[1;37m
+} T GE attack aborted message
+
+NODECOYS {
+[0;37m[[1;31mERROR[0;37m] There are no decoys on-board.[1;37m
+} T GE no decoys message
+
+DECGONE {***
+[0;37m[[1;31mCAUTION[0;37m] A decoy has self-destructed![1;37m
+} T GE decoy destructed message
+
+DECGONE2 {***
+[0;37m[[1;31mCAUTION[0;37m] %d decoys have self-destructed![1;37m
+} T GE decoy destructed message
+
+DECFIRE {
+[0;32mDecoy launched![1;37m
+} T GE decoy launched message
+
+DECMANY {
+[0;37m[[1;31mERROR[0;37m] No more than 10 decoys can be deployed at once.[1;37m
+} T GE too many decoys message
+
+DECOY0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a decoy launcher.[1;37m
+} T GE no decoy launcher message
+
+DECOY1 {
+[0;37m[[1;31mERROR[0;37m] Decoys do not function in hyperspace.[1;37m
+} T GE no decoys at warp message
+
+DECOYREL {
+[0;37m[[1;31mERROR[0;37m] The decoy launcher is reloading.[1;37m
+} T GE no decoys at warp message
+
+TORDEST {***
+[0;37mAn incoming torpedo locked onto a decoy, destroying both![1;37m
+} T GE torpedo hit decoy message
+
+TORDEST2 {***
+[0;37mAn outgoing torpedo was lost to a decoy![1;37m
+} T GE torpedo hit decoy message
+
+MISDEST {***
+[0;37mAn incoming missile locked onto a decoy, destroying both![1;37m
+} T GE missile hit decoy message
+
+MISDEST2 {***
+[0;37mAn outgoing missile was lost to a decoy![1;37m
+} T GE torpedo hit missile message
+
+NOFLUX {
+[0;37m[[0;31mWARNING![0;37m] The neutron flux pile is empty, and there are no flux pods on-board![1;37m
+} T GE out of power message
+
+LASTFLUX {
+[0;37m[[1;31mCAUTION[0;37m] There are no more flux pods on-board. Make sure to stock up soon.[1;37m
+} T GE out of flux pods message
+
+FLUXLOAD {***
+[0;37mFlux pod loaded, neutron flux levels back to normal.[1;37m
+} T GE flux pod loaded message
+
+MSGSNT1 {***
+[0;37m%s message from [0;36m%s[0;37m's ship, the [0;36m%s
+[1;36m<[1;37m %s [1;36m>[1;37m
+} T GE message received with name message
+
+MSGSNT1O {***
+[0;37m%s message from [0;36m%s[0;37m's ship
+[1;36m<[1;37m %s [1;36m>[1;37m
+} T GE message received without name message
+
+MSGSNT2 {
+[0;37m%s message sent.[1;37m
+} T GE message received with name message
+
+MSGSNT3 {
+[0;37mEncoded message sent on frequency %u.[1;37m
+} T GE message received with name message
+
+MSGSNT4 {
+[0;37mEncoded communications are set to frequency %u.[1;37m
+} T GE message received with name message
+
+MSGSNT4N {
+[0;37mEncoded communications are turned off.[1;37m
+} T GE message received with name message
+
+DASHES {[0;31m--------------------------------------[1;37m
+} T GE dashes
+
+DASHESL {[0;31m----------------------------------------------------------[1;37m
+} T GE longer dashes
+
+ORBIT0 {
+[0;37m[[1;31mERROR[0;37m] Wormholes cannot be orbited.[1;37m
+} T GE no orbiting wormholes message
+
+ORBIT1 {
+[0;37mSensors confirm stationary orbit around planet [1;34m%d[0;37m, [1;34m%s[0;37m.[1;37m
+} T GE orbit established message
+
+ORBIT1N {
+[0;37mSensors confirm stationary orbit around planet [1;34m%d[0;37m.[1;37m
+} T GE orbit established no name message
+
+ORBIT2 {
+[0;37m[[1;31mERROR[0;37m] You must be within 250 subsectors of a planet to establish an orbit.[1;37m
+} T GE too far to orbit message
+
+ORBIT3 {
+[0;37m[[1;31mERROR[0;37m] Orbit has already been established.[1;37m
+} T GE already orbiting message
+
+ORBIT4 {
+[0;37m[[1;31mERROR[0;37m] An orbit cannot be established from hyperspace.[1;37m
+} T GE no orbiting from warp message
+
+GRAVITY1 {***
+[0;37m[[1;31mCAUTION[0;37m] In gravity pull of planet [1;34m%d[0;37m, helm compensating![1;37m
+} T GE planet gravity message 1
+
+GRAVITY2 {***
+[0;37m[[0;31mWARNING![0;37m] Gravity pull increasing, the ship is dangerously close to the
+escape horizon of planet [1;34m%d[0;37m![1;37m
+} T GE planet gravity message 2
+
+GRAVITY3 {***
+[0;31mWARNING! WARNING! WARNING!
+The ship is being pulled into planet [1;34m%d[0;31m....[1;37m
+} T GE planet gravity message 3
+
+GRAVWRM1 {***
+[0;37m[[1;31mCAUTION[0;37m] Within gravity pull of wormhole [1;34m%d[0;37m, prepare for impact![1;37m
+} T GE wormhole gravity 1
+
+GRAVWRM2 {***
+[0;37m[[0;31mWARNING![0;37m] Gravity pull increasing, the ship is dangerously close to the
+escape horizon of wormhole [1;34m%d[0;37m![1;37m
+} T GE wormhole gravity 2
+
+GRAVWRM3 {***
+[0;31mWARNING! WARNING! WARNING!
+The ship is being pulled into wormhole [1;34m%d[0;31m....[1;37m
+} T GE wormhole gravity 3
+
+IMPULSE1 {
+[0;37m[[1;31mERROR[0;37m] Impulse drives don't function in hyperspace.[1;37m
+} T GE no impulse in hyperspace message
+
+LEAVEORB {
+[0;37mLeaving orbit![1;37m
+} T GE leaving orbit message
+
+TRANSFR1 {
+[1;36mThere are not that many on-board.[1;37m
+} T GE not enough to transfer down message
+
+TRANSFR2 {
+[1;36mThe Galactic Command does not accept charitable donations.[1;37m
+} T GE no transfer down in 0 0 message
+
+TRANSFR3 {
+[1;36mItems can only be transferred while in orbit.[1;37m
+} T GE no transfer unless in orbit message
+
+TRANSFR4 {
+[1;36mYou don't own this planet; you can't transfer down items.[1;37m
+} T GE no transfer down if not owner message
+
+TRANSFR5 {
+[1;37m%s %s[1;36m have been transferred to the planet.[1;37m
+} T GE transfer down message
+
+TRANSFR6 {
+[1;36mThe planet cannot accept any more %s.[1;37m
+} T GE no transfer down in 0 0 message
+
+TRANSUP1 {
+[1;36mThey don't have that many available.[1;37m
+} T GE not enough to transfer up message
+
+TRANSUP4 {
+[1;36mYou don't own this planet; you can't transfer up items.[1;37m
+} T GE no transfer up if not owner message
+
+TRANSUP5 {
+[1;37m%s %s[1;36m have been transferred from the planet.[1;37m
+} T GE transfer up message
+
+TRANSUP6 {
+[1;36mThere is not enough space available for that many items.[1;37m
+} T GE not enough space message
+
+ABAN01 {
+[1;36mYou must first orbit a planet you own.[1;37m
+} T GE no abandon message
+
+ABAN02 {
+[1;36mConfirmed, the planet is now unclaimed.[1;37m
+} T GE abandon message
+
+ADMIN1 {
+[1;36mYou must first orbit a planet.[1;37m
+} T GE no admin message
+
+ADMIN2 {
+[1;36mYou do not own this planet.[1;37m
+} T GE no admin if not owner message
+
+ADMIN3 {
+[1;36mReturning to command mode...[1;37m
+} T GE exiting admin mode message
+
+ADMIN4 {
+[1;36mYou've already claimed %d planets, the maximum permitted by galactic law.[1;37m
+} T GE you own too many planets message
+
+ADMENU1 {
+[1;36mDo you wish to settle this planet (Y/N)? [1;37m} T GE do you want to admin question
+
+ADMENU1A {
+[1;36mPlease name this planet:
+ [46m                   [0m
+[A[1;37m} T GE name planet prompt
+
+ADMENU1B {
+[0m[1;36mWe hereby declare planet [1;34m%d[1;36m to be named [1;34m%s[1;36m, and added to
+the empire of [0;36m%s[1;36m the Great, commander of the [0;36m%s[1;36m.[1;37m
+} T GE planet is yours message
+
+ADMNU1BO {
+[0m[1;36mWe hereby declare planet [1;34m%d[1;36m to be named [1;34m%s[1;36m, and added to
+the empire of [0;36m%s[1;36m the Great.[1;37m
+} T GE planet is yours message
+
+ADMENU2 {
+[1;36m  Planet Administration Menu
+[0;31m  --------------------------------------------------------
+[1;34m  1 - Get accounting report
+  2 - Collect taxes
+  3 - Alter work assignments and adjust trade policy/pricing
+  4 - Rename planet
+  5 - Adjust tax rate
+  6 - Set trade password
+  7 - Set beacon message
+  X - Exit to command mode[1;36m
+
+  Please select (1-6):[1;37m } T GE admin menu
+
+ADMENU2B {
+[1;36mTransfer how much tax from the planetary bank to your account?[1;37m } T GE transfer tax question
+
+ADMENU2C {
+[0;33m%s[1;36m collected in taxes![1;37m
+} T GE taxes collected message
+
+ADMENU2D {
+[1;36mThere isn't that much tax revenue in the planetary bank![1;37m
+} T GE not enough taxes message
+
+ADMENU2E {
+[1;36mSelect the item to adjust
+[0;31m----------------------------
+[1;34m  [1;37mmen[1;34m = adjust men
+  [1;37mmis[1;34m = adjust missiles
+  [1;37mtor[1;34m = adjust torpedoes
+  [1;37mion[1;34m = adjust ion cannons
+  [1;37mflu[1;34m = adjust flux pods
+  [1;37mfoo[1;34m = adjust food
+  [1;37mfig[1;34m = adjust fighters
+  [1;37mdec[1;34m = adjust decoys
+  [1;37mtro[1;34m = adjust troops
+  [1;37mzip[1;34m = adjust zippers
+  [1;37mjam[1;34m = adjust jammers
+  [1;37mmin[1;34m = adjust mines
+  [1;37mgol[1;34m = adjust gold
+  [1;37mspy[1;34m = adjust spies
+[0;31m----------------------------
+[1;36mSelect now:[1;37m } T GE item to adjust menu
+
+ADMEN2F1 {
+[1;36mPercentage of effort toward [1;37m%s[1;36m ([1;37m%u[1;36m)?[1;37m } T GE item percent question
+
+ADMEN2F2 {[1;36mCharge how much for each [1;37m%s[1;36m ([1;37m%u[1;36m)?[1;37m } T GE item cost question
+
+ADMEN2F3 {[1;36mSell [1;37m%s[1;36m to other ships ([1;37m%c[1;36m)?[1;37m } T GE sell to others question
+
+ADMEN2F4 {[1;36mReserve how many [1;37m%s[1;36m for stockpiling ([1;37m%u[1;36m)?[1;37m } T GE item reserve question
+
+ADMEN2FA {
+[1;36mTotal percentage exceeds 100 percent. Percentage of effort toward
+[1;37m%s[1;36m adjusted to %d.
+} T GE items over 100 message
+
+ADMEN2FB {
+[1;36mStill have %d percent effort unassigned.
+} T GE items under 100 message
+
+ADMENU2G {
+[1;36mEnter the new name:
+ [46m                   [0m
+[A[1;37m} T GE rename planet question
+
+ADMENU2H {
+[1;36mEnter the new tax rate (0-100):[1;37m } T GE tax rate question
+
+ADMENU2I {
+[1;36m(Never use a password you use in real life. It can be visible to others.)
+Enter the new password, [1;37mteam[1;36m, or [1;37mnone[1;36m:[1;37m } T GE password question
+
+ADMEN2I1 {
+[1;36mThe new password is [1;37m%s[1;36m.
+} T GE password changed message
+
+ADMEN2I2 {
+[1;36mThere is no trade password required.
+} T GE no password required message
+
+ADMEN2I3 {
+[1;36mTeam members can all trade with your planet now!
+} T GE team password message
+
+ADMEN2I4 {
+[1;36mIgnored! You are not a member of a team.
+} T GE not part of a team message
+
+ADMENU2J {
+[1;36mEnter the beacon message or leave blank for no message:
+ [46m                                                                           [0m
+[A[1;37m} T GE beacon message question
+
+ADMEN2J1 {
+[0m[1;36mNo beacon message entered - none set.
+} T GE no beacon message entered message
+
+ADMEN2J2 {
+[0m[1;36mThe beacon message has been set. Approaching ships will be notified.
+} T GE beacon message entered message
+
+PRESSKEY {[1;36mPress ENTER to continue:[1;37m } T GE press enter to continue message
+
+ATTACK0 {
+[1;36mYou can't attack your own planet.[1;37m
+} T GE no attacking your own planet message
+
+ATTACK0A {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a fighter launcher.[1;37m
+} T GE no fighter launcher message
+
+ATTACKM0 {
+[1;36mThere are not that many troops on-board.[1;37m
+} T GE not enough troops message
+
+ATTACKM1 {
+[1;36mOn your orders, [1;37m%s troops[1;36m have deployed to the planet.[1;37m
+
+***
+} T GE troops sent message
+
+ATTACKM2 {[1;36mIn the attack your troops took out [1;37m%s[1;36m, and suffered losses of [1;37m%s[1;36m.[1;37m
+} T GE troops took out message
+
+ATTACKM3 {[1;36mThe remaining [1;37m%s[1;36m of the planetary forces have surrendered![1;37m
+} T GE remaining troops surrendered message
+
+ATTACKM4 {[1;36mThe remaining [1;37m%s[1;36m of your forces have surrendered![1;37m
+} T GE attacking troops surrendered message
+
+ATTACKM5 {[1;37m%s[1;36m of their [1;37m%s[1;36m were also destroyed![1;37m
+} T GE troops collateral damage message
+
+ATTACKM6 {[1;37m%s[1;36m troops have returned to the ship.[1;37m
+} T GE troops returned message
+
+ATTACKM7 {[1;36mThe planetary fighters are counter-attacking your troops.[1;37m
+} T GE planet fighters attacking troops message
+
+ATTACKM8 {[1;36mThe planetary fighters have taken out [1;37m%s[1;36m of your troops![1;37m
+} T GE planet fighters took out message
+
+ATTACKF0 {
+[0;37m[[1;31mERROR[0;37m] There are not that many fighters on-board.[1;37m
+} T GE not enough fighters message
+
+ATTACKF1 {
+[0;32mLaunching [1;37m%s fighters[1;32m to the planet![1;37m
+
+***
+} T GE sending fighters message
+
+ATTACKF2 {[1;36mIn the attack your fighters destroyed [1;37m%s[1;36m fighters, and you lost [1;37m%s[1;36m![1;37m
+} T GE fighters took out message
+
+ATTACKF5 {[1;36mYour fighters also destroyed [1;37m%s %s[1;36m in the attack![1;37m
+} T GE fighters collateral damage message
+
+ATTACKF6 {[1;37m%s[1;36m fighters have returned to the ship.[1;37m
+} T GE fighters returned message
+
+ATTACKF7 {[1;36mYour fighters have crushed their defenses![1;37m
+} T GE fighters won message
+
+ATTACKF8 {[1;36mYour fighters are being fired upon by planetary troops![1;37m
+} T GE fighters fired upon message
+
+ATTACK6 {***
+[0;37mIncoming distress message from [1;34m%s[0;37m in star system [1;34m%d %d[0;37m!
+They are under attack from [1;34m%s[0;37m in the [1;34m%s[0;37m
+and are requesting immediate assistance!
+} T GE distress message to owner message
+
+ATTACK6O {***
+[0;37mIncoming distress message from [1;34m%s[0;37m in star system [1;34m%d %d[0;37m!
+They are under attack from [1;34m%s[0;37m
+and are requesting immediate assistance!
+} T GE distress message to owner message
+
+ATTACK6A {***
+[36m GALACTIC EMPIRE ALERT! *** 
+Planet under attack... Check GE Mail for details.[37m
+} T GE distress message to owner not in game message
+
+ATTACK7 {[1;36mThe planet is sending a distress signal![1;37m
+} T GE attacker informed owner is notified message
+
+ATTACK8 {[1;36mYour forces have won, this planet is yours![1;37m
+} T GE you won the planet message
+
+ATTACK9 {[1;36mThe planetary forces continue to put up a valiant resistance![1;37m
+} T GE you did not win the planet message
+
+IHIT1 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit from an ion cannon burst, shields deflected some of the
+blast![1;37m
+} T GE hit with ion with shields message
+
+IHIT2 {***
+[0;37m[[0;31mWARNING![0;37m] Direct hit from an ion cannon burst![1;37m
+} T GE hit with ion without shields message
+
+ROSTER1 {
+[1;36mComplete roster list
+[0;31m--------------------------------------------------------------------
+[1;34mPlayer                             Score Kills Users Pla Empire Size[1;37m
+} T GE complete roster list message
+
+ROSTER2 {
+[1;36mTop %d roster list
+[0;31m--------------------------------------------------------------------
+[1;34mPlayer                             Score Kills Users Pla Empire Size[1;37m
+} T GE incomplete roster list message
+
+ROSTER3 {
+[1;36mYou are #%d on the roster![1;37m
+} T GE roster position message
+
+BUYPAS1 {
+[1;36mThey are asking for the correct trade password.[1;37m
+} T GE asking for trade password message
+
+BUYPAS2 {
+[1;36mThey are not accepting that trade password.[1;37m
+} T GE wrong trade password message
+
+BUYPAS3 {
+[1;36mThis is a team planet; no trading allowed![1;37m
+} T GE team only planet no message
+
+BUYPAS4 {
+[1;36mYou are trading with a team planet![1;37m
+} T GE team only planet yes message
+
+BUY1 {
+[1;36mYou must be orbiting a planet to buy goods.[1;37m
+} T GE no buying unless orbiting message
+
+BUY2 {
+[1;36mThey want [0;33m%s[1;36m for the [1;37m%s %s[1;36m, you don't have that much cash.[1;37m
+} T GE not enough money to buy message
+
+BUY3 {
+[1;36mThey only have [1;37m%s %s[1;36m available for sale.[1;37m
+} T GE not enough stuff to buy message
+
+BUY4 {
+[1;36mThey are not selling their [1;37m%s[1;36m.[1;37m
+} T GE not selling item message
+
+BUY7 {
+[1;36mThis planet is unsettled.[1;37m
+} T GE no buying if no owner message
+
+BUY8 {
+[1;36mThere is not enough space available for that many items.[1;37m
+} T GE not enough space to buy message
+
+BUY9 {
+[1;37m%s %s[1;36m purchased at the price of [0;33m%u[1;36m each for a total of [0;33m%s[1;36m.[1;37m
+} T GE buy message
+
+PRICE1 {
+[1;37m%s %s[1;36m are going to cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m.[1;37m
+} T GE price message
+
+PRICE2 {
+[1;37m%s %s[1;36m would cost [0;33m%u[1;36m each for a total of [0;33m%s[1;36m, but there
+is not enough space available for that many items.[1;37m
+} T GE price but not enough space message
+
+FORHELP {
+[1;36mType [1;37m?[1;36m for help.[1;37m
+} T GE for help message
+
+PHANONE {
+[0;37m[[1;31mERROR[0;37m] There is insufficient phaser power to fire![1;37m
+} T GE no phaser power message
+
+SETOPT {
+[1;36mOption %s set to %s.[1;37m} T GE set options one arg message
+
+SETOPT2 {
+[1;36mOption %s %s set to %s.[1;37m} T GE set option two arg message
+
+REP01 {
+[1;37m%s%s: the %s
+} T GE report 01
+
+REP01O {
+[1;37m%s%s: %s's ship
+} T GE report 01
+
+REP02 {[1;35mTraveling in hyperspace (sector [1;34m%d %d[1;35m)[1;37m
+} T GE report 02
+
+REP02N {[1;35mTraveling in hyperspace ([1;32mnebula [1;34m%d %d[1;35m)[1;37m
+} T GE report 02
+
+REP03 {[1;37mSpeed................. Warp %s
+} T GE report 03
+
+REP04 {[1;37mGalactic heading...... %d
+} T GE report 04
+
+REP05 {[1;37mNavigating sector [1;34m%d %d[1;37m
+} T GE report 05
+
+REP05N {[1;37mNavigating [1;32mnebula [1;34m%d %d[1;37m
+} T GE report 05
+
+REP06 {[1;37mSpeed................. Warp %s
+} T GE report 06
+
+REP07 {[1;37mGalactic heading...... %u
+} T GE report 07
+
+REP08 {[1;37mOrbiting planet [1;34m%d[1;37m in sector [1;34m%d %d[1;37m
+} T GE report 08
+
+REP08N {[1;37mOrbiting planet [1;34m%d[1;37m in [1;32mnebula [1;34m%d %d[1;37m
+} T GE report 08
+
+REP09 {[1;37mNeutron flux.......... %u
+} T GE report 09
+
+REP10 {[1;37mShields (Mark-%d)......[1;32m UP[1;37m
+} T GE report 10
+
+REP10S {[1;37mShields (Mark-%d).....[1;32m UP[1;37m
+} T GE report 10 short
+
+REP11 {[1;37mShields (Mark-%d)......[0;31m DOWN[1;37m
+} T GE report 11
+
+REP11S {[1;37mShields (Mark-%d).....[0;31m DOWN[1;37m
+} T GE report 11 short
+
+REP11B {[1;37mShield bank charge....[1;33m %d[1;37m
+} T GE report 11B
+
+REP12 {[1;37mCloak.................[1;32m ON[1;37m
+} T GE report 12
+
+REP13 {[1;37mCloak.................[0;31m OFF[1;37m
+} T GE report 13
+
+REP14 {[1;37mDCO reports...........[0;31m %s[1;37m damage
+} T GE report 14
+
+REP15 {[0;31m   Shields out %s[1;37m
+} T GE report 15
+
+REP16 {[0;31m   Helm damaged %s[1;37m
+} T GE report 16
+
+REP17 {[0;31m   Cloaking system damaged %s[1;37m
+} T GE report 17
+
+REP18 {[0;31m   Tactical scanners damaged %s[1;37m
+} T GE report 18
+
+REP18A {[0;31m   Maintenance status - %d seconds[1;37m
+} T GE report 18A
+
+REP19 {[0;31m   Warp engines inoperable[1;37m
+} T GE report 19
+
+REP20 {[0;31m   Warp engines damaged
+   Warp [1;37m%d[0;31m or below recommended[1;37m
+} T GE report 20
+
+REP20A {[0;31m   Warp engines above cruising speed[1;37m
+} T GE report 20A
+
+REP21 {[0;31m   Phasers damaged %s[1;37m
+} T GE report 21
+
+REP22T {[0;31m   Torpedo launchers damaged %s[1;37m
+} T GE report 22
+
+REP22M {[0;31m   Missile launchers damaged %s[1;37m
+} T GE report 22
+
+REP22MN {[0;31m   Mine launcher damaged %s[1;37m
+} T GE report 22
+
+REP22Z {[0;31m   Zipper launcher damaged %s[1;37m
+} T GE report 22
+
+REP22J {[0;31m   Jammer launcher damaged %s[1;37m
+} T GE report 22
+
+REP22D {[0;31m   Decoy launcher damaged %s[1;37m
+} T GE report 22
+
+REP23 {[1;37mPhasers (Mark-%d)...... [1;32m<operative>[1;37m
+} T GE report 23
+
+REP23S {[1;37mPhasers (Mark-%d)..... [1;32m<operative>[1;37m
+} T GE report 23 short
+
+REP24 {[1;37mPhasers (Mark-%d)...... [0;31m<inoperable>[1;37m
+} T GE report 24
+
+REP24S {[1;37mPhasers (Mark-%d)..... [0;31m<inoperable>[1;37m
+} T GE report 24 short
+
+REP25 {[1;37mAccounting report:
+} T GE report 25
+
+REP26 {[1;37mPlanets established... none
+} T GE report 26
+
+REP27 {[1;37mPlanets established... %d
+} T GE report 27
+
+REP28 {[1;37mCash on hand.......... [0;33m%s[1;37m
+} T GE report 28
+
+REP29 {[1;37mPhasers (Mark-%d)...... [1;33m< charging >[1;37m
+} T GE report 24
+
+REP29S {[1;37mPhasers (Mark-%d)..... [1;33m< charging >[1;37m
+} T GE report 24 short
+
+REP30 {[1;37mScore................. %s
+} T GE report 30
+
+REP31 {[1;37mTotal kills........... %u (%u)
+} T GE report 31
+
+REP32 {[1;37mKills in this ship.... %u (%u)
+} T GE report 31
+
+REP33 {[1;37m   Team: %s
+} T GE report 31A
+
+REP34 {[1;37mGalactic position..... X:%d Y:%d
+Sector position....... X:%d Y:%d
+} T GE report 32
+
+REP35 {[1;37mNavigational report:
+} T GE report 35
+
+REP36 {[1;37mSystems report:
+} T GE report 36
+
+REP37 {[1;37mTotal cargo weight.... %s tons
+} T GE report 37
+
+REP38 {[1;37mInventory report:
+} T GE report 38
+
+REP40 {[1;37mCyborg: %d, Cybmine: %d, Cybupdate: %d
+} T GE report 40
+
+REP41 {[1;37mOrdnance report:
+} T GE report 41
+
+REP42 {[1;37mIncoming torpedoes.... } T GE report 42
+
+REP43 {[1;37mIncoming missiles..... } T GE report 43
+
+REP44 {[1;37mOutgoing torpedoes.... } T GE report 44
+
+REP45 {[1;37mOutgoing missiles..... } T GE report 45
+
+REP46 {[1;37mMines deployed........ } T GE report 46
+
+REP47 {[1;37mDecoys deployed....... } T GE report 47
+
+REP48 {[1;37mUpgrades installed:
+} T GE report 48
+
+REP49 {[1;37mNo upgrades installed
+} T GE report 49
+
+SCAN01 {[0;37m
+Scanning the [1;34m%s[0;37m:
+} T GE scan 01
+
+SCAN01O {[0;37m
+Scanning [1;34m%s[0;37m's ship:
+} T GE scan 01
+
+SCAN01N {[0;37m
+Scanning [1;34m%s[0;37m:
+} T GE scan 01
+
+SCAN01A {[0;37mShip class: %s%s
+} T GE scan 01A
+
+SCAN02 {[0;37mCommanded by: [1;34m%s
+} T GE scan 02
+
+SCAN02A {[0;37mAlliance: [1;34m%s
+} T GE scan 02A
+
+SCAN03 {[0;37mBearing: [1;37m%s[0;37m Heading: [1;37m%s[0;37m Dist: [1;37m%s[0;37m
+} T GE scan 03
+
+SCAN03A {[0;37mGalactic heading: [1;37m%s[0;37m Sect: [1;37m%s
+} T GE scan 03A
+
+SCAN04 {[0;37mSpeed: [1;37mWarp %s
+} T GE scan 04
+
+SCAN05 {[0;37mDamage: [1;37m%s damage
+} T GE scan 05
+
+SCAN06 {[0;37mShields: [1;32mUP
+} T GE scan 06
+
+SCAN06M {[0;37mShields (Mark-%d): [1;32mUP
+} T GE scan with class 06
+
+SCAN07 {[0;37mShields: [0;31mDOWN
+} T GE scan 07
+
+SCAN07M {[0;37mShields (Mark-%d): [0;31mDOWN
+} T GE scan with class 07
+
+SCAN08 {[0;37mRegistered kills: [1;37m%u
+} T GE scan 08
+
+SCAN09 {[0;37mRegistered kills (%s): [1;37m%u (%u)
+} T GE scan 09
+
+SCAN10 {
+[0;37mScanning planet [0;34m%d[0;37m: [0;34m%s[1;37m
+} T GE scan 08
+
+SCAN11 {[0;37mCommanded by: [1;34m%s[0;37m
+} T GE scan 09
+
+SCAN12 {[0;37mBearing: [1;37m%s[0;37m  Distance: [1;37m%s[0;37m
+} T GE scan 10
+
+SCAN13 {[0;37mEnvironment: } T GE scan 11
+
+SCAN14 {[1;37mPoor
+} T GE scan 12
+
+SCAN15 {[1;37mMarginal
+} T GE scan 13
+
+SCAN16 {[1;37mGood
+} T GE scan 14
+
+SCAN17 {[1;37mVery good
+} T GE scan 15
+
+SCAN18 {[0;37mResources: } T GE scan 16
+
+SCAN19 {[0;37mPhasers (Mark-%d): [1;32m<operative>
+} T GE scan 19
+
+SCAN20 {[0;37mPhasers (Mark-%d): [0;31m<inoperable>
+} T GE scan 20
+
+SCAN21 {[0;37mPhasers (Mark-%d): [1;33m< charging >
+} T GE scan 20
+
+SCAN24 {[0;37m
+Scanning range %s from sector [1;34m%d %d[0;37m:
+} T GE scan 24
+
+SCAN24G {[0;37m
+Full galaxy scan:
+} T GE scan 24 galaxy
+
+SCAN25 {[0;37m
+Scanning %s [1;34m%d %d[0;37m:
+} T GE scan 25
+
+SCAN26 {
+[0;37m[[1;31mERROR[0;37m] There is no such planet in this sector, or it is hidden by the nebula.[1;37m
+} T GE can't scan planet in nebula message
+
+SCAN27 {
+[0;37m[[1;31mERROR[0;37m] Scanner functionality is limited inside the nebula.[1;37m
+} T GE can't scan planet in nebula message
+
+SCAN28 {[0;37mPopulation: [1;37m%s
+} T GE scan 28
+
+SCAN29 {[0;37m%s stockpile of missiles.
+} T GE scan 29
+
+SCAN30 {[0;37m%s stockpile of torpedoes.
+} T GE scan 30
+
+SCAN31 {[0;37mNo sign of fighters anywhere.
+} T GE scan 31
+
+SCAN32 {[0;37mThere are indications of fighters.
+} T GE scan 32
+
+SCAN33 {[0;37m%s stockpile of flux pods.
+} T GE scan 33
+
+SCAN34 {[0;37m%s stockpile of mines.
+} T GE scan 34
+
+SCAN35 {[0;37mPolarity: %s
+} T GE scan 35
+
+SCANWRM {
+[0;37mScanning wormhole [1;33m%d[0;37m: [1;33m%s[1;37m
+} T GE scan wormhole message
+
+PLUSDASH {[0;31m   +------------------------------+} T GE dashes for scans
+
+PLUSFULL {[0;31m   +------------------------------+  [0;37mShip Distance Bearing Heading Speed} T GE dashes for scans with names
+
+PLUSSECT {[0;31m   +------------------------------+  [0;37m   # Distance Bearing} T GE dashes for scans with planets
+
+NOMAPSE {[0;37m     # Distance Bearing} T GE dashes for scans with planets
+
+NOMAPRA {[0;37m     Distance Bearing Heading Speed       Distance Bearing Heading Speed} T GE dashes for scans with planets
+
+SCANNOSH {No ships detected in scan range.
+} T NOMAP no ships
+
+SCANNOPL {No planets or wormholes detected in scan range.
+} T NOMAP no planets
+
+ADMIN01 {
+Planet accounting report for %s:
+} T GE admin 01
+
+ADMIN02 {Item         Rate        Qty Price  Resv  Sell     Sold
+} T GE admin 02
+
+ADMIN04 {[0;37mCash in planetary bank ..... [0;33m%s
+} T GE admin 04
+
+ADMIN04A {[0;37mTax revenue ................ [0;33m%s
+} T GE admin 04A
+
+ADMIN04B {[0;37mTax rate ................... [1;37m%d
+} T GE admin 04B
+
+ADMIN06 {[0;37mTrade password.............. [1;37m%s
+} T GE admin 06
+
+MISSHRT {
+[0;37m[[1;31mERROR[0;37m] There is not enough energy in the neutron flux to charge the missile.[1;37m
+} T GE not enough energy for missile message
+
+KILLGOT1 {***
+[1;36mYou have destroyed the [0;36m%s[1;36m. All usable flotsam have been retrieved.
+You have retrieved[1;37m} T GE you destroyed a ship message
+
+KILLGTNO {***
+[1;36mYou have destroyed [0;36m%s[1;36m's ship. All usable flotsam have been retrieved.
+You have retrieved[1;37m} T GE you destroyed a ship message
+
+KILLGOTN {***
+[1;36mYou have destroyed [0;36m%s[1;36m. All usable flotsam have been retrieved.
+You have retrieved[1;37m} T GE you destroyed a ship message
+
+KILLFULL {
+[1;36mYour ship is now full; no more items could be collected.[1;37m
+} T GE no more room for spoils message
+
+KILLPNTS {
+[1;36mYou got %s points for the %s%s.[1;37m
+} T GE points for kill message
+
+KILLBON1 {[1;36mYou also got %s bonus points for taking out a more powerful ship![1;37m
+} T GE points for top kill message
+
+KILLBON2 {[1;36mHowever, %s points were deducted for taking out a less powerful ship.[1;37m
+} T GE points for top kill message
+
+KILLBON3 {
+[1;36mYou were ranked #%d and took out the #%d player! %s bonus points![1;37m
+} T GE points for top kill message
+
+KILNOPTS {
+[1;36mYou got zero points for taking out a new player.[1;37m
+} T GE points for kill message
+
+KILLDIS {
+[1;36mYou also got %s bonus points for rescuing [0;36m%s[1;36m.
+You are now held in high regard by the } T GE points for top kill message
+
+FACNAME0 {users.[1;37m} T name of faction 0
+
+FACNAME1 {Cybertrons.[1;37m} T name of faction 1
+
+FACNAME2 {Sartens.[1;37m} T name of faction 2
+
+FACNAME3 {Lydorians.[1;37m} T name of faction 3
+
+FACNAME4 {Murdonians.[1;37m} T name of faction 4
+
+FACNAME5 {Vakories.[1;37m} T name of faction 5
+
+FACNAME6 {Tryklons.[1;37m} T name of faction 6
+
+FACNAME7 {Zygorians.[1;37m} T name of faction 7
+
+CHGLSR1 {
+[1;36mAccording to galactic treaty, you have been ordered to pay to the winner the
+amount of [0;33m%s[1;36m as reparations and fines. Next time, don't lose![1;37m
+} T GE you have to pay because you lost message
+
+CHGLSR2 {
+[1;36mAccording to galactic treaty you are awarded the sum of [0;33m%s[1;36m as reparations
+and fines from [0;36m%s[1;36m. Congratulations![1;37m
+} T GE you get paid because you won message
+
+PHASER0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with phasers.[1;37m
+} T GE no phasers on this ship message
+
+HPFIRED {
+[0;32mHyper-phaser fired at bearing [1;37m%d[0;32m![1;37m
+} T GE fired hyperphaser message
+
+HPHITM {
+[0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to [0;36m%s[0;37m's ship![1;37m
+} T GE you hit a ship with hyperphaser message
+
+HPHITNEB {
+[0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to a ship in [1;32mnebula [1;34m%d %d[0;37m![1;37m
+} T GE you hit a ship with hyperphaser message
+
+HPHITSEC {
+[0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to a ship outside the nebula![1;37m
+} T GE you hit a ship with hyperphaser message
+
+HPHITN {
+[0;37mThe hyper-phaser caused [0;31m%s[0;37m damage to [0;36m%s[0;37m![1;37m
+} T GE you hit a ship with hyperphaser message
+
+HPHITU {***
+[0;37m[[0;31mWARNING![0;37m] Hyper-phaser hit from [0;36m%s[0;37m's ship, caused [0;31m%s[0;37m damage![1;37m
+} T GE you got hit with a hyperphaser message
+
+HPHITUN {***
+[0;37m[[0;31mWARNING![0;37m] Hyper-phaser hit a ship bearing %d, caused [0;31m%s[0;37m damage![1;37m
+} T GE you got hit with a hyperphaser message
+
+HPNHITU {***
+[0;37m[[0;31mWARNING![0;37m] Hyper-phaser hit from [0;36m%s[0;37m, caused [0;31m%s[0;37m damage![1;37m
+} T GE you got hit with a hyperphaser message
+
+HNOFIRP {
+[0;37m[[1;31mERROR[0;37m] There is insufficient power in the neutron flux to fire![1;37m
+} T GE not enough power to use hyperphasers message
+
+HPWAIT {
+[0;37m[[1;31mERROR[0;37m] The hyper-phaser needs a few more seconds to cool before firing again.[1;37m
+} T GE hyperphaser time out message
+
+MOVE1 {***
+[0;37mHelm reports leaving %s [1;34m%d %d[0;37m and entering %s [1;34m%d %d[0;37m.[1;37m
+} T GE you changed sectors message
+
+MOVE2 {***
+[0;37mSensors indicate the [0;36m%s[0;37m has left this sector.[1;37m
+} T GE someone else left your sector message
+
+MOVE2N {***
+[0;37mSensors indicate [0;36m%s[0;37m has left this sector.[1;37m
+} T GE someone else left your sector message
+
+MOVE2NO {***
+[0;37mSensors indicate [0;36m%s[0;37m's ship left this sector.[1;37m
+} T GE someone else left your sector message
+
+MOVE3 {***
+[0;37mSensors indicate the [0;36m%s[0;37m has entered this sector.[1;37m
+} T GE someone else entered your sector message
+
+MOVE3N {***
+[0;37mSensors indicate [0;36m%s[0;37m has entered this sector.[1;37m
+} T GE someone else entered your sector message
+
+MOVE3NO {***
+[0;37mSensors indicate [0;36m%s[0;37m's ship has entered this sector.[1;37m
+} T GE someone else entered your sector message
+
+MOVE4 {***
+[0;37m[[0;31mWARNING![0;37m] Neutron flux levels are too low. Engines shut down![1;37m
+} T GE out of power engines stopping message
+
+MOVE5 {***
+[0;37m[[0;31mWARNING![0;37m] Neutron flux depleted! Only impulse power is left.[1;37m
+} T GE out of power engines stopping message
+
+ZAPHIM1 {***
+[0;37m[[0;31mWARNING![0;37m] The Enforcer Planet fired an energy beam, caused [0;31m%s[0;37m damage!
+} T GE got hit with enforcer beam message
+
+ZAPHIM2 {***
+[0;37mBeacon message from the Enforcer Planet
+[1;36m<[1;37m This sector is a neutral zone; any hostilities will be dealt with severely! [1;36m>[1;37m
+} T GE you are in the neutral zone message
+
+NOZYG {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m You have committed crimes against the Galactic Command!
+  You are banned from doing business in this sector for %d days. [1;36m>[1;37m
+} T GE you are unwelcome in the neutral zone message
+
+PLAMSG1 {
+[1;36mPlanet name                     Sector  Planet[1;37m
+} T GE planet list message
+
+PLAMSG2 {
+[1;36mNo planets have been established.[1;37m
+} T GE you have no planets message
+
+PLAMSG3 {
+[1;36mEnter [1;37mPLANET %d[1;36m for more....[1;37m
+} T GE you have no planets message
+
+MAINT1 {
+[1;36mYou are not orbiting a planet.[1;37m
+} T GE no maint if not orbiting message
+
+MAINT2 {
+[1;36mThey are requesting a trade password before commencing repairs.[1;37m
+} T GE no maint if no password message
+
+MAINT3 {
+[1;36mThey say the password is not correct.[1;37m
+} T GE no maint if password is wrong message
+
+MAINT4 {
+[1;36mThe Enforcer Planet does not have a repair depot.[1;37m
+} T GE no maint at the enforcer planet message
+
+MAINT5 {
+[1;36mThey are commencing the maintenance and should be completed in %d seconds![1;37m
+} T GE yes maint message
+
+MAINT6 {
+[1;36mYou don't have enough cash to pay for a maintenance team.[1;37m
+} T GE no maint if no money message
+
+MAINT7 {***
+[1;32mRepairs and general maintenance have been completed![1;37m
+} T GE maint is done message
+
+MAINT8 {
+[1;36mThis planet has not established a repair facility.[1;37m
+} T GE no maint if planet not populated message
+
+MAINT9 {
+[1;36mThe maintenance team reports that under the conventions of their union contract
+they are not permitted to perform services on ships engaged in acts of war or
+in hostile situations.[1;37m
+} T GE no maint if you are fighting message
+
+MAINT10 {
+[1;36mThe maintenance team reports that they have ceased work under the conventions
+of their union contract preventing them from performing services on ships
+engaged in acts of war.[1;37m
+} T GE maint stopped message
+
+MAINT11 {
+[1;36mMaintenance is already in progress.[1;37m
+} T GE no maint if planet not populated message
+
+MAINT12 {
+[1;36mThe maintenance team is requesting you deactivate your cloaking device.[1;37m
+} T GE can't maint cloaked message
+
+MAINT13 {
+[1;36mThis ship is undamaged; no maintenance is required.[1;37m
+} T GE maint is unneeded message
+
+JAMMER0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a jammer launcher.[1;37m
+} T GE no jammer launcher message
+
+JAMMER1 {
+[0;37m[[1;31mERROR[0;37m] There are no jammers on-board.[1;37m
+} T GE no jammers message
+
+JAMMER2 {
+[0;32mJammer fired![1;37m
+} T GE you fired a jammer message
+
+JAMMER3 {***
+[0;37m[[0;31mWARNING![0;37m] The scanners are being jammed![1;37m
+} T GE someone fired a jammer message
+
+JAMMER4 {
+[0;37m[[1;31mERROR[0;37m] Too much jammer interference to display scan.[1;37m
+} T GE no scans because jammer message
+
+JAMMER4W {
+[0;37m[[1;31mERROR[0;37m] Too much jammer interference to establish lock.[1;37m
+} T GE no scans because jammer message
+
+JAMMER5 {***
+[0;37mThe jamming has stopped![1;37m
+} T GE jamming stopped message
+
+JAMMER6 {
+[0;37m[[1;31mERROR[0;37m] The jammer launcher is reloading.[1;37m
+} T GE jammer reloading message
+
+ZIPPER0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a zipper launcher.[1;37m
+} T GE no zipper launcher message
+
+ZIPPER1 {
+[0;37m[[1;31mERROR[0;37m] There are no zippers on-board.[1;37m
+} T GE no zippers message
+
+ZIPPER2 {
+[0;32mZipper fired![1;37m
+} T GE you fired a zipper message
+
+ZIPPER3 {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors detect the [0;36m%s[0;37m just launched a zipper.[1;37m
+} T GE someone else fired a zipper message
+
+ZIPPER3O {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors detect [0;36m%s[0;37m's ship just launched a zipper.[1;37m
+} T GE someone else fired a zipper message
+
+ZIPPER3N {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors detect [0;36m%s[0;37m just launched a zipper.[1;37m
+} T GE someone else fired a zipper message
+
+ZIPPER4 {
+[0;37m[[1;31mERROR[0;37m] The zipper launcher is reloading.[1;37m
+} T GE zipper launcher reloading message
+
+NEW1 {
+[1;36mYou must go to Zygor in sector [1;34m0 0[1;36m to get new equipment.[1;37m
+} T GE only buy ships at Zygor message
+
+NEW2 {
+[1;36mType [1;37mHELP CLASS[1;36m for a list of ship class types.[1;37m
+} T GE no such ship class message
+
+NEW3 {
+[1;36mYou are now the proud owner of a %s.[1;37m
+} T GE you bought a ship hooray message
+
+NEW4 {
+[1;36mYou don't have enough cash for a %s.[1;37m
+} T GE not enough money for new ship message
+
+NEW5 {
+[1;36mYou must go to Zygor in sector [1;34m0 0[1;36m to get new equipment.[1;37m
+} T GE only buy equipment at Zygor message
+
+NEW6 {
+[1;36mThis ship cannot be equipped with a Mark-%d shield.[1;37m
+} T GE ship cannot take this shield message
+
+NEW7 {
+[1;36mFor the meager sum of [0;33m%s[1;36m, your ship now has a Mark-%d shield.[1;37m
+} T GE you bought a new shield message
+
+NEW8 {
+[1;36mYou don't have enough cash for a Mark-%d shield.[1;37m
+} T GE not enough money for new shield message
+
+NEW9 {
+[1;36mThis ship cannot be equipped with a Mark-%d phaser.[1;37m
+} T GE ship cannot take this phaser message
+
+NEW10 {
+[1;36mFor the meager sum of [0;33m%s[1;36m, your ship now has a Mark-%d phaser.[1;37m
+} T GE you bought a new phaser message
+
+NEW11 {
+[1;36mYou don't have enough cash for a Mark-%d phaser.[1;37m
+} T GE not enough money for new phaser message
+
+NEW12 {
+[1;36m There is no such item.[1;37m
+} T GE no such item message
+
+NEW13 {
+[1;36mYour ship now has a Mark-%d shield.[1;37m
+} T GE new shield message
+
+NEW14 {
+[1;36mYour ship now has a Mark-%d phaser.[1;37m
+} T GE new phaser message
+
+NEW15S {
+[1;36mYour ship already has a Mark-%d shield.[1;37m
+} T GE new phaser message
+
+NEW15P {
+[1;36mYour ship already has a Mark-%d phaser.[1;37m
+} T GE new phaser message
+
+NEW16 {
+[1;36mYou already have %d ships, the maximum amount permitted by galactic law.[1;37m
+} T GE you have too many ships message
+
+NEW17 {
+[1;36mThe minimum charge of [0;33m1000[1;36m will be charged for installation.[1;37m
+} T GE install charge message
+
+NEW18 {
+[1;36mThere is no charge for the new shield and after deducting a transaction 
+fee of [0;33m%s[1;36m, [0;33m%s[1;36m has been deposited to your account.[1;37m
+} T GE shield refund message
+
+NEW19 {[1;36mYou will be credited [0;33m%s[1;36m for the existing used shield.[1;37m
+} T GE shield credit message
+
+NEW20 {
+[1;36mThis ship cannot be equipped with that upgrade.[1;37m
+} T GE ship cannot take this upgrade message
+
+NEW21 {
+[1;36mThis ship already has that upgrade.[1;37m
+} T GE ship already has this upgrade message
+
+NEW22 {
+[1;36mUpgrade installed for the meager sum of [0;33m%s[1;36m.[1;37m
+} T GE you bought a new upgrade message
+
+NEW23 {
+[1;36mYou don't have enough cash for that upgrade.[1;37m
+} T GE not enough money for upgrade message
+
+NEW28 {
+[1;36mThere is no charge for the new phaser and after deducting a transaction
+fee of [0;33m%s[1;36m, [0;33m%s[1;36m has been deposited to your account.[1;37m
+} T GE phaser refund message
+
+NEW29 {[1;36mYou will be credited us [0;33m%s[1;36m for the existing used phaser.[1;37m
+} T GE phaser credit message
+
+TPOND1 {[1;36mTransponder control set to HIGH.[1;37m
+} T GE transponder adjusted to high
+
+TPOND2 {[1;36mTransponder control set to NORMAL.[1;37m
+} T GE transponder adjusted to normal
+
+TPOND3 {[1;36mTransponder control set to LOW.[1;37m
+} T GE transponder adjusted to low
+
+TPOND4 {[1;36mType [1;37mNEW UPGRADE 7 [mode][1;36m to adjust your transponder.[1;37m
+} T GE transponder wrong
+
+TPOND5 {[1;36mValid transponder values are [1;37mNORMAL[1;36m, [1;37mHIGH[1;36m, and [1;37mLOW[1;36m.[1;37m
+} T GE transponder wrong
+
+SELL1 {
+[1;36mYou must go to Zygor in sector [1;34m0 0[1;36m to sell items.[1;37m
+} T GE no selling unless at Zygor message
+
+SELL2 {
+[1;36mAfter the transfer tax of [0;33m%s[1;36m, you have netted [0;33m%s[1;36m for the [1;37m%s %s[1;36m.[1;37m
+} T GE sell message
+
+SELL3 {
+[1;36mThere are not that many [1;37m%s[1;36m on-board.[1;37m
+} T GE not enough to sell message
+
+SELL5 {
+[1;36mThere are no [1;37m%s[1;36m on-board.[1;37m
+} T GE none to sell message
+
+TOOMUCH {
+[1;36mThis is too large of a transaction to process at once.[1;37m
+} T GE transaction too big message
+
+TOORICH {
+[1;36mDue to the Galactic Financial Reform Act of 3264, no individual can have more
+than [0;33m%s[1;36m in the bank.[1;37m
+} T GE too much money message
+
+SYSGET {
+[1;37m%s %s[1;36m granted.[1;37m
+} T GE sysop get message
+
+SYSKILL {
+[0;36m%s[1;36m killed.[1;37m
+} T GE sysop kill message
+
+SYSKILN {
+[1;36mNo user by that name found.[1;37m
+} T GE sysop no one to kill message
+
+SYSCASH {
+[0;33m%s[1;36m granted.[1;37m
+} T GE sysop get money message
+
+SYSCLS {
+[1;36mYour ship is now a %s.[1;37m
+} T GE sysop change ship class message
+
+SYSLST {
+[1;36mChn Name                 Xsect Ysect Damage Tick Cybmine HoldC CybUp   LF[1;37m
+} T GE sysop ship list message
+
+SYSCLL {
+[1;36mCls Name                        Cybs attack?   How many[1;37m
+} T GE sysop class list message
+
+SYSCYB {
+[1;36mCybertrons paused for %d seconds.[1;37m
+} T GE sysop cybpause message
+
+SYSPOP {
+[1;36m%d planetary cycles run.[1;37m
+} T GE sysop multiply message
+
+SYSNP {
+[1;36mThis planet is unowned or has no population -- skipped.[1;37m
+} T GE sysop no multiply message
+
+SYSACY {
+[1;36mClosest Cybertrons assigned.[1;37m
+} T GE sysop assign cybs message
+
+SYSTEAM {
+[1;36m Code  Team name                      Mbers   Del date       Pswd      FPswd [1;37m
+} T GE team dump header
+
+MAIL1 {
+   You have no messages waiting...
+} T GE no messages message
+
+MAIL2 {
+<Received: %s [%s]>} T GE mail 2
+
+MAIL3 {
+The message was garbled beyond reconstruction / type - %d
+} T GE mail 3
+
+MESG02 {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s in the
+%s with %s troops.
+ 
+They successfully defended the planet.
+} T GE mesg 02
+
+MESG02O {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s
+with %s troops.
+ 
+They successfully defended the planet.
+} T GE mesg 02
+
+MESG03 {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s in the
+%s with %s troops. 
+
+They have surrendered the planet.
+} T GE mesg 03
+
+MESG03O {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s
+with %s troops. 
+
+They have surrendered the planet.
+} T GE mesg 03
+
+
+MESG04 {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s in the
+%s with %s fighters. 
+
+They successfully defended the planet.
+} T GE mesg 04
+
+MESG04O {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s
+with %s fighters. 
+
+They successfully defended the planet.
+} T GE mesg 04
+
+
+MESG05 {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s in the
+%s with %s fighters. 
+
+They have surrendered the planet.
+} T GE mesg 05
+
+MESG05O {
+Distress message from %s in sector %d %d,
+they were attacked by Commander %s
+with %s fighters.
+
+They have surrendered the planet.
+} T GE mesg 05
+
+
+MESG06 {
+Distress message from %s in sector %d %d, the food
+supply is extremely low and %s troops have been lost.
+} T GE mesg 06
+
+
+MESG07 {
+Distress message from %s in sector %d %d, the food
+supply is extremely low and %s men been lost.
+} T GE mesg 07
+
+
+MESG08 {
+Message from %s in sector %d %d, the population of
+men has reached the maximum sustainable on this planet. Population now
+%s.
+} T GE mesg 08
+
+
+MESG09 {
+Message from %s in sector %d %d, there are no
+more facilities for storing missiles, the missile production has been
+suspended at %s.
+} T GE mesg 09
+
+
+MESG10 {
+Message from %s in sector %d %d, there are no
+more facilities for storing torpedoes, the torpedo production has been
+suspended at %s.
+} T GE mesg 10
+
+
+MESG11 {
+Message from %s in sector %d %d, there are no
+more facilities for storing ion cannons, the ion cannon production has
+been suspended at %s.
+} T GE mesg 11
+
+
+MESG12 {
+Message from %s in sector %d %d, there are no
+more facilities for storing flux pods, the flux pod production has
+been suspended at %s.
+} T GE mesg 12
+
+
+MESG13 {
+Message from %s in Sector %d %d, there are no
+more facilities for storing food supplies, the food production has
+been suspended at %s.
+} T GE mesg 13
+
+
+MESG14 {
+Message from %s in sector %d %d, there are no
+more support facilities for fighters, the fighter production has been
+suspended at %s.
+} T GE mesg 14
+
+
+MESG15 {
+Message from %s in sector %d %d, there are no
+more facilities for storing decoys, the decoy production has been
+suspended at %s.
+} T GE mesg 15
+
+
+MESG16 {
+Message from %s in sector %d %d, there are no
+more facilities for housing troops, the training has been suspended
+at %s troops in active duty.
+} T GE mesg 16
+
+
+MESG17 {
+Message from %s in sector %d %d, there are no
+more facilities for storing zippers, the zipper production has been
+suspended at %s.
+} T GE mesg 17
+
+
+MESG18 {
+Message from %s in sector %d %d, there are no
+more facilities for storing jammers, the jammer production has been
+suspended at %s.
+} T GE mesg 18
+
+
+MESG19 {
+Message from %s in sector %d %d, there are no
+more facilities for storing mines, the mines production has been
+suspended at %s.
+} T GE mesg 19
+
+
+MESG19A {
+Message from %s in sector %d %d, there are no
+more facilities for storing gold, the gold mining has been suspended
+at %s.
+} T GE mesg 19A
+
+
+MESG19B {
+Message from %s in sector %d %d, the PIA
+(Planetary Intelligence Agency) has closed enrollment for its
+operative training facility at %s agents.
+} T GE mesg 19b
+
+
+MESG20 {
+Production report from %s in sector %d %d 
+} T GE mesg 20
+
+
+MESG30 {
+Distress message from %s in sector %d %d, the
+local population has revolted and overpowered our troops.
+%s troops joined the revolt, the rest were lost.
+} T GE mesg 30
+
+
+CAPTDOC {
+[1;36mA secret document was also recovered, it reads...
+} T GE capture document message
+
+FLEET3 {[1;36mWhich ship do you wish to command this mission?[1;37m } T GE pick your ship question
+
+FLEET4 {
+[1;36mPick a ship from the list or "x" to return to the main menu.[1;37m
+} T GE come on pick a real ship message
+
+RENAME1 {
+[1;36mYour ship is now named the [0;36m%s[1;36m.[1;37m
+} T GE you renamed your ship message
+
+RENAME1O {
+[1;36mYour ship now has no name.[1;37m
+} T GE you renamed your ship message
+
+SELFD1 {
+[1;36mSelf-destruct countdown begun, type [1;37mABORT[1;36m to cancel![1;37m
+} T GE self destruct started message
+
+SELFD1A {
+[0;37m[[1;31mERROR[0;37m] Self-destruct is not permitted in the neutral zone.[1;37m
+} T GE no self destruct in neutral zone message
+
+SELFD2 {***
+[0;37m[[0;31mWARNING![0;37m] Self-destruct in %d.[1;37m
+} T GE self destruct countdown message
+
+SELFD2A {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors detect a large neutron flux buildup in the [0;36m%s[0;37m.[1;37m
+} T GE someone is self destructing message 1
+
+SELFD2AO {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors detect a large neutron flux buildup in [0;36m%s[0;37m's ship.[1;37m
+} T GE someone is self destructing message 1
+
+SELFD2B {***
+[0;37m[[0;31mWARNING![0;37m] Dangerous neutron flux overload condition in the [0;36m%s[0;37m.[1;37m
+} T GE someone is self destructing message 2
+
+SELFD2BO {***
+[0;37m[[0;31mWARNING![0;37m] Dangerous neutron flux overload condition in [0;36m%s[0;37m's ship.[1;37m
+} T GE someone is self destructing message 2
+
+SELFD2C {***
+[0;37m[[0;31mWARNING![0;37m] Critical neutron flux overload condition in the [0;36m%s[0;37m.[1;37m
+} T GE someone is self destructing message 3
+
+SELFD2CO {***
+[0;37m[[0;31mWARNING![0;37m] Critical neutron flux overload condition in [0;36m%s[0;37m's ship.[1;37m
+} T GE someone is self destructing message 3
+
+SELFD3 {***
+[0;37m[[0;31mWARNING![0;37m] The neutron flux overload caused [0;31msevere[0;37m damage![1;37m
+} T GE self destruct started message
+
+SELFD3A {***
+[0;37m[[0;31mWARNING![0;37m] The [0;36m%s[0;37m just exploded with a massive neutron implosion.[1;37m
+} T GE someone self destructed message
+
+SELFD3AO {***
+[0;37m[[0;31mWARNING![0;37m] [0;36m%s[0;37m's ship just exploded with a massive neutron implosion.[1;37m
+} T GE someone self destructed message
+
+SELFD3N {[0;37mThe neutron shock wave caused [0;31m%s[0;37m damage to [0;36m%s[0;37m's ship![1;37m
+} T GE self destruct damaged without name message
+
+SELFD3O {[0;37mThe neutron shock wave caused [0;31m%s[0;37m damage to the [0;36m%s[0;37m![1;37m
+} T GE self destruct damaged with name message
+
+SELFD3S {[0;37mShields contained the neutron shock wave![1;37m
+} T GE self destruct with shield up message
+
+SELFD4 {
+[0;37mSelf-destruct sequence aborted![1;37m
+} T GE self destruct aborted message
+
+SELFD4A {***
+[0;37mThe neutron flux overload on the [0;36m%s[0;37m appears to have been resolved.[1;37m
+} T GE someone canceled their self destruct message
+
+SELFD4AO {***
+[0;37mThe neutron flux overload on [0;36m%s[0;37m's ship appears to have been resolved.[1;37m
+} T GE someone canceled their self destruct message
+
+SELFD5 {
+[0;37m[[1;31mERROR[0;37m] The self-destruct sequence has not been started![1;37m
+} T GE no self destruct no abort message
+
+SELFD6 {[0;37mThe shock wave caused [0;31m%s[0;37m damage! Shields deflected some of the blast![1;37m
+} T GE self destruct with shields message
+
+SELFD7 {[0;37mThe shock wave caused [0;31m%s[0;37m damage![1;37m
+} T GE self destruct with no shields message
+
+SELFD8 {
+[0;37m[[1;31mERROR[0;37m] The cloaking system is offline during the self-destruct sequence.[1;37m
+} T GE no cloak during self destruct
+
+CYBNEW {***
+[0;37mA huge energy burst has been detected, bearing [1;37m%d[0;37m.[1;37m
+} T GE new Cyb outside scan range message
+
+CYBNEW2 {***
+[0;37mA huge energy burst has been detected in sector [1;34m%d %d[0;37m.[1;37m
+} T GE new Cyb inside scan range message
+
+DROIDNEW {***
+[0;37mSome low frequency energy fluctuation has been detected, bearing [1;37m%d[0;37m.[1;37m
+} T GE new droid outside scan range message
+
+DROIDNW2 {***
+[0;37mSome low frequency energy fluctuation has been detected in sector [1;34m%d %d[0;37m.[1;37m
+} T GE new droid inside scan range message
+
+TELEPORT {***
+[0;37m[[0;31mWARNING![0;37m] Navigation beyond the galactic perimeter is not possible. Engines
+shut down under emergency procedures.
+
+Damage control reports [0;31m%s[0;37m damage to all sections due to kinetic shock.[1;37m
+} T GE hit galactic barrier message
+
+MINE0 {
+[0;37m[[1;31mERROR[0;37m] This ship is not equipped with a mine launcher.[1;37m
+} T GE no mine launcher message
+
+MINE1 {
+[0;37m[[1;31mERROR[0;37m] There are no neutron mines on-board.[1;37m
+} T GE no mines message
+
+MINE2 {
+[0;37m[[1;31mERROR[0;37m] The mine launcher can only safely deploy %d mines at once.[1;37m
+} T GE too many mines message
+
+MINE3 {
+[0;32mNeutron mine set to %u ticks and launched. Detonation in %u seconds![1;37m
+} T GE you launched a mine message
+
+MINE4 {***
+[0;37m[[0;31mWARNING![0;37m] A neutron mine exploded bearing [1;37m%d[0;37m, distance [1;37m%u[0;37m, causing
+[0;31m%s[0;37m damage![1;37m
+} T GE mine exploded close message
+
+MINE5 {***
+[0;37mSensors indicate a large neutron explosion, bearing [1;37m%d[0;37m![1;37m
+} T GE mine exploded far message
+
+MINE6 {***
+[0;37m[[1;31mCAUTION[0;37m] Sensors indicate a neutron mine, bearing [1;37m%d[0;37m, distance [1;37m%u[0;37m.[1;37m
+} T GE mine near message
+
+MINE7 {
+[0;37m[[1;31mERROR[0;37m] The Galactic Command does not permit mining in the neutral zone.[1;37m
+} T GE no mining in neutral zone message
+
+MINE8 {
+[0;37m[[1;31mERROR[0;37m] Too many active mines in the galaxy. All mining temporarily halted.[1;37m
+} T GE no mining in neutral zone message
+
+MINE9 {
+[0;37m[[1;31mERROR[0;37m] The mine launcher is reloading.[1;37m
+} T GE too many mines message
+
+LOCK01 {
+[0;37mScanner lock removed![1;37m
+} T GE fire control lock removed message
+
+LOCK02 {
+[0;37mScanners locked on [0;36m%s[0;37m commanded by [0;36m%s[0;37m.[1;37m
+} T GE fire control locked message
+
+LOCK02O {
+[0;37mScanners locked on [0;36m%s[0;37m's ship.[1;37m
+} T GE fire control locked message
+
+LOCK02N {
+[0;37mScanners locked on [0;36m%s[0;37m.[1;37m
+} T GE fire control locked message
+
+LOCK03 {***
+[0;37m[[0;31mWARNING![0;37m] Ship [0;36m%c[0;37m has locked its scanners onto this ship![1;37m
+} T GE someone locked onto you message
+
+LOCK03N {***
+[0;37m[[0;31mWARNING![0;37m] A ship outside scan range has locked its scanners onto this ship![1;37m
+} T GE someone locked onto you message
+
+LOCK04 {***
+[0;37mShip [0;36m%c[0;37m is no longer locked onto this ship.[1;37m
+} T GE lock removed notice to lockee
+
+LOCK05 {***
+[0;37mScanner lock lost![1;37m
+} T GE lock lost out of range notice to locker
+
+NOLOCK {
+[0;37m[[1;31mERROR[0;37m] Scanners have no lock set.[1;37m
+} T GE no fire control lock message
+
+LOCKHY1 {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m has gone to hyperspace![1;37m
+} T GE lock entering hyperspace message
+
+LOCKHY2 {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is coming out of hyperspace.[1;37m
+} T GE lock leaving hyperspace message
+
+LOCKORB1 {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is orbiting a planet in sector [1;34m%d %d[0;37m.[1;37m
+} T GE lock orbiting message
+
+LOCKORB2 {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is leaving orbit in sector [1;34m%d %d[0;37m.[1;37m
+} T GE lock leaving orbit message
+
+LOCKWORM {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is entering a wormhole in sector [1;34m%d %d[0;37m.[1;37m
+} T GE lock entering wormhole message
+
+LOCKCLOK {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is activating its cloaking system.[1;37m
+} T GE lock entering wormhole message
+
+LOCKTOR {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing a torpedo at ship [0;36m%c[0;37m.[1;37m
+} T GE lock firing torps at target message
+
+LOCKTORN {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing a torpedo.[1;37m
+} T GE lock firing torps at unviewable target message
+
+LOCKMIS {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing a missile at ship [0;36m%c[0;37m.[1;37m
+} T GE lock firing misls at target message
+
+LOCKMISN {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing a missile.[1;37m
+} T GE lock firing misls at unviewable target message
+
+LOCKPHA {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing phasers.[1;37m
+} T GE lock firing phasers
+
+LOCKHPHA {***
+[0;37m[[1;34mLOCK[0;37m] Ship [0;36m%c[0;37m is firing hyper-phasers.[1;37m
+} T GE lock firing hyperphasers
+
+NAV01 {
+[0;37mSector [1;34m%d %d[0;37m is bearing [1;37m%d[0;37m, distance [1;37m%s[0;37m.[1;37m
+} T GE navigate message
+
+UPGRHEAD {
+[1;36mAvailable %s upgrades:[1;37m
+
+} T upgrade header
+
+UPGRNO {
+[1;36mSorry, no %s upgrades are available.[1;37m
+} T upgrade header
+
+UPGR1 {Enhanced scanners} T upgrade 1
+
+UPGR2 {Armor plating} T upgrade 2
+
+UPGR3 {Acceleration boosters} T upgrade 3
+
+UPGR4 {Scan range boost} T upgrade 4
+
+UPGR5 {Enhanced lock} T upgrade 5
+
+UPGR6 {Enhanced damage control} T upgrade 6
+
+UPGR7 {Transponder control} T upgrade 7
+
+UPGR8 {Reinforced neutron core} T upgrade 8
+
+UPGRD1 { [1;36m([1;37m%d[1;36m) provide more details about scanned ships and are less
+susceptible to jamming. Price: [0;33m%s[1;37m
+
+} T upgrade 1
+
+UPGRD2 { [1;36m([1;37m%d[1;36m) increases a ship's durability.
+Price: [0;33m%s[1;37m
+
+} T upgrade 2
+
+UPGRD3 { [1;36m([1;37m%d[1;36m) increase a ship's acceleration rate.
+Price: [0;33m%s[1;37m
+
+} T upgrade 3
+
+UPGRD4 { [1;36m([1;37m%d[1;36m) increases a ship's scan range.
+Price: [0;33m%s[1;37m
+
+} T upgrade 4
+
+UPGRD5 { [1;36m([1;37m%d[1;36m) sends additional information about what a target is doing to
+a ship's sensors. Price: [0;33m%s[1;37m
+
+} T upgrade 5
+
+UPGRD6 { [1;36m([1;37m%d[1;36m) increases the speed at which a ship repairs
+itself, as well as adds repair ETAs to the ship's reports. Price: [0;33m%s[1;37m
+
+} T upgrade 6
+
+UPGRD7 { [1;36m([1;37m%d[1;36m) makes a ship more or less likely to be pursued by
+Cybertrons. Purchase once, come back for free adjustments at any time.
+Price: [0;33m%s[1;37m
+
+} T upgrade 7
+
+UPGRD8 { [1;36m([1;37m%d[1;36m) enables a ship's warp drive to run over its top
+cruising speed for a longer duration. Price: [0;33m%s[1;37m
+
+} T upgrade 8
+
+TOOMANY {
+[1;36mThere are already a maximum of %d teams declared.[1;37m
+} T GE too many teams message
+
+TEAMEXST {
+[1;36mThat team name or team code already exists... choose another.[1;37m
+} T GE team already exists message
+
+TEAMDEAC {
+[1;36mThat team code has already been used and may not be reused.[1;37m
+} T GE team already exists message
+
+TEAMNINV {
+[1;36mTeam names must start with a letter.[1;37m
+} T GE team already exists message
+
+TEAMALRD {
+[1;36mYou are already on a team. Use [1;37mTEAM UNJOIN[1;36m to leave your current team first.[1;37m
+} T GE team already exists message
+
+TEAMALR2 {
+[1;36mYou are already on that team.[1;37m
+} T GE team already exists message
+
+TEAMCRT {
+[1;36m-- Team Created --
+Name: [0;36m%s[1;36m
+Id #..............: [0;36m%s[1;36m
+Team password.....: [0;36m%s[1;36m
+Founder password..: [0;36m%s[1;36m
+
+Please write down the founder password as you will not be able to change it
+or display it again.[1;37m
+} T GE team created message
+
+TEAMBAD {
+[1;36mThat team code is not valid.[1;37m
+} T GE invalid team code message
+
+TEAMBIG {
+[1;36mThat team is full. You cannot join at this time.[1;37m
+} T GE team is full message
+
+TEAMBADP {
+[1;36mThat is not the password. Please contact the team leader for the correct one.[1;37m
+} T GE team bad password message
+
+TEAMJOIN {
+[1;36mYou are now a member of the [0;36m%s[1;36m team.[1;37m
+} T GE team joined message
+
+TEAMUNJN {
+[1;36mYou are no longer a member of the [0;36m%s[1;36m team.[1;37m
+} T GE team left message
+
+TEAMHDR {
+[1;36mTeam scores
+[0;31m--------------------------------------------------------------------
+[1;34mCode   Team name                             Members           Score[1;37m
+} T GE team display header message
+
+TEAMTLR {
+} T GE team display trailer message
+
+TEAMBDSC {
+[1;36mSorry, that is not the valid founder password.[1;37m
+} T GE team not founder password message
+
+TEAMNOT {
+[1;36mYou are not currently a member of a valid team.[1;37m
+} T GE not on team message
+
+TEAMNFND {
+[1;36mThat player is not currently in the game.[1;37m
+} T GE team player not in game message
+
+TEAMNTM {
+[1;36mThat player is not currently on your team.[1;37m
+} T GE team player no on team message
+
+TEAMKYOU {
+[1;36mYour membership in team [0;36m%s[1;36m has been revoked by [0;36m%s[1;36m.[1;37m
+} T GE team kicked off message
+
+TEAMKICK {
+[1;36mAs you requested, [0;36m%s[1;36m has been removed from the team and 
+sent an email message notifying them of this action.[1;37m
+} T GE team you kicked someone message
+
+TEAMBPSS {
+[1;36mThat password is too long, please shorten it to 10 characters or fewer.[1;37m
+} T GE team password too long message
+
+TEAMNPSS {
+[1;36mThe team password has been changed to [1;37m%s[1;36m.[1;37m
+} T GE team password changed message
+
+TEAMBNAM {
+[1;36mThe team name must be at least 5 characters long.[1;37m
+} T GE team name too short message
+
+TEAMNNAM {
+[1;36mThe new team name is now [1;37m%s[1;36m.[1;37m
+} T GE team name changed message
+
+TEAMMHDR {
+[1;36mThe members of your team are...[1;37m
+} T GE team list header message
+
+JETT1 {
+[0;37m[[1;31mERROR[0;37m] There are not that many on-board.[1;37m
+} T GE not enough to jettison message
+
+JETT2 {
+[1;36mYou can't jettison %s![1;37m
+} T GE you can't jettison people message
+
+JETT3 {
+[1;37m%s %s[0;37m have been jettisoned.[1;37m
+} T GE jettison message
+
+JETT3D {
+[1;37m%s %s[0;37m have been defused and jettisoned.[1;37m
+} T GE jettison message
+
+FORMAT {
+[1;36mType [1;37mHELP %s[1;36m for the correct usage.[1;37m
+} T GE universal format message
+
+MSGPRF {
+[0;37m[[1;31mERROR[0;37m] The Galactic Communications Commission will not allow such a message.[1;37m
+} T GE bad word message
+
+BEAC01 {***
+[0;37mBeacon message from planet [0;34m%d
+[1;36m< [1;37m%s[1;36m >[1;37m
+} T GE beacon message received message
+
+BEAC02 {***
+[0;37mBeacon message from planet [0;34m%d[0;37m, [0;34m%s
+[1;36m< [1;37m%s[1;36m >[1;37m
+} T GE beacon message received message
+
+SPY0 {
+[1;36mYou own this planet, you can't spy on it.[1;37m
+} T GE no spying on your own planet message
+
+SPY0C {
+[1;36mSpying on the Galactic Command is a capital offense![1;37m
+} T GE no spying on Galactic Command message
+
+SPYM0 {
+[1;36mThere are no spies on-board.[1;37m
+} T GE no spies message
+
+SPYM1 {
+[0;32mTransporting a spy to the planet![1;37m
+} T GE spy sent message
+
+SPYC1 {
+The government of the planet %s in sector %d %d has
+arrested a spy believed to be in your employ. They have lodged an official
+protest with the Galactic Command and are demanding a formal apology.
+
+} T GE spy captured message
+
+SPYC2 {
+The government of your planet %s in sector %d %d has
+captured and arrested a spy believed to be in the employment
+of %s. 
+
+They have already sent notice to %s demanding an apology.
+
+} T GE spy caught message
+
+SPYM2 {
+Classification: TOP SECRET/EYES ONLY
+
+Your operative on %s in sector %d %d has acquired
+the following intelligence from his local operatives. The information is from
+a questionable source but has a %d percent confidence rating.
+--------------------------------------------------------------------------
+
+Planetary reserves of %s - %s
+
+--------------------------------------------------------------------------
+End report
+
+} T GE spy found something message
+
+SPYM3 {
+Classification: TOP SECRET
+
+Your operative on %s in sector %d %d reports
+that hostile forces commanded by %s launched an attack 
+on this planet. The outcome was unclear as of this report.
+
+End report
+
+} T GE spy witnessed failed attack message
+
+SPYM4 {
+Classification: TOP SECRET
+
+Your operative on %s in sector %d %d reports 
+that hostile forces commanded by %s have toppled the 
+defenses and taken over the planet. 
+
+End report
+
+} T GE spy witnessed successful attack message
+
+**********************************************************************
+
+CYBBASEM {DO NOT REMOVE THIS MESSAGE!!!!!!} T Cyb message beginning divider
+
+The following are sets of annoyance messages for 
+each type of Cybertron behavior. There are four messages
+for each behavior.
+
+**********************************************************************
+
+APPROACH
+
+CYB0M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Organic beings are the scum of the galaxy, not fit to survive! [1;36m>[1;37m
+} T GE Cyb 0 message 1
+
+CYB0M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your pitiful species will join the Sartens in oblivion! [1;36m>[1;37m
+} T GE Cyb 0 message 2
+
+CYB0M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Extermination is the only way to deal with organic scum! [1;36m>[1;37m
+} T GE Cyb 0 message 3
+
+CYB0M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m By cyborg decree, all organics are doomed to destruction! [1;36m>[1;37m
+} T GE Cyb 0 message 4
+
+LOATTACK
+
+CYB1M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You had better run if you know what's good for you! [1;36m>[1;37m
+} T GE Cyb 1 message 1
+
+CYB1M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m I could kill you right now if it weren't so unsportsmanlike! [1;36m>[1;37m
+} T GE Cyb 1 message 2
+
+CYB1M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Give it up! I can keep this up for hours! [1;36m>[1;37m
+} T GE Cyb 1 message 3
+
+CYB1M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m I will destroy you, organic vermin! [1;36m>[1;37m
+} T GE Cyb 1 message 4
+
+HIATTACK
+
+CYB2M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your ship shall be mine! [1;36m>[1;37m
+} T GE Cyb 2 message 1
+
+CYB2M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Eat this, you biological misfit! [1;36m>[1;37m
+} T GE Cyb 2 message 2
+
+CYB2M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your extermination is a mathematical certainty! [1;36m>[1;37m
+} T GE Cyb 2 message 3
+
+CYB2M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You will never survive this attack! [1;36m>[1;37m
+} T GE Cyb 2 message 4
+
+IGNORE
+
+CYB3M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your ship is no match for a Cybertron! [1;36m>[1;37m
+} T GE Cyb 3 message 1
+
+CYB3M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are not worth wasting a single torpedo on! [1;36m>[1;37m
+} T GE Cyb 3 message 2
+
+CYB3M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are mine to toy with, and mine to slay! [1;36m>[1;37m
+} T GE Cyb 3 message 3
+
+CYB3M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Destroying your pathetic vessel would be a waste of time! [1;36m>[1;37m
+} T GE Cyb 3 message 4
+
+NEUTRAL
+
+CYB4M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Stop hiding and face your fate! [1;36m>[1;37m
+} T GE Cyb 4 message 1
+
+CYB4M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Cybertrons cannot be stopped! [1;36m>[1;37m
+} T GE Cyb 4 message 2
+
+CYB4M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You can't hide in the neutral zone forever! [1;36m>[1;37m
+} T GE Cyb 4 message 3
+
+CYB4M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Are you too frightened to leave the neutral zone? [1;36m>[1;37m
+} T GE Cyb 4 message 4
+
+TAUNT
+
+CYB5M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are so dumb you make a Toranian pig look like intelligent life. [1;36m>[1;37m
+} T GE Cyb 5 message 1
+
+CYB5M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Prepare to be destroyed! [1;36m>[1;37m
+} T GE Cyb 5 message 2
+
+CYB5M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your computational abilities are inferior to Cybertrons. [1;36m>[1;37m
+} T GE Cyb 5 message 3
+
+CYB5M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Death is too easy for Traxlyn Scurge like you. [1;36m>[1;37m
+} T GE Cyb 5 message 4
+
+CYBTORP
+
+CYB6M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You cannot defeat us! [1;36m>[1;37m
+} T GE Cyb 6 message 1
+
+CYB6M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your defeat is a mathematical certainty! [1;36m>[1;37m
+} T GE Cyb 6 message 2
+
+CYB6M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You can't dodge torpedoes forever, you Mongonian mudmole! [1;36m>[1;37m
+} T GE Cyb 6 message 3
+
+CYB6M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Suck on this torpedo, you Gloxanian slugworm! [1;36m>[1;37m
+} T GE Cyb 6 message 4
+
+FLEE
+
+CYB7M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your pathetic resistance only delays the inevitable! [1;36m>[1;37m
+} T GE Cyb 7 message 1
+
+CYB7M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Next time you won't be so lucky! [1;36m>[1;37m
+} T GE Cyb 7 message 2
+
+CYB7M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m I shall be back for you later, vermin! [1;36m>[1;37m
+} T GE Cyb 7 message 3
+
+CYB7M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We will prevail. You cannot survive! [1;36m>[1;37m
+} T GE Cyb 7 message 4
+
+CYBBASEA
+
+CYB8M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Halt your approach or prepare to be destroyed. [1;36m>[1;37m
+} T GE Cyb 8 message 1
+
+CYB8M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Only Cybertrons are permitted in this region of space. [1;36m>[1;37m
+} T GE Cyb 8 message 2
+
+CYB8M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are approaching a Cybertron base. Turn around now! [1;36m>[1;37m
+} T GE Cyb 8 message 3
+
+CYB8M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Retreat from this area! This is your only warning! [1;36m>[1;37m
+} T GE Cyb 8 message 4
+
+CYBBASEB
+
+CYB9M1 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This sector is off limits to organics! [1;36m>[1;37m
+} T GE Cyb 9 message 1
+
+CYB9M2 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This Cyber-Base is invincible! [1;36m>[1;37m
+} T GE Cyb 9 message 2
+
+CYB9M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Only a fool would dare attack a Cyber-Base! [1;36m>[1;37m
+} T GE Cyb 9 message 3
+
+CYB9M4 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Turn around and leave this area while you still can! [1;36m>[1;37m
+} T GE Cyb 9 message 4
+
+CYBLASTM {DO NOT REMOVE THIS MESSAGE!!!!!!} T Cyb message end divider
+
+**********************************************************************
+**********************************************************************
+
+DRBASEM {DO NOT REMOVE THIS MESSAGE!!!!!!} T Droid message beginning divider
+
+**********************************************************************
+Lydorian Garbage Scow
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR1M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m CAUTION! This vessel transports hazardous material. [1;36m>[1;37m
+} T GE Droid 1 message 1
+
+DR1M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m This vessel is protected under Galactic Treaty Gt05-66A7-5847. [1;36m>[1;37m
+} T GE Droid 1 message 2
+
+DR1M3 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m CAUTION! Avoid contamination! Maintain clearance. [1;36m>[1;37m
+} T GE Droid 1 message 3
+
+DR1M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Maintain standard approach clearance regulations Gr06-25K6-41D6. [1;36m>[1;37m
+} T GE Droid 1 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR1M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are no friend to the Lydorians! [1;36m>[1;37m
+} T GE Droid 1 message 5
+
+DR1M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This vessel poses no threat to you. Halt your approach! [1;36m>[1;37m
+} T GE Droid 1 message 6
+
+DR1M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are not carrying anything of value. Move along! [1;36m>[1;37m
+} T GE Droid 1 message 7
+
+DR1M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have been identified as an enemy of the Lydorians! [1;36m>[1;37m
+} T GE Droid 1 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR1M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your actions are in violation of Galactic Treaty! Cease and desist! [1;36m>[1;37m
+} T GE Droid 1 message 9
+
+DR1M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are not your enemy. Cease fire immediately! [1;36m>[1;37m
+} T GE Droid 1 message 10
+
+DR1M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Please spare this vessel! We carry nothing of value! [1;36m>[1;37m
+} T GE Droid 1 message 11
+
+DR1M12 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Stop this pointless aggression at once! [1;36m>[1;37m
+} T GE Droid 1 message 12
+
+**********************************************************************
+Murdonian Transport
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR2M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Warning! This ship is operating under Murdonian Imperial Authority. [1;36m>[1;37m
+} T GE Droid 2 message 1
+
+DR2M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Warning! Interfering with this vessel is punishable by Murdonian law. [1;36m>[1;37m
+} T GE Droid 2 message 2
+
+DR2M3 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Warning! This vessel is transporting goods under Galactic Treaty. [1;36m>[1;37m
+} T GE Droid 2 message 3
+
+DR2M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Maintain standard approach clearance regulations Gr06-25K6-42D6. [1;36m>[1;37m
+} T GE Droid 2 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR2M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Warning! Approaching this vessel will be considered an act of aggression. [1;36m>[1;37m
+} T GE Droid 2 message 5
+
+DR2M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Warning! We are prepared to defend this vessel and its passengers! [1;36m>[1;37m
+} T GE Droid 2 message 6
+
+DR2M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are wanted for crimes against the Murdonian Imperial Authority! [1;36m>[1;37m
+} T GE Droid 2 message 7
+
+DR2M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your presence is unwelcome. Cease your approach at once! [1;36m>[1;37m
+} T GE Droid 2 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR2M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This vessel is carrying hundreds of civilian passengers! [1;36m>[1;37m
+} T GE Droid 2 message 9
+
+DR2M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are authorized to destroy your vessel to protect our passengers. [1;36m>[1;37m
+} T GE Droid 2 message 10
+
+DR2M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This is a peaceful transport ship. Your actions are reprehensible! [1;36m>[1;37m
+} T GE Droid 2 message 11
+
+DR2M12 {***
+[0;37mDistress call from [0;36m%s
+[1;36m<[1;37m The Murdonian Imperial Defense was informed of your illegal aggression. [1;36m>[1;37m
+} T GE Droid 2 message 12
+
+**********************************************************************
+Vakory Survey Drone
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR3M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m This survey ship is protected under Galactic Treaty Gt05-66A7-5821. [1;36m>[1;37m
+} T GE Droid 3 message 1
+
+DR3M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Disturbing this survey ship is punishable under galactic law. [1;36m>[1;37m
+} T GE Droid 3 message 2
+
+DR3M3 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Maintain standard approach clearance regulations Gr06-25K6-43D2. [1;36m>[1;37m
+} T GE Droid 3 message 3
+
+DR3M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m This unmanned vessel is engaged in scientific research. [1;36m>[1;37m
+} T GE Droid 3 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR3M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Warning! This vessel is equipped with auto-defense systems! [1;36m>[1;37m
+} T GE Droid 3 message 5
+
+DR3M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have been identified as a threat to this vessel. [1;36m>[1;37m
+} T GE Droid 3 message 6
+
+DR3M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are responsible for attacking a research vessel! [1;36m>[1;37m
+} T GE Droid 3 message 7
+
+DR3M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This survey ship is no threat to you. Back off now! [1;36m>[1;37m
+} T GE Droid 3 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR3M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m The Vakory High Command has been informed of your illegal aggression. [1;36m>[1;37m
+} T GE Droid 3 message 9
+
+DR3M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This survey ship is no threat to you. Stop firing at once! [1;36m>[1;37m
+} T GE Droid 3 message 10
+
+DR3M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Auto-defense systems activated. Cease and desist this attack! [1;36m>[1;37m
+} T GE Droid 3 message 11
+
+DR3M12 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Destroying this scientific research vessel is pointless! [1;36m>[1;37m
+} T GE Droid 3 message 12
+
+**********************************************************************
+Sarten Civil Transport
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR4M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m This vessel is transporting civilians. We are no threat! [1;36m>[1;37m
+} T GE Droid 4 message 1
+
+DR4M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m We are seeking refuge from Cybertron aggression. [1;36m>[1;37m
+} T GE Droid 4 message 2
+
+DR4M3 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We no longer have any animosity towards your kind. [1;36m>[1;37m
+} T GE Droid 4 message 3
+
+DR4M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Cybertrons have decimated our species. We seek peace! [1;36m>[1;37m
+} T GE Droid 4 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR4M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are an enemy of the Sarten Empire! [1;36m>[1;37m
+} T GE Droid 4 message 5
+
+DR4M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are prepared to defend ourselves from all aggressors! [1;36m>[1;37m
+} T GE Droid 4 message 6
+
+DR4M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are responsible for attacks on Sarten vessels. [1;36m>[1;37m
+} T GE Droid 4 message 7
+
+DR4M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Why do you wish for more destruction? We seek peace! [1;36m>[1;37m
+} T GE Droid 4 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR4M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m The Sarten Empire has been informed of your actions! [1;36m>[1;37m
+} T GE Droid 4 message 9
+
+DR4M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Stop this unprovoked attack or we will summon defense drones. [1;36m>[1;37m
+} T GE Droid 4 message 10
+
+DR4M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have no more honor than a Cybertron! [1;36m>[1;37m
+} T GE Droid 4 message 11
+
+DR4M12 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m The Sarten Empire shall not take this aggression lightly. [1;36m>[1;37m
+} T GE Droid 4 message 12
+
+**********************************************************************
+Sarten Defense Drone
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR5M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m This Sarten vessel is acting in the defense of the Sarten Empire. [1;36m>[1;37m
+} T GE Droid 5 message 1
+
+DR5M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Do not interfere with the operation of this vessel. [1;36m>[1;37m
+} T GE Droid 5 message 2
+
+DR5M3 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Cybertrons must be stopped! [1;36m>[1;37m
+} T GE Droid 5 message 3
+
+DR5M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Join us in defending the galaxy from Cybertron aggression! [1;36m>[1;37m
+} T GE Droid 5 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR5M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are an enemy of the Sarten Empire! [1;36m>[1;37m
+} T GE Droid 5 message 5
+
+DR5M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are responsible for attacks on Sarten vessels. [1;36m>[1;37m
+} T GE Droid 5 message 6
+
+DR5M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are prepared to defend ourselves from all aggressors! [1;36m>[1;37m
+} T GE Droid 5 message 7
+
+DR5M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your foolishness will be your destruction! [1;36m>[1;37m
+} T GE Droid 5 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR5M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are responsible for attacks on Sarten vessels. [1;36m>[1;37m
+} T GE Droid 5 message 9
+
+DR5M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have no more honor than a Cybertron! [1;36m>[1;37m
+} T GE Droid 5 message 10
+
+DR5M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You were offered peaceful coexistence, and refused! [1;36m>[1;37m
+} T GE Droid 5 message 11
+
+DR5M12 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your actions leave us no recourse. [1;36m>[1;37m
+} T GE Droid 5 message 12
+
+**********************************************************************
+Galactic Command Freighter
+
+The first four messages are sent to players that approach
+but are not (yet) considered threats.
+
+DR6M1 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Be prepared for anything... stock up on weapons at Zygor! [1;36m>[1;37m
+} T GE Droid 6 message 1
+
+DR6M2 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Ready for a new ship? Check out the selection at Zygor! [1;36m>[1;37m
+} T GE Droid 6 message 2
+
+DR6M3 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Visit Zygor in sector [1;34m0 0[1;37m for all your galactic needs! [1;36m>[1;37m
+} T GE Droid 6 message 3
+
+DR6M4 {***
+[0;37mBeacon message from [0;36m%s
+[1;36m<[1;37m Need more colonists and food? Visit Tahanian Station today! [1;36m>[1;37m
+} T GE Droid 6 message 4
+
+The next four messages can be sent to players who are
+considered unfriendly by this faction.
+
+DR6M5 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have committed crimes against the Galactic Command! [1;36m>[1;37m
+} T GE Droid 6 message 5
+
+DR6M6 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Your presence is unwelcome. Back off now! [1;36m>[1;37m
+} T GE Droid 6 message 6
+
+DR6M7 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m We are prepared to defend this vessel. [1;36m>[1;37m
+} T GE Droid 6 message 7
+
+DR6M8 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You have been identified as a threat! Do not approach! [1;36m>[1;37m
+} T GE Droid 6 message 8
+
+The next four messages are sent when a player attacks
+this ship.
+
+DR6M9 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m You are no longer welcome at Zygor! [1;36m>[1;37m
+} T GE Droid 6 message 9
+
+DR6M10 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m This unprovoked attack will not go unanswered! [1;36m>[1;37m
+} T GE Droid 6 message 10
+
+DR6M11 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m An attack on this freighter is an affront to galactic law! [1;36m>[1;37m
+} T GE Droid 6 message 11
+
+DR6M12 {***
+[0;37mHailing message from [0;36m%s
+[1;36m<[1;37m Cease and desist this attack at once! [1;36m>[1;37m
+} T GE Droid 6 message 12
+
+DRLASTM {DO NOT REMOVE THIS MESSAGE!!!!!!} T Droid message end divider
+
+DRDISMSG {***
+[0;37mDistress message from [0;36m%s
+[1;36m<[1;37m %s under attack by [1;34m%s[1;37m!
+  Requesting immediate assistance to sector [1;34m%d %d[1;37m! [1;36m>[1;37m
+} T GE Droid distress message
+
+
+ENDMARK {ENDMARK} T Endmark - do not remove
+
+

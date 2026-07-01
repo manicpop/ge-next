@@ -1,0 +1,30 @@
+; MPOGA.MDF
+
+Module Name: ge-arena
+
+Developer: ManicPop.org
+
+
+Requires:
+Replaces:
+
+Install:
+
+Online user manual:
+
+DLLs:MPOGA
+MSGs:MPOGAHLP  MPOGAMSG MPOGASHP
+
+
+Btrieve page size:    2048
+Btrieve files:       6
+
+Cleanup:
+
+Event-1:
+Event-2:
+Event-3:
+Event-4:
+
+Add-On Utility:
+

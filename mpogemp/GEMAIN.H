@@ -60,21 +60,41 @@
 /* #define FASTPLANET 1 */
 
 /* enable to build with mbbsemu mitigations */
-/* #define MBBSEMU 1 */
+#define MBBSEMU 1
 
+#ifndef GE_ARENA
 #define PROJECT_NAME "ge-next"
-#define PROJECT_VERSION "0.3.1"
-#ifdef MBBSEMU
-#define PROJECT_ARCH "mbbsemu"
 #else
-#define PROJECT_ARCH "16-bit"
+#define PROJECT_NAME "ge-arena"
 #endif
+
+#define PROJECT_VERSION "0.3.1"
+
+#ifndef MBBSEMU
+#define PROJECT_ARCH "16-bit"
+#else
+#define PROJECT_ARCH "mbbsemu"
+#endif
+
+#ifndef GE_ARENA
 #define GEHELP  "MPOGEHLP.MCV"
 #define GEMSG   "MPOGEMSG.MCV"
+#define GEMDF   "MPOGEMP.MDF"
+#else
+#define GEHELP  "MPOGAHLP.MCV"
+#define GEMSG   "MPOGAMSG.MCV"
+#define GEMDF   "MPOGA.MDF"
+#endif
 
+#ifndef GE_ARENA
 #include "mpogemsg.h"
 #include "mpogehlp.h"
 #include "mpogeshp.h"
+#else
+#include "mpogamsg.h"
+#include "mpogahlp.h"
+#include "mpogashp.h"
+#endif
 
 /***************************************************************************/
 /* The following defines have been carefully chosen and refined to provide */
