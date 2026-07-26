@@ -158,8 +158,8 @@ S01HELP {
 [1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-8 maximum   [1;37mTorpedo launchers: [1;32m1
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m5000 Su/T   [1;37mTop rated speed: [1;32mWarp 10   [1;37mKill points: [1;32m750
-[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m5000 Tons
+[1;37mAcceleration rate: [1;32m5,000 Su/T   [1;37mTop rated speed: [1;32mWarp 10   [1;37mKill points: [1;32m750
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m5,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
 
@@ -167,7 +167,7 @@ S01HELP {
 ship for adventurers looking to learn the ropes of interstellar travel,
 and best of all, it's FREE*!
 
-With a warp 10 capable engine, one torpedo launcher, and 5000 tons of cargo
+With a warp 10 capable engine, one torpedo launcher, and 5,000 tons of cargo
 space, you'll be ready to start finding new planets to colonize and be
 prepared for light battles.
 
@@ -335,7 +335,7 @@ S02HELP {
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [0;31mNo   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
 [1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 40   [1;37mKill points: [1;32m500
-[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m1000 Tons
+[1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m1,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
 
@@ -511,7 +511,7 @@ S03HELP {
 [1;37mShields: [1;32mMark-4 maximum   [1;37mPhasers: [1;32mMark-2 maximum   [1;37mTorpedo launchers: [0;31m0
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 8   [1;37mKill points: [1;32m1000
+[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 8   [1;37mKill points: [1;32m1,000
 [1;37mScanner range: [1;32m50,000 subsectors (5 sectors)   [1;37mCargo capacity: [1;32m100,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -686,7 +686,7 @@ S04HELP {
 [1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-10 maximum   [1;37mTorpedo launchers: [1;32m1
 [1;37mMissile launchers: [1;32m1   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [0;31mNo
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
-[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 4   [1;37mKill points: [1;32m1000
+[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 4   [1;37mKill points: [1;32m1,000
 [1;37mScanner range: [1;32m50,000 subsectors (5 sectors)   [1;37mCargo capacity: [1;32m10,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -700,7 +700,7 @@ or buy one for every commander in your fleet.
 
 With a warp 4 rated engine, the Patrol is not designed for long-range
 exploration, and it may be difficult to flee when outgunned. However, a
-cloaking system, along with decoy and jammer launchers, should help you get
+cloaking system, along with decoy and zipper launchers, should help you get
 out of trouble long enough to call for backup.
 
 The Patrol retails for [0;33m150,000[1;36m."
@@ -797,7 +797,7 @@ Points awarded for destroying a class 05 ship.
 
 S05PNTS {Points awarded: 1500} (S05TYPE#<NONE>) N 1 32767
 
-Scanner range of a class 04 ship in subsectors.
+Scanner range of a class 05 ship in subsectors.
 
 S05SRNG {Scanner range: 100000} (S05TYPE#<NONE>) L 1 10000000
 
@@ -819,7 +819,7 @@ Lowest class of user ship a class 05 Cybertron will pursue?
 
 S05LATK {Lowest class of user ship this ship will pursue: 0} (S05TYPE=CYBORG,DROID) N 0 50
 
-How many class 04 ships should be created (NPCs only)? 
+How many class 05 ships should be created (NPCs only)? 
 
 S05MAKE {Number of NPCs of this class to make: 0} (S05TYPE=CYBORG,DROID) N 0 255
 
@@ -862,7 +862,7 @@ S05HELP {
 [1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-3 maximum   [1;37mTorpedo launchers: [0;31m0
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [0;31mNo   [1;37mJammer launcher: [0;31mNo
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
-[1;37mAcceleration rate: [1;32m5,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m1500
+[1;37mAcceleration rate: [1;32m5,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m1,500
 [1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m30,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -1035,12 +1035,12 @@ S06HELP {
 [1;37mShields: [1;32mMark-5 maximum   [1;37mPhasers: [1;32mMark-15 maximum   [1;37mTorpedo launchers: [1;32m2
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m8,000 Su/T   [1;37mTop rated speed: [1;32mWarp 20   [1;37mKill points: [1;32m1000
+[1;37mAcceleration rate: [1;32m8,000 Su/T   [1;37mTop rated speed: [1;32mWarp 20   [1;37mKill points: [1;32m1,000
 [1;37mScanner range: [1;32m200,000 subsectors (20 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
 
-[1;36m"Need to keep an eye on large area of space? Looking for a ship with big
+[1;36m"Need to keep an eye on a large area of space? Looking for a ship with big
 phaser capability? The warp 20 rated engine and 200,000-subsector scanner on the
 MONITOR, new from Zygor, might be just what you need.
 
@@ -1207,7 +1207,7 @@ S07HELP {
 [1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-4 maximum   [1;37mTorpedo launchers: [0;31m0
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 12   [1;37mKill points: [1;32m1500
+[1;37mAcceleration rate: [1;32m3,000 Su/T   [1;37mTop rated speed: [1;32mWarp 12   [1;37mKill points: [1;32m1,500
 [1;37mScanner range: [1;32m100,000 subsectors (10 sectors)   [1;37mCargo capacity: [1;32m400,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -1377,10 +1377,10 @@ S08HELP {
 [1;36mDetailed Class Specification
 [0;31m-----------------------------------------------------------------------------
 [1;37mShip class: [1;32mDestroyer  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m124m
-[1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-10 maximum   [1;37mTorpedo launchers: [1;32mY2
+[1;37mShields: [1;32mMark-10 maximum   [1;37mPhasers: [1;32mMark-10 maximum   [1;37mTorpedo launchers: [1;32m2
 [1;37mMissile launchers: [1;32m1   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 25   [1;37mKill points: [1;32m2000
+[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 25   [1;37mKill points: [1;32m2,000
 [1;37mScanner range: [1;32m150,000 subsectors (15 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -1553,8 +1553,8 @@ S09HELP {
 [1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-6 maximum   [1;37mTorpedo launchers: [1;32m1
 [1;37mMissile launchers: [1;32m1   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 30   [1;37mKill points: [1;32m5000
-[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m60,000 Tons
+[1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 30   [1;37mKill points: [1;32m5,000
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m200,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
 
@@ -1723,8 +1723,8 @@ S10HELP {
 [1;37mShields: [1;32mMark-16 maximum   [1;37mPhasers: [1;32mMark-16 maximum   [1;37mTorpedo launchers: [1;32m2
 [1;37mMissile launchers: [1;32m2   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
-[1;37mAcceleration rate: [1;32m6,000 Su/T   [1;37mTop rated speed: [1;32mWarp 35   [1;37mKill points: [1;32m5000
-[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m30,000 Tons
+[1;37mAcceleration rate: [1;32m6,000 Su/T   [1;37mTop rated speed: [1;32mWarp 35   [1;37mKill points: [1;32m5,000
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m40,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
 
@@ -1732,7 +1732,7 @@ S10HELP {
 the hearts of your enemies when you enter a sector, it's time to check out
 Zygor's BATTLE CRUISER.
 
-With Mark-16-capable phasers and shields and the full compliment of
+With Mark-16-capable phasers and shields and the full complement of
 offensive and defensive capabilities, the Battle Cruiser is focused solely
 on combat.
 
@@ -1892,7 +1892,7 @@ S11HELP {
 [1;36mDetailed Class Specification
 [0;31m-----------------------------------------------------------------------------
 [1;37mShip class: [1;32mDreadnought  [1;37mLength: [1;32m3125m    [1;37mWidth: [1;32m1041m   [1;37mHeight: [1;32m638m
-[1;37mShields: [1;32mMark-12 maximum   [1;37mPhasers: [1;32mMark-12 maximum   [1;37mTorpedo launchers: [1;32m3
+[1;37mShields: [1;32mMark-19 maximum   [1;37mPhasers: [1;32mMark-19 maximum   [1;37mTorpedo launchers: [1;32m3
 [1;37mMissile launchers: [1;32m3   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [1;32mYes
 [1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 40   [1;37mKill points: [1;32m10,000
@@ -2065,7 +2065,7 @@ S12HELP {
 [1;37mShields: [1;32mMark-6 maximum   [1;37mPhasers: [1;32mMark-3 maximum   [1;37mTorpedo launchers: [0;31m0
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [1;32mYes   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m5000
+[1;37mAcceleration rate: [1;32m2,000 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m5,000
 [1;37mScanner range: [1;32m200,000 subsectors (20 sectors)   [1;37mCargo capacity: [1;32m1,000,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -2237,7 +2237,7 @@ S13HELP {
 [1;37mShields: [1;32mMark-12 maximum   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launchers: [0;31m0
 [1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [1;32mYes
-[1;37mAcceleration rate: [1;32m15,000 Su/T   [1;37mTop rated speed: [1;32mWarp 75   [1;37mKill points: [1;32m2500
+[1;37mAcceleration rate: [1;32m15,000 Su/T   [1;37mTop rated speed: [1;32mWarp 75   [1;37mKill points: [1;32m2,500
 [1;37mScanner range: [1;32m400,000 subsectors (40 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -2407,7 +2407,7 @@ S14HELP {
 [1;37mShields: [1;32mMark-19 maximum   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launchers: [1;32m1
 [1;37mMissile launcher: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [0;31mNo
 [1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m200 Su/T   [1;37mTop rated speed: [1;32mImpulse 99   [1;37mKill points: [1;32m10000
+[1;37mAcceleration rate: [1;32m200 Su/T   [1;37mTop rated speed: [1;32mImpulse 99   [1;37mKill points: [1;32m10,000
 [1;37mScanner range: [1;32m100,000 subsectors (10 sectors)  [1;37mCargo capacity: [1;32m800,000,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:
@@ -2594,7 +2594,7 @@ S15HELP {
 [1;36m"Have you ever heard it said that 'They don't make them like they used to'?
 That's certainly the case when it comes to the MBM DREADNOUGHT, available from
 Zygor. With phasers and shields upgradable to Mark-19, a warp 50 rated
-engine with an amazing acceleration rate, and a full compliment of all the
+engine with an amazing acceleration rate, and a full complement of all the
 weapons systems available, you'll be partying like it's 3250.
 
 The MBM Dreadnought hasn't been in production for decades, as the demand for
@@ -2764,7 +2764,7 @@ S16HELP {
 [1;37mShields: [1;32mMark-17 maximum   [1;37mPhasers: [1;32mMark-17 maximum   [1;37mTorpedo launchers: [1;32m3
 [1;37mMissile launchers: [1;32m3   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
 [1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
-[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 65   [1;37mKill points: [1;32m20,000
+[1;37mAcceleration rate: [1;32m10,000 Su/T   [1;37mTop rated speed: [1;32mWarp 65   [1;37mKill points: [1;32m30,000
 [1;37mScanner range: [1;32m800,000 subsectors (80 sectors)   [1;37mCargo capacity: [1;32m1,000,000 Tons
 
 [1;37mThe following information is from Zygor's sales catalog:

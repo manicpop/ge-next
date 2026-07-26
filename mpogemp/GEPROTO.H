@@ -78,16 +78,20 @@ int FUNC clswar P((void));
 void FUNC clswara P((void));
 int FUNC galemp P((void));
 void FUNC outwar P((int filter , unsigned exclude , unsigned channel , int mode));
+#ifndef GE_ARENA
 int FUNC gepdb P((int func , char *usrname , int shipnum , WARSHP *geptr));
+#endif
 int FUNC geudb P((int func , char *usrname , WARUSR *geptr));
 int FUNC gesdb P((int func , PKEY *sect , GALSECT *geptr));
 int FUNC getplanetdat P((int usrn));
 void FUNC fixplanetteam P((void));
 void FUNC load_team_tab P((void));
 void FUNC update_team_tab P((void));
+#ifndef GE_ARENA
 void FUNC pplarti P((void));
 int FUNC plarti P((void));
 void FUNC plartia P((void));
+#endif
 void FUNC pwarrti P((void));
 int FUNC warrti P((void));
 void FUNC warrtia P((void));
@@ -97,17 +101,47 @@ void FUNC autortia P((void));
 void FUNC pwarrti2 P((void));
 int FUNC warrti2 P((void));
 void FUNC warrti2a P((void));
+#ifndef GE_ARENA
 void FUNC pwarrti3 P((void));
 int FUNC warrti3 P((void));
 void FUNC warrti3a P((void));
+#endif
 void FUNC outprfge P((int cls , int shpno));
+#ifdef MBBSEMU
+void FUNC save_prf_mbbsemu P((void));
+void FUNC restore_prf_mbbsemu P((void));
+#endif
 void FUNC outsect P((int filter , COORD *coordptr , unsigned exclude));
 void FUNC outrange P((int filter , COORD *coordptr));
 int FUNC ingegame P((int shpno));
 void FUNC geshocst P((int opt , char *str));
 int FUNC mnu_main P((void));
 int FUNC mnu_main_ans P((void));
+#ifdef GE_ARENA
+int FUNC arena_enter_lobby P((void));
+void FUNC arena_leave P((int usrn));
+void FUNC arena_tick P((void));
+int FUNC mnu_arena_lobby P((void));
+int FUNC arena_selected_shipclass P((int usrn));
+int FUNC arena_shipclass_for_choice P((int choice));
+int FUNC arena_parse_ship_choice P((char *text));
+void FUNC arena_apply_loadout P((WARSHP *ptr , int cls));
+void FUNC arena_select_ship P((int usrn , int choice));
+void FUNC arena_show_ship_choices P((void));
+void FUNC arena_show_ship_classes P((void));
+void FUNC arena_show_status P((void));
+void FUNC arena_exit_match P((void));
+unsigned long FUNC arena_total_wins P((WARUSR *ptr));
+void FUNC arena_refresh_win_scores P((void));
+void FUNC arena_initialize_world P((void));
+int FUNC arena_scan_percent P((void));
+void FUNC arena_ship_destroyed P((WARSHP *ptr , int usrn));
+int FUNC arena_neutral_fire_blocked P((WARSHP *ptr , int usrn));
+int FUNC arena_neutral_protection_active P((void));
+void FUNC arena_enforce_staging_bounds P((WARSHP *ptr , int usrn));
+#endif
 int FUNC mnu_fightsub P((void));
+#ifndef GE_ARENA
 int FUNC mnu_admenu1 P((void));
 int FUNC mnu_admenu2 P((void));
 int FUNC mnu_admenu2b P((void));
@@ -122,8 +156,11 @@ int FUNC mnu_admenu2j P((void));
 int FUNC mnu_choosesh P((void));
 int FUNC mnu_menug1 P((void));
 int FUNC mnu_menug2 P((void));
+#endif
 void FUNC disp_main_menu P((void));
+#ifndef GE_ARENA
 void FUNC disp_menu_d P((void));
+#endif
 void FUNC update_items P((void));
 void FUNC optdisp P((void));
 void FUNC stshdlr P((void));
@@ -145,7 +182,9 @@ void FUNC firep P((WARSHP *ptr , int usrn));
 void FUNC firehp P((WARSHP *ptr , int usrn));
 int FUNC torp P((WARSHP *ptr , int usrn , int shpnum));
 int FUNC misl P((WARSHP *ptr , int usrnum , int shpnum , unsigned energy, unsigned eng_flu));
+#ifndef GE_ARENA
 void FUNC lookupshp P((void));
+#endif
 void FUNC suddenappear P((WARSHP *ptr , int usrn));
 void FUNC start_entrymsg P((int usrn));
 void FUNC tick_entrymsg P((void));
@@ -153,12 +192,18 @@ void FUNC exit_entrymsg P((int usrn));
 void FUNC tossingegame P((void));
 int FUNC initshp P((char *userid , int type));
 int FUNC initusr P((char *userid));
+#ifndef GE_ARENA
 int FUNC valid_user_ship P((WARSHP *ptr));
+#endif
 int FUNC cyb_slot_class P((int usrn));
 int FUNC cyb_user_slot P((char *userid));
+#ifndef GE_ARENA
 void FUNC prune_stale_auto_records P((void));
+#endif
+#ifndef GE_ARENA
 int FUNC findships P((int direction , int quiet));
 void FUNC selectship P((void));
+#endif
 void FUNC repairship P((WARSHP *ptr , int usrn));
 void FUNC rotateship P((WARSHP *ptr , int usrn));
 void FUNC accel P((WARSHP *ptr , int usrn));
@@ -169,6 +214,9 @@ void FUNC proximity P((WARSHP *ptr , int usrn));
 void FUNC checkdist P((WARSHP *ptr , int usrn));
 void FUNC refresh P((WARSHP *ptr , int usrn));
 void FUNC checkdam P((WARSHP *ptr , int usrn));
+void FUNC prf_item_list_add P((int *listed , unsigned long amount , char *name));
+void FUNC prf_item_list_end P((int listed));
+void FUNC collect_spoils P((WARSHP *ptr , WARSHP *wptr , int who , unsigned int r));
 void FUNC killem P((WARSHP *ptr , int usrn));
 void FUNC recharge P((WARSHP *ptr));
 int FUNC fluxstat P((WARSHP *ptr , int usrn , unsigned energy));
@@ -191,12 +239,16 @@ double FUNC pdamage P((WARSHP *wptr , double dist , int foc));
 void FUNC setsect P((WARSHP *ptr));
 void FUNC movecoord P((COORD *pointb , COORD *pointa));
 int FUNC samesect P((COORD *pointb , COORD *pointa));
+#ifndef GE_ARENA
 int FUNC mailscan P((char *userid , int cls));
 int FUNC mailread P((char *userid , int cls));
+#endif
 void FUNC mailit P((int flag));
 int FUNC sendit P((void));
+#ifndef GE_ARENA
 void FUNC prf2tx P((void));
 int FUNC sendgemsg P((struct message *msgptr));
+#endif
 void FUNC shieldup P((WARSHP *wptr , int usrn));
 void FUNC shielddn P((WARSHP *wptr , int usrn));
 int FUNC shieldhit P((WARSHP *wptr , int dam));
@@ -283,21 +335,27 @@ void FUNC cyb_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
 void FUNC cyb_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 
 /* gedroids.c */
+#ifndef GE_ARENA
 void FUNC droid_init P((WARSHP *ptr , int usrn , int cls));
 void FUNC droid_lives P((WARSHP *ptr , int usrn));
 void FUNC droid_won P((WARSHP *ptr , int usrn , WARSHP *wptr));
 void FUNC droid_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
+#endif
 
 /* geplanet.c */
+#ifndef GE_ARENA
 void FUNC check_spy P((void ));
 void FUNC multiply P((int final_mult ));
+#endif
 void FUNC getsector P((COORD *sect));
 int FUNC getplanet P((COORD *sect , int plnt));
 int FUNC neutral P((COORD *coord));
 int FUNC innebula P((int x , int y));
+#ifndef GE_ARENA
 void FUNC update_plan_1 P((void));
 void FUNC update_plan_2 P((void));
 void FUNC update_plan_3 P((void));
+#endif
 
 /* gelib.c */
 unsigned FUNC smallest P((unsigned a1 , unsigned a2));

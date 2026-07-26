@@ -86,6 +86,7 @@ double d_topspeed;
 ** Validate a saved cyborg ship record for the current cyb slot          **
 **************************************************************************/
 
+#ifndef GE_ARENA
 static int valid_cyb_ship(WARSHP *ptr, int usrn, int cls)
 {
 	if (strncmp(ptr->userid, cybname, UIDSIZ) != 0)
@@ -167,6 +168,7 @@ static int load_cyb_ship(WARSHP *ptr, int usrn, int cls)
 
 	return have_ship;
 }
+#endif
 
 /**************************************************************************
 ** Initialize or load a cyborg ship                                      **
@@ -175,9 +177,13 @@ static int load_cyb_ship(WARSHP *ptr, int usrn, int cls)
 void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 {
 	WARSHP *wptr;
-	int i, goldwin, goldspin, goldtry, zothusn;
+	int zothusn;
+#ifndef GE_ARENA
+	int i, goldwin, goldspin, goldtry;
+#endif
 	double ddist;
 	int have_ship = FALSE;
+	int have_user;
 	int expected_class;
 
 	logthis(spr("@Cyb_init usrn=%d,cls=%d", usrn, cls));
@@ -197,15 +203,23 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 	strncpy(cybname, "@Cybrg-", UIDSIZ);
 	sprintf(&cybname[7], "%d", usrn);
 
+	waruptr = warusroff(usrn);
+
+#ifdef GE_ARENA
+	initusr(cybname);
+	memcpy(waruptr, &tmpusr, sizeof(WARUSR));
+	have_user = TRUE;
+#else
 	if (!geudb(GELOOKUP, cybname, &tmpusr)) {
 		initusr(cybname);
 		geudb(GEADD, tmpusr.userid, &tmpusr);
 		logthis(spr("GE:INF:Adding %s user", tmpusr.userid));
 	}
+	have_user = geudb(GELOOKUP, cybname, waruptr);
+#endif
 
-	waruptr = warusroff(usrn);
-
-	if (geudb(GELOOKUP, cybname, waruptr)) {
+	if (have_user) {
+#ifndef GE_ARENA
 		if (!geudb(GEGET, cybname, waruptr)) {
 			geshocst(0, spr("GE:ERR:CYBGETUSR usrn=%d uid=%s",
 				usrn, cybname));
@@ -228,15 +242,18 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 			ptr->tick = CYBTICKTIME + gernd() % (CYBTICKTIME * 5);
 			have_ship = TRUE;
 		}
+#endif
 
 		if (!have_ship) {
 			/* make me a Cybertron */
 			logthis(spr("GE:INF:Adding %s ship - %d", cybname, cls));
 
 			initshp(cybname, cls);
+#ifndef GE_ARENA
 			if (!gepdb(GEADD, tmpshp.userid, tmpshp.shipno, &tmpshp))
 				geshocst(0, spr("GE:ERR:CYBADDSHP uid=%s shipno=%d",
 					tmpshp.userid, tmpshp.shipno));
+#endif
 			memcpy(ptr, &tmpshp, sizeof(WARSHP));	/* make is the current ship */
 
 			logthis(spr("GE:INF:Add shp,cls=%d/%d", cls, ptr->shpclass));
@@ -262,6 +279,10 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 				ptr->coord.ycoord = rndm((double)univmax * 2.0) - (double)univmax;
 			}
 
+#ifdef GE_ARENA
+			/* arena Cyborg systems and inventory come from its mode class */
+			arena_apply_loadout(ptr, cls);
+#else
 			/* phaser and shields between 50 and 100% of max */
 			if (shipclass[cls].max_phasr > 0)
 				ptr->phasrtype = (shipclass[cls].max_phasr / 2) +
@@ -274,6 +295,7 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 					(gernd() % (shipclass[cls].max_shlds / 2 + 1));
 			else
 				ptr->shieldtype = 0;
+#endif
 
 			ptr->cybmine = (byte)255;
 			ptr->track_grace = 0;
@@ -285,6 +307,7 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 			ptr->shield = 40 + (ptr->shieldtype * 10);
 			ptr->phasr = 100;
 
+#ifndef GE_ARENA
 			ptr->items[I_FLUXPOD] = (gernd() % 20) + 10;
 			if (shipclass[ptr->shpclass].has_decoy)
 				ptr->items[I_DECOYS] = (gernd() % 20) + 10;
@@ -316,15 +339,18 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 				}
 				ptr->items[I_GOLD] = goldwin;
 			}
+#endif
 
 			ptr->status = GESTAT_AUTO;
 			ptr->tick = CYBTICKTIME + gernd() % (CYBTICKTIME * 5);
 
 			ptr->cybupdate = 1;
 
+#ifndef GE_ARENA
 			if (!gepdb(GEUPDATE, ptr->userid, ptr->shipno, ptr))
 				geshocst(0, spr("GE:ERR:CYBUPDSHP uid=%s shipno=%d",
 					ptr->userid, ptr->shipno));
+#endif
 
 			/* show users sector of new Cyb if in scan range */
 			/* show bearing if far away */
@@ -590,12 +616,14 @@ static void cyb_annoy(WARSHP *ptr, int usrn, int msgtype)
 		cyb_msg(ptr, usrn, msgtype);
 }
 /**************************************************************************
-** Count down and perform cyb database updates                           **
+** Count down Cyborg state refreshes and persistent updates              **
 **************************************************************************/
 
 static void db_update(WARSHP *ptr, int usrn)
 {
+#ifndef GE_ARENA
 	WARUSR *wuptr;
+#endif
 
 	if (ptr->cybupdate > 1) {
 		--ptr->cybupdate;
@@ -610,6 +638,7 @@ static void db_update(WARSHP *ptr, int usrn)
 		return;
 	}
 	if (ptr->cybupdate == 0) {
+#ifndef GE_ARENA
 		wuptr = warusroff(usrn);
 		logthis(spr("GE:DBG:Cyb UUpd %s", wuptr->userid));
 		if (!geudb(GEUPDATE, wuptr->userid, wuptr))
@@ -618,6 +647,7 @@ static void db_update(WARSHP *ptr, int usrn)
 		if (!gepdb(GEUPDATE, ptr->userid, ptr->shipno, ptr))
 			geshocst(0, spr("GE:ERR:CYBUPDSHP uid=%s shipno=%d",
 				ptr->userid, ptr->shipno));
+#endif
 		ptr->cybupdate = 100 + gernd() % 100;
 		return;
 	}

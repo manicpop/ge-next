@@ -14,8 +14,8 @@
 ###############################################################################
 mpoga.dll: \
      mpogamsg.h    mpogahlp.h    mpogashp.h                            \
-     gemain.obj     gefuncs.obj   gecmds.obj    gecybs.obj   geplanet.obj \
-     gelib.obj      gedroids.obj  gescan.obj\
+     gemain.obj     gearena.obj   gefuncs.obj   gecmds.obj    gecybs.obj   geplanet.obj \
+     gelib.obj      gescan.obj\
      \wgserv\dlib\galimp.lib        \wgserv\dlib\gsblimp.lib                 \
      \run286\bc3\lib\phapi.lib     \wgserv\dlib\nodef.def
      ltdll mpoga
@@ -27,6 +27,8 @@ mpoga.dll: \
 
 gemain.obj: gemain.c
      ctdll -DGE_ARENA -n..\gaobj gemain
+gearena.obj: gearena.c
+     ctdll -DGE_ARENA -n..\gaobj gearena
 gefuncs.obj: gefuncs.c
      ctdll -DGE_ARENA -n..\gaobj gefuncs
 gecmds.obj: gecmds.c
@@ -37,8 +39,6 @@ geplanet.obj: geplanet.c
      ctdll -DGE_ARENA -n..\gaobj geplanet
 gelib.obj: gelib.c
      ctdll -DGE_ARENA -n..\gaobj gelib
-gedroids.obj: gedroids.c
-     ctdll -DGE_ARENA -n..\gaobj gedroids
 gescan.obj: gescan.c
      ctdll -DGE_ARENA -n..\gaobj gescan
 

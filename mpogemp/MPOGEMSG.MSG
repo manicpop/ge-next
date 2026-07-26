@@ -18,10 +18,11 @@ specific GAMEOP's or players as needed.
 
 SYSKEY {SYSOP} S 15 Key required for sysop powers
 
-A registration number is not required for ge-next.
-Feel free to put any eight digit number here.
+A registration number is not required for ge-next; leave
+this option blank to suppress its startup status line.
+Any value entered here will be printed on that line.
 
-REGNO {12345678} S 8 Registration Number
+REGNO {} S 8 Registration Number
 
 The DATA command prints game data in a comma-delimited
 format for use by ge-next-compatible frontends. When a

@@ -9,6 +9,17 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
+=== 0.3.2 === in progress:
+
+* This is the first build containing ge-arena. ge-arena is a
+  separate download from ge-next but is included in the ge-next
+  source. ge-arena uses MPOGA* filenames.
+* Mines that were dropped by a player that has been destroyed are
+  no longer removed from the game, but instead set to "no user."
+* How the "bounce" is calculated when you run into the galactic
+  barrier has been slightly modified to work with smaller galaxy
+  sizes (necessary for ge-arena).
+
 === 0.3.1 === 2026-06-30:
 
 * Cargo size calculation routines were rewritten with separate

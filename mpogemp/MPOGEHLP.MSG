@@ -101,7 +101,7 @@ compass and is strictly two dimensional. The major bearings are as follows:
 
 BEARING -- Bearing is always used to indicate where a particular ship or planet
 is in relation to you. It is relative to the direction you are facing and
-expressed in a number from -179 to 180. If a object is bearing -90, it is to
+expressed in a number from -179 to 180. If an object is bearing -90, it is to
 the left of you, if 90 it is to the right of you, if 0 it is directly in front
 of you, and if 180 it is directly behind you.
 
@@ -318,7 +318,7 @@ an uneasy alliance. Cybertrons are now bent on the destruction of all organic
 life from the galaxy, including the Sartens, Murdonians, and (presumably) you.
 
 All Cybertrons are equipped with a pursuit capability to identify non-Cybertron
-ships throughout the galaxy, and are capability of traversing the galaxy in
+ships throughout the galaxy, and are capable of traversing the galaxy in
 mere moments to reach a ship, at speeds far beyond warp as currently
 understood. All attempts by the Galactic Command to reverse engineer this
 technology have so far failed. A scan of a Cybertron ship traveling at this
@@ -663,7 +663,7 @@ a good percentage of power left in the old pod. The old pod is jettisoned. Your
 power is restored to full charge automatically.
 
 Ships are also capable of recharging the flux pile by absorbing the naturally
-occuring background ion radiation of the galaxy, at a rate of 2 units every
+occurring background ion radiation of the galaxy, at a rate of 2 units every
 three seconds. This means a ship can still travel at impulse even if a ship has
 run out of flux pods.
 
@@ -1179,9 +1179,9 @@ if your ship's helm is damaged and not accepting commands.
 HLPZIP {
 [1;36mThe [1;37mZIPPER[1;36m command launches a defensive (and sometimes offensive) weapon which
 interferes with the timing mechanism on mines. The effect is to trip all mines
-in the vicinity of the players ship into exploding immediately. This weapon can
-be used to trip an opponent's mines after they have laid them but before they
-can distance themself from them, causing the mines to do damage to the
+in the vicinity of the player's ship into exploding immediately. This weapon
+can trip an opponent's mines after they have laid them but before they can
+distance themself from them, causing the mines to do damage to the
 opponent's own ship.
 [1;37m} T GE help zipper message
 
@@ -1239,7 +1239,7 @@ spies who sneak onto your planet.
 
 HLPJET {
 [1;36mThe [1;37mJETTISON[1;36m command permits you to dump goods from your ship. You can dump a
-specific number, or all you have of a item type. You are not allowed to
+specific number, or all you have of an item type. You are not allowed to
 jettison people. Issue the command as follows:
 
 [1;37m  jettison [1;32m[[1;37mall[1;32m/amount] [item]

@@ -83,10 +83,95 @@
 WORMTAB	wormtab[MAXPLANETS];
 int	wormnum;
 
+#ifdef GE_ARENA
+static int arena_chance(int pct)
+{
+	return rndm(100.0) < (double)pct;
+}
+
+static byte arena_planet_qty(void)
+{
+	unsigned r;
+
+	r = (unsigned)rndm(100.0);
+	if (r < 55)
+		return 0;
+	if (r < 75)
+		return 1;
+	if (r < 87)
+		return 2;
+	if (r < 94)
+		return 3;
+	if (r < 98)
+		return (byte)(4 + (gernd() % 3));
+	if (r < 99)
+		return (byte)(7 + (gernd() % 3));
+	return 10;
+}
+
+static byte arena_planet_boost(void)
+{
+	unsigned r;
+
+	r = (unsigned)rndm(100.0);
+	if (r < 88)
+		return 0;
+	if (r < 96)
+		return 1;
+	if (r < 99)
+		return 2;
+	return 3;
+}
+
+static void arena_init_planet_loot(void)
+{
+	unsigned maint_roll;
+
+	planet.items[I_TORPEDO].qty = arena_planet_qty();
+	planet.items[I_MISSILE].qty = arena_planet_qty();
+	planet.items[I_MINE].qty = arena_planet_qty();
+	planet.items[I_JAMMERS].qty = arena_planet_qty();
+	planet.items[I_DECOYS].qty = arena_planet_qty();
+	planet.items[I_ZIPPERS].qty = arena_planet_qty();
+	planet.items[I_FLUXPOD].qty = arena_planet_qty();
+
+	planet.arena_shield_boost = arena_planet_boost();
+	planet.arena_phaser_boost = arena_planet_boost();
+	planet.arena_flags = 0;
+	if (arena_chance(6))
+		planet.arena_flags |= ARENA_PL_SCAN;
+	if (arena_chance(6))
+		planet.arena_flags |= ARENA_PL_ARMOR;
+	if (arena_chance(6))
+		planet.arena_flags |= ARENA_PL_ACCEL;
+	if (arena_chance(6))
+		planet.arena_flags |= ARENA_PL_CORE;
+	maint_roll = (unsigned)rndm(100.0);
+	if (maint_roll < 6)
+		planet.arena_flags |= ARENA_PL_INSTANT;
+	else if (maint_roll < 31)
+		planet.arena_flags |= ARENA_PL_MAINT;
+}
+
+static void arena_init_empty_planet(void)
+{
+	int i;
+
+	for (i = 0; i < NUMITEMS; ++i) {
+		planet.items[i].qty = 0;
+		planet.items[i].sell = 'N';
+	}
+	planet.arena_shield_boost = 0;
+	planet.arena_phaser_boost = 0;
+	planet.arena_flags = 0;
+}
+#endif
+
 /**************************************************************************
 ** Check Spy Function                                                    **
 **************************************************************************/
 
+#ifndef GE_ARENA
 void FUNC check_spy(void)
 {
 	int spycnt, odds, i, j;
@@ -367,6 +452,7 @@ void FUNC multiply(int final_mult)
 		}
 	}
 }
+#endif
 
 /**************************************************************************
 ** build special planet # 1                                              **
@@ -395,12 +481,18 @@ static void build_plan_1(int idx)
 	planet.coord.xcoord = ((double)planet.xsect) + s00[idx].xcoord;
 	planet.coord.ycoord = ((double)planet.ysect) + s00[idx].ycoord;
 	planet.type = PLTYPE_PLNT;
+#ifndef GE_ARENA
 	planet.nebseed = nebseed;
 	if (planet.nebseed == 0L)
 		planet.nebseed = 1L;
+#endif
 
 	plptr = &planet;
+#ifdef GE_ARENA
+	arena_init_empty_planet();
+#else
 	update_plan_1();
+#endif
 
 	logthis("Zygor build first time");
 }
@@ -430,7 +522,11 @@ static void build_plan_2(int idx)
 	planet.type = PLTYPE_PLNT;
 
 	plptr = &planet;
+#ifdef GE_ARENA
+	arena_init_empty_planet();
+#else
 	update_plan_2();
+#endif
 
 	logthis("T-Station build first time");
 }
@@ -634,6 +730,9 @@ static int xgetsector(COORD *sect, int wormy)
 
 					for (k = 0; k < NUMITEMS; ++k)
 						planet.items[k].sell = 'N';
+#ifdef GE_ARENA
+					arena_init_planet_loot();
+#else
 					if (rndm(3.99) > 3) {
 						for (k = 0; k < NUMITEMS; ++k)
 							planet.items[k].rate = (unsigned int)rndm(5.1);
@@ -643,6 +742,7 @@ static int xgetsector(COORD *sect, int wormy)
 						planet.items[I_FOOD].qty = (unsigned long)rndm(3200.0);
 						planet.items[I_FOOD].rate = 15 + (unsigned int)rndm(15.0);
 					}
+#endif
 					logthis("GE:DBG:Getsector-write planet record");
 					/* write the database record */
 					gesdb(GEADD, (PKEY *)&planet, (GALSECT *)&planet);
@@ -807,6 +907,7 @@ int FUNC innebula(int x, int y)
 	return (unsigned)(work % (unsigned long)dmod) == 0;
 }
 
+#ifndef GE_ARENA
 void FUNC update_plan_1(void)
 {
 	int i;
@@ -844,3 +945,4 @@ void FUNC update_plan_3(void)
 		plptr->items[i].sell = 'N';
 	}
 }
+#endif

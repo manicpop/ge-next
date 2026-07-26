@@ -1,10 +1,10 @@
 \run286\bc3\lib\c0phdll  +
 \run286\bc3\lib\fpdmy +
 \wgserv\gaobj\gemain +
+\wgserv\gaobj\gearena +
 \wgserv\gaobj\gefuncs +
 \wgserv\gaobj\gecmds +
 \wgserv\gaobj\gecybs +
-\wgserv\gaobj\gedroids +
 \wgserv\gaobj\geplanet +
 \wgserv\gaobj\gelib +
 \wgserv\gaobj\gescan

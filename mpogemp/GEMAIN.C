@@ -79,9 +79,21 @@
 
 /* LOCAL GLOBAL DEFS *****************************************************/
 
+#ifdef GE_ARENA
+#define GE_MODULE_BLOCK mpoga
+#define GE_ROSTER_FILE  "MPOGAROS.TXT"
+#define GE_MENU_FILE    "MPOGAMNU.TXT"
+#define GE_MESSAGE_FILE "MPOGAMSG.MCV"
+#else
+#define GE_MODULE_BLOCK mpoge
+#define GE_ROSTER_FILE  "MPOGEROS.TXT"
+#define GE_MENU_FILE    "MPOGEMNU.TXT"
+#define GE_MESSAGE_FILE "MPOGEMSG.MCV"
+#endif
+
 int gestt;			/* module number */
 
-struct module mpoge = {		/* module interface block		*/
+struct module GE_MODULE_BLOCK = {	/* module interface block		*/
 	"",			/* description for main menu		*/
 	gelogon,		/* user logon supplemental routine	*/
 	galemp,			/* input routine if selected		*/
@@ -94,19 +106,27 @@ struct module mpoge = {		/* module interface block		*/
 	pclswar			/* finish-up (sys shutdown) routine	*/
 };
 
-BTVFILE *gebb1,		/* MPOGESHP.DAT */
-	*gebb2,		/* MPOGEPLT.DAT */
+#ifndef GE_ARENA
+BTVFILE *gebb1;		/* MPOGESHP.DAT */
+#endif
+BTVFILE *gebb2,		/* MPOGEPLT.DAT or MPOGAPLT.DAT*/
+#ifndef GE_ARENA
 	*gebb4,		/* MPOGEMAL.DAT */
-	*gebb5;		/* MPOGEUSR.DAT */
+#endif
+	*gebb5;		/* MPOGEUSR.DAT or MPOGAUSR.DAT*/
 
-FILE *gemb,		/* MPOGEMSG.MSG: main GE messages */
-	*gehlpmb,	/* MPOGEHLP.MSG: GE help messages */
-	*geshmb;	/* MPOGESHP.MSG: ship class messages */
+FILE *gemb,		/* MPOGEMSG.MSG or MPOGAMSG.MSG: main GE messages */
+	*gehlpmb,	/* MPOGEHLP.MSG or MPOGAHLP.MSG: GE help messages */
+	*geshmb;	/* MPOGESHP.MSG or MPOGASHP.MSG: ship class messages */
 
 static char *geuser,		/* configured user database name */
+#ifndef GE_ARENA
 	*geship,		/* configured ship database name */
+#endif
 	*geplnt,		/* configured planet database name */
+#ifndef GE_ARENA
 	*gemail,		/* configured mail database name */
+#endif
 	*geshipcl;		/* configured ship class message name */
 
 static char *endmark;		/* startup message/config integrity marker */
@@ -138,10 +158,12 @@ GALPLNT planet;		/* temporary planet-record workspace */
 GALWORM worm;		/* temporary wormhole-record workspace */
 
 static int mnu_admenu1a(void);
+#ifndef GE_ARENA
 static int mnu_menug(void);
+#endif
 #ifdef MBBSEMU
-static void save_prf_mbbsemu(void);
-static void restore_prf_mbbsemu(void);
+void FUNC save_prf_mbbsemu(void);
+void FUNC restore_prf_mbbsemu(void);
 #endif
 
 PLANETAB *ptab;		/* base pointer to per-user planet scan tables */
@@ -160,7 +182,9 @@ byte *entrysent;		/* per-entrant sent-recipient bitsets */
 byte *entrypend;		/* per-entrant pending-recipient bitsets */
 int entrybytes;			/* bytes per entrysent/entrypend bitset */
 
+#ifndef GE_ARENA
 struct message *gemsg;		/* temporary GE mail/message buffer */
+#endif
 
 
 /***********************************************************************/
@@ -223,7 +247,9 @@ int				gemaxplrs,	/* max simultaneous GE players */
 				pfirdist,	/* phaser distance factor */
 				pdammax,	/* phaser max damage factor */
 				jamtime,	/* jammer duration */
+#ifndef GE_ARENA
 				maildays,	/* mail retention days */
+#endif
 				torpsped,	/* torpedo speed */
 				mislsped,	/* base missile speed */
 				decodds,	/* decoy effectiveness odds */
@@ -252,12 +278,16 @@ int				gemaxplrs,	/* max simultaneous GE players */
 				passnum;	/* current planet-update pass number */
 
 
-char				*frontend,	/* configured frontend pairing code */
-				*opttxt,	/* option-text menu prompt */
-				optchr;		/* option-text trigger character */
+char				*opttxt,	/* option-text menu prompt */
+					optchr;		/* option-text trigger character */
+#ifndef GE_ARENA
+char				*frontend;	/* configured frontend pairing code */
+#endif
 
 long				*opttbl;	/* per-user option-text file offsets */
+#ifndef GE_ARENA
 byte				*data_enabled;	/* per-session DATA state flags */
+#endif
 
 double				tor_fact,	/* torpedo hit-distance factor */
 				tdammax,	/* torpedo max damage factor */
@@ -275,8 +305,10 @@ double				tor_fact,	/* torpedo hit-distance factor */
 				plattrt1,	/* defending troops destroying attacking troops */
 				plattrt2;	/* attacking troops destroying defending troops */
 
+#ifndef GE_ARENA
 SHPKEY				shpkey;		/* ship database key workspace */
 MAILKEY				mailkey;	/* mail database key workspace */
+#endif
 
 SHIP				*shipclass;	/* base pointer to ship class table */
 
@@ -284,6 +316,15 @@ S00				*s00;		/* sector 0,0 predefined object table */
 int				s00plnum;	/* number of predefined sector 0,0 objects */
 
 SCANTAB				*scantab;	/* base pointer to per-user scan tables */
+
+#ifdef GE_ARENA
+ARENAPLAYER			*arena_player;	/* per-user arena lobby/match state */
+int				arena_state;	/* current arena state machine value */
+int				arena_host;	/* user currently allowed to configure the match */
+int				arena_ticks;	/* countdown timer */
+int				arena_match_ticks;	/* remaining match time */
+int				arena_mode;	/* selected arena game mode */
+#endif
 
 long shieldprice[TOPSHIELD];		/* shield upgrade prices */
 long phaserprice[TOPPHASOR];		/* phaser upgrade prices */
@@ -306,9 +347,15 @@ typedef struct _menu {
 MENU menu[] = {
 	{0,        mnu_main},       /* selected GE from the MajorBBS main menu */
 	{1,        mnu_main_ans},   /* choosing an option from the GE main menu */
+#ifdef GE_ARENA
+	{ARENASUB, mnu_arena_lobby},/* waiting at the arena help desk */
+#endif
 	{FIGHTSUB, mnu_fightsub},   /* entering commands while in flight */
+#ifndef GE_ARENA
 	{ADMENU1,  mnu_admenu1},    /* do you wish to claim this planet */
+#endif
 	{ADMENU1A, mnu_admenu1a},   /* enter the new planet name */
+#ifndef GE_ARENA
 	{ADMENU2,  mnu_admenu2},    /* choose an option from the planet admin menu */
 	{ADMENU2B, mnu_admenu2b},   /* enter the amount of tax cash to transfer */
 	{ADMENU2E, mnu_admenu2e},   /* choose which planet item to modify */
@@ -323,6 +370,7 @@ MENU menu[] = {
 	{MENUG,    mnu_menug},      /* choose an option from the mail menu */
 	{MENUG1,   mnu_menug1},     /* advance or exit distress messages */
 	{MENUG2,   mnu_menug2}      /* advance or exit production reports */
+#endif
 };
 
 
@@ -333,10 +381,10 @@ MENU menu[] = {
 #ifdef PHARLAP
 void EXPORT init__galemp(void)
 {
-	stzcpy(mpoge.descrp, gmdnam(GEMDF), MNMSIZ);
+	stzcpy(GE_MODULE_BLOCK.descrp, gmdnam(GEMDF), MNMSIZ);
 
 	iniwara();
-	gestt = register_module(&mpoge);
+	gestt = register_module(&GE_MODULE_BLOCK);
 }
 #else
 int FUNC iniwar(void)
@@ -354,47 +402,64 @@ void FUNC iniwara(void)
 {
 	int i, n, type, classbase;
 	int j;
+	char *regno;
 
 	int class_tab[50];
 
 	gemb = opnmsg(GEMSG);
 	endmark = stgopt(ENDMARK);
 	if (!sameas(endmark, "ENDMARK")) {
-		catastro("GE:ERR:MPOGEMSG.MCV Corrupted");
+		catastro(spr("GE:ERR:%s Corrupted", GE_MESSAGE_FILE));
 	}
 
 	geuser = stgopt(GEUSER);		/* configured user database name */
+#ifndef GE_ARENA
 	geship = stgopt(GESHIP);		/* configured ship database name */
+#endif
 	geplnt = stgopt(GEPLNT);		/* configured planet database name */
+#ifndef GE_ARENA
 	gemail = stgopt(GEMAIL);		/* configured mail database name */
+#endif
 	geshipcl = stgopt(GESHIPCL);		/* configured ship class message name */
+#ifndef GE_ARENA
 	frontend = stgopt(FRONTEND);		/* frontend pairing code */
+#endif
 
+#ifndef GE_ARENA
 	gemaxplrs = numopt(MAXPLRS, 1, 256);	/* max simultaneous GE players */
+#endif
 	gefreebies = numopt(FREEBIES, 0, 1);	/* allow non-paying/freebie access */
 	gemaxlist = numopt(MAXLIST, 3, 50);	/* max entries shown in GE lists */
 	gerostxt = ynopt(GEROSTXT);		/* nightly roster text-file export enabled */
+#ifndef GE_ARENA
 	maxships = numopt(MAXSHIPS, 1, 60);	/* max ships allowed per user */
+#endif
 	se100dam = numopt(SE100DAM, 1, 101);	/* enforcer planet damage per violation */
 	showopt = numopt(SHOWOPT, 0, 5);	/* log level to console */
 	trans_opt = ynopt(TRANSOPT);		/* allow goods transfers to planets not owned */
 	syscmds = ynopt(SYSCMDS);		/* sysop commands enabled */
 	sysonly = ynopt(SYSONLY);		/* restrict special commands to sysops */
+#ifndef GE_ARENA
 	max_plnts = numopt(MAXPLNTS, 1, 256);	/* max planets a user may own */
 	planupd = numopt(PLANUPD, 1, 15);	/* planet updates per day */
+#endif
 	plodds = numopt(PLODDS, 1, 20);		/* planet creation odds */
 	wormodds = numopt(WORMODDS, 1, 100);	/* wormhole creation odds */
 	nebodds = numopt(NEBODDS, 0, 10);	/* nebula existence odds */
+#ifndef GE_ARENA
 	univmax = numopt(UNIVMAX, 10, 32767);	/* radius of galaxy outside of 0 0 */
+#endif
 	univwrap = ynopt(UNIVWRAP);		/* universe wraparound enabled */
 	s00plnum = numopt(S00PLNUM, 3, 9);	/* number of sector 0,0 predefined objects */
 	maxplanets = numopt(MAXPLSE, 1, 9);	/* max planets allowed per sector */
+#ifndef GE_ARENA
 	teambonus = numopt(TEAMBONU, 0, 32000) * 100L;	/* team score/cash bonus factor */
 	team_max = numopt(TEAMMAX, 0, 32000);	/* max members allowed on a team */
 	meneat = ynopt(MENEAT);			/* do men eat */
 	showdoc = numopt(SHOWDOC, 0, 10);	/* how often to give winner planet list from loser */
 	cattkd = numopt(CATTKD, 0, 10);		/* how often do cybs attack droids */
 	gcnum = numopt(GCNUM, 0, 8);		/* which faction does the neutral zone belong to*/
+#endif
 
 	profon = ynopt(PROFON);			/* profiling output enabled */
 	logflag = ynopt(LOGFLG);		/* extended GE trace logging enabled */
@@ -411,7 +476,9 @@ void FUNC iniwara(void)
 	pdammax = numopt(PDAMMAX, 1, 200);		/* phaser max damage factor */
 
 	jamtime = numopt(JAMTIME, 1, 10);		/* jammer duration */
+#ifndef GE_ARENA
 	maildays = numopt(MAILDAYS, 1, 7);		/* mail retention days */
+#endif
 	torpsped = numopt(TORPSPED, 1, 10000);		/* torpedo speed */
 	mislsped = numopt(MISLSPED, 1, 10000);		/* base missile speed */
 
@@ -431,10 +498,12 @@ void FUNC iniwara(void)
 	repairrate /= 100.0;
 
 	tooclose = (double)numopt(TOOCLOSE, 1, 32000);	/* cyborg close-range threshold */
+#ifndef GE_ARENA
 	clenguse = numopt(CLENGUSE, 1, 32000);		/* cloak energy use */
 
 	startcash = (long)numopt(STRTCASH, 1, 32000);	/* starting user cash in thousands */
 	startcash *= 1000L;
+#endif
 
 	max_plrec = (long)numopt(MAXPLREC, 10, 32767);	/* max MPOGEPLT.DAT size in KiB */
 	max_plrec *= 2;					/* max planet records (512 bytes each) */
@@ -444,6 +513,7 @@ void FUNC iniwara(void)
 	hyperdist1 = (double)numopt(HYPDST1, 1, 32000);	/* cyborg long-range pursuit threshold */
 	hyperdist2 = (double)numopt(HYPDST2, 1, 32000);	/* cyborg mid-range pursuit threshold */
 
+#ifndef GE_ARENA
 	plattrf1 = (double)numopt(PLATTRF1, 5, 1000);	/* planet troops destroying attacking fighters */
 	plattrf1 /= 100.0;
 	plattrf2 = (double)numopt(PLATTRF2, 5, 1000);	/* defending fighters destroying attacking fighters */
@@ -454,17 +524,21 @@ void FUNC iniwara(void)
 	plattrt1 /= 100.0;
 	plattrt2 = (double)numopt(PLATTRT2, 5, 1000);	/* attacking troops destroying defending troops */
 	plattrt2 /= 100.0;
+#endif
 
 	/* load the planet maximum table */
 	for (i = 0; i < NUMITEMS; ++i) {
 		logthis(spr("Item %s", item_name[i]));
 
+#ifndef GE_ARENA
 		maxpl[i] = (double)lngopt(ITMPL01 + i, 0L, 201228378L);
 		logthis(spr("Itm #%d maxpl=%ld", i, (long)maxpl[i]));
+#endif
 
 		weight[i] = lngopt(ITMWT01 + i, 1L, 1000000L);
 		logthis(spr("Itm #%d weight=%ld", i, weight[i]));
 
+#ifndef GE_ARENA
 		value[i] = lngopt(ITMVAL01 + i, 0L, 201228378L);
 		logthis(spr("Itm #%d value=%ld", i, value[i]));
 
@@ -473,8 +547,10 @@ void FUNC iniwara(void)
 
 		baseprice[i] = numopt(ITMPR01 + i, 1, 32000);
 		logthis(spr("Itm #%d baseprice=%d", i, baseprice[i]));
+#endif
 	}
 
+#ifndef GE_ARENA
 	/* load the shieldprice table */
 	for (i = 0; i < TOPSHIELD; ++i) {
 		logthis(spr("shieldtype %d", i));
@@ -490,23 +566,30 @@ void FUNC iniwara(void)
 		phaserprice[i] = lngopt(PHSRPR01 + i, 0L, 201228378L);
 		logthis(spr("Phaser #%d Price=%ld", i, phaserprice[i]));
 	}
+#endif
 
+#ifndef GE_ARENA
 	/* load the upgrade price table */
 	for (i = 0; i < 8; ++i) {
 		logthis(spr("upgrade %d", i + 1));
 
 		upgrprice[i] = lngopt(UPGRPR1 + i, 0L, 201228378L);
-	logthis(spr("Upgr #%d Price=%ld",i+1,upgrprice[i]));
+		logthis(spr("Upgr #%d Price=%ld",i+1,upgrprice[i]));
 	}
+#endif
 
+#ifndef GE_ARENA
 	pltvcash = lngopt(PLTVCASH, 0L, 201228378L);	/* planet value cash scaling factor */
 	logthis(spr("pltvcash=%ld", pltvcash));
 	pltvdiv = lngopt(PLTVDIV, 0L, 201228378L);	/* planet value item scaling divisor */
+#endif
 
 	phatowrp = numopt(PHATOWRP, 0, 100);		/* minimum phasers required to hit ships at warp */
 	score_bonus = numopt(SCRBONUS, 0, 32700);	/* score bonus setting */
 	score_f2 = numopt(SCRFACT, 0, 32700);		/* score scaling factor */
+#ifndef GE_ARENA
 	chgloser = numopt(CHGLOSER, 0, 100);		/* loser cash-charge percentage */
+#endif
 
 	optmenu = ynopt(OPTMENU);			/* optional text/help menu enabled */
 	optchr = chropt(OPTCHR);			/* optional text trigger character */
@@ -516,11 +599,15 @@ void FUNC iniwara(void)
 	opttbl = (long *)alcmem(n = nterms * sizeof(long));	/* per-user option-text offsets */
 	setmem(opttbl, n, 0);
 
+#ifndef GE_ARENA
 	gebb1 = opnbtv(geship, sizeof(WARSHP));			/* open ship database */
 	gebb4 = opnbtv(gemail, sizeof(struct message) + GEMSGSIZ);	/* open mail database */
+#endif
 	gebb2 = opnbtv(geplnt, sizeof(GALSECT));		/* open planet database */
 
-	nebseed = 1L;		/* default nebula seed until a saved seed is restored */
+	nebseed = 1L;
+#ifndef GE_ARENA
+	/* restore the persistent ge-next nebula map from Zygor when possible */
 	pkey.xsect = 0;
 	pkey.ysect = 0;
 	pkey.plnum = 1;		/* let's see if we already have a nebula seed in Zygor */
@@ -532,6 +619,7 @@ void FUNC iniwara(void)
 		if (nebseed == 0L)
 			nebseed = 1L;
 	}
+#endif
 
 	/* cofdat is number of days since 1980-01-01 */
 	/* this value is used to determine if/how planets should be updated */
@@ -539,12 +627,19 @@ void FUNC iniwara(void)
 
 	cyb_class = 0;
 	dr_class = 0;
+#ifdef GE_ARENA
+	numships = 0;
+#endif
 
 	/* load the ship class table */
 	geshmb = opnmsg(geshipcl);
 	setmbk(geshmb);
 
+#ifdef GE_ARENA
+#define NCL 36		/* arena ship class table entries per class slot */
+#else
 #define NCL 28		/* ship class table entries per class slot */
+#endif
 
 	/* first audit the table */
 
@@ -585,7 +680,7 @@ void FUNC iniwara(void)
 	/* read in the ship classes */
 	i = 0;
 
-	/* each class is loaded from its fixed-width option block in MPOGESHP.MSG */
+	/* each class is loaded from its fixed-width ship-class MSG option block */
 	for (n = 0; n < tot_classes; ++n) {
 		classbase = class_tab[i];
 		shipclass[i].max_type = tokopt(classbase, "USER", "CYBORG", "DROID", "<NONE>", NULL);
@@ -603,12 +698,30 @@ void FUNC iniwara(void)
 		shipclass[i].has_jam = ynopt(++classbase);
 		shipclass[i].has_zip = ynopt(++classbase);
 		shipclass[i].has_mine = ynopt(++classbase);
+#ifdef GE_ARENA
+		shipclass[i].arena_start_phaser = (byte)numopt(++classbase, 0,
+		    shipclass[i].max_phasr);
+		shipclass[i].arena_start_shield = (byte)numopt(++classbase, 0,
+		    shipclass[i].max_shlds);
+#else
 		shipclass[i].max_attk = ynopt(++classbase);
 		shipclass[i].max_cloak = ynopt(++classbase);
+#endif
 		shipclass[i].max_accel = numopt(++classbase, 0, 32767);
 		shipclass[i].max_warp = numopt(++classbase, 0, 255);
 		shipclass[i].max_tons = lngopt(++classbase, 1, 2000000000L);
+#ifdef GE_ARENA
+		shipclass[i].arena_start_items[I_TORPEDO] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_MISSILE] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_MINE] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_FLUXPOD] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_ZIPPERS] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_JAMMERS] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_DECOYS] = (byte)numopt(++classbase, 0, 255);
+		shipclass[i].arena_start_items[I_GOLD] = (byte)numopt(++classbase, 0, 255);
+#else
 		shipclass[i].max_price = lngopt(++classbase, 1, 2000000000L);
+#endif
 		shipclass[i].max_points = numopt(++classbase, 1, 32767);
 		shipclass[i].scanrange = lngopt(++classbase, 1, 9999999L);
 		shipclass[i].cybs_can_att = ynopt(++classbase);
@@ -619,6 +732,9 @@ void FUNC iniwara(void)
 		shipclass[i].damfact = numopt(++classbase, 0, 32767);
 		shipclass[i].faction = numopt(++classbase, 0, 32767);
 		shipclass[i].loadout = numopt(++classbase, 0, 32767);
+#ifdef GE_ARENA
+		shipclass[i].arena_mode = (byte)numopt(++classbase, 1, 255);
+#endif
 
 		shipclass[i].hlpmsg = ++classbase;
 
@@ -628,10 +744,12 @@ void FUNC iniwara(void)
 		shipclass[i].won_func = NULL;
 
 		/* how many NPCs of this class to make */
+#ifndef GE_ARENA
 		if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
 			shipclass[i].max_type == CLASSTYPE_DROID) {
 			numships += shipclass[i].tot_to_create;
 		}
+#endif
 
 		/* attach class-specific behavior hooks; user classes leave these NULL */
 		if (shipclass[i].max_type == CLASSTYPE_CYBORG) {
@@ -641,7 +759,9 @@ void FUNC iniwara(void)
 			shipclass[i].tick_func = cyb_lives;
 			shipclass[i].kill_func = cyb_died;
 			shipclass[i].won_func = cyb_won;
-		} else if (shipclass[i].max_type == CLASSTYPE_DROID) {
+		}
+#ifndef GE_ARENA
+		else if (shipclass[i].max_type == CLASSTYPE_DROID) {
 			if (dr_class == 0)	/* remember the first droid class as the base class */
 				dr_class = i;
 			shipclass[i].init_func = droid_init;
@@ -649,12 +769,31 @@ void FUNC iniwara(void)
 			shipclass[i].kill_func = droid_died;
 			shipclass[i].won_func = droid_won;
 		}
+#endif
 		geshocst(1, spr("GE:INF:Init Class %s", shipclass[i].typename));
 
 		++i; /* index the next table entry */
 	}
 
+#ifdef GE_ARENA
+	/* allocate enough automaton slots for the largest configured mode */
+	for (i = 0; i < tot_classes; ++i) {
+		if (shipclass[i].max_type != CLASSTYPE_CYBORG)
+			continue;
+		n = 0;
+		for (j = 0; j < tot_classes; ++j)
+			if (shipclass[j].max_type == CLASSTYPE_CYBORG &&
+			    shipclass[j].arena_mode == shipclass[i].arena_mode)
+				n += shipclass[j].tot_to_create;
+		if (n > numships)
+			numships = n;
+	}
+#endif
+
 	gebb5 = opnbtv(geuser, sizeof(WARUSR));
+#ifdef GE_ARENA
+	arena_refresh_win_scores();
+#endif
 
 	gehlpmb = opnmsg(GEHELP);
 
@@ -711,8 +850,20 @@ void FUNC iniwara(void)
 	setmem(entrysent, n, 0);
 	entrypend = (byte *)alcmem(n = nterms * entrybytes);	/* per-entrant bitmaps of recipients still pending entry */
 	setmem(entrypend, n, 0);
+#ifndef GE_ARENA
 	data_enabled = (byte *)alcmem(n = nterms * sizeof(byte));	/* per-session DATA state */
 	setmem(data_enabled, n, 0);
+#endif
+
+#ifdef GE_ARENA
+	arena_player = (ARENAPLAYER *)alcmem(n = nterms * sizeof(ARENAPLAYER));
+	setmem(arena_player, n, 0);
+	arena_state = ARENA_IDLE;
+	arena_host = -1;
+	arena_ticks = 0;
+	arena_match_ticks = 0;
+	arena_mode = ARENA_MODE_BATTLE;
+#endif
 
 	/* allocate memory for S00 table */
 	s00 = (S00 *)alcmem(n = s00plnum * sizeof(S00));
@@ -721,8 +872,10 @@ void FUNC iniwara(void)
 
 	beacontimer = 0;
 
+#ifndef GE_ARENA
 	/* allocate memory for the mail message table */
 	gemsg = (struct message *)alcmem(sizeof(struct message) + GEMSGSIZ);
+#endif
 
 	/* allocate memory for mine table */
 	mines = (MINE *)alcmem(n = nummines * sizeof(MINE));
@@ -740,7 +893,7 @@ void FUNC iniwara(void)
 
 	/* init empty mine field */
 	for (n = 0; n < nummines; ++n)
-		mines[n].channel = 255;
+		mines[n].channel = MINE_UNUSED;
 
 	/* init sector, planet, and worm table to bad values */
 	sector.xsect = 32767;
@@ -754,6 +907,11 @@ void FUNC iniwara(void)
 	worm.xsect = 32767;
 	worm.ysect = 32767;
 	worm.plnum = 32767;
+
+#ifdef GE_ARENA
+	/* remove any world records left by an interrupted match before opening the lobby */
+	arena_initialize_world();
+#endif
 
 	setmbk(gemb);
 
@@ -788,21 +946,35 @@ void FUNC iniwara(void)
 
 	/* tell everyone that we are up */
 	geshocst(0, spr("Galactic Empire %s %s", PROJECT_NAME, PROJECT_VERSION));
-	geshocst(0, spr("Registration # %s", stgopt(REGNO)));
+	regno = stgopt(REGNO);
+	if (*regno != '\0' && strcmp(regno, "0") != 0)
+		geshocst(0, spr("Registration # %s", regno));
 
 	#ifdef PHARLAP
 	rtkick(TICKTIME, pwarrti);
 	rtkick(TICKTIME2, pwarrti2);
+#ifndef GE_ARENA
 	rtkick(60, pwarrti3);
+#endif
+#ifndef GE_ARENA
 	rtkick(30, pplarti);
+#endif
+#ifndef GE_ARENA
 	rtkick(1, pautorti);
+#endif
 	#else
 
 	rtkick(TICKTIME, warrti);
 	rtkick(TICKTIME2, warrti2);
+#ifndef GE_ARENA
 	rtkick(60, warrti3);
+#endif
+#ifndef GE_ARENA
 	rtkick(10, plarti);
+#endif
+#ifndef GE_ARENA
 	rtkick(1, autorti);
+#endif
 	#endif
 
 	/* find the module number (state) of the FSE for later use */
@@ -825,7 +997,7 @@ int FUNC gelogon(void)
 	int other_ge_present = FALSE;
 
 	for (i = 0; i < nmods; ++i) {
-		if (module[i] == &mpoge)	/* we see ourself */
+		if (module[i] == &GE_MODULE_BLOCK)	/* we see ourself */
 			continue;
 
 		if (sameas((char *)module[i]->descrp, "Galactic Empire"))	/* hello there */
@@ -869,17 +1041,19 @@ static int gedelete(char *uid)
 }
 #endif
 
-/* delete all GE data for a user account that MajorBBS is removing */
+/* delete GE data for a user account that MajorBBS is removing */
 void FUNC gedeletea(char *uid)
 {
 	if (geudb(GELOOKUP, uid, &tmpusr)) {
-		/* delete all ships owned by this user, then remove the GE user record */
 		geudb(GEGET, uid, &tmpusr);
+#ifndef GE_ARENA
+		/* ge-next also removes every persistent ship owned by this user */
 		while (gepdb(GELOOKUPNAME, uid, 0, &tmpshp)) {
 			gcrbtv(&tmpshp, 0);
 			gepdb(GEDELETE, tmpshp.userid, tmpshp.shipno, &tmpshp);
 			logthis(spr("GE:Deleted %s ship %d", tmpshp.userid, tmpshp.shipno));
 		}
+#endif
 		geudb(GEDELETE, tmpusr.userid, &tmpusr);
 		logthis(spr("GE:Deleted %s user", tmpusr.userid));
 		return;
@@ -907,14 +1081,21 @@ int FUNC gemidnight(void)
 
 void FUNC gemidnighta(void)
 {
+#ifndef GE_ARENA
 	int i;
 	int foundit;
 	int intkey = PLTYPE_PLNT;
 
 	setmbk(gemb);
+#endif
 
 	geshocst(0, spr("GE:INF:Begin Cleanup"));
 
+#ifdef GE_ARENA
+	arena_refresh_win_scores();
+	if (gerostxt)
+		dump_roster_file();
+#else
 	prune_stale_auto_records();
 
 	/* clear out planet counter */
@@ -968,6 +1149,7 @@ void FUNC gemidnighta(void)
 						updbtv(&tmpusr);
 						gcrbtv(&tmpusr, 0);
 
+#ifndef GE_ARENA
 						/* now go create the Status Record */
 						strncpy(tmpstat.userid, tmpusr.userid, UIDSIZ);
 						tmpstat.userid[UIDSIZ - 1] = 0;
@@ -988,6 +1170,7 @@ void FUNC gemidnighta(void)
 						/* queue a production/status report mail record for the planet owner */
 						memcpy(&mail, &tmpstat, sizeof(MAILSTAT));
 						mailit(0);
+#endif
 					}
 				}
 			}
@@ -1001,6 +1184,7 @@ void FUNC gemidnighta(void)
 	if (cntrbtv() >= max_plrec)
 		geshocst(0, "GE:INF:Max Sect Reached");
 
+#ifndef GE_ARENA
 	geshocst(1, spr("GE:INF:Cleanup Phase-3"));
 
 	/* purge mail older than 7 days */
@@ -1018,10 +1202,12 @@ void FUNC gemidnighta(void)
 
 			} while (qnxbtv());
 	}
+#endif
 
 	geshocst(1, spr("GE:INF:Cleanup Phase-4"));
 	setbtv(gebb5);
 
+#ifndef GE_ARENA
 	/* zero out the team count */
 	for (i = 0; i < MAXTEAMS; ++i) {
 		teamtab[i].teamcount = 0;
@@ -1056,13 +1242,18 @@ void FUNC gemidnighta(void)
 			gcrbtv(&tmpusr, 0);
 		} while (qnxbtv());
 	}
+#endif
 
 	/* update player scores */
 	if (qlobtv(0)) {
 		do {
 			gcrbtv(&tmpusr, 0);
+#ifdef GE_ARENA
+			tmpusr.score = arena_total_wins(&tmpusr);
+#else
 			/* total score is recomputed from planet score plus kill score */
 			tmpusr.score = tmpusr.plscore + tmpusr.klscore;
+#endif
 			updbtv(&tmpusr);
 			gcrbtv(&tmpusr, 0);
 		} while (qnxbtv());
@@ -1071,6 +1262,7 @@ void FUNC gemidnighta(void)
 	if (gerostxt)
 		dump_roster_file();
 
+#ifndef GE_ARENA
 	/* remove any teams with no players */
 	for (i = 0; i < MAXTEAMS; ++i) {
 		if (teamtab[i].teamcode > 0
@@ -1087,6 +1279,8 @@ void FUNC gemidnighta(void)
 
 	/* update the team scores on disk */
 	update_team_tab();
+#endif
+#endif
 
 	geshocst(0, spr("GE:INF:End Cleanup"));
 }
@@ -1100,24 +1294,34 @@ void FUNC dump_roster_file(void)
 	FILE *hdl;
 	int i;
 
-	hdl = fopen("MPOGEROS.TXT", "wt");
+	hdl = fopen(GE_ROSTER_FILE, "wt");
 	if (hdl == NULL) {
-		geshocst(0, "GE:ERR:MPOGEROS.TXT open failed");
+		geshocst(0, spr("GE:ERR:%s open failed", GE_ROSTER_FILE));
 		return;
 	}
 
 	setmbk(gemb);
 	clrprf();
+#ifdef GE_ARENA
+	prfmsg(ROSTER1);
+#else
 	prfmsg(ROSTER2, gemaxlist);
+#endif
 	fputs(prfbuf, hdl);
 	clrprf();
 
 	i = 0;
 	setbtv(gebb5);
 	if (qhibtv(1)) {
-		do {
+			do {
 			gcrbtv(&tmpusr, 1);
 			if (tmpusr.score > 0 && tmpusr.userid[0] != '@') {
+#ifdef GE_ARENA
+				fprintf(hdl, "%-29s%7lu%8u\n",
+					tmpusr.userid,
+					tmpusr.score,
+					tmpusr.arena_wins[ARENA_WIN_BATTLE]);
+#else
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);
 				fprintf(hdl, "%-29s%s%6u%6u%4u%s\n",
@@ -1127,15 +1331,17 @@ void FUNC dump_roster_file(void)
 					tmpusr.ukills,
 					tmpusr.planets,
 					gechrbuf2);
+#endif
 				++i;
 			}
 		} while (qprbtv() && i < gemaxlist);
 	}
 
 	fclose(hdl);
-	geshocst(1, "GE:INF:MPOGEROS.TXT updated");
+	geshocst(1, spr("GE:INF:%s updated", GE_ROSTER_FILE));
 }
 
+#ifndef GE_ARENA
 /* determine the net worth of a planet */
 void FUNC calc_networth(void)
 {
@@ -1158,6 +1364,7 @@ unsigned FUNC long value_pl(void)
 
 	return v;
 }
+#endif
 
 /**************************************************************************
 ** User logged off                                                       **
@@ -1167,7 +1374,12 @@ int FUNC pwarlof(void)
 {
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
+#ifndef GE_ARENA
 	data_enabled[usrnum] = FALSE;
+#endif
+#ifdef GE_ARENA
+	arena_leave(usrnum);
+#endif
 
 	logthis(spr("WARLOF called 4 %s", waruptr->userid));
 	return 0;
@@ -1193,13 +1405,20 @@ int FUNC warhup(void)
 
 void FUNC warhupa(void)
 {
+#ifndef GE_ARENA
 	setbtv(gebb1);
+#endif
 	setmbk(gemb);
 
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
+#ifndef GE_ARENA
 	data_enabled[usrnum] = FALSE;
-
+#endif
+#ifdef GE_ARENA
+	arena_leave(usrnum);
+	logthis(spr("WARHUP called 4 %s", waruptr->userid));
+#else
 	logthis(spr("WARHUP called 4 %s", waruptr->userid));
 
 	if (warsptr->status == GESTAT_USER) {
@@ -1243,6 +1462,7 @@ void FUNC warhupa(void)
 	}
 
 	warsptr->status = GESTAT_AVAIL;
+#endif
 }
 
 /**************************************************************************
@@ -1269,8 +1489,10 @@ void FUNC clswara(void)
 		gemb = NULL;
 	}
 
+#ifndef GE_ARENA
 	clsbtv(gebb1);
 	clsbtv(gebb4);
+#endif
 	clsbtv(gebb2);
 	clsbtv(gebb5);
 
@@ -1285,13 +1507,19 @@ int FUNC galemp(void)
 {
 	int i, rtn;
 
+#ifndef GE_ARENA
 	setbtv(gebb1);
+#endif
 	setmbk(gemb);
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
 
 #ifdef MBBSEMU
-	if (usrptr->substt >= FIGHTSUB && warsptr->where == -1) {
+	if (usrptr->substt >= FIGHTSUB && warsptr->where == -1
+#ifdef GE_ARENA
+	    && (arena_player == NULL || arena_player[usrnum].state == ARENA_P_EMPTY)
+#endif
+	    ) {
 		disp_main_menu();
 		outprfge(FLT_NONE, usrnum);
 		usrptr->substt = 1;
@@ -1359,6 +1587,7 @@ void FUNC outwar(int filter, unsigned exclude, unsigned channel, int mode)
 ** Player/ship Database functions                                        **
 **************************************************************************/
 
+#ifndef GE_ARENA
 int FUNC gepdb(int func, char *usrname, int shipnum, WARSHP *geptr)
 {
 	int rtn;
@@ -1428,6 +1657,7 @@ int FUNC gepdb(int func, char *usrname, int shipnum, WARSHP *geptr)
 	}
 	return rtn;
 }
+#endif
 
 /**************************************************************************
 ** User Database functions                                               **
@@ -1640,10 +1870,12 @@ void FUNC fixplanetteam(void)
 
 void FUNC load_team_tab(void)
 {
+#ifndef GE_ARENA
 	char buffer[256];
 	FILE *mzfp;
-	int i;
 	long val;
+#endif
+	int i;
 
 	/* clear out the memory team table */
 	for (i = 0; i < MAXTEAMS; ++i) {
@@ -1655,6 +1887,7 @@ void FUNC load_team_tab(void)
 		teamtab[i].secret[0] = 0;
 	}
 
+#ifndef GE_ARENA
 	logthis("Loading Team Table");
 
 	/* reload the fixed-width team table saved in MPOGETEA.DAT */
@@ -1714,10 +1947,12 @@ void FUNC load_team_tab(void)
 		}
 		fclose(mzfp);
 	}
+#endif
 }
 
 void FUNC update_team_tab(void)
 {
+#ifndef GE_ARENA
 	FILE *hdl;
 	int i;
 
@@ -1737,11 +1972,13 @@ void FUNC update_team_tab(void)
 		}
 		fclose(hdl);
 	}
+#endif
 }
 
 /**************************************************************************
 ** Planet economic processing                                            **
 **************************************************************************/
+#ifndef GE_ARENA
 #ifdef PHARLAP
 void FUNC pplarti(void)
 {
@@ -1967,6 +2204,7 @@ void FUNC plartia(void)
 	rtkick(plantime, plarti);
 #endif
 }
+#endif
 
 /**************************************************************************
 ** Real time kick routine                                                **
@@ -2004,7 +2242,9 @@ void FUNC warrtia(void)
 		wptr = warshpoff(zothusn);
 		if (ingegame(zothusn)) {
 			logthis(spr("Chk Shp Stat %s", wptr->userid));
+#ifndef GE_ARENA
 			setbtv(gebb1);
+#endif
 			setmbk(gemb);
 			if (wptr->status == GESTAT_USER)
 				++cntr;
@@ -2012,9 +2252,11 @@ void FUNC warrtia(void)
 			repairship(wptr, zothusn);
 			validate_lock(wptr, zothusn);
 			if (wptr->damage < 100.0) {
-				/* only ships that are still alive recharge and update shield/cloak state */
+				/* only ships that are still alive recharge and update defensive state */
 				shieldstat(wptr, zothusn);
+#ifndef GE_ARENA
 				cloakstat(wptr, zothusn);
+#endif
 				recharge(wptr);
 			}
 			checktm(wptr, zothusn);		/* check torps, missl, and decoys */
@@ -2038,12 +2280,16 @@ void FUNC warrtia(void)
 #ifdef PHARLAP
 void FUNC pautorti(void)
 {
+#ifndef GE_ARENA
 	autortia();
+#endif
 }
 #else
 int FUNC autorti(void)
 {
+#ifndef GE_ARENA
 	autortia();
+#endif
 	return 0;
 }
 #endif
@@ -2060,7 +2306,9 @@ void FUNC autortia(void)
 	logthis("TICK:autorti entered");
 
 	setmbk(gemb);
+#ifndef GE_ARENA
 	setbtv(gebb1);
+#endif
 
 	/* 12/19/91 spread out disk I/O over more time */
 
@@ -2083,8 +2331,13 @@ void FUNC autortia(void)
 			cls = -1;
 			logthis("Chan Stat = GESTAT_AVAIL");
 			for (i = 0; i < tot_classes; ++i) {
+#ifdef GE_ARENA
+				if (shipclass[i].max_type == CLASSTYPE_CYBORG &&
+				    shipclass[i].arena_mode == arena_mode) {
+#else
 				if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
 					shipclass[i].max_type == CLASSTYPE_DROID) {
+#endif
 					/* is this slot within class i */
 					if (clscnt < shipclass[i].tot_to_create) {
 						cls = i;
@@ -2188,6 +2441,11 @@ void FUNC warrti2a(void)
 	if (beacontimer > 0)
 		--beacontimer;
 
+#ifdef GE_ARENA
+	setmbk(gemb);
+	arena_tick();
+#endif
+
 	/* advance delayed entry-message deliveries on the movement tick */
 	tick_entrymsg();
 
@@ -2196,12 +2454,16 @@ void FUNC warrti2a(void)
 	while (zothusn < nships) {
 		if (ingegame(zothusn)) {
 			wptr = warshpoff(zothusn);
+#ifndef GE_ARENA
 			setbtv(gebb1);
+#endif
 			setmbk(gemb);
 			rotateship(wptr, zothusn);
 			accel(wptr, zothusn);
 			moveship(wptr, zothusn);
+#ifndef GE_ARENA
 			destruct(wptr, zothusn);
+#endif
 		}
 		zothusn += 3;
 	}
@@ -2220,6 +2482,7 @@ void FUNC warrti2a(void)
 ** Real time kick routine #3                                             **
 **************************************************************************/
 
+#ifndef GE_ARENA
 #ifdef PHARLAP
 void FUNC pwarrti3(void)
 {
@@ -2253,6 +2516,7 @@ void FUNC warrti3a(void)
 	rtkick(120, warrti3);
 #endif
 }
+#endif
 
 
 /*********************/
@@ -2265,7 +2529,7 @@ void FUNC warrti3a(void)
 **************************************************************************/
 
 #ifdef MBBSEMU
-static void save_prf_mbbsemu(void)
+void FUNC save_prf_mbbsemu(void)
 {
 	if (geprfsav == NULL)
 		return;
@@ -2274,7 +2538,7 @@ static void save_prf_mbbsemu(void)
 	stzcpy(geprfsav, prfbuf, OUTSIZ);
 }
 
-static void restore_prf_mbbsemu(void)
+void FUNC restore_prf_mbbsemu(void)
 {
 	if (geprfsav == NULL)
 		return;
@@ -2284,6 +2548,7 @@ static void restore_prf_mbbsemu(void)
 }
 #endif
 
+#ifndef GE_ARENA
 static void outprf_metadata(int cls, int shpno)
 {
 	static char header[32], footer[32];
@@ -2310,6 +2575,7 @@ static void outprf_metadata(int cls, int shpno)
 	}
 	outprf(shpno);
 }
+#endif
 
 void FUNC outprfge(int cls, int shpno)
 {
@@ -2324,10 +2590,12 @@ void FUNC outprfge(int cls, int shpno)
 				return;
 			case FLT_CYB_ALL:
 				if ((msgfilter & MSGF_CYBS_MASK) == 0x00) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
@@ -2335,70 +2603,84 @@ void FUNC outprfge(int cls, int shpno)
 			case FLT_CYB_BAT:
 				if ((msgfilter & MSGF_CYBS_MASK) == 0x00 ||
 					(msgfilter & MSGF_CYBS_MASK) == 0x01) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_CYB_APP:
 				if ((msgfilter & MSGF_CYBS_MASK) != 0x03) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_DISTRESS:
 				if (!(msgfilter & MSGF_DISTRESS)) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_BEACON:
 				if (!(msgfilter & MSGF_BEACON)) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_HAIL:
 				if (!(msgfilter & MSGF_HAIL)) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_ENTRY:
 				if ((msgfilter & MSGF_ENTRY_MASK) != 0x40) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
 				break;
 			case FLT_SHIP:
 				if (!(msgfilter & MSGF_SHIP)) {
+#ifndef GE_ARENA
 					if (data_enabled != NULL
 						&& (data_enabled[shpno] & GEDATA_METADATA))
 						outprf_metadata(cls,shpno);
 					else
+#endif
 						outprf(shpno);
 					return;
 				}
@@ -2555,14 +2837,15 @@ void FUNC geshocst(int opt, char *str)
 ** players state (substt) modified.                                         **
 *****************************************************************************/
 
+
 /* player selected GE from the main menu */
 
 int FUNC mnu_main(void)
 {
 	prfmsg(INTRO, spr("%s %s", PROJECT_NAME, PROJECT_VERSION));
 	disp_main_menu();
-	outprfge(FLT_NONE, usrnum);
 	usrptr->substt = 1;
+	outprfge(FLT_NONE, usrnum);
 	return 1;
 }
 
@@ -2577,6 +2860,14 @@ int FUNC mnu_main_ans(void)
 	}
 	else if (margc == 1) {
 		if (sameas(input, "P")) {
+#ifdef GE_ARENA
+			if (!arena_enter_lobby()) {
+				outprfge(FLT_NONE, usrnum);
+				return 0;
+			}
+			outprfge(FLT_NONE, usrnum);
+			return 1;
+#else
 #ifdef PHARLAP
 			if (!hasmkey(PLAYKEY)) {
 				prfmsg(FORPLAY);
@@ -2606,6 +2897,7 @@ int FUNC mnu_main_ans(void)
 					return 1;
 				}
 			}
+#endif
 		}
 		else if (sameas(input, "G")) {
 			prfmsg(EXPLAIN);
@@ -2620,11 +2912,13 @@ int FUNC mnu_main_ans(void)
 			outprfge(FLT_NONE, usrnum);
 			return 1;
 		}
+#ifndef GE_ARENA
 		else if (sameas(input, "M")) {
 			disp_menu_d();
 			outprfge(FLT_NONE, usrnum);
 			return 1;
 		}
+#endif
 		else if (sameas(input, "I")) {
 			prfmsg(COINFO);
 			outprfge(FLT_NONE, usrnum);
@@ -2659,15 +2953,66 @@ int FUNC mnu_main_ans(void)
 
 int FUNC mnu_fightsub(void)
 {
+#ifdef GE_ARENA
+	int choice;
+
+	if (arena_player[usrnum].state != ARENA_P_PLAYING) {
+		usrptr->substt = ARENASUB;
+		user[usrnum].substt = ARENASUB;
+		return mnu_arena_lobby();
+	}
+
+	if (arena_player[usrnum].flags & ARENA_F_NEEDSHIP) {
+		if (sameas(input, "x")) {
+			arena_exit_match();
+			return 1;
+		}
+		if (sameas(input, "?")) {
+			arena_show_ship_classes();
+			outprfge(FLT_NONE, usrnum);
+			return 1;
+		}
+		choice = margc == 1 ? arena_parse_ship_choice(margv[0]) : -1;
+		if (choice >= 0) {
+			arena_select_ship(usrnum, choice);
+			prfmsg(SHPSEL, shipclass[arena_selected_shipclass(usrnum)].typename);
+		}
+		else {
+			prfmsg(SHPREQ);
+			arena_show_ship_choices();
+		}
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+#endif
+
+#ifdef GE_ARENA
+	if (margc == 1 && sameto("sta", margv[0])) {
+		arena_show_status();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+#endif
+
 	if (sameas(input, "x")) {
+#ifdef GE_ARENA
+		if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+			arena_exit_match();
+			return 1;
+		}
+#endif
 		/* only allow exit when not fighting or in neutral with no incoming projectiles */
 		if (warsptr->cantexit == 0 || (neutral(&warsptr->coord) && chkitm(usrnum))) {
 			warsptr->cantexit = 0;
 			cleartm(usrnum);
+#ifndef GE_ARENA
 			gepdb(GEUPDATE, warsptr->userid, warsptr->shipno, warsptr);
+#endif
 			geudb(GEUPDATE, waruptr->userid, waruptr);
 			/* return the player to the GE main menu and mark the ship slot free */
+#ifndef GE_ARENA
 			data_enabled[usrnum] = FALSE;
+#endif
 			disp_main_menu();
 			outprfge(FLT_NONE, usrnum);
 			exit_entrymsg(usrnum);
@@ -2676,10 +3021,12 @@ int FUNC mnu_fightsub(void)
 			btupmt(usrnum, 0);
 			warsptr->status = GESTAT_AVAIL;
 		}
+#ifndef GE_ARENA
 		else {
 			prfmsg(CANTEXT);
 			outprfge(FLT_NONE, usrnum);
 		}
+#endif
 	}
 	else {
 		/* any non-empty input in fightsub is treated as an in-flight command */
@@ -2697,6 +3044,7 @@ int FUNC mnu_fightsub(void)
    to respond with yes or no to the question "do you wish to claim this
    planet". */
 
+#ifndef GE_ARENA
 int FUNC mnu_admenu1(void)
 {
 	int i;
@@ -2743,6 +3091,7 @@ int FUNC mnu_admenu1(void)
 	}
 	return 1;
 }
+#endif
 
 /* player was asked to enter the name of the new planet and should have
    responded with a string. */
@@ -2762,6 +3111,11 @@ static int mnu_admenu1a(void)
 		pkey.plnum = plnum;
 		gesdb(GEUPDATE, (PKEY *)&pkey, (GALSECT *)&planet);
 
+#ifdef GE_ARENA
+		prfmsg(ARADM1, plnum, plptr->name);
+		outprfge(FLT_NONE, usrnum);
+		usrptr->substt = FIGHTSUB;
+#else
 		if (warsptr->shipname[0] == 0)
 			prfmsg(ADMNU1BO, plnum, plptr->name, warsptr->userid);
 		else
@@ -2770,6 +3124,7 @@ static int mnu_admenu1a(void)
 		prfmsg(ADMENU2);
 		outprfge(FLT_NONE, usrnum);
 		usrptr->substt = ADMENU2;
+#endif
 	}
 	else {
 		prfmsg(ADMENU1A);
@@ -2781,6 +3136,7 @@ static int mnu_admenu1a(void)
 /* player was displayed the admin main menu and should have selected an
    item from it. */
 
+#ifndef GE_ARENA
 int FUNC mnu_admenu2(void)
 {
 	int i;
@@ -3195,10 +3551,12 @@ int FUNC mnu_choosesh(void)
 	selectship();
 	return 1;
 }
+#endif
 
 /* player selected read messages from main menu, was displayed the mail
    sub-menu, and was asked to select an option */
 
+#ifndef GE_ARENA
 static int mnu_menug(void)
 {
 	if (margc > 0) {
@@ -3330,6 +3688,7 @@ int FUNC mnu_menug2(void)
 	}
 	return 1;
 }
+#endif
 
 /* re-displays the main menu */
 
@@ -3337,10 +3696,12 @@ void FUNC disp_main_menu(void)
 {
 	prfmsg(MENUA);
 
+#ifndef GE_ARENA
 	if (mailscan(usaptr->userid, 0))
 		prfmsg(MENUB2);
 	else
 		prfmsg(MENUB1);
+#endif
 
 	if (optmenu)
 		prf("\r   %c ... %s", optchr, opttxt);
@@ -3350,6 +3711,7 @@ void FUNC disp_main_menu(void)
 
 /* re-displays the mail sub-menu */
 
+#ifndef GE_ARENA
 void FUNC disp_menu_d(void)
 {
 	prfmsg(MENUD);
@@ -3364,7 +3726,9 @@ void FUNC disp_menu_d(void)
 		prfmsg(MENUF1);
 	prfmsg(usrptr->substt = MENUG);
 }
+#endif
 
+#ifndef GE_ARENA
 void FUNC update_items(void)
 {
 	int i, pcnt = 0;
@@ -3399,6 +3763,7 @@ void FUNC update_items(void)
 	gesdb(GEUPDATE, (PKEY *)&pkey, (GALSECT *)&planet);
 
 }
+#endif
 
 void FUNC optdisp(void)
 {
@@ -3406,11 +3771,11 @@ void FUNC optdisp(void)
 
 	/* open the optional text-menu file on first use and reuse the handle until EOF */
 	if (hdl == (FILE *)0) {
-		hdl = fopen("mpogemnu.txt", "rt");
+		hdl = fopen(GE_MENU_FILE, "rt");
 		if (hdl == (FILE *)0)
-			geshocst(0, "GE:ERR MPOGEMNU.TXT Open Failed");
+			geshocst(0, spr("GE:ERR %s Open Failed", GE_MENU_FILE));
 		else
-			logthis("optdisp: mpogemnu.txt opened");
+			logthis(spr("optdisp: %s opened", GE_MENU_FILE));
 	}
 
 	if (hdl != (FILE *)0) {

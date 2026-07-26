@@ -54,10 +54,14 @@
 #ifndef GEMAIN
 extern int gestt;
 
-extern BTVFILE *gebb1,		/* GEship.dat */
-	       *gebb2,		/* GEplanet.dat */
-	       *gebb4,		/* GEmail.dat */
-	       *gebb5;		/* GEuser.dat */
+#ifndef GE_ARENA
+extern BTVFILE *gebb1;		/* MPOGESHP.DAT */
+#endif
+extern BTVFILE *gebb2,		/* MPOGEPLT.DAT or MPOGAPLT.DAT */
+#ifndef GE_ARENA
+	       *gebb4,		/* MPOGEMAL.DAT */
+#endif
+	       *gebb5;		/* MPOGEUSR.DAT or MPOGAUSR.DAT */
 
 extern FILE *gemb, *gehlpmb, *geshmb;
 
@@ -89,7 +93,18 @@ extern byte *entrysent;
 extern byte *entrypend;
 extern int entrybytes;
 
+#ifdef GE_ARENA
+extern ARENAPLAYER *arena_player;
+extern int arena_state;
+extern int arena_host;
+extern int arena_ticks;
+extern int arena_match_ticks;
+extern int arena_mode;
+#endif
+
+#ifndef GE_ARENA
 extern struct message *gemsg;
+#endif
 
 extern int nships;
 extern int heading;
@@ -142,7 +157,9 @@ extern int gemaxplrs,
 	   pfirdist,
 	   pdammax,
 	   jamtime,
+#ifndef GE_ARENA
 	   maildays,
+#endif
 	   torpsped,
 	   mislsped,
 	   decodds,
@@ -170,12 +187,16 @@ extern int gemaxplrs,
 	   planupd,
 	   passnum;
 
+#ifndef GE_ARENA
 extern char *frontend;		/* configured frontend pairing code */
+#endif
 extern char *opttxt;		/* option-text menu prompt */
 extern char optchr;		/* option-text trigger character */
 
 extern long *opttbl;		/* per-user option-text file offsets */
+#ifndef GE_ARENA
 extern byte *data_enabled;	/* per-session DATA state flags */
+#endif
 
 extern double tor_fact,		/* torpedo hit-distance factor */
 	      tdammax,		/* torpedo max damage factor */
@@ -193,8 +214,10 @@ extern double tor_fact,		/* torpedo hit-distance factor */
 	      plattrt1,		/* planet troop-vs-attacker damage factor 1 */
 	      plattrt2;		/* planet troop-vs-attacker damage factor 2 */
 
+#ifndef GE_ARENA
 extern SHPKEY shpkey;
 extern MAILKEY mailkey;
+#endif
 
 extern SHIP *shipclass;
 

@@ -60,7 +60,7 @@
 /* #define FASTPLANET 1 */
 
 /* enable to build with mbbsemu mitigations */
-#define MBBSEMU 1
+/* #define MBBSEMU 1 */
 
 #ifndef GE_ARENA
 #define PROJECT_NAME "ge-next"
@@ -68,7 +68,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.1"
+#define PROJECT_VERSION "0.3.2-pre3"
 
 #ifndef MBBSEMU
 #define PROJECT_ARCH "16-bit"
@@ -148,12 +148,20 @@
 #define MAXMISSL 3
 #define MAXDECOY 10
 
+/* mine owner channels cannot conflict because nships is capped at 125 */
+#define MINE_NO_USER 254
+#define MINE_UNUSED 255
+
 #define DECOYTIME 15		/* times TICKTIME how long a decoy lives   */
 #define TICKTIME 6		/* main ship-state tick interval in seconds */
 #define TICKTIME2 1		/* movement tick interval in seconds       */
 #define CYBTICKTIME 5		/* Cyborgs do stuff this fast              */
 
+#ifdef GE_ARENA
+#define FIRETICKS 4		/* shorter battle lock for arena matches   */
+#else
 #define FIRETICKS 10		/* normal cantexit delay when in battle    */
+#endif
 
 #define LOCKGRACE 5		/* ticks to retain a hidden lock target    */
 #define CYBGRACE 10		/* ticks to retain hidden cyb target       */
@@ -250,9 +258,11 @@
 #define	FLT_SHIP 7
 #define	FLT_NONE 8
 
+#ifndef GE_ARENA
 /* per-session DATA state flags */
 #define GEDATA_ACCESS 0x01
 #define GEDATA_METADATA 0x02
+#endif
 
 /* how many seconds to delay 'reduced' entry messages */
 #define	ENTRYWAIT 30
@@ -336,6 +346,54 @@
 #define byte unsigned char
 #endif
 
+#ifdef GE_ARENA
+#define ARENASUB 2
+#define ARENA_MAX_PLAYERS 16
+
+#define ARENA_IDLE 0
+#define ARENA_QUEUE 1
+#define ARENA_STAGING 2
+#define ARENA_RUNNING 3
+
+#define ARENA_MODE_BATTLE 1
+
+#define ARENA_WIN_BATTLE 0
+#define ARENA_WIN_SLOTS 8
+
+#define ARENA_SORT_NONE 0
+#define ARENA_SORT_KILLS 1
+
+#define ARENA_STAGING_TIME 60
+#define ARENA_AUTOSTART_TIME 60
+#define ARENA_MATCH_TIME 900
+#define ARENA_RESPAWN_TIME 10
+
+#define ARENA_P_EMPTY 0
+#define ARENA_P_READY 1
+#define ARENA_P_OBSERVE 2
+#define ARENA_P_PLAYING 3
+#define ARENA_P_RESPAWN 4
+
+#define ARENA_F_NEEDSHIP 1
+
+#define ARENA_PL_SCAN 0x01
+#define ARENA_PL_ARMOR 0x02
+#define ARENA_PL_ACCEL 0x04
+#define ARENA_PL_CORE 0x08
+#define ARENA_PL_INSTANT 0x10
+#define ARENA_PL_MAINT 0x20
+
+typedef struct _arenaplayer {
+	byte state;
+	byte ready;
+	byte flags;
+	byte respawn;
+	byte shipclass;
+	int kills;
+	unsigned deaths;
+} ARENAPLAYER;
+#endif
+
 /*
  * Message structure from GME.H, Copyright (c) 1994-1995 GALACTICOMM, Inc.
  * The mail Btrieve record is sizeof(MESSAGE)+GEMSGSIZ, which is 1000 bytes
@@ -375,7 +433,7 @@ typedef struct _coord {
 } COORD;
 
 typedef struct _mine {
-	byte channel;		/* owning ship/user slot                   */
+	byte channel;		/* owner slot, MINE_NO_USER, or MINE_UNUSED */
 	unsigned timer;		/* countdown timer                         */
 	COORD coord;		/* mine location                           */
 } MINE;
@@ -394,7 +452,11 @@ typedef struct _torpedo {
 typedef struct warusr {
 	char userid[UIDSIZ];		/* userid of player; Btrieve key 0         */
 /*30*/
+#ifdef GE_ARENA
+	unsigned long score;		/* total arena wins; Btrieve key 1         */
+#else
 	unsigned long score;		/* player score; Btrieve key 1             */
+#endif
 /*34*/
 	unsigned noships;		/* number of ships owned currently         */
 /*36*/
@@ -422,7 +484,13 @@ typedef struct warusr {
 /*134*/
 	unsigned long teamcode;		/* current team code; Btrieve key 2        */
 /*138*/
+#ifdef GE_ARENA
+	unsigned arena_wins[ARENA_WIN_SLOTS]; /* wins by arena mode              */
+/*154*/
+	char filler[92];		/* pad WARUSR to the real 246-byte record  */
+#else
 	char filler[108];		/* pad WARUSR to the real 246-byte record  */
+#endif
 } WARUSR;
 
 typedef struct warshp {
@@ -628,7 +696,15 @@ typedef struct _galplnt {
 /*422*/
 	unsigned long nebseed;		/* random seed for nebula map (Zygor only) */
 /*426*/
+#ifdef GE_ARENA
+	/* ge-arena powerups live in the historical 67-byte planet filler. */
+	byte arena_shield_boost;
+	byte arena_phaser_boost;
+	byte arena_flags;
+	char filler[64];		/* keep arena fields + filler at 67 bytes  */
+#else
 	char filler[67];		/* pad GALPLNT to the real 493-byte record */
+#endif
 } GALPLNT;
 
 typedef struct galworm {
@@ -756,6 +832,12 @@ typedef struct _ship {
 	byte has_mine;			/* mine capability                         */
 	byte max_attk;			/* fighter capability                      */
 	byte max_cloak;			/* cloak capability                        */
+#ifdef GE_ARENA
+	byte arena_start_phaser;	/* starting phaser class                    */
+	byte arena_start_shield;	/* starting shield class                    */
+	byte arena_start_items[NUMITEMS]; /* starting inventory quantities       */
+	byte arena_mode;		/* arena mode that uses this class          */
+#endif
 	unsigned int max_accel;		/* max acceleration                        */
 	byte max_warp;			/* max warp cruising speed                 */
 	long max_tons;			/* cargo capacity                          */

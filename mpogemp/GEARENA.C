@@ -1,0 +1,1767 @@
+/*****************************************************************************
+ * ge-next GEARENA.C                                                         *
+ *                                                                           *
+ * ge-next modifications by Anthony Schmidt / ManicPop.org                   *
+ * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
+ *                                                                           *
+ * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
+ *                                                                           *
+ * All development through v3.2e         M. Murdock     03/17/1992           *
+ * Worldgroup 3.2 Conversion v3.3        R. Hadsall     04/03/2021           *
+ * Major BBS v10  Conversion v3.4        R. Hadsall     12/05/2025           *
+ *                                                                           *
+ * Copyright (C) 2006-2025 Rick Hadsall.  All Rights Reserved.               *
+ *                                                                           *
+ * This program is free software: you can redistribute it and/or modify      *
+ * it under the terms of the GNU Affero General Public License as published  *
+ * by the Free Software Foundation, either version 3 of the License, or      *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * This program is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the              *
+ * GNU Affero General Public License for more details.                       *
+ *                                                                           *
+ * You should have received a copy of the GNU Affero General Public License  *
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.     *
+ *                                                                           *
+ * Additional Terms for Contributors:                                        *
+ * 1. By contributing to this project, you agree to assign all right, title, *
+ *    and interest, including all copyrights, in and to your contributions   *
+ *    to Rick Hadsall and Elwynor Technologies.                              *
+ * 2. You grant Rick Hadsall and Elwynor Technologies a non-exclusive,       *
+ *    royalty-free, worldwide license to use, reproduce, prepare derivative  *
+ *    works of, publicly display, publicly perform, sublicense, and          *
+ *    distribute your contributions                                          *
+ * 3. You represent that you have the legal right to make your contributions *
+ *    and that the contributions do not infringe any third-party rights.     *
+ * 4. Rick Hadsall and Elwynor Technologies are not obligated to incorporate *
+ *    any contributions into the project.                                    *
+ * 5. This project is licensed under the AGPL v3, and any derivative works   *
+ *    must also be licensed under the AGPL v3.                               *
+ * 6. If you create an entirely new project (a fork) based on this work, it  *
+ *    must also be licensed under the AGPL v3, you assign all right, title,  *
+ *    and interest, including all copyrights, in and to your contributions   *
+ *    to Rick Hadsall and Elwynor Technologies, and you must include these   *
+ *    additional terms in your project's LICENSE file(s).                    *
+ *                                                                           *
+ * By contributing to this project, you agree to these terms.                *
+ *                                                                           *
+ *****************************************************************************/
+
+#ifdef PHARLAP
+
+#include "gcomm.h"
+#include "string.h"
+
+#else
+
+#include "stdio.h"
+#include "ctype.h"
+#include "mem.h"
+#include "dos.h"
+#include "usracc.h"
+#include "btvstf.h"
+#include "portable.h"
+#include "dosface.h"
+
+#endif
+
+#include "math.h"
+#include "stdlib.h"
+#include "majorbbs.h"
+
+#include "gemain.h"
+
+#define GEARENA 1
+
+#include "geglobal.h"
+
+/* LOCAL GLOBAL DEFS *****************************************************/
+
+static void arena_start_match(void);
+static void arena_end_match(void);
+static int arena_load_user(int usrn);
+static void arena_observe_match(int usrn);
+static void arena_wipe_galaxy(void);
+
+/*
+ * Arena ships and galaxy records are disposable match state; user records
+ * persist only account settings and wins. ARENAPLAYER.state describes what
+ * a terminal is doing now, while ready records its intent for the next match.
+ */
+
+/**************************************************************************
+** Mode and persistent score helpers                                     **
+**************************************************************************/
+
+/* return the player-facing name for an arena mode */
+static char *arena_mode_name(int mode)
+{
+	if (mode == ARENA_MODE_BATTLE)
+		return "Battle";
+	return "unknown";
+}
+
+/* map a game mode to its persistent wins slot in WARUSR */
+static int arena_mode_win_slot(int mode)
+{
+	if (mode == ARENA_MODE_BATTLE)
+		return ARENA_WIN_BATTLE;
+	return -1;
+}
+
+/* sum all persistent mode wins for roster sorting and display */
+unsigned long FUNC arena_total_wins(WARUSR *ptr)
+{
+	return (unsigned long)ptr->arena_wins[ARENA_WIN_BATTLE];
+}
+
+/* refresh the legacy score fields used by the Btrieve roster index */
+void FUNC arena_refresh_win_scores(void)
+{
+	unsigned long total;
+
+	setbtv(gebb5);
+	if (!qlobtv(0))
+		return;
+	do {
+		gcrbtv(&tmpusr,0);
+		total = arena_total_wins(&tmpusr);
+		if (tmpusr.score != total || tmpusr.planets != 0 ||
+		    tmpusr.plscore != 0 || tmpusr.population != 0) {
+			tmpusr.score = total;
+			tmpusr.planets = 0;
+			tmpusr.plscore = 0;
+			tmpusr.population = 0;
+			updbtv(&tmpusr);
+		}
+		gcrbtv(&tmpusr,0);
+	} while (qnxbtv());
+}
+
+/* clear any arena world records left by a previous or interrupted run */
+void FUNC arena_initialize_world(void)
+{
+	arena_wipe_galaxy();
+}
+
+/* load or create a persistent arena user in WARUSR */
+static int arena_load_user(int usrn)
+{
+	struct usracc *uap;
+	WARUSR *wuptr;
+
+	uap = uacoff(usrn);
+	if (uap == NULL || uap->userid[0] == 0)
+		return FALSE;
+	wuptr = warusroff(usrn);
+	if (geudb(GELOOKUP,uap->userid,wuptr))
+		return geudb(GEGET,uap->userid,wuptr);
+	initusr(uap->userid);
+	if (!geudb(GEADD,tmpusr.userid,&tmpusr))
+		return FALSE;
+	memcpy(wuptr,&tmpusr,sizeof(WARUSR));
+	return TRUE;
+}
+
+/* record one completed-match win and update its roster sort value */
+static void arena_record_win(int usrn)
+{
+	WARUSR *wuptr;
+	int slot;
+
+	slot = arena_mode_win_slot(arena_mode);
+	if (usrn < 0 || usrn >= nterms || slot < 0 || slot >= ARENA_WIN_SLOTS)
+		return;
+	wuptr = warusroff(usrn);
+	if (wuptr->arena_wins[slot] != (unsigned)~0U)
+		++wuptr->arena_wins[slot];
+	wuptr->score = arena_total_wins(wuptr);
+	geudb(GEUPDATE,wuptr->userid,wuptr);
+}
+
+/**************************************************************************
+** Ship selection and loadouts                                           **
+**************************************************************************/
+
+/* return the player's valid selection, falling back to this mode's first class */
+int FUNC arena_selected_shipclass(int usrn)
+{
+	int cls;
+
+	cls = arena_player[usrn].shipclass;
+	if (!VALID_SHPCLASS(cls) || shipclass[cls].max_type != CLASSTYPE_USER ||
+	    shipclass[cls].arena_mode != arena_mode)
+		return arena_shipclass_for_choice(0);
+	return cls;
+}
+
+/* translate a zero-based menu choice into this mode's ship-class index */
+int FUNC arena_shipclass_for_choice(int choice)
+{
+	int i;
+
+	if (choice < 0)
+		return -1;
+	for (i = 0; i < tot_classes; ++i) {
+		if (shipclass[i].max_type != CLASSTYPE_USER ||
+		    shipclass[i].arena_mode != arena_mode)
+			continue;
+		if (choice-- == 0)
+			return i;
+	}
+	return -1;
+}
+
+/* validate a numeric ship choice and return its zero-based menu index */
+int FUNC arena_parse_ship_choice(char *text)
+{
+	char *ptr;
+	long choice;
+
+	if (text == NULL || *text == 0)
+		return -1;
+	for (ptr = text; *ptr != 0; ++ptr)
+		if (!isdigit((unsigned char)*ptr))
+			return -1;
+	choice = atol(text);
+	if (choice < 1L || choice > 32767L ||
+	    arena_shipclass_for_choice((int)choice - 1) < 0)
+		return -1;
+	return (int)choice - 1;
+}
+
+/* assign systems and items based on this class' loadout */
+void FUNC arena_apply_loadout(WARSHP *ptr, int cls)
+{
+	SHIP *classptr;
+	int item;
+
+	classptr = &shipclass[cls];
+	setmem(ptr->items, sizeof(ptr->items), 0);
+	ptr->phasrtype = classptr->arena_start_phaser;
+	ptr->shieldtype = classptr->arena_start_shield;
+	for (item = 0; item < NUMITEMS; ++item)
+		ptr->items[item] = classptr->arena_start_items[item];
+}
+
+/* commit a ship choice to an existing arena ship and expose it to scans */
+void FUNC arena_select_ship(int usrn, int choice)
+{
+	WARSHP *ptr;
+	int cls;
+
+	cls = arena_shipclass_for_choice(choice);
+	if (cls < 0)
+		cls = arena_shipclass_for_choice(0);
+	if (cls < 0)
+		return;
+	arena_player[usrn].shipclass = (byte)cls;
+	ptr = warshpoff(usrn);
+	ptr->shpclass = arena_selected_shipclass(usrn);
+	ptr->topspeed = shipclass[ptr->shpclass].max_warp;
+	ptr->speed = 0.0;
+	ptr->speed2b = 0.0;
+	ptr->where = 0;
+	ptr->damage = 0.0;
+	ptr->energy = 50000L;
+	ptr->phasr = 100;
+	ptr->shieldstat = SHIELDDN;
+	ptr->lastfired = -1;
+	ptr->lock = -1;
+	arena_apply_loadout(ptr, ptr->shpclass);
+	ptr->status = GESTAT_USER;
+	arena_player[usrn].flags &= ~ARENA_F_NEEDSHIP;
+	update_scantab(ptr, usrn);
+}
+
+/* print the compact ship-selection list generated from the class table */
+void FUNC arena_show_ship_choices(void)
+{
+	SHIP *classptr;
+	int choice, i;
+
+	prf("\rShips:\r");
+	choice = 0;
+	for (i = 0; i < tot_classes; ++i) {
+		classptr = &shipclass[i];
+		if (classptr->max_type != CLASSTYPE_USER ||
+		    classptr->arena_mode != arena_mode)
+			continue;
+		++choice;
+		prf("  %s%d %s%s%s: Mark-%d shield, Mark-%d phaser",
+		    CLR_CYAN2, choice, CLR_CYAN1, classptr->typename, CLR_WHITE2,
+		    classptr->arena_start_shield, classptr->arena_start_phaser);
+		if (classptr->arena_start_items[I_TORPEDO])
+			prf(", %u torpedoes", (unsigned)classptr->arena_start_items[I_TORPEDO]);
+		if (classptr->arena_start_items[I_MISSILE])
+			prf(", %u missiles", (unsigned)classptr->arena_start_items[I_MISSILE]);
+		if (classptr->arena_start_items[I_MINE])
+			prf(", %u mines", (unsigned)classptr->arena_start_items[I_MINE]);
+		if (classptr->arena_start_items[I_DECOYS])
+			prf(", %u decoys", (unsigned)classptr->arena_start_items[I_DECOYS]);
+		if (classptr->arena_start_items[I_ZIPPERS])
+			prf(", %u zippers", (unsigned)classptr->arena_start_items[I_ZIPPERS]);
+		if (classptr->arena_start_items[I_JAMMERS])
+			prf(", %u jammers", (unsigned)classptr->arena_start_items[I_JAMMERS]);
+		if (classptr->arena_start_items[I_FLUXPOD])
+			prf(", %u flux pods", (unsigned)classptr->arena_start_items[I_FLUXPOD]);
+		if (classptr->arena_start_items[I_GOLD])
+			prf(", %u gold", (unsigned)classptr->arena_start_items[I_GOLD]);
+		prf("\r");
+	}
+	if (choice > 0)
+		prfmsg(SHPPROM, choice);
+}
+
+/* put a player at the initial ship-selection prompt */
+static void arena_show_initial_ship_choice(int usrn)
+{
+	user[usrn].substt = FIGHTSUB;
+	if (usrn == usrnum)
+		usrptr->substt = FIGHTSUB;
+	btupmt(usrn,'>');
+	prfmsg(ENTSHP);
+	outprfge(FLT_NONE,usrn);
+}
+
+/* mini HELP CLASS with functions unused in arena removed */
+void FUNC arena_show_ship_classes(void)
+{
+	char warp[12], shields[12], phasers[12], torps[12], missiles[12];
+	char accel[12], points[6];
+	SHIP *classptr;
+	int choice, i;
+
+	setmbk(gehlpmb);
+	prfmsg(HLPCLS1, arena_mode_name(arena_mode));
+	choice = 0;
+	for (i = 0; i < tot_classes; ++i) {
+		classptr = &shipclass[i];
+		if (classptr->max_type != CLASSTYPE_USER ||
+		    classptr->arena_mode != arena_mode)
+			continue;
+		++choice;
+
+		if (classptr->max_tons > 999999L)
+			sprintf(gechrbuf, "%ldm", classptr->max_tons / 1000000L);
+		else if (classptr->max_tons > 999L)
+			sprintf(gechrbuf, "%ldk", classptr->max_tons / 1000L);
+		else
+			sprintf(gechrbuf, "%ld", classptr->max_tons);
+
+		if (classptr->scanrange > 999999L)
+			sprintf(gechrbuf3, "%ldm", classptr->scanrange / 1000000L);
+		else if (classptr->scanrange > 999L)
+			sprintf(gechrbuf3, "%ldk", classptr->scanrange / 1000L);
+		else
+			sprintf(gechrbuf3, "%ld", classptr->scanrange);
+
+		if (classptr->max_warp == 0)
+			strcpy(warp, CLR_RED1 " N");
+		else
+			sprintf(warp, "%s%2d", CLR_WHITE2, classptr->max_warp);
+		if (classptr->max_shlds == 0)
+			strcpy(shields, CLR_RED1 " N");
+		else
+			sprintf(shields, "%s%2d", CLR_WHITE2, classptr->max_shlds);
+		if (classptr->max_phasr == 0)
+			strcpy(phasers, CLR_RED1 " N");
+		else
+			sprintf(phasers, "%s%2d", CLR_WHITE2, classptr->max_phasr);
+		if (classptr->max_torps == 0)
+			strcpy(torps, CLR_RED1 "N");
+		else
+			sprintf(torps, "%s%1d", CLR_GREEN2, classptr->max_torps);
+		if (classptr->max_missl == 0)
+			strcpy(missiles, CLR_RED1 "N");
+		else
+			sprintf(missiles, "%s%1d", CLR_GREEN2, classptr->max_missl);
+		if (classptr->max_accel > 999)
+			sprintf(accel, "%s%2dk", CLR_WHITE2, classptr->max_accel / 1000);
+		else
+			sprintf(accel, "%s%3d", CLR_WHITE2, classptr->max_accel);
+
+		strcpy(points, "-");
+		prf("%s%2d %s%-24s       %s %s %s %s %s %s %s %s %s %s   %4s %4s %4s %5s\r",
+			CLR_CYAN2, choice,
+			CLR_CYAN1, classptr->typename,
+			warp,
+			shields,
+			phasers,
+			torps,
+			missiles,
+			classptr->has_mine ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+			" ",
+			classptr->has_decoy ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+			classptr->has_jam ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+			classptr->has_zip ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+			accel,
+			gechrbuf3,
+			gechrbuf,
+			points);
+	}
+	prfmsg(HLPCLS2);
+}
+
+/**************************************************************************
+** Lobby counts, hosting, and broadcasts                                 **
+**************************************************************************/
+
+/* count every terminal currently represented in the arena module */
+static int arena_count_present(void)
+{
+	int i, count;
+
+	count = 0;
+	for (i = 0; i < nterms; ++i)
+		if (arena_player[i].state != ARENA_P_EMPTY)
+			++count;
+	return count;
+}
+
+/* count players committed to the next match, including the host */
+static int arena_count_ready(void)
+{
+	int i, count;
+
+	count = 0;
+	for (i = 0; i < nterms; ++i)
+		if (arena_player[i].state != ARENA_P_EMPTY && arena_player[i].ready)
+			++count;
+	return count;
+}
+
+/* count terminals whose current arena state is observing */
+static int arena_count_observe(void)
+{
+	int i, count;
+
+	count = 0;
+	for (i = 0; i < nterms; ++i)
+		if (arena_player[i].state == ARENA_P_OBSERVE)
+			++count;
+	return count;
+}
+
+/* count active ships and players waiting to respawn */
+static int arena_count_playing(void)
+{
+	int i, count;
+
+	count = 0;
+	for (i = 0; i < nterms; ++i)
+		if (arena_player[i].state == ARENA_P_PLAYING ||
+		    arena_player[i].state == ARENA_P_RESPAWN)
+			++count;
+	return count;
+}
+
+/* scale scanner range for the player count encoded in the galaxy radius */
+int FUNC arena_scan_percent(void)
+{
+	int players;
+
+	if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING)
+		return 100;
+	players = univmax / 5;
+	if (players <= 2)
+		return 50;
+	if (players == 3)
+		return 75;
+	return 100;
+}
+
+/* print the compact queue or active-match population summary */
+static void arena_show_mini_status(void)
+{
+	int present, playing;
+
+	present = arena_count_present();
+	if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+		playing = arena_count_playing();
+		prfmsg(MATSTAT, present, playing, present - playing,
+		    arena_mode_name(arena_mode));
+	}
+	else {
+		prfmsg(LOBSTAT, present, arena_count_ready(),
+		    arena_count_observe(), arena_mode_name(arena_mode));
+	}
+}
+
+/* notify the selected terminal that it has inherited host duties */
+static void arena_notify_new_host(void)
+{
+	if (arena_host < 0 || arena_host >= nterms)
+		return;
+	clrprf();
+	prfmsg(LOBNEWH);
+	arena_show_mini_status();
+	outprfge(FLT_NONE, arena_host);
+	clrprf();
+}
+
+/* select the lowest eligible terminal as host, optionally skipping one user */
+static void arena_choose_host_ex(int skip, int notify)
+{
+	int i;
+	int oldhost;
+
+	if (arena_host >= 0 && arena_host < nterms &&
+	    arena_player[arena_host].state != ARENA_P_EMPTY &&
+	    arena_player[arena_host].state != ARENA_P_OBSERVE)
+		return;
+	oldhost = arena_host;
+	arena_host = -1;
+	/* prefer a participant who has not explicitly chosen to observe */
+	for (i = 0; i < nterms; ++i) {
+		if (i != skip && arena_player[i].state != ARENA_P_EMPTY &&
+		    arena_player[i].state != ARENA_P_OBSERVE) {
+			arena_host = i;
+			if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING) {
+				arena_player[i].state = ARENA_P_READY;
+				arena_player[i].ready = TRUE;
+			}
+			if (notify && oldhost != arena_host)
+				arena_notify_new_host();
+			return;
+		}
+	}
+	/* if everyone is observing, promote the first remaining terminal */
+	for (i = 0; i < nterms; ++i) {
+		if (i != skip && arena_player[i].state != ARENA_P_EMPTY) {
+			arena_host = i;
+			if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING) {
+				arena_player[i].state = ARENA_P_READY;
+				arena_player[i].ready = TRUE;
+			}
+			if (notify && oldhost != arena_host)
+				arena_notify_new_host();
+			return;
+		}
+	}
+}
+
+/* select a host without excluding or notifying any terminal */
+static void arena_choose_host(void)
+{
+	arena_choose_host_ex(-1, FALSE);
+}
+
+/* restore idle defaults after the last arena user leaves */
+static void arena_reset_if_empty(void)
+{
+	if (arena_count_present() != 0)
+		return;
+	arena_state = ARENA_IDLE;
+	arena_host = -1;
+	arena_ticks = 0;
+	arena_match_ticks = 0;
+	arena_mode = ARENA_MODE_BATTLE;
+}
+
+/* send the current print buffer to all arena users except one terminal */
+static void arena_broadcast_prf_except(int skip)
+{
+	int i;
+
+#ifdef MBBSEMU
+	save_prf_mbbsemu();
+#endif
+	for (i = 0; i < nterms; ++i) {
+		if (i != skip && arena_player[i].state != ARENA_P_EMPTY) {
+#ifdef MBBSEMU
+			restore_prf_mbbsemu();
+#endif
+			outprfge(FLT_NONE, i);
+		}
+	}
+	clrprf();
+}
+
+/* send the current print buffer to every terminal in the arena module */
+static void arena_broadcast_prf(void)
+{
+	arena_broadcast_prf_except(-1);
+}
+
+/* broadcast a one-line lobby chat message entered with the > command */
+static void arena_lobby_chat(void)
+{
+	char *msg;
+
+	if (margc < 2) {
+		prfmsg(FORMAT,"SEND");
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+	msg = margv[1];
+	rstrin();
+	prfmsg(LOBCHAT,waruptr->userid,msg);
+	arena_broadcast_prf();
+}
+
+/* start or cancel autostart when the queue crosses two ready players */
+static void arena_update_queue_timer(void)
+{
+	if (arena_state != ARENA_QUEUE)
+		return;
+	if (arena_count_ready() >= 2) {
+		if (arena_ticks <= 0) {
+			arena_ticks = ARENA_AUTOSTART_TIME;
+			prfmsg(AUTOBRDC, arena_mode_name(arena_mode), arena_ticks);
+			arena_broadcast_prf_except(usrnum);
+		}
+	}
+	else if (arena_ticks > 0) {
+		arena_ticks = 0;
+		prfmsg(AUTOCAN);
+		arena_broadcast_prf();
+	}
+}
+
+/* announce a lobby departure and refresh the host's population summary */
+static void arena_announce_lobby_exit(char *userid, int newhost)
+{
+	int i;
+
+	if (arena_state != ARENA_QUEUE || userid == NULL || userid[0] == 0)
+		return;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_EMPTY)
+			continue;
+		clrprf();
+			prfmsg(PEACEOUT, userid);
+			if (i == arena_host) {
+				if (newhost)
+					prfmsg(LOBNEWH);
+				arena_show_mini_status();
+			}
+		outprfge(FLT_NONE, i);
+		clrprf();
+	}
+}
+
+/* remove a terminal from arena state and end an undersized active match */
+void FUNC arena_leave(int usrn)
+{
+	WARUSR *wuptr;
+	int announce;
+	int oldhost;
+	int was_playing;
+
+	if (usrn < 0 || usrn >= nterms || arena_player == NULL)
+		return;
+	was_playing = arena_player[usrn].state == ARENA_P_PLAYING ||
+	    arena_player[usrn].state == ARENA_P_RESPAWN;
+	/* use the normal match-exit path first to score, announce, and clear the ship */
+	if (was_playing)
+		arena_observe_match(usrn);
+	announce = (arena_state == ARENA_QUEUE &&
+	    arena_player[usrn].state != ARENA_P_EMPTY &&
+	    arena_count_present() > 1);
+	wuptr = warusroff(usrn);
+	oldhost = arena_host;
+	/* remove transient membership, then choose a replacement host before announcing */
+	setmem(&arena_player[usrn], sizeof(ARENAPLAYER), 0);
+	if (arena_host == usrn)
+		arena_host = -1;
+	arena_choose_host_ex(-1, FALSE);
+	if (announce)
+		arena_announce_lobby_exit(wuptr->userid, oldhost != arena_host);
+	/* end an undersized match, or adjust the queue and reset an empty arena */
+	if (was_playing && arena_state != ARENA_QUEUE && arena_count_playing() < 2)
+		arena_end_match();
+	arena_update_queue_timer();
+	arena_reset_if_empty();
+}
+
+/**************************************************************************
+** Lobby display and command actions                                     **
+**************************************************************************/
+
+/* list selectable modes and give the host the mode-selection hint */
+static void arena_show_modes(void)
+{
+	prfmsg(MODLIST, arena_mode_name(arena_mode));
+	if (arena_host == usrnum)
+		prfmsg(MODHINT);
+}
+
+/* print the remaining match time with compact minute/second formatting */
+static void arena_show_match_time(void)
+{
+	if (arena_match_ticks < 60)
+		prfmsg(MATTIME, arena_match_ticks);
+	else
+		prfmsg(MATTIME2, arena_match_ticks / 60, arena_match_ticks % 60);
+}
+
+/* print how much scheduled time remained when a match ended early */
+static void arena_show_match_ended_time(void)
+{
+	if (arena_match_ticks < 60)
+		prfmsg(ENDTIME, arena_match_ticks);
+	else
+		prfmsg(ENDTIME2, arena_match_ticks / 60, arena_match_ticks % 60);
+}
+
+/* print only the commands appropriate to the current user's lobby role */
+static void arena_show_lobby_prompt(void)
+{
+	if (arena_host == usrnum)
+		prfmsg(LOBPHST);
+	else if (arena_player[usrnum].ready)
+		prfmsg(LOBPRDY);
+	else
+		prfmsg(LOBPOBS);
+}
+
+/* print lobby status, the user's queue state, timers, and command prompt */
+static void arena_show_lobby(void)
+{
+	arena_show_mini_status();
+	if (arena_host == usrnum)
+		prfmsg(LOBHOST);
+	else if (arena_player[usrnum].ready)
+		prfmsg(LOBREADY);
+	else if (arena_player[usrnum].state == ARENA_P_OBSERVE)
+		prfmsg(LOBOBS);
+	if (arena_state == ARENA_STAGING)
+		prfmsg(STGSTAT, arena_ticks);
+	else if (arena_state == ARENA_QUEUE && arena_ticks > 0)
+		prfmsg(AUTOTIME, arena_mode_name(arena_mode), arena_ticks);
+	else if (arena_state == ARENA_RUNNING)
+		arena_show_match_time();
+	arena_show_lobby_prompt();
+}
+
+/* announce a new lobby arrival to everyone already present */
+static void arena_announce_lobby_entry(int usrn)
+{
+	int i;
+	WARUSR *wuptr;
+
+	if (arena_state != ARENA_QUEUE)
+		return;
+	wuptr = warusroff(usrn);
+	for (i = 0; i < nterms; ++i) {
+		if (i == usrn || arena_player[i].state == ARENA_P_EMPTY)
+			continue;
+			clrprf();
+			prfmsg(ANNOUN, wuptr->userid);
+			if (i == arena_host)
+				arena_show_mini_status();
+			outprfge(FLT_NONE, i);
+		clrprf();
+	}
+}
+
+/* admit the current terminal, load its user, and initialize its queue state */
+int FUNC arena_enter_lobby(void)
+{
+	int first;
+	int entering;
+	int needs_host;
+
+	if (arena_player[usrnum].state == ARENA_P_EMPTY &&
+	    arena_count_present() >= ARENA_MAX_PLAYERS) {
+		prfmsg(LOBFULL);
+		btupmt(usrnum, 0);
+		return FALSE;
+	}
+	if (!arena_load_user(usrnum)) {
+		btupmt(usrnum, 0);
+		return FALSE;
+	}
+	first = (arena_count_present() == 0);
+	needs_host = (arena_host < 0);
+	entering = (arena_player[usrnum].state == ARENA_P_EMPTY);
+	if (arena_player[usrnum].state == ARENA_P_EMPTY) {
+		arena_player[usrnum].state = (first || needs_host) ? ARENA_P_READY : ARENA_P_OBSERVE;
+		arena_player[usrnum].ready = first || needs_host;
+	}
+	if (arena_state == ARENA_IDLE)
+		arena_state = ARENA_QUEUE;
+	arena_choose_host();
+	if (entering && !first)
+		arena_announce_lobby_entry(usrnum);
+	arena_update_queue_timer();
+	prfmsg(WELCOM, waruptr->userid);
+	arena_show_lobby();
+	usrptr->substt = ARENASUB;
+	btupmt(usrnum, '>');
+	return TRUE;
+}
+
+/* mark the current user ready now or queued for the match after this one */
+static int arena_set_ready(void)
+{
+	if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+		if (arena_player[usrnum].state == ARENA_P_PLAYING ||
+		    arena_player[usrnum].state == ARENA_P_RESPAWN) {
+			prfmsg(LOBREADY);
+			return TRUE;
+		}
+		arena_player[usrnum].ready = TRUE;
+		arena_player[usrnum].state = ARENA_P_OBSERVE;
+		prfmsg(LOBREADY);
+		return TRUE;
+	}
+	if (arena_host == usrnum)
+		return TRUE;
+	arena_player[usrnum].state = ARENA_P_READY;
+	arena_player[usrnum].ready = TRUE;
+	arena_choose_host();
+	arena_update_queue_timer();
+	return TRUE;
+}
+
+/* mark the current user observing and hand off hosting when necessary */
+static void arena_set_observe(void)
+{
+	arena_player[usrnum].state = ARENA_P_OBSERVE;
+	arena_player[usrnum].ready = FALSE;
+	if (arena_host == usrnum)
+		arena_host = -1;
+	arena_choose_host_ex(usrnum, TRUE);
+	arena_update_queue_timer();
+}
+
+/* validate and apply a host's numeric game-mode selection */
+static int arena_set_mode(char *mode)
+{
+	if (arena_host != usrnum) {
+		prfmsg(MODHOST);
+		return FALSE;
+	}
+	if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+		prfmsg(MODLOCK);
+		return FALSE;
+	}
+	if (sameas("1", mode)) {
+		arena_mode = ARENA_MODE_BATTLE;
+		prfmsg(MODSET);
+		return TRUE;
+	}
+	prfmsg(MODUNK);
+	arena_show_modes();
+	return FALSE;
+}
+
+/* let the host bypass autostart and begin staging when enough users are ready */
+static int arena_start_countdown(void)
+{
+	if (arena_host != usrnum) {
+		prfmsg(GOHOST);
+		return FALSE;
+	}
+	if (arena_state == ARENA_STAGING) {
+		prfmsg(GOSTAGE);
+		return FALSE;
+	}
+	if (arena_state == ARENA_RUNNING) {
+		prfmsg(GORUN);
+		return FALSE;
+	}
+	if (arena_count_ready() < 2) {
+		prfmsg(GOMIN);
+		return FALSE;
+	}
+	arena_ticks = 0;
+	arena_start_match();
+	return TRUE;
+}
+
+/**************************************************************************
+** Match lifecycle                                                       **
+**************************************************************************/
+
+/* build a temporary arena ship, preserving the caller's terminal globals */
+static int arena_spawn_player(int usrn)
+{
+	int oldusr;
+	struct user *oldusrptr;
+	WARSHP *oldsptr;
+	WARUSR *olduptr;
+	int span;
+
+	oldusr = usrnum;
+	oldusrptr = usrptr;
+	oldsptr = warsptr;
+	olduptr = waruptr;
+	/* legacy ship initialization operates on the current-terminal globals */
+	usrnum = usrn;
+	usrptr = &user[usrn];
+	warsptr = warshpoff(usrn);
+	waruptr = warusroff(usrn);
+	waruptr->topshipno = 0;
+	waruptr->noships = 0;
+	if (initshp(waruptr->userid,arena_selected_shipclass(usrn))) {
+		usrnum = oldusr;
+		usrptr = oldusrptr;
+		warsptr = oldsptr;
+		waruptr = olduptr;
+		return FALSE;
+	}
+	memcpy(warsptr,&tmpshp,sizeof(WARSHP));
+	arena_apply_loadout(warsptr, arena_selected_shipclass(usrn));
+	if (arena_state == ARENA_RUNNING) {
+		span = (univmax * 2) + 1;
+		warsptr->coord.xcoord = (double)((int)(gernd() % span) - univmax)
+		    + rndm(.9998) + .0001;
+		warsptr->coord.ycoord = (double)((int)(gernd() % span) - univmax)
+		    + rndm(.9998) + .0001;
+	}
+	warsptr->where = 0;
+	if (arena_state == ARENA_RUNNING) {
+		warsptr->status = GESTAT_USER;
+		arena_player[usrn].flags &= ~ARENA_F_NEEDSHIP;
+		update_scantab(warsptr,usrn);
+	}
+	else {
+		/* staged ships remain hidden until their players select a class */
+		warsptr->status = GESTAT_AVAIL;
+		arena_player[usrn].flags |= ARENA_F_NEEDSHIP;
+	}
+	usrptr->substt = FIGHTSUB;
+	user[usrn].substt = FIGHTSUB;
+	btupmt(usrn,'>');
+	if (arena_state == ARENA_RUNNING) {
+		prfmsg(RSPAWN, shipclass[arena_selected_shipclass(usrn)].typename,
+		    coord1(warsptr->coord.xcoord), coord1(warsptr->coord.ycoord));
+		outprfge(FLT_NONE,usrn);
+	}
+	usrnum = oldusr;
+	usrptr = oldusrptr;
+	warsptr = oldsptr;
+	waruptr = olduptr;
+	return TRUE;
+}
+
+/* move a player with a failed ship initialization to a safe observing state */
+static void arena_spawn_failed(int usrn)
+{
+	arena_player[usrn].state = ARENA_P_OBSERVE;
+	arena_player[usrn].ready = FALSE;
+	arena_player[usrn].flags = 0;
+	arena_player[usrn].respawn = 0;
+	if (arena_host == usrn) {
+		arena_host = -1;
+		arena_choose_host_ex(usrn,FALSE);
+	}
+}
+
+/* convert ready users into staged players and create their hidden ships */
+static void arena_start_match(void)
+{
+	unsigned long newseed;
+	int i;
+	int players;
+
+	/* staging has its own countdown; the match clock starts with combat */
+	arena_state = ARENA_STAGING;
+	arena_ticks = ARENA_STAGING_TIME;
+	arena_match_ticks = 0;
+	/* set the nebseed here for each match instead of using Zygor */
+	newseed = (((unsigned long)gernd()) << 16) | (unsigned long)gernd();
+	if (newseed == 0L)
+		newseed = 1L;
+	if (newseed == nebseed) {
+		++newseed;
+		if (newseed == 0L)
+			newseed = 1L;
+	}
+	nebseed = newseed;
+	/* scale the disposable galaxy to the number entering this match */
+	players = arena_count_ready();
+	if (players > 0)
+		univmax = players * 5;
+	for (i = 0; i < nterms; ++i) {
+		arena_player[i].kills = 0;
+		arena_player[i].deaths = 0;
+		if (arena_player[i].state == ARENA_P_READY)
+			arena_show_initial_ship_choice(i);
+	}
+	/* announce staging before sending each participant the ship list */
+	prfmsg(STGSTART, arena_mode_name(arena_mode), arena_ticks);
+	arena_broadcast_prf();
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_READY) {
+			arena_show_ship_choices();
+			outprfge(FLT_NONE,i);
+		}
+	}
+	/* create hidden staged ships; selecting a class later exposes each ship */
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_READY) {
+			arena_player[i].ready = FALSE;
+			if (arena_spawn_player(i)) {
+				arena_player[i].state = ARENA_P_PLAYING;
+			}
+			else
+				arena_spawn_failed(i);
+		}
+	}
+	/* initialization failures must not leave a one-player match in staging */
+	if (arena_count_playing() < 2) {
+		arena_end_match();
+		return;
+	}
+}
+
+/* auto-select missing ships, expose all players, and start the match clock */
+static void arena_start_combat(void)
+{
+	int i;
+
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_PLAYING &&
+		    (arena_player[i].flags & ARENA_F_NEEDSHIP)) {
+			arena_select_ship(i,0);
+			prfmsg(SHPSEL, shipclass[arena_selected_shipclass(i)].typename);
+			outprfge(FLT_NONE,i);
+		}
+	}
+	arena_state = ARENA_RUNNING;
+	arena_ticks = 0;
+	arena_match_ticks = ARENA_MATCH_TIME;
+	prfmsg(MATSTART, arena_mode_name(arena_mode));
+	arena_broadcast_prf();
+}
+
+/* apply normal neutral rules except while arena combat is active */
+int FUNC arena_neutral_fire_blocked(WARSHP *ptr, int usrn)
+{
+	if (arena_player == NULL || usrn < 0 || usrn >= nterms ||
+	    arena_player[usrn].state != ARENA_P_PLAYING)
+		return neutral(&ptr->coord);
+	if (arena_state == ARENA_RUNNING)
+		return FALSE;
+	if (arena_state == ARENA_STAGING)
+		return TRUE;
+	return neutral(&ptr->coord);
+}
+
+/* report whether neutral-zone projectile protection should be enforced */
+int FUNC arena_neutral_protection_active(void)
+{
+	return arena_state != ARENA_RUNNING;
+}
+
+/* keep staged players inside sector 0 0 using the normal barrier bounce */
+void FUNC arena_enforce_staging_bounds(WARSHP *ptr, int usrn)
+{
+	COORD center;
+	int bounced;
+
+	if (arena_player == NULL || arena_state != ARENA_STAGING ||
+	    usrn < 0 || usrn >= nterms ||
+	    arena_player[usrn].state != ARENA_P_PLAYING)
+		return;
+
+	bounced = FALSE;
+	if (ptr->coord.xcoord < 0.0) {
+		ptr->coord.xcoord = 0.1;
+		bounced = TRUE;
+	}
+	else if (ptr->coord.xcoord >= 1.0) {
+		ptr->coord.xcoord = 0.9;
+		bounced = TRUE;
+	}
+	if (ptr->coord.ycoord < 0.0) {
+		ptr->coord.ycoord = 0.1;
+		bounced = TRUE;
+	}
+	else if (ptr->coord.ycoord >= 1.0) {
+		ptr->coord.ycoord = 0.9;
+		bounced = TRUE;
+	}
+	if (bounced) {
+		center.xcoord = 0.50001;
+		center.ycoord = 0.50001;
+		ptr->head2b = normal(vector(&ptr->coord,&center));
+		ptr->heading = ptr->head2b;
+		telezip(ptr,usrn);
+	}
+}
+
+/* determine and announce the result, persist valid wins, and show final status */
+static void arena_show_results(void)
+{
+	int i;
+	int winner;
+	int highscore;
+	int tied;
+	int forfeit;
+	WARUSR *wuptr;
+
+	forfeit = arena_match_ticks > 0 && arena_count_playing() == 1;
+	winner = -1;
+	highscore = 0;
+	tied = 0;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state != ARENA_P_PLAYING &&
+		    arena_player[i].state != ARENA_P_RESPAWN)
+			continue;
+		if (winner < 0 || arena_player[i].kills > highscore) {
+			winner = i;
+			highscore = arena_player[i].kills;
+			tied = 1;
+		}
+		else if (arena_player[i].kills == highscore)
+			++tied;
+	}
+	if (tied == 1) {
+		wuptr = warusroff(winner);
+		/* the winner hosts the next match; ties leave the current host in place */
+		arena_host = winner;
+		/* completed matches and combat forfeits both earn roster credit */
+		if (arena_match_ticks == 0 || forfeit)
+			arena_record_win(winner);
+		if (forfeit)
+			prfmsg(MATFORF, wuptr->userid, arena_mode_name(arena_mode));
+		else
+			prfmsg(MATWIN, wuptr->userid, arena_mode_name(arena_mode),
+			    highscore);
+		arena_broadcast_prf();
+	}
+	else if (tied > 1) {
+		prfmsg(MATTIE, arena_mode_name(arena_mode), highscore);
+		arena_broadcast_prf();
+	}
+	if (arena_match_ticks > 0) {
+		arena_show_match_ended_time();
+		arena_match_ticks = 0;
+	}
+	arena_show_status();
+	arena_broadcast_prf();
+}
+
+/* select the status sort appropriate to the current mode and phase */
+static int arena_status_sort_mode(void)
+{
+	if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING)
+		return ARENA_SORT_NONE;
+	if (arena_mode == ARENA_MODE_BATTLE)
+		return ARENA_SORT_KILLS;
+	return ARENA_SORT_NONE;
+}
+
+/* compare two status rows, keeping active players first and scores descending */
+static int arena_status_compare(int left, int right, int sortmode)
+{
+	int leftactive;
+	int rightactive;
+
+	leftactive = arena_player[left].state == ARENA_P_PLAYING ||
+	    arena_player[left].state == ARENA_P_RESPAWN;
+	rightactive = arena_player[right].state == ARENA_P_PLAYING ||
+	    arena_player[right].state == ARENA_P_RESPAWN;
+	if (leftactive && !rightactive)
+		return -1;
+	if (!leftactive && rightactive)
+		return 1;
+	if (sortmode == ARENA_SORT_KILLS) {
+		if (arena_player[left].kills > arena_player[right].kills)
+			return -1;
+		if (arena_player[left].kills < arena_player[right].kills)
+			return 1;
+	}
+	return left - right;
+}
+
+/* print one mode-aware player row for the arena status table */
+static void arena_print_status_row(int usrn)
+{
+	WARUSR *wuptr;
+	char *state;
+
+	if (arena_player[usrn].state == ARENA_P_EMPTY)
+		return;
+	wuptr = warusroff(usrn);
+	if (usrn == arena_host && arena_player[usrn].state == ARENA_P_PLAYING)
+		state = "playing (host)";
+	else if (usrn == arena_host && arena_player[usrn].state == ARENA_P_RESPAWN)
+		state = "respawn (host)";
+	else if (usrn == arena_host)
+		state = "ready (host)";
+	else if (arena_player[usrn].state == ARENA_P_PLAYING)
+		state = "playing";
+	else if (arena_player[usrn].state == ARENA_P_RESPAWN)
+		state = "respawn";
+	else if (arena_player[usrn].state == ARENA_P_OBSERVE)
+		state = (arena_player[usrn].ready && arena_state != ARENA_STAGING &&
+		    arena_state != ARENA_RUNNING) ? "ready" : "observing";
+	else if (arena_player[usrn].ready)
+		state = "ready";
+	else
+		state = "unknown";
+	if ((arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) &&
+	    (arena_player[usrn].state == ARENA_P_PLAYING ||
+	    arena_player[usrn].state == ARENA_P_RESPAWN))
+		prf("%-22s %-24s %5d %7u\r", wuptr->userid, state,
+		    arena_player[usrn].kills, arena_player[usrn].deaths);
+	else
+		prf("%-22s %-24s %5s %7s\r", wuptr->userid, state, "-", "-");
+}
+
+/* build and print the sorted status table for the current arena phase */
+void FUNC arena_show_status(void)
+{
+	int i, j;
+	int count;
+	int best;
+	int tmp;
+	int sortmode;
+	int order[ARENA_MAX_PLAYERS];
+
+	prf("\r");
+	if (arena_state == ARENA_RUNNING && arena_match_ticks > 0)
+		arena_show_match_time();
+	arena_show_mini_status();
+	if (arena_state == ARENA_QUEUE && arena_ticks > 0)
+		prfmsg(AUTOTIME, arena_mode_name(arena_mode), arena_ticks);
+	prfmsg(BATSTAT);
+
+	count = 0;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state != ARENA_P_EMPTY && count < ARENA_MAX_PLAYERS)
+			order[count++] = i;
+	}
+
+	sortmode = arena_status_sort_mode();
+	/* a fixed-size selection sort avoids recursion and additional stack use */
+	for (i = 0; i < count - 1; ++i) {
+		best = i;
+		for (j = i + 1; j < count; ++j)
+			if (arena_status_compare(order[j], order[best], sortmode) < 0)
+				best = j;
+		if (best != i) {
+			tmp = order[i];
+			order[i] = order[best];
+			order[best] = tmp;
+		}
+	}
+
+	for (i = 0; i < count; ++i)
+		arena_print_status_row(order[i]);
+}
+
+/* award a kill to a valid active last attacker without persistent ship writes */
+static int arena_credit_last_attacker(WARSHP *ptr, int usrn)
+{
+	int who;
+	WARSHP *wptr;
+	WARUSR *wuptr;
+
+	who = ptr->lastfired;
+	if (who < 0 || who >= nterms || who == usrn ||
+	    (arena_player[who].state != ARENA_P_PLAYING &&
+	     arena_player[who].state != ARENA_P_RESPAWN))
+		return FALSE;
+	wptr = warshpoff(who);
+	if (arena_player[who].state == ARENA_P_PLAYING &&
+	    wptr->status != GESTAT_USER)
+		return FALSE;
+	wuptr = warusroff(who);
+	if (wptr->status == GESTAT_USER) {
+		++wptr->kills;
+		++wptr->ukills;
+	}
+	++wuptr->kills;
+	++wuptr->ukills;
+	++arena_player[who].kills;
+	return TRUE;
+}
+
+/* remove one player from the current match while retaining lobby membership */
+static void arena_observe_match(int usrn)
+{
+	WARSHP *wptr;
+	int was_playing;
+
+	if (usrn < 0 || usrn >= nterms)
+		return;
+	was_playing = arena_player[usrn].state == ARENA_P_PLAYING ||
+	    arena_player[usrn].state == ARENA_P_RESPAWN;
+	wptr = warshpoff(usrn);
+	if (was_playing && arena_state == ARENA_RUNNING)
+		arena_credit_last_attacker(wptr,usrn);
+	if (was_playing && arena_state == ARENA_RUNNING) {
+		prfmsg(MATLEFT, username(wptr));
+		arena_broadcast_prf_except(usrn);
+	}
+	arena_player[usrn].state = ARENA_P_OBSERVE;
+	arena_player[usrn].ready = FALSE;
+	arena_player[usrn].kills = 0;
+	arena_player[usrn].deaths = 0;
+	arena_player[usrn].respawn = 0;
+	arena_player[usrn].flags = 0;
+	user[usrn].substt = ARENASUB;
+	if (usrn == usrnum)
+		usrptr->substt = ARENASUB;
+	cleartm(usrn);
+	clearitm(usrn);
+	setmem(wptr,sizeof(WARSHP),0);
+	wptr->status = GESTAT_AVAIL;
+	wptr->where = -1;
+	if (arena_host == usrn) {
+		arena_host = -1;
+		arena_choose_host_ex(usrn,FALSE);
+	}
+	btupmt(usrn,'>');
+}
+
+/* return the current player to the lobby and finish a one-player match */
+void FUNC arena_exit_match(void)
+{
+	arena_observe_match(usrnum);
+	prfmsg(MATOBS);
+	outprfge(FLT_NONE,usrnum);
+	if (arena_count_playing() < 2)
+		arena_end_match();
+	else {
+		arena_show_lobby();
+		outprfge(FLT_NONE,usrnum);
+	}
+}
+
+/* delete generated world state and clear transient ships, mines, and caches */
+static void arena_wipe_galaxy(void)
+{
+	WARSHP *wptr;
+	unsigned deleted;
+	int i;
+
+	deleted = 0;
+	setbtv(gebb2);
+	/* every generated sector record belongs exclusively to the prior match */
+	do {
+		if (!qlobtv(0))
+			break;
+		gcrbtv(&sector,0);
+		delbtv();
+		++deleted;
+	} while (TRUE);
+
+	for (i = 0; i < nummines; ++i) {
+		setmem(&mines[i],sizeof(MINE),0);
+		mines[i].channel = MINE_UNUSED;
+	}
+
+	for (i = 0; i < nships; ++i) {
+		wptr = warshpoff(i);
+		if (i >= nterms) {
+			setmem(wptr,sizeof(WARSHP),0);
+			wptr->status = GESTAT_AVAIL;
+			wptr->where = -1;
+			continue;
+		}
+		setmem(wptr->ltorps,sizeof(wptr->ltorps),0);
+		setmem(wptr->lmissl,sizeof(wptr->lmissl),0);
+		wptr->minesnear = FALSE;
+	}
+
+	setmem(ptab,nships * sizeof(PLANETAB),0);
+
+	setmem(&sector,sizeof(GALSECT),0);
+	sector.xsect = 32767;
+	sector.ysect = 32767;
+	sector.plnum = 32767;
+	setmem(&planet,sizeof(GALPLNT),0);
+	planet.xsect = 32767;
+	planet.ysect = 32767;
+	planet.plnum = 32767;
+	setmem(&worm,sizeof(GALWORM),0);
+	worm.xsect = 32767;
+	worm.ysect = 32767;
+	worm.plnum = 32767;
+
+	geshocst(1,spr("GE:INF:Arena galaxy wipe records=%u",deleted));
+}
+
+/* return participants to the queue, announce completion, and wipe the galaxy */
+static void arena_end_match(void)
+{
+	int i;
+	WARSHP *wptr;
+
+	if (arena_state == ARENA_RUNNING)
+		arena_show_results();
+	arena_state = ARENA_QUEUE;
+	arena_ticks = 0;
+	arena_match_ticks = 0;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_PLAYING ||
+		    arena_player[i].state == ARENA_P_RESPAWN) {
+			arena_player[i].ready = TRUE;
+			arena_player[i].respawn = 0;
+			user[i].substt = ARENASUB;
+			if (i == usrnum)
+				usrptr->substt = ARENASUB;
+			cleartm(i);
+			clearitm(i);
+			wptr = warshpoff(i);
+			setmem(wptr,sizeof(WARSHP),0);
+			wptr->status = GESTAT_AVAIL;
+			btupmt(i,'>');
+		}
+	}
+	arena_choose_host();
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_EMPTY)
+			continue;
+		if (arena_player[i].ready) {
+			arena_player[i].state = ARENA_P_READY;
+		}
+		else {
+			arena_player[i].state = ARENA_P_OBSERVE;
+			arena_player[i].ready = FALSE;
+		}
+	}
+	prfmsg(MATEND);
+	arena_broadcast_prf();
+	arena_wipe_galaxy();
+}
+
+/* score a destruction, distribute spoils, and put the victim into respawn */
+void FUNC arena_ship_destroyed(WARSHP *ptr, int usrn)
+{
+	int who;
+	WARSHP *wptr;
+
+	who = ptr->lastfired;
+	if (arena_credit_last_attacker(ptr,usrn)) {
+		wptr = warshpoff(who);
+		prfmsg(KILLEDBY, username(ptr), warusroff(who)->userid);
+		arena_broadcast_prf();
+		if (arena_player[who].state == ARENA_P_PLAYING &&
+		    wptr->status == GESTAT_USER) {
+			if (ptr->shipname[0] == 0)
+				prfmsg(KILLGTNO,ptr->userid);
+			else
+				prfmsg(KILLGOT1,ptr->shipname);
+			collect_spoils(ptr,wptr,who,gernd());
+		}
+	}
+	else {
+		if (who == -1)
+			--arena_player[usrn].kills;
+		if (ptr->shipname[0] == 0)
+			prfmsg(DIEDNO, username(ptr));
+		else
+			prfmsg(DIED, ptr->shipname, username(ptr));
+		arena_broadcast_prf();
+	}
+
+	prfmsg(RSPWAIT, ARENA_RESPAWN_TIME);
+	arena_show_ship_choices();
+	outprfge(FLT_NONE,usrn);
+	++arena_player[usrn].deaths;
+	arena_player[usrn].state = ARENA_P_RESPAWN;
+	arena_player[usrn].ready = FALSE;
+	arena_player[usrn].respawn = ARENA_RESPAWN_TIME;
+	user[usrn].substt = ARENASUB;
+	if (usrn == usrnum)
+		usrptr->substt = ARENASUB;
+	clearitm(usrn);
+	setmem(ptr,sizeof(WARSHP),0);
+	ptr->status = GESTAT_AVAIL;
+	ptr->where = -1;
+	btupmt(usrn,'>');
+}
+
+/**************************************************************************
+** Planet drops and periodic state                                       **
+**************************************************************************/
+
+/* add an item to the current planet without exceeding its arena cap */
+static void arena_add_drop_item(int item, unsigned long qty, unsigned long cap)
+{
+	if (planet.items[item].qty >= cap)
+		return;
+	if (qty > cap - planet.items[item].qty)
+		qty = cap - planet.items[item].qty;
+	planet.items[item].qty += qty;
+}
+
+/* consume two random bits to vary one base item quantity from base to base+3 */
+static unsigned long arena_drop_qty(unsigned int *r, unsigned long base)
+{
+	unsigned long qty;
+
+	qty = base + (*r & 3);
+	*r >>= 2;
+	return qty;
+}
+
+/* add the scheduled item and upgrade drop to Zygor, then announce it */
+static void arena_drop_zygor(void)
+{
+	COORD coord;
+	byte special;
+	unsigned int r;
+
+	coord.xcoord = 0.50001;
+	coord.ycoord = 0.50001;
+	getsector(&coord);
+	if (!getplanet(&coord,1) || planet.type != PLTYPE_PLNT)
+		return;
+	r = gernd();
+	arena_add_drop_item(I_TORPEDO,arena_drop_qty(&r,7UL),20UL);
+	arena_add_drop_item(I_MISSILE,arena_drop_qty(&r,7UL),20UL);
+	arena_add_drop_item(I_MINE,arena_drop_qty(&r,7UL),20UL);
+	arena_add_drop_item(I_FLUXPOD,arena_drop_qty(&r,4UL),12UL);
+	arena_add_drop_item(I_DECOYS,arena_drop_qty(&r,2UL),10UL);
+	arena_add_drop_item(I_ZIPPERS,arena_drop_qty(&r,2UL),10UL);
+	/* fewer jammers */
+	arena_add_drop_item(I_JAMMERS,arena_drop_qty(&r,2UL) / 2UL,5UL);
+	special = (byte)(2 + (gernd() % 2));
+	planet.arena_shield_boost += special;
+	special = (byte)(2 + (gernd() % 2));
+	planet.arena_phaser_boost += special;
+	switch (gernd() % 5) {
+	case 0:
+		planet.arena_flags |= ARENA_PL_SCAN;
+		break;
+	case 1:
+		planet.arena_flags |= ARENA_PL_ARMOR;
+		break;
+	case 2:
+		planet.arena_flags |= ARENA_PL_ACCEL;
+		break;
+	case 3:
+		planet.arena_flags |= ARENA_PL_CORE;
+		break;
+	default:
+		planet.arena_flags |= ARENA_PL_INSTANT;
+		break;
+	}
+	pkey.xsect = 0;
+	pkey.ysect = 0;
+	pkey.plnum = 1;
+	gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
+	prfmsg(PLDROP);
+	arena_broadcast_prf();
+}
+
+/* advance queue, staging, match, drop, and respawn timers once per second */
+void FUNC arena_tick(void)
+{
+	int i;
+
+	if (arena_state == ARENA_QUEUE) {
+		if (arena_count_ready() < 2) {
+			if (arena_ticks > 0) {
+				arena_ticks = 0;
+				prfmsg(AUTOCAN);
+				arena_broadcast_prf();
+			}
+			return;
+		}
+		if (arena_ticks <= 0) {
+			arena_ticks = ARENA_AUTOSTART_TIME;
+			prfmsg(AUTOBRDC, arena_mode_name(arena_mode), arena_ticks);
+			arena_broadcast_prf();
+			return;
+		}
+		--arena_ticks;
+		if (arena_ticks == 30 || arena_ticks == 10) {
+			prfmsg(AUTOBRDC, arena_mode_name(arena_mode), arena_ticks);
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks == 5) {
+			prfmsg(AUTO5, arena_mode_name(arena_mode));
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks > 0 && arena_ticks < 5) {
+			prfmsg(AUTOFIN, arena_ticks);
+			arena_broadcast_prf();
+		}
+		if (arena_ticks <= 0)
+			arena_start_match();
+		return;
+	}
+	if (arena_state == ARENA_STAGING) {
+		if (arena_ticks > 0)
+			--arena_ticks;
+		if (arena_ticks == 45) {
+			if (arena_scan_percent() < 100)
+				prfmsg(STGSIZE2, univmax, arena_scan_percent());
+			else
+				prfmsg(STGSIZE, univmax);
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks == 30 || arena_ticks == 10) {
+			prfmsg(STGTIME, arena_mode_name(arena_mode), arena_ticks);
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks == 5) {
+			prfmsg(STG5, arena_mode_name(arena_mode));
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks > 0 && arena_ticks < 5) {
+			prfmsg(STGFIN, arena_ticks);
+			arena_broadcast_prf();
+		}
+		if (arena_ticks <= 0)
+			arena_start_combat();
+		return;
+	}
+	if (arena_state == ARENA_RUNNING) {
+		if (arena_match_ticks > 0)
+			--arena_match_ticks;
+		if (arena_match_ticks == 600 || arena_match_ticks == 300)
+			arena_drop_zygor();
+		if (arena_match_ticks == 60) {
+			prfmsg(MATWARN, arena_mode_name(arena_mode));
+			arena_broadcast_prf();
+		}
+		for (i = 0; i < nterms; ++i) {
+			if (arena_player[i].state == ARENA_P_RESPAWN) {
+				if (arena_player[i].respawn > 0)
+					--arena_player[i].respawn;
+				if (arena_player[i].respawn == 0) {
+					if (arena_spawn_player(i))
+						arena_player[i].state = ARENA_P_PLAYING;
+					else
+						arena_spawn_failed(i);
+				}
+			}
+		}
+		if (arena_count_playing() < 2 || arena_match_ticks <= 0)
+			arena_end_match();
+	}
+}
+
+/**************************************************************************
+** Command dispatch                                                      **
+**************************************************************************/
+
+/* dispatch lobby and respawn commands, handing active players to combat */
+int FUNC mnu_arena_lobby(void)
+{
+	int choice;
+
+	if (arena_player[usrnum].state == ARENA_P_PLAYING) {
+		usrptr->substt = FIGHTSUB;
+		user[usrnum].substt = FIGHTSUB;
+		return mnu_fightsub();
+	}
+
+	if (arena_player[usrnum].state == ARENA_P_RESPAWN &&
+	    arena_state == ARENA_RUNNING) {
+		if (margc == 1 && sameas(margv[0], "X")) {
+			arena_exit_match();
+			return 1;
+		}
+		if (margc == 1 && sameas(margv[0], "?")) {
+			arena_show_ship_classes();
+			outprfge(FLT_NONE, usrnum);
+			return 1;
+		}
+		choice = margc == 1 ? arena_parse_ship_choice(margv[0]) : -1;
+		if (choice >= 0) {
+			arena_player[usrnum].shipclass =
+			    (byte)arena_shipclass_for_choice(choice);
+			prfmsg(RSPSEL, shipclass[arena_selected_shipclass(usrnum)].typename);
+		}
+		else {
+			prfmsg(RSPPROM);
+		}
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+
+	if (margc == 0) {
+		arena_show_lobby();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc >= 1 &&
+	    (sameto("?", margv[0]) || sameto("hel", margv[0]))) {
+		gwar();
+		return 1;
+	}
+	else if (margc >= 1 && sameas(margv[0], ">")) {
+		arena_lobby_chat();
+		return 1;
+	}
+	else if (margc == 1 && sameto("cls", margv[0])) {
+		cmd_clear();
+		return 1;
+	}
+	else if ((margc == 1 || (margc == 2 && sameas(margv[1], "all"))) &&
+	    sameto("ros", margv[0])) {
+		cmd_geroster();
+		return 1;
+	}
+	else if (margc >= 1 && sameto("sen", margv[0])) {
+		prfmsg(LOBCHATH);
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc >= 1 && sameto("set", margv[0])) {
+		cmd_set();
+		return 1;
+	}
+	else if (margc >= 1 && sameto("sys", margv[0])) {
+		/* cmd_sysop enforces sysop restriction */
+		cmd_sysop();
+		return 1;
+	}
+	else if (margc == 1 && sameto("who", margv[0])) {
+		cmd_who();
+		return 1;
+	}
+	else if (margc == 1 && sameto("sta", margv[0])) {
+		arena_show_status();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc == 1 && sameto("rea", margv[0])) {
+		if (arena_host == usrnum)
+			prfmsg(LOBHOST);
+		else {
+			arena_set_ready();
+			arena_show_lobby();
+		}
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc == 1 && sameto("obs", margv[0])) {
+		arena_set_observe();
+		arena_show_lobby();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc == 1 && sameto("mod", margv[0])) {
+		arena_show_modes();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc == 2 && sameto("mod", margv[0])) {
+		arena_set_mode(margv[1]);
+		arena_show_lobby();
+		outprfge(FLT_NONE, usrnum);
+		return 1;
+	}
+	else if (margc == 1 && sameto("go", margv[0])) {
+		if (!arena_start_countdown()) {
+			outprfge(FLT_NONE, usrnum);
+		}
+		return 1;
+	}
+	else if (margc == 1 && sameas(margv[0], "X")) {
+		prfmsg(EXIWAR);
+		outprfge(FLT_NONE, usrnum);
+		arena_leave(usrnum);
+		btupmt(usrnum, 0);
+		return 0;
+	}
+	arena_show_lobby_prompt();
+	outprfge(FLT_NONE, usrnum);
+	return 1;
+}
