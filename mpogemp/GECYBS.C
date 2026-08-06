@@ -82,6 +82,17 @@ static char cybname[UIDSIZ];
 int cybhaltflg = 0;
 double d_topspeed;
 
+/* use arena combat rules without changing ge-next neutral-zone behavior */
+static int cyb_in_neutral(WARSHP *ptr, int usrn)
+{
+#ifdef GE_ARENA
+	return arena_neutral_fire_blocked(ptr,usrn);
+#else
+	usrn = usrn;
+	return neutral(&ptr->coord);
+#endif
+}
+
 /**************************************************************************
 ** Validate a saved cyborg ship record for the current cyb slot          **
 **************************************************************************/
@@ -178,9 +189,7 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 {
 	WARSHP *wptr;
 	int zothusn;
-#ifndef GE_ARENA
 	int i, goldwin, goldspin, goldtry;
-#endif
 	double ddist;
 	int have_ship = FALSE;
 	int have_user;
@@ -279,10 +288,6 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 				ptr->coord.ycoord = rndm((double)univmax * 2.0) - (double)univmax;
 			}
 
-#ifdef GE_ARENA
-			/* arena Cyborg systems and inventory come from its mode class */
-			arena_apply_loadout(ptr, cls);
-#else
 			/* phaser and shields between 50 and 100% of max */
 			if (shipclass[cls].max_phasr > 0)
 				ptr->phasrtype = (shipclass[cls].max_phasr / 2) +
@@ -295,7 +300,6 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 					(gernd() % (shipclass[cls].max_shlds / 2 + 1));
 			else
 				ptr->shieldtype = 0;
-#endif
 
 			ptr->cybmine = (byte)255;
 			ptr->track_grace = 0;
@@ -307,7 +311,6 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 			ptr->shield = 40 + (ptr->shieldtype * 10);
 			ptr->phasr = 100;
 
-#ifndef GE_ARENA
 			ptr->items[I_FLUXPOD] = (gernd() % 20) + 10;
 			if (shipclass[ptr->shpclass].has_decoy)
 				ptr->items[I_DECOYS] = (gernd() % 20) + 10;
@@ -339,7 +342,6 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 				}
 				ptr->items[I_GOLD] = goldwin;
 			}
-#endif
 
 			ptr->status = GESTAT_AUTO;
 			ptr->tick = CYBTICKTIME + gernd() % (CYBTICKTIME * 5);
@@ -665,9 +667,9 @@ static void cyb_attack(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 
 	acted = 0;
 
-	if (neutral(&ptr->coord))
+	if (cyb_in_neutral(ptr,usrn))
 		return;
-	if (neutral(&wptr->coord))
+	if (cyb_in_neutral(wptr,zothusn))
 		return;
 
 	if (shipclass[ptr->shpclass].max_phasr > 0 && ptr->phasr >= PMINFIRE &&
@@ -732,7 +734,7 @@ static void cyb_check_damage(WARSHP *ptr, int usrn)
 		if (shipclass[ptr->shpclass].has_mine
 			&& ptr->items[I_MINE] > 0
 			&& ptr->mineload == 0
-			&& !neutral(&ptr->coord)
+			&& !cyb_in_neutral(ptr,usrn)
 			&& gernd() % 8 == 0)
 			laymine(ptr, usrn, 10);
 
@@ -1052,7 +1054,8 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 					spr("%ld",(long)hyperdist1),spr("%ld",(long)hyperdist2),spr("%ld",(long)low_dist));
 			outwar(ALWAYS,usrn,0); */
 		} else if ((shipclass[wptr->shpclass].cybs_can_att ||
-			wptr->cantexit > 0 || ptr->cantexit > 0) && !neutral(&wptr->coord)) {
+			wptr->cantexit > 0 || ptr->cantexit > 0) &&
+			!cyb_in_neutral(wptr,low_ship)) {
 			if (low_dist > .5) {
 				if (ptr->where == 0 && wptr->where == 0 &&
 					wptr->speed >= 990.0 && d_topspeed >= 1000.0 && low_dist > 1.5) {
@@ -1104,7 +1107,7 @@ static void cyb_check_lockon(WARSHP *ptr, int usrn)
 				ptr->head2b = normal(vector(&ptr->coord, &wptr->coord) + 30.0 + rndm(60.0));
 			if (shipclass[wptr->shpclass].cybs_can_att == 0)
 				cyb_annoy(ptr, low_ship, CYBIGNORE);
-			else if (neutral(&wptr->coord))
+			else if (cyb_in_neutral(wptr,low_ship))
 				cyb_annoy(ptr, low_ship, NEUTRAL);
 			ptr->holdcourse = (gernd() % 3) + 2;
 		}
@@ -1188,7 +1191,7 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 					wptr->status == GESTAT_USER)
 					ptr->tick = CYBTICKTIME +
 						gernd() % (5 - shipclass[ptr->shpclass].tough_factor);
-				if (!neutral(&ptr->coord) &&
+				if (!cyb_in_neutral(ptr,usrn) &&
 					ddist < (double)shipclass[ptr->shpclass].scanrange) {
 					/* bases don't approach... so send msg when wptr approaches */
 					if (shipclass[ptr->shpclass].max_accel == 0 &&
@@ -1197,7 +1200,7 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 					/* in range, and target not in neutral zone, AND... */
 					if (ddist < 30000.0 +
 						((double)shipclass[ptr->shpclass].tough_factor * 2000.0) &&
-						!neutral(&wptr->coord) &&
+						!cyb_in_neutral(wptr,zothusn) &&
 						/* if target is NPC, and not traveling to neutral zone or is already targeting me */
 						((wptr->status == GESTAT_AUTO &&
 						((wptr->npcstate < 2 || wptr->npcstate > 7) || wptr->cybmine == usrn) &&
@@ -1249,7 +1252,8 @@ void FUNC cyb_lives(WARSHP *ptr, int usrn)
 			/* as long as they can't see ... the other player must be trying to get
 			away.... might as well mine the area */
 			if (shipclass[ptr->shpclass].has_mine && ptr->items[I_MINE] > 0 &&
-				ptr->mineload == 0 && !neutral(&ptr->coord) && gernd() % 5 == 0) {
+				ptr->mineload == 0 && !cyb_in_neutral(ptr,usrn) &&
+				gernd() % 5 == 0) {
 				laymine(ptr, usrn, 10);
 				npc_cruise(ptr, usrn, 2);
 			}

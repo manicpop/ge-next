@@ -2072,14 +2072,14 @@ IHIT2 {***
 
 ROSTER1 {
 [1;36mArena wins
-[0;31m--------------------------------------------
-[1;34mPlayer                         Total  Battle[1;37m
+[0;31m---------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard[1;37m
 } T GE arena wins roster
 
 ROSTER2 {
 [1;36mArena wins
-[0;31m--------------------------------------------
-[1;34mPlayer                         Total  Battle[1;37m
+[0;31m---------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard[1;37m
 } T GE arena wins roster
 
 ROSTER3 {
@@ -3293,7 +3293,8 @@ LOBPHST {
 
 MODLIST {
 [1;36mArena modes:
-  1 - Battle: free-for-all combat; most kills wins.
+  1 - Battle: free-for-all combat, no Cybertrons, most kills wins.
+  2 - Hoard: collect gold from planets and combat, incl. Cybs, most gold wins.
 
 Current mode: [1;37m%s
 } T GE arena mode list
@@ -3310,8 +3311,12 @@ MODHOST {[1;36mOnly the arena host can select the game mode.[1;37m
 MODLOCK {[1;36mThe game mode cannot be changed while a match is pending or running.[1;37m
 } T GE arena mode change blocked
 
-MODSET {[1;36mArena mode set to Battle.[1;37m
+MODSET {[1;36mArena mode set to %s.[1;37m
 } T GE arena mode set
+
+MODCHG {***
+[1;36mThe host has changed the game mode to [1;37m%s[1;36m.[1;37m
+} T GE arena mode changed
 
 MODUNK {[1;36mUnknown arena mode.[1;37m
 } T GE arena unknown mode
@@ -3343,6 +3348,10 @@ MATTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining.[1;37m
 BATSTAT {[0;31m-------------------------------------------------------------
 [1;34mPlayer                 Status                   Kills  Killed[1;37m
 } T GE arena Battle status header
+
+HODSTAT {[0;31m------------------------------------------------------------
+[1;34mPlayer                 Status                           Gold[1;37m
+} T GE arena Hoard status header
 
 ANNOUN {***
 [0;36m%s[1;36m has entered the arena lobby.[1;37m
@@ -3396,7 +3405,7 @@ STGWORM {***
 } T GE arena staging wormhole repulsor
 
 STGBOUND {***
-[0;37m[[0;31mWARNING![0;37m] Navigation outside sector [1;34m0 0[0;37m until the match begins.
+[0;37m[[0;31mWARNING![0;37m] Navigation outside sector [1;34m0 0[0;37m is not allowed until the match begins.
 Engines shut down under emergency procedures.
 
 Damage control reports [0;31m%s[0;37m damage to all sections due to kinetic shock.[1;37m
@@ -3440,9 +3449,6 @@ ENDTIME {[1;36mMatch ended early with [1;37m%d[1;36m seconds remaining.[1;37
 ENDTIME2 {[1;36mMatch ended early with [1;37m%dm %02ds[1;36m remaining.[1;37m
 } T GE arena early end status minutes
 
-PLMAINT {[1;36mA maintenance depot is available here. Use MAINT for repairs.[1;37m
-} T GE arena maintenance depot hint
-
 PLDROP {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m New supplies have arrived at Zygor. [1;36m>[1;37m
@@ -3468,11 +3474,35 @@ MATTIE {***
 [1;36m<[1;37m %s ends in a tie with %d kills! [1;36m>[1;37m
 } T GE arena tie line
 
+HODWIN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s wins Hoard with %s gold! [1;36m>[1;37m
+} T GE arena Hoard winner
+
+HODTIE {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m Hoard ends in a tie with %s gold! [1;36m>[1;37m
+} T GE arena Hoard tie
+
+HODLEAD {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s currently has the most gold. [1;36m>[1;37m
+} T GE arena Hoard leader hint
+
+HODCONT {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m There is currently a tie for the most gold. [1;36m>[1;37m
+} T GE arena Hoard tied leader hint
+
+HODOPEN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m Gold standings are now public. [1;36m>[1;37m
+} T GE arena Hoard standings revealed
+
 LOBCHATH {[1;36mUse [1;37m>[1;36m to chat in the arena lobby.[1;37m
 } T GE arena lobby SEND guidance
 
 SHPPROM {
-
 [1;36mSelect [1;37m1-%d[1;36m or [1;37m?[1;36m.[1;37m
 } T GE arena ship selection prompt
 

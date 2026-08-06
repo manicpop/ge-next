@@ -895,6 +895,8 @@ static void arena_scan_planet_contents(void)
 	arena_scan_item(I_DECOYS);
 	arena_scan_item(I_ZIPPERS);
 	arena_scan_item(I_FLUXPOD);
+	if (arena_mode == ARENA_MODE_HOARD)
+		arena_scan_item(I_GOLD);
 	if (plptr->arena_shield_boost)
 		arena_scan_powerup("Shield booster",plptr->arena_shield_boost);
 	if (plptr->arena_phaser_boost)

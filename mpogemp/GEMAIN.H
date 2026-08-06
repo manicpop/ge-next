@@ -68,7 +68,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.2-pre3"
+#define PROJECT_VERSION "0.3.2-pre5"
 
 #ifndef MBBSEMU
 #define PROJECT_ARCH "16-bit"
@@ -356,12 +356,15 @@
 #define ARENA_RUNNING 3
 
 #define ARENA_MODE_BATTLE 1
+#define ARENA_MODE_HOARD 2
 
 #define ARENA_WIN_BATTLE 0
+#define ARENA_WIN_HOARD 1
 #define ARENA_WIN_SLOTS 8
 
 #define ARENA_SORT_NONE 0
 #define ARENA_SORT_KILLS 1
+#define ARENA_SORT_GOLD 2
 
 #define ARENA_STAGING_TIME 60
 #define ARENA_AUTOSTART_TIME 60

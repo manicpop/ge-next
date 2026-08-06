@@ -959,9 +959,7 @@ void FUNC iniwara(void)
 #ifndef GE_ARENA
 	rtkick(30, pplarti);
 #endif
-#ifndef GE_ARENA
 	rtkick(1, pautorti);
-#endif
 	#else
 
 	rtkick(TICKTIME, warrti);
@@ -972,9 +970,7 @@ void FUNC iniwara(void)
 #ifndef GE_ARENA
 	rtkick(10, plarti);
 #endif
-#ifndef GE_ARENA
 	rtkick(1, autorti);
-#endif
 	#endif
 
 	/* find the module number (state) of the FSE for later use */
@@ -1317,10 +1313,11 @@ void FUNC dump_roster_file(void)
 			gcrbtv(&tmpusr, 1);
 			if (tmpusr.score > 0 && tmpusr.userid[0] != '@') {
 #ifdef GE_ARENA
-				fprintf(hdl, "%-29s%7lu%8u\n",
+				fprintf(hdl, "%-29s%7lu%8u%7u\n",
 					tmpusr.userid,
 					tmpusr.score,
-					tmpusr.arena_wins[ARENA_WIN_BATTLE]);
+					tmpusr.arena_wins[ARENA_WIN_BATTLE],
+					tmpusr.arena_wins[ARENA_WIN_HOARD]);
 #else
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);
@@ -2277,19 +2274,25 @@ void FUNC warrtia(void)
 ** Real time kick routine for all automatons                             **
 **************************************************************************/
 
+/* schedule the next automaton tick for the active MajorBBS platform */
+static void schedule_autorti(void)
+{
+#ifdef PHARLAP
+	rtkick(1, pautorti);
+#else
+	rtkick(1, autorti);
+#endif
+}
+
 #ifdef PHARLAP
 void FUNC pautorti(void)
 {
-#ifndef GE_ARENA
 	autortia();
-#endif
 }
 #else
 int FUNC autorti(void)
 {
-#ifndef GE_ARENA
 	autortia();
-#endif
 	return 0;
 }
 #endif
@@ -2302,6 +2305,14 @@ void FUNC autortia(void)
 	static int ticktock1 = 0;
 	static int ticktock2 = 0;
 	int count, cls, clscnt, i;
+
+#ifdef GE_ARENA
+	/* arena automatons exist only while a match is actively running */
+	if (arena_state != ARENA_RUNNING) {
+		schedule_autorti();
+		return;
+	}
+#endif
 
 	logthis("TICK:autorti entered");
 
@@ -2404,11 +2415,7 @@ void FUNC autortia(void)
 
 	logthis("Exiting AUTORTI");
 
-#ifdef PHARLAP
-	rtkick(1, pautorti);
-#else
-	rtkick(1, autorti);
-#endif
+	schedule_autorti();
 }
 
 /**************************************************************************

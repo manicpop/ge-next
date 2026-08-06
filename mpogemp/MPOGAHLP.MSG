@@ -503,7 +503,7 @@ This command is also available in the lobby.
 } T GE help set message
 
 HLPSET2 {
-The type of messages displayed can be filtered with the [1;37mSET DISPLAY[1;36m command:
+[1;36mThe type of messages displayed can be filtered with the [1;37mSET DISPLAY[1;36m command:
 
 [1;37mcybs (off / approach / battle / on)
 [1;36m  OFF -- show no Cybertron hails

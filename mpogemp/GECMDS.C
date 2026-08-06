@@ -2502,6 +2502,8 @@ static void arena_transfer_up(void)
 	changed |= arena_planet_transfer_item(I_DECOYS,&full,&listed);
 	changed |= arena_planet_transfer_item(I_ZIPPERS,&full,&listed);
 	changed |= arena_planet_transfer_item(I_FLUXPOD,&full,&listed);
+	if (arena_mode == ARENA_MODE_HOARD)
+		changed |= arena_planet_transfer_item(I_GOLD,&full,&listed);
 	changed |= arena_planet_apply_boosts(&listed,&used);
 	changed |= arena_planet_apply_upgrade(ARENA_PL_SCAN,ENHSCAN,
 	    "enhanced scanners",&listed);
@@ -2529,11 +2531,8 @@ static void arena_transfer_up(void)
 		prfmsg(MAINT7);
 	if (full)
 		prfmsg(KILLFULL);
-	if (!changed) {
-		if (plptr->arena_flags & ARENA_PL_MAINT)
-			prfmsg(PLMAINT);
+	if (!changed)
 		return;
-	}
 	setsect(warsptr);
 	pkey.plnum = plnum;
 	gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
@@ -3355,8 +3354,10 @@ void FUNC cmd_geroster(void)
 				sprintf(gechrbuf, "%lu", tmpusr.score);
 				sprintf(gechrbuf2, "%u",
 				    tmpusr.arena_wins[ARENA_WIN_BATTLE]);
-				prf("%-29s%7s%8s\r", tmpusr.userid, gechrbuf,
-				    gechrbuf2);
+				sprintf(gechrbuf3, "%u",
+				    tmpusr.arena_wins[ARENA_WIN_HOARD]);
+				prf("%-29s%7s%8s%7s\r", tmpusr.userid, gechrbuf,
+				    gechrbuf2, gechrbuf3);
 #else
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);

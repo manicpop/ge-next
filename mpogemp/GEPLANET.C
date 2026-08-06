@@ -123,6 +123,22 @@ static byte arena_planet_boost(void)
 	return 3;
 }
 
+static unsigned long arena_planet_gold(void)
+{
+	unsigned r;
+
+	r = (unsigned)rndm(100.0);
+	if (r < 55)
+		return 0UL;
+	if (r < 80)
+		return 1UL + (unsigned long)(gernd() % 40);
+	if (r < 92)
+		return 41UL + (unsigned long)(gernd() % 60);
+	if (r < 98)
+		return 101UL + (unsigned long)(gernd() % 60);
+	return 161UL + (unsigned long)(gernd() % 40);
+}
+
 static void arena_init_planet_loot(void)
 {
 	unsigned maint_roll;
@@ -134,6 +150,8 @@ static void arena_init_planet_loot(void)
 	planet.items[I_DECOYS].qty = arena_planet_qty();
 	planet.items[I_ZIPPERS].qty = arena_planet_qty();
 	planet.items[I_FLUXPOD].qty = arena_planet_qty();
+	if (arena_mode == ARENA_MODE_HOARD)
+		planet.items[I_GOLD].qty = arena_planet_gold();
 
 	planet.arena_shield_boost = arena_planet_boost();
 	planet.arena_phaser_boost = arena_planet_boost();

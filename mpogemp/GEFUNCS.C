@@ -81,6 +81,19 @@ static long	deathdeduct;		/* death penalty amount to report after kill processin
 static void	shieldhitmsg(int shmsg, int usrn);	/* map shieldhit() result codes to output messages */
 static void	pick_letter(SCANTAB *ptr);
 
+#ifdef GE_ARENA
+/* arena users and configured Cyb slots retain ownership of active weapons */
+static int arena_weapon_owner_active(int channel)
+{
+	if (channel < 0 || channel >= nships)
+		return FALSE;
+	if (channel < nterms)
+		return arena_player[channel].state == ARENA_P_PLAYING ||
+		    arena_player[channel].state == ARENA_P_RESPAWN;
+	return cyb_slot_class(channel) >= 0;
+}
+#endif
+
 /**************************************************************************
 ** Lockon helper for torp and misl                                       **
 **************************************************************************/
@@ -2800,6 +2813,12 @@ void FUNC checkdam(WARSHP *ptr, int usrn)
 			arena_ship_destroyed(ptr,usrn);
 			return;
 		}
+		if (arena_state == ARENA_RUNNING && usrn >= nterms &&
+		    VALID_SHPCLASS(ptr->shpclass) &&
+		    shipclass[ptr->shpclass].max_type == CLASSTYPE_CYBORG) {
+			arena_cyb_destroyed(ptr,usrn);
+			return;
+		}
 #endif
 		ptr->damage = 0.0;	/* reset damage so he can get back on */
 
@@ -2919,13 +2938,13 @@ void FUNC prf_item_list_end(int listed)
 		prf(" nothing.\r");
 }
 
-void FUNC collect_spoils(WARSHP *ptr, WARSHP *wptr, int who, unsigned int r)
+static int transfer_spoils(WARSHP *ptr, WARSHP *wptr, unsigned int r,
+	int *listed)
 {
 	int i;
 	unsigned long loot_amt;
-	int listed, full;
+	int full;
 
-	listed = FALSE;
 	full = FALSE;
 
 	/* get gold drop first, complete amount */
@@ -2937,7 +2956,8 @@ void FUNC collect_spoils(WARSHP *ptr, WARSHP *wptr, int who, unsigned int r)
 		}
 		if (loot_amt > 0) {
 			wptr->items[I_GOLD] += loot_amt;
-			prf_item_list_add(&listed,loot_amt,item_name[I_GOLD]);
+			if (listed != NULL)
+				prf_item_list_add(listed,loot_amt,item_name[I_GOLD]);
 		}
 	}
 	/* get the rest except casualties, random amounts */
@@ -2955,11 +2975,27 @@ void FUNC collect_spoils(WARSHP *ptr, WARSHP *wptr, int who, unsigned int r)
 				}
 				if (loot_amt > 0) {
 					wptr->items[i] += loot_amt;
-					prf_item_list_add(&listed,loot_amt,item_name[i]);
+					if (listed != NULL)
+						prf_item_list_add(listed,loot_amt,item_name[i]);
 				}
 			}
 		}
 	}
+
+	return full;
+}
+
+void FUNC collect_spoils_silent(WARSHP *ptr, WARSHP *wptr, unsigned int r)
+{
+	transfer_spoils(ptr,wptr,r,NULL);
+}
+
+void FUNC collect_spoils(WARSHP *ptr, WARSHP *wptr, int who, unsigned int r)
+{
+	int listed, full;
+
+	listed = FALSE;
+	full = transfer_spoils(ptr,wptr,r,&listed);
 	prf_item_list_end(listed);
 
 	if (full == TRUE)
@@ -3449,10 +3485,8 @@ void FUNC checkmines(void)
 								randamage(wptr,zothusn,damfact);
 								/* orphaned mines still detonate, but they no longer assign credit or faction dislike */
 #ifdef GE_ARENA
-								if (minechan >= 0 && minechan < nterms &&
-								    (arena_player[minechan].state == ARENA_P_PLAYING ||
-								     arena_player[minechan].state == ARENA_P_RESPAWN)) {
-									/* arena ownership survives destruction because the player slot remains stable */
+								if (arena_weapon_owner_active(minechan)) {
+									/* arena ownership survives destruction because ship slots remain stable */
 									if (zothusn != minechan)
 										wptr->lastfired = minechan;
 									wuptr = warusroff(minechan);
@@ -4060,10 +4094,8 @@ void FUNC validate_lock(WARSHP *ptr, int usrn)
 void FUNC acctm(WARSHP *ptr, int usrn, int mt, byte channel, int count)
 {
 #ifdef GE_ARENA
-	/* arena projectile ownership survives while its player waits to respawn */
-	if (channel < nterms &&
-	    (arena_player[channel].state == ARENA_P_PLAYING ||
-	     arena_player[channel].state == ARENA_P_RESPAWN))
+	/* arena projectile ownership survives while its owner remains in the match */
+	if (arena_weapon_owner_active((int)channel))
 		ptr->lastfired = channel;
 	else
 		ptr->lastfired = -1;
@@ -5355,6 +5387,12 @@ int FUNC chkweight(WARSHP *wptr, int itm, unsigned long amt)
 	if (wptr->items[itm] > ULCAP - amt)
 		return FALSE;
 
+#ifdef GE_ARENA
+	/* Hoard scoring is not constrained by ship-class cargo tonnage */
+	if (arena_mode == ARENA_MODE_HOARD)
+		return TRUE;
+#endif
+
 	cap = (unsigned long)shipclass[wptr->shpclass].max_tons;
 	tons = 0UL;
 	rem100 = 0;
@@ -5379,6 +5417,11 @@ unsigned long FUNC cargo_room_for_item(WARSHP *wptr, int itm)
 	/* this won't happen unless we're having fun with SYS commands */
 	if (wptr->items[itm] == ULCAP)
 		return 0UL;
+
+#ifdef GE_ARENA
+	if (arena_mode == ARENA_MODE_HOARD)
+		return ULCAP - wptr->items[itm];
+#endif
 
 	lo = 0UL;
 	hi = ULCAP - wptr->items[itm];
