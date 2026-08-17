@@ -83,6 +83,9 @@ static void arena_start_match(void);
 static void arena_end_match(void);
 static void arena_observe_match(int usrn);
 
+static int arena_king_x;
+static int arena_king_y;
+
 /*
  * Arena ships and galaxy records are disposable match state; user records
  * persist only account settings and wins. ARENAPLAYER.state describes what
@@ -100,6 +103,8 @@ static char *arena_mode_name(int mode)
 		return "Battle";
 	if (mode == ARENA_MODE_HOARD)
 		return "Hoard";
+	if (mode == ARENA_MODE_KING)
+		return "King";
 	return "unknown";
 }
 
@@ -110,6 +115,8 @@ static int arena_mode_win_slot(int mode)
 		return ARENA_WIN_BATTLE;
 	if (mode == ARENA_MODE_HOARD)
 		return ARENA_WIN_HOARD;
+	if (mode == ARENA_MODE_KING)
+		return ARENA_WIN_KING;
 	return -1;
 }
 
@@ -320,9 +327,16 @@ void FUNC arena_show_ship_choices(void)
 		    classptr->arena_mode != arena_mode)
 			continue;
 		++choice;
-		prf("  %s%d %s%s%s: Mark-%d shield, Mark-%d phaser\r",
-		    CLR_CYAN2, choice, CLR_CYAN1, classptr->typename, CLR_WHITE2,
-		    classptr->arena_start_shield, classptr->arena_start_phaser);
+		prf("  %s%d %s%s%s:",CLR_CYAN2,choice,CLR_CYAN1,
+		    classptr->typename,CLR_WHITE2);
+		if (classptr->arena_start_shield > 0)
+			prf(" Mark-%d shield",classptr->arena_start_shield);
+		if (classptr->arena_start_phaser > 0) {
+			if (classptr->arena_start_shield > 0)
+				prf(",");
+			prf(" Mark-%d phaser",classptr->arena_start_phaser);
+		}
+		prf("\r");
 		column = 0;
 		first = TRUE;
 		arena_show_choice_item(&column,&first,
@@ -887,6 +901,8 @@ static int arena_set_mode(char *mode)
 		newmode = ARENA_MODE_BATTLE;
 	else if (sameas("2", mode))
 		newmode = ARENA_MODE_HOARD;
+	else if (sameas("3", mode))
+		newmode = ARENA_MODE_KING;
 	else {
 		prfmsg(MODUNK);
 		arena_show_modes();
@@ -960,10 +976,16 @@ static int arena_spawn_player(int usrn)
 	arena_apply_loadout(warsptr, arena_selected_shipclass(usrn));
 	if (arena_state == ARENA_RUNNING) {
 		span = (univmax * 2) + 1;
-		warsptr->coord.xcoord = (double)((int)(gernd() % span) - univmax)
-		    + rndm(.9998) + .0001;
-		warsptr->coord.ycoord = (double)((int)(gernd() % span) - univmax)
-		    + rndm(.9998) + .0001;
+		do {
+			warsptr->coord.xcoord =
+			    (double)((int)(gernd() % span) - univmax)
+			    + rndm(.9998) + .0001;
+			warsptr->coord.ycoord =
+			    (double)((int)(gernd() % span) - univmax)
+			    + rndm(.9998) + .0001;
+		} while (arena_mode == ARENA_MODE_KING &&
+		    coord1(warsptr->coord.xcoord) == arena_king_x &&
+		    coord1(warsptr->coord.ycoord) == arena_king_y);
 	}
 	warsptr->where = 0;
 	if (arena_state == ARENA_RUNNING) {
@@ -1032,6 +1054,7 @@ static void arena_start_match(void)
 	for (i = 0; i < nterms; ++i) {
 		arena_player[i].kills = 0;
 		arena_player[i].deaths = 0;
+		arena_player[i].kingtime = 0;
 		if (arena_player[i].state == ARENA_P_READY)
 			arena_show_initial_ship_choice(i);
 	}
@@ -1080,6 +1103,12 @@ static void arena_start_combat(void)
 	arena_match_ticks = ARENA_MATCH_TIME;
 	prfmsg(MATSTART, arena_mode_name(arena_mode));
 	arena_broadcast_prf();
+	if (arena_mode == ARENA_MODE_KING) {
+		arena_king_x = 0;
+		arena_king_y = 0;
+		prfmsg(KNGSECT,arena_king_x,arena_king_y);
+		arena_broadcast_prf();
+	}
 }
 
 /* apply normal neutral rules except while arena combat is active */
@@ -1167,6 +1196,41 @@ static int arena_hoard_scores_public(void)
 	    arena_state == ARENA_RUNNING && arena_match_ticks <= 180;
 }
 
+/* move the King objective to a different random sector */
+static void arena_king_move_sector(void)
+{
+	int newx, newy, span;
+
+	span = (univmax * 2) + 1;
+	do {
+		newx = (int)(gernd() % span) - univmax;
+		newy = (int)(gernd() % span) - univmax;
+	} while ((newx == arena_king_x && newy == arena_king_y) ||
+	    innebula(newx,newy));
+	arena_king_x = newx;
+	arena_king_y = newy;
+	prfmsg(KNGSECT,arena_king_x,arena_king_y);
+	arena_broadcast_prf();
+}
+
+/* award one second to each live player occupying the King sector */
+static void arena_king_score_tick(void)
+{
+	WARSHP *ptr;
+	int i;
+
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state != ARENA_P_PLAYING)
+			continue;
+		ptr = warshpoff(i);
+		if (ptr->status == GESTAT_USER &&
+		    coord1(ptr->coord.xcoord) == arena_king_x &&
+		    coord1(ptr->coord.ycoord) == arena_king_y &&
+		    arena_player[i].kingtime != (unsigned)~0U)
+			++arena_player[i].kingtime;
+	}
+}
+
 /* determine and announce the result, persist valid wins, and show final status */
 static void arena_show_results(void)
 {
@@ -1177,12 +1241,14 @@ static void arena_show_results(void)
 	int forfeit;
 	unsigned long gold;
 	unsigned long highgold;
+	unsigned hightime;
 	WARUSR *wuptr;
 
 	forfeit = arena_match_ticks > 0 && arena_count_playing() == 1;
 	winner = -1;
 	highscore = 0;
 	highgold = 0UL;
+	hightime = 0;
 	tied = 0;
 	for (i = 0; i < nterms; ++i) {
 		if (!arena_player_active(i))
@@ -1195,6 +1261,15 @@ static void arena_show_results(void)
 				tied = 1;
 			}
 			else if (gold == highgold)
+				++tied;
+		}
+		else if (arena_mode == ARENA_MODE_KING) {
+			if (winner < 0 || arena_player[i].kingtime > hightime) {
+				winner = i;
+				hightime = arena_player[i].kingtime;
+				tied = 1;
+			}
+			else if (arena_player[i].kingtime == hightime)
 				++tied;
 		}
 		else {
@@ -1220,6 +1295,9 @@ static void arena_show_results(void)
 			sprintf(gechrbuf,"%lu",highgold);
 			prfmsg(HODWIN,wuptr->userid,gechrbuf);
 		}
+		else if (arena_mode == ARENA_MODE_KING)
+			prfmsg(KNGWIN,wuptr->userid,(int)(hightime / 60),
+			    (int)(hightime % 60));
 		else
 			prfmsg(MATWIN, wuptr->userid, arena_mode_name(arena_mode),
 			    highscore);
@@ -1230,6 +1308,8 @@ static void arena_show_results(void)
 			sprintf(gechrbuf,"%lu",highgold);
 			prfmsg(HODTIE,gechrbuf);
 		}
+		else if (arena_mode == ARENA_MODE_KING)
+			prfmsg(KNGTIE,(int)(hightime / 60),(int)(hightime % 60));
 		else
 			prfmsg(MATTIE, arena_mode_name(arena_mode), highscore);
 		arena_broadcast_prf();
@@ -1251,6 +1331,8 @@ static int arena_status_sort_mode(void)
 		return ARENA_SORT_KILLS;
 	if (arena_mode == ARENA_MODE_HOARD && arena_hoard_scores_public())
 		return ARENA_SORT_GOLD;
+	if (arena_mode == ARENA_MODE_KING)
+		return ARENA_SORT_TIME;
 	return ARENA_SORT_NONE;
 }
 
@@ -1276,6 +1358,12 @@ static int arena_status_compare(int left, int right, int sortmode)
 		if (arena_player_gold(left) > arena_player_gold(right))
 			return -1;
 		if (arena_player_gold(left) < arena_player_gold(right))
+			return 1;
+	}
+	else if (sortmode == ARENA_SORT_TIME) {
+		if (arena_player[left].kingtime > arena_player[right].kingtime)
+			return -1;
+		if (arena_player[left].kingtime < arena_player[right].kingtime)
 			return 1;
 	}
 	return left - right;
@@ -1319,6 +1407,7 @@ static void arena_print_status_row(int usrn)
 {
 	WARUSR *wuptr;
 	char *state;
+	unsigned seconds;
 
 	if (arena_player[usrn].state == ARENA_P_EMPTY)
 		return;
@@ -1350,6 +1439,16 @@ static void arena_print_status_row(int usrn)
 			else
 				prf("%-22s %-24s %12s\r",wuptr->userid,state,"?");
 		}
+		else if (arena_mode == ARENA_MODE_KING) {
+			seconds = arena_player[usrn].kingtime % 60;
+			if (seconds < 10)
+				sprintf(gechrbuf,"%u:0%u",arena_player[usrn].kingtime / 60,
+				    seconds);
+			else
+				sprintf(gechrbuf,"%u:%u",arena_player[usrn].kingtime / 60,
+				    seconds);
+			prf("%-22s %-24s %11s\r",wuptr->userid,state,gechrbuf);
+		}
 		else
 			prf("%-22s %-24s %5d %7u\r", wuptr->userid, state,
 			    arena_player[usrn].kills, arena_player[usrn].deaths);
@@ -1357,6 +1456,8 @@ static void arena_print_status_row(int usrn)
 	else {
 		if (arena_mode == ARENA_MODE_HOARD)
 			prf("%-22s %-24s %12s\r", wuptr->userid, state, "-");
+		else if (arena_mode == ARENA_MODE_KING)
+			prf("%-22s %-24s %11s\r", wuptr->userid, state, "-");
 		else
 			prf("%-22s %-24s %5s %7s\r", wuptr->userid, state, "-", "-");
 	}
@@ -1373,13 +1474,24 @@ void FUNC arena_show_status(void)
 	int order[ARENA_MAX_PLAYERS];
 
 	prf("\r");
-	if (arena_state == ARENA_RUNNING && arena_match_ticks > 0)
-		arena_show_match_time();
+	if (arena_state == ARENA_RUNNING && arena_match_ticks > 0) {
+		if (arena_mode == ARENA_MODE_KING) {
+			if (arena_match_ticks < 60)
+				prfmsg(KNGTIME,arena_match_ticks,arena_king_x,arena_king_y);
+			else
+				prfmsg(KNGTIM2,arena_match_ticks / 60,
+				    arena_match_ticks % 60,arena_king_x,arena_king_y);
+		}
+		else
+			arena_show_match_time();
+	}
 	arena_show_mini_status();
 	if (arena_state == ARENA_QUEUE && arena_ticks > 0)
 		prfmsg(AUTOTIME, arena_mode_name(arena_mode), arena_ticks);
 	if (arena_mode == ARENA_MODE_HOARD)
 		prfmsg(HODSTAT);
+	else if (arena_mode == ARENA_MODE_KING)
+		prfmsg(KNGSTAT);
 	else
 		prfmsg(BATSTAT);
 
@@ -1868,8 +1980,14 @@ void FUNC arena_tick(void)
 		return;
 	}
 	if (arena_state == ARENA_RUNNING) {
+		if (arena_mode == ARENA_MODE_KING)
+			arena_king_score_tick();
 		if (arena_match_ticks > 0)
 			--arena_match_ticks;
+		if (arena_mode == ARENA_MODE_KING &&
+		    (arena_match_ticks == 720 || arena_match_ticks == 540 ||
+		    arena_match_ticks == 360 || arena_match_ticks == 180))
+			arena_king_move_sector();
 		if (arena_mode == ARENA_MODE_HOARD &&
 		    (arena_match_ticks == 720 || arena_match_ticks == 540 ||
 		    arena_match_ticks == 360))

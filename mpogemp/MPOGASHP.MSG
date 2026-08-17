@@ -2390,5 +2390,818 @@ S12HELP {
 [1;37m
 } (S12TYPE=USER) T   Help screen for class 12
 
+Type of ship class 13:
+USER for player-controlled ships.
+CYBORG for Cybertrons.
+DROID for all other NPC ships.
+
+S13TYPE {Class 13 type of ship: USER} E USER CYBORG DROID <NONE>  
+
+Name of class of ship for class 13.
+
+S13NAME {Monitor} (S13TYPE#<NONE>) S 29 Class 13 name
+
+Name of ship of class 13 (NPCs only).
+This will be appended with a numerical identifier.
+
+S13SNAME {} (S13TYPE=CYBORG,DROID) S 29 Ship 15 name
+
+Maximum shield type for class 13. 0 for no shields at all.
+For arena users, the starting shield type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S13SHLD {Maximum shield type: 5} (S13TYPE#<NONE>) N 0 19
+
+Maximum phaser type for class 13. 0 for no phasers at all.
+For arena users, the starting phaser type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S13PHSR {Maximum phaser type: 15} (S13TYPE#<NONE>) N 0 19
+
+Number of torpedo launchers for class 13.
+
+S13TORP {Number of torpedo launchers: 2} (S13TYPE#<NONE>) N 0 3
+
+Number of missile launchers for class 13.
+
+S13MISL {Number of missile launchers: 0} (S13TYPE#<NONE>) N 0 3
+
+Decoy capability for class 13.
+
+S13DECY {Has decoy capability? YES} (S13TYPE#<NONE>) B
+
+Jammer capability for class 13.
+
+S13JAMMR {Has jammer capability? YES} (S13TYPE#<NONE>) B
+
+Zipper capability for class 13.
+
+S13ZIPPR {Has zipper capability? YES} (S13TYPE#<NONE>) B
+
+Mine capability for class 13.
+
+S13MINE {Has mine capability? NO} (S13TYPE#<NONE>) B
+
+Starting phaser type for class 13.
+This cannot exceed the maximum phaser type.
+
+S13SPHS {Starting phaser type: 8} (S13TYPE=USER,CYBORG) N 0 19
+
+Starting shield type for class 13.
+This cannot exceed the maximum shield type.
+
+S13SSHD {Starting shield type: 2} (S13TYPE=USER,CYBORG) N 0 19
+
+Acceleration rate of class 13.
+1000 means one warp speed increment per ship tick.
+Immobile NPCs (e.g. Cyber-Base) should have this set to 0,
+which will exclude them from all routines that involve
+pursuing other ships.
+
+S13ACCL {Acceleration rate: 8000} (S13TYPE#<NONE>) N 0 32767
+
+Maximum warp cruising speed of class 13.
+For user ships, actual top speed is 1.5x this value, but
+causes engine damage over time. A value of 0 means impulse
+only. To make a class completely immobile, set SXXACCL to 0
+as well.
+
+S13WARP {Maximum warp cruising speed: 20} (S13TYPE#<NONE>) N 0 255
+
+Maximum cargo capacity of class 13 in tons.
+
+S13TONS {Maximum tonnage: 20000} (S13TYPE#<NONE>) L 1 2000000000
+
+Starting torpedoes for class 13.
+
+S13STOR {Starting torpedoes: 10} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting missiles for class 13.
+
+S13SMIS {Starting missiles: 0} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting mines for class 13.
+
+S13SMIN {Starting mines: 0} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting flux pods for class 13.
+
+S13SFLX {Starting flux pods: 3} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting zippers for class 13.
+
+S13SZIP {Starting zippers: 0} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting jammers for class 13.
+
+S13SJAM {Starting jammers: 2} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting decoys for class 13.
+
+S13SDEC {Starting decoys: 2} (S13TYPE=USER,CYBORG) N 0 255
+
+Starting gold for class 13.
+
+S13SGOL {Starting gold: 0} (S13TYPE=USER,CYBORG) N 0 255
+
+Points awarded for destroying a class 13 ship.
+
+S13PNTS {Points awarded: 1000} (S13TYPE#<NONE>) N 1 32767
+
+Scanner range of a class 13 ship in subsectors.
+
+S13SRNG {Scanner range: 200000} (S13TYPE#<NONE>) L 1 10000000
+
+Will Cybertrons fire on a class 13 ship unprovoked?
+If YES, Cybertrons will pursue and fire upon this class.
+If NO:
+For USER ships, Cybertrons will pursue this class but not
+fire on unprovoked.
+For DROID ships, Cybertrons will ignore this class.
+
+S13CATK {Cybs will fire on this ship: YES} (S13TYPE=USER,DROID) B
+
+How many Cybertrons will pursue a class 13 ship?
+Cybertrons will only pursue DROID ships if SXXCATK is YES.
+
+S13NATK {Number of Cybs to pursue this ship: 2} (S13TYPE=USER,DROID) N 0 5
+
+Lowest class of user ship a class 13 Cybertron will pursue?
+
+S13LATK {Lowest class of user ship this ship will pursue: 0} (S13TYPE=CYBORG,DROID) N 0 50
+
+How many class 13 ships should be created (NPCs only)?
+
+S13MAKE {Number of NPCs of this class to make: 0} (S13TYPE=CYBORG,DROID) N 0 255
+
+Toughness level of class 13 (NPCs only)?
+This is a level from 0 to 4.
+
+S13TOUGH {Toughness level: 0} (S13TYPE=CYBORG,DROID) N 0 4
+
+Class 13 damage factor, 100 is normal. 200 is twice as
+resilient, 77 is the minimum.
+Damage = damage / (SnnDAMF / 100)
+
+S13DAMF {Damage effect factor: 130} (S13TYPE#<NONE>) N 77 32767
+
+Class 13 faction code.
+0 for user ships. 1 for Cybertrons.
+2 for Sartens. 3 for Lydorians. 4 for Murdonians.
+5 for Vakories. 6 for Tryklons. 7 for Zygorians.
+NPCs with the same code will not attack each other or
+register "friendly fire" on each other with phasers.
+
+S13FCTN {Faction code: 0} (S13TYPE#<NONE>) N 0 255
+
+Class 13 loadout/upgrade code. 0 for Cybertrons.
+1 for Lydorian Garbage Scow. 2 for Murdonian Transport.
+3 for Vakory Survey Drone. 4 for Sarten Civil Transport.
+5 for Sarten Attack Drone. 6 for Galactic Command Freighter.
+For user ships, set to the byte value of available
+upgrades.
+
+S13LOUT {Loadout code: 177} (S13TYPE=USER,DROID) N 0 255
+
+Arena game mode that uses class 13.
+
+S13MODE {Arena game mode: 3} (S13TYPE#<NONE>) N 1 255
+
+This is the in-game help that is displayed for class 13.
+Press F2 to edit.
+
+S13HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mMonitor  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m112m
+[1;37mShields: [1;32mMark-5 maximum   [1;37mPhasers: [1;32mMark-15 maximum   [1;37mTorpedo launchers: [1;32m2
+[1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [0;31mNo
+[1;37mAcceleration rate: [1;32m8,000 Su/T   [1;37mTop rated speed: [1;32mWarp 20
+[1;37mScanner range: [1;32m200,000 subsectors (20 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
+
+[1;37mKing loadout:
+
+Mark-2 shield, Mark-8 phaser, 10 torpedoes, 2 decoys, 2 jammers,
+3 flux pods
+
+Eligible upgrades:
+
+Enhanced scanners, reinforced neutron core
+
+} (S13TYPE=USER) T   Help screen for class 13
+
+Type of ship class 14:
+USER for player-controlled ships.
+CYBORG for Cybertrons.
+DROID for all other NPC ships.
+
+S14TYPE {Class 14 type of ship: USER} E USER CYBORG DROID <NONE> 
+
+Name of class of ship for class 14.
+
+S14NAME {Frigate} (S14TYPE#<NONE>) S 29 Class 14 name
+
+Name of ship of class 14 (NPCs only).
+This will be appended with a numerical identifier.
+
+S14SNAME {} (S14TYPE=CYBORG,DROID) S 29 Ship 07 name
+
+Maximum shield type for class 14. 0 for no shields at all.
+For arena users, the starting shield type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S14SHLD {Maximum shield type: 8} (S14TYPE#<NONE>) N 0 19
+
+Maximum phaser type for class 14. 0 for no phasers at all.
+For arena users, the starting phaser type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S14PHSR {Maximum phaser type: 6} (S14TYPE#<NONE>) N 0 19
+
+Number of torpedo launchers for class 14.
+
+S14TORP {Number of torpedo launchers: 1} (S14TYPE#<NONE>) N 0 3
+
+Number of missile launchers for class 14.
+
+S14MISL {Number of missile launchers: 1} (S14TYPE#<NONE>) N 0 3
+
+Decoy capability for class 14.
+
+S14DECY {Has decoy capability?: YES} (S14TYPE#<NONE>) B
+
+Jammer capability for class 14.
+
+S14JAMMR {Has jammer capability?: YES} (S14TYPE#<NONE>) B
+
+Zipper capability for class 14.
+
+S14ZIPPR {Has zipper capability?: YES} (S14TYPE#<NONE>) B
+
+Mine capability for class 14.
+
+S14MINE {Has mine capability?: YES} (S14TYPE#<NONE>) B
+
+Starting phaser type for class 14.
+This cannot exceed the maximum phaser type.
+
+S14SPHS {Starting phaser type: 4} (S14TYPE=USER,CYBORG) N 0 19
+
+Starting shield type for class 14.
+This cannot exceed the maximum shield type.
+
+S14SSHD {Starting shield type: 5} (S14TYPE=USER,CYBORG) N 0 19
+
+Acceleration rate of class 14.
+1000 means one warp speed increment per ship tick.
+Immobile NPCs (e.g. Cyber-Base) should have this set to 0,
+which will exclude them from all routines that involve
+pursuing other ships.
+
+S14ACCL {Acceleration rate: 4000} (S14TYPE#<NONE>) N 0 32767
+
+Maximum warp cruising speed of class 14.
+For user ships, actual top speed is 1.5x this value, but
+causes engine damage over time. A value of 0 means impulse
+only. To make a class completely immobile, set SXXACCL to 0
+as well.
+
+S14WARP {Maximum warp cruising speed: 30} (S14TYPE#<NONE>) N 0 255
+
+Maximum cargo capacity of class 14 in tons.
+
+S14TONS {Maximum tonnage: 200000} (S14TYPE#<NONE>) L 1 2000000000
+
+Starting torpedoes for class 14.
+
+S14STOR {Starting torpedoes: 4} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting missiles for class 14.
+
+S14SMIS {Starting missiles: 2} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting mines for class 14.
+
+S14SMIN {Starting mines: 2} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting flux pods for class 14.
+
+S14SFLX {Starting flux pods: 3} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting zippers for class 14.
+
+S14SZIP {Starting zippers: 0} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting jammers for class 14.
+
+S14SJAM {Starting jammers: 1} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting decoys for class 14.
+
+S14SDEC {Starting decoys: 0} (S14TYPE=USER,CYBORG) N 0 255
+
+Starting gold for class 14.
+
+S14SGOL {Starting gold: 0} (S14TYPE=USER,CYBORG) N 0 255
+
+Points awarded for destroying a class 14 ship.
+
+S14PNTS {Points awarded: 5000} (S14TYPE#<NONE>) N 1 32767
+
+Scanner range of a class 14 ship in subsectors.
+
+S14SRNG {Scan range: 250000} (S14TYPE#<NONE>) L 1 10000000
+
+Will Cybertrons fire on a class 14 ship unprovoked?
+If YES, Cybertrons will pursue and fire upon this class.
+If NO:
+For USER ships, Cybertrons will pursue this class but not
+fire on unprovoked.
+For DROID ships, Cybertrons will ignore this class.
+
+S14CATK {Cybs will fire on this ship: YES} (S14TYPE=USER,DROID) B
+
+How many Cybertrons will pursue a class 14 ship?
+Cybertrons will only pursue DROID ships if SXXCATK is YES.
+
+S14NATK {Number of Cybs to pursue this ship: 2} (S14TYPE=USER,DROID) N 0 5
+
+Lowest class of user ship a class 14 Cybertron will pursue?
+
+S14LATK {Lowest class of user ship this ship will pursue: 0} (S14TYPE=CYBORG,DROID) N 0 50
+
+How many class 14 ships should be created (NPCs only)?
+
+S14MAKE {Number of NPCs of this class to make: 0} (S14TYPE=CYBORG,DROID) N 0 255
+
+Toughness level of class 14 (NPCs only)?
+This is a level from 0 to 4.
+
+S14TOUGH {Toughness level: 0} (S14TYPE=CYBORG,DROID) N 0 4
+
+Class 14 damage factor, 100 is normal. 200 is twice as
+resilient, 77 is the minimum.
+Damage = damage / (SnnDAMF / 100)
+
+S14DAMF {Damage effect factor: 200} (S14TYPE#<NONE>) N 77 32767
+
+Class 14 faction code.
+0 for user ships. 1 for Cybertrons.
+2 for Sartens. 3 for Lydorians. 4 for Murdonians.
+5 for Vakories. 6 for Tryklons. 7 for Zygorians.
+NPCs with the same code will not attack each other or
+register "friendly fire" on each other with phasers.
+
+S14FCTN {Faction code: 0} (S14TYPE#<NONE>) N 0 255
+
+Class 14 loadout/upgrade code. 0 for Cybertrons.
+1 for Lydorian Garbage Scow. 2 for Murdonian Transport.
+3 for Vakory Survey Drone. 4 for Sarten Civil Transport.
+5 for Sarten Attack Drone. 6 for Galactic Command Freighter.
+For user ships, set to the byte value of available
+upgrades.
+
+S14LOUT {Loadout code: 255} (S14TYPE=USER,DROID) N 0 255
+
+Arena game mode that uses class 14.
+
+S14MODE {Arena game mode: 3} (S14TYPE#<NONE>) N 1 255
+
+This is the in-game help that is displayed for class 14.
+Press F2 to edit.
+
+S14HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mFrigate  [1;37mLength: [1;32m1875m    [1;37mWidth: [1;32m625m   [1;37mHeight: [1;32m293m
+[1;37mShields: [1;32mMark-8 maximum   [1;37mPhasers: [1;32mMark-6 maximum   [1;37mTorpedo launchers: [1;32m1
+[1;37mMissile launchers: [1;32m1   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes
+[1;37mAcceleration rate: [1;32m4,000 Su/T   [1;37mTop rated speed: [1;32mWarp 30
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m200,000 Tons
+
+[1;37mKing loadout:
+
+Mark-5 shield, Mark-4 phaser, 4 torpedoes, 2 missiles, 2 mines,
+1 jammer, 3 flux pods
+
+Eligible upgrades:
+
+Enhanced scanners, armor plating, acceleration boosters,
+reinforced neutron core
+
+} (S14TYPE=USER) T   Help screen for class 14
+
+Type of ship class 15:
+USER for player-controlled ships.
+CYBORG for Cybertrons.
+DROID for all other NPC ships.
+
+S15TYPE {Class 15 type of ship: USER} E USER CYBORG DROID <NONE> 
+
+Name of class of ship for class 15.
+
+S15NAME {Battle Cruiser} (S15TYPE#<NONE>) S 29 Class 15 name
+
+Name of ship of class 15 (NPCs only).
+This will be appended with a numerical identifier.
+
+S15SNAME {} (S15TYPE=CYBORG,DROID) S 29 Ship 17 name
+
+Maximum shield type for class 15. 0 for no shields at all.
+For arena users, the starting shield type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S15SHLD {Maximum shield type: 16} (S15TYPE#<NONE>) N 0 19
+
+Maximum phaser type for class 15. 0 for no phasers at all.
+For arena users, the starting phaser type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S15PHSR {Maximum phaser type: 16} (S15TYPE#<NONE>) N 0 19
+
+Number of torpedo launchers for class 15.
+
+S15TORP {Number of torpedo launchers: 2} (S15TYPE#<NONE>) N 0 3
+
+Number of missile launchers for class 15.
+
+S15MISL {Number of missile launchers: 2} (S15TYPE#<NONE>) N 0 3
+
+Decoy capability for class 15.
+
+S15DECY {Has decoy capability? YES} (S15TYPE#<NONE>) B
+
+Jammer capability for class 15.
+
+S15JAMMR {Has jammer capability? YES} (S15TYPE#<NONE>) B
+
+Zipper capability for class 15.
+
+S15ZIPPR {Has zipper capability? YES} (S15TYPE#<NONE>) B
+
+Mine capability for class 15.
+
+S15MINE {Has mine capability? YES} (S15TYPE#<NONE>) B
+
+Starting phaser type for class 15.
+This cannot exceed the maximum phaser type.
+
+S15SPHS {Starting phaser type: 3} (S15TYPE=USER,CYBORG) N 0 19
+
+Starting shield type for class 15.
+This cannot exceed the maximum shield type.
+
+S15SSHD {Starting shield type: 3} (S15TYPE=USER,CYBORG) N 0 19
+
+Acceleration rate of class 15.
+1000 means one warp speed increment per ship tick.
+Immobile NPCs (e.g. Cyber-Base) should have this set to 0,
+which will exclude them from all routines that involve
+pursuing other ships.
+
+S15ACCL {Acceleration rate: 6000} (S15TYPE#<NONE>) N 0 32767
+
+Maximum warp cruising speed of class 15.
+For user ships, actual top speed is 1.5x this value, but
+causes engine damage over time. A value of 0 means impulse
+only. To make a class completely immobile, set SXXACCL to 0
+as well.
+
+S15WARP {Maximum warp cruising speed: 35} (S15TYPE#<NONE>) N 0 255
+
+Maximum cargo capacity of class 15 in tons.
+
+S15TONS {Maximum tonnage: 40000} (S15TYPE#<NONE>) L 1 2000000000
+
+Starting torpedoes for class 15.
+
+S15STOR {Starting torpedoes: 6} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting missiles for class 15.
+
+S15SMIS {Starting missiles: 4} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting mines for class 15.
+
+S15SMIN {Starting mines: 6} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting flux pods for class 15.
+
+S15SFLX {Starting flux pods: 3} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting zippers for class 15.
+
+S15SZIP {Starting zippers: 2} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting jammers for class 15.
+
+S15SJAM {Starting jammers: 0} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting decoys for class 15.
+
+S15SDEC {Starting decoys: 0} (S15TYPE=USER,CYBORG) N 0 255
+
+Starting gold for class 15.
+
+S15SGOL {Starting gold: 0} (S15TYPE=USER,CYBORG) N 0 255
+
+Points awarded for destroying a class 15 ship.
+
+S15PNTS {Points awarded: 5000} (S15TYPE#<NONE>) N 1 32767
+
+Scanner range of a class 15 ship in subsectors.
+
+S15SRNG {Scan range: 250000} (S15TYPE#<NONE>) L 1 10000000
+
+Will Cybertrons fire on a class 15 ship unprovoked?
+If YES, Cybertrons will pursue and fire upon this class.
+If NO:
+For USER ships, Cybertrons will pursue this class but not
+fire on unprovoked.
+For DROID ships, Cybertrons will ignore this class.
+
+S15CATK {Cybs will fire on this ship: YES} (S15TYPE=USER,DROID) B
+
+How many Cybertrons will pursue a class 15 ship?
+Cybertrons will only pursue DROID ships if SXXCATK is YES.
+
+S15NATK {Number of Cybs to pursue this ship: 3} (S15TYPE=USER,DROID) N 0 5
+
+Lowest class of user ship a class 15 Cybertron will pursue?
+
+S15LATK {Lowest class of user ship this ship will pursue: 0} (S15TYPE=CYBORG,DROID) N 0 50
+
+How many class 15 ships should be created (NPCs only)?
+
+S15MAKE {Number of NPCs of this class to make: 0} (S15TYPE=CYBORG,DROID) N 0 255
+
+Toughness level of class 15 (NPCs only)?
+This is a level from 0 to 4.
+
+S15TOUGH {Toughness level: 0} (S15TYPE=CYBORG,DROID) N 0 4
+
+Class 15 damage factor, 100 is normal. 200 is twice as
+resilient, 77 is the minimum.
+Damage = damage / (SnnDAMF / 100)
+
+S15DAMF {Damage effect factor: 225} (S15TYPE#<NONE>) N 77 32767
+
+Class 15 faction code.
+0 for user ships. 1 for Cybertrons.
+2 for Sartens. 3 for Lydorians. 4 for Murdonians.
+5 for Vakories. 6 for Tryklons. 7 for Zygorians.
+NPCs with the same code will not attack each other or
+register "friendly fire" on each other with phasers.
+
+S15FCTN {Faction code: 0} (S15TYPE#<NONE>) N 0 255
+
+Class 15 loadout/upgrade code. 0 for Cybertrons.
+1 for Lydorian Garbage Scow. 2 for Murdonian Transport.
+3 for Vakory Survey Drone. 4 for Sarten Civil Transport.
+5 for Sarten Attack Drone. 6 for Galactic Command Freighter.
+For user ships, set to the byte value of available
+upgrades.
+
+S15LOUT {Loadout code: 255} (S15TYPE=USER,DROID) N 0 255
+
+Arena game mode that uses class 15.
+
+S15MODE {Arena game mode: 3} (S15TYPE#<NONE>) N 1 255
+
+This is the in-game help that is displayed for class 15.
+Press F2 to edit.
+
+S15HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mBattle Cruiser  [1;37mLength: [1;32m937m    [1;37mWidth: [1;32m312m   [1;37mHeight: [1;32m204m
+[1;37mShields: [1;32mMark-16 maximum   [1;37mPhasers: [1;32mMark-16 maximum   [1;37mTorpedo launchers: [1;32m2
+[1;37mMissile launchers: [1;32m2   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [1;32mYes   [1;37mMine launcher: [1;32mYes
+[1;37mAcceleration rate: [1;32m6,000 Su/T   [1;37mTop rated speed: [1;32mWarp 35
+[1;37mScanner range: [1;32m250,000 subsectors (25 sectors)   [1;37mCargo capacity: [1;32m40,000 Tons
+
+[1;37mKing loadout:
+
+Mark-3 shield, Mark-3 phaser, 6 torpedoes, 4 missiles, 6 mines,
+2 zippers, 3 flux pods
+
+Eligible upgrades:
+
+Enhanced scanners, armor plating, acceleration boosters,
+reinforced neutron core
+
+} (S15TYPE=USER) T   Help screen for class 15
+
+Type of ship class 16:
+USER for player-controlled ships.
+CYBORG for Cybertrons.
+DROID for all other NPC ships.
+
+S16TYPE {Class 16 type of ship: USER} E USER CYBORG DROID <NONE> 
+
+Name of class of ship for class 16.
+
+S16NAME {Surveyor} (S16TYPE#<NONE>) S 29 Class 16 name
+
+Name of ship of class 16 (NPCs only).
+This will be appended with a numerical identifier.
+
+S16SNAME {} (S16TYPE=CYBORG,DROID) S 29 Ship 16 name
+
+Maximum shield type for class 16. 0 for no shields at all.
+For arena users, the starting shield type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S16SHLD {Maximum shield type: 12} (S16TYPE#<NONE>) N 0 19
+
+Maximum phaser type for class 16. 0 for no phasers at all.
+For arena users, the starting phaser type is configured separately.
+For NPCs, this will be a random value
+between 1 and this class.
+
+S16PHSR {Maximum phaser type: 0} (S16TYPE#<NONE>) N 0 19
+
+Number of torpedo launchers for class 16.
+
+S16TORP {Number of torpedo launchers: 0} (S16TYPE#<NONE>) N 0 3
+
+Number of missile launchers for class 16.
+
+S16MISL {Number of missile launchers: 0} (S16TYPE#<NONE>) N 0 3
+
+Decoy capability for class 16.
+
+S16DECY {Has decoy capability? YES} (S16TYPE#<NONE>) B
+
+Jammer capability for class 16.
+
+S16JAMMR {Has jammer capability? YES} (S16TYPE#<NONE>) B
+
+Zipper capability for class 16.
+
+S16ZIPPR {Has zipper capability? NO} (S16TYPE#<NONE>) B
+
+Mine capability for class 16.
+
+S16MINE {Has mine capability? NO} (S16TYPE#<NONE>) B
+
+Starting phaser type for class 16.
+This cannot exceed the maximum phaser type.
+
+S16SPHS {Starting phaser type: 0} (S16TYPE=USER,CYBORG) N 0 19
+
+Starting shield type for class 16.
+This cannot exceed the maximum shield type.
+
+S16SSHD {Starting shield type: 8} (S16TYPE=USER,CYBORG) N 0 19
+
+Acceleration rate of class 16.
+1000 means one warp speed increment per ship tick.
+Immobile NPCs (e.g. Cyber-Base) should have this set to 0,
+which will exclude them from all routines that involve
+pursuing other ships.
+
+S16ACCL {Acceleration rate: 15000} (S16TYPE#<NONE>) N 0 32767
+
+Maximum warp cruising speed of class 16.
+For user ships, actual top speed is 1.5x this value, but
+causes engine damage over time. A value of 0 means impulse
+only. To make a class completely immobile, set SXXACCL to 0
+as well.
+
+S16WARP {Maximum warp cruising speed: 75} (S16TYPE#<NONE>) N 0 255
+
+Maximum cargo capacity of class 16 in tons.
+
+S16TONS {Maximum tonnage: 20000} (S16TYPE#<NONE>) L 1 2000000000
+
+Starting torpedoes for class 16.
+
+S16STOR {Starting torpedoes: 0} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting missiles for class 16.
+
+S16SMIS {Starting missiles: 0} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting mines for class 16.
+
+S16SMIN {Starting mines: 0} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting flux pods for class 16.
+
+S16SFLX {Starting flux pods: 3} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting zippers for class 16.
+
+S16SZIP {Starting zippers: 0} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting jammers for class 16.
+
+S16SJAM {Starting jammers: 2} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting decoys for class 16.
+
+S16SDEC {Starting decoys: 2} (S16TYPE=USER,CYBORG) N 0 255
+
+Starting gold for class 16.
+
+S16SGOL {Starting gold: 0} (S16TYPE=USER,CYBORG) N 0 255
+
+Points awarded for destroying a class 16 ship.
+
+S16PNTS {Points awarded: 2500} (S16TYPE#<NONE>) N 1 32767
+
+Scanner range of a class 16 ship in subsectors.
+
+S16SRNG {Scan range: 400000} (S16TYPE#<NONE>) L 1 10000000
+
+Will Cybertrons fire on a class 16 ship unprovoked?
+If YES, Cybertrons will pursue and fire upon this class.
+If NO:
+For USER ships, Cybertrons will pursue this class but not
+fire on unprovoked.
+For DROID ships, Cybertrons will ignore this class.
+
+S16CATK {Cybs will fire on this ship: YES} (S16TYPE=USER,DROID) B
+
+How many Cybertrons will pursue a class 16 ship?
+Cybertrons will only pursue DROID ships if SXXCATK is YES.
+
+S16NATK {Number of Cybs to pursue this ship: 1} (S16TYPE=USER,DROID) N 0 5
+
+Lowest class of user ship a class 16 Cybertron will pursue?
+
+S16LATK {Lowest class of user ship this ship will pursue: 0} (S16TYPE=CYBORG,DROID) N 0 50
+
+How many class 16 ships should be created (NPCs only)?
+
+S16MAKE {Number of NPCs of this class to make: 0} (S16TYPE=CYBORG,DROID) N 0 255
+
+Toughness level of class 16 (NPCs only)?
+This is a level from 0 to 4.
+
+S16TOUGH {Toughness level: 0} (S16TYPE=CYBORG,DROID) N 0 4
+
+Class 16 damage factor, 100 is normal. 200 is twice as
+resilient, 77 is the minimum.
+Damage = damage / (SnnDAMF / 100)
+
+S16DAMF {Damage effect factor: 90} (S16TYPE#<NONE>) N 77 32767
+
+Class 16 faction code.
+0 for user ships. 1 for Cybertrons.
+2 for Sartens. 3 for Lydorians. 4 for Murdonians.
+5 for Vakories. 6 for Tryklons. 7 for Zygorians.
+NPCs with the same code will not attack each other or
+register "friendly fire" on each other with phasers.
+
+S16FCTN {Faction code: 0} (S16TYPE#<NONE>) N 0 255
+
+Class 16 loadout/upgrade code. 0 for Cybertrons.
+1 for Lydorian Garbage Scow. 2 for Murdonian Transport.
+3 for Vakory Survey Drone. 4 for Sarten Civil Transport.
+5 for Sarten Attack Drone. 6 for Galactic Command Freighter.
+For user ships, set to the byte value of available
+upgrades.
+
+S16LOUT {Loadout code: 113} (S16TYPE=USER,DROID) N 0 255
+
+Arena game mode that uses class 16.
+
+S16MODE {Arena game mode: 3} (S16TYPE#<NONE>) N 1 255
+
+This is the in-game help that is displayed for class 16.
+Press F2 to edit.
+
+S16HELP {
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mSurveyor  [1;37mLength: [1;32m625m    [1;37mWidth: [1;32m208m   [1;37mHeight: [1;32m147m
+[1;37mShields: [1;32mMark-12 maximum   [1;37mPhasers: [0;31mNo   [1;37mTorpedo launchers: [0;31m0
+[1;37mMissile launchers: [0;31m0   [1;37mDecoy launcher: [1;32mYes   [1;37mJammer launcher: [1;32mYes
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo
+[1;37mAcceleration rate: [1;32m15,000 Su/T   [1;37mTop rated speed: [1;32mWarp 75
+[1;37mScanner range: [1;32m400,000 subsectors (40 sectors)   [1;37mCargo capacity: [1;32m20,000 Tons
+
+[1;37mKing loadout:
+
+Mark-8 shield, 2 decoys, 2 jammers, 3 flux pods
+
+Eligible upgrades:
+
+Enhanced scanners
+
+} (S16TYPE=USER) T   Help screen for class 16
+
 SXXEND {} T Place holder - do not remove
 

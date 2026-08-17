@@ -2072,14 +2072,14 @@ IHIT2 {***
 
 ROSTER1 {
 [1;36mArena wins
-[0;31m---------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard[1;37m
+[0;31m---------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King[1;37m
 } T GE arena wins roster
 
 ROSTER2 {
 [1;36mArena wins
-[0;31m---------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard[1;37m
+[0;31m---------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King[1;37m
 } T GE arena wins roster
 
 ROSTER3 {
@@ -3295,6 +3295,7 @@ MODLIST {
 [1;36mArena modes:
   1 - Battle: free-for-all combat, no Cybertrons, most kills wins.
   2 - Hoard: collect gold from planets and combat, incl. Cybs, most gold wins.
+  3 - King: spend the most total time in the active sector.
 
 Current mode: [1;37m%s
 } T GE arena mode list
@@ -3352,6 +3353,16 @@ BATSTAT {[0;31m-------------------------------------------------------------
 HODSTAT {[0;31m------------------------------------------------------------
 [1;34mPlayer                 Status                           Gold[1;37m
 } T GE arena Hoard status header
+
+KNGSTAT {[0;31m-----------------------------------------------------------
+[1;34mPlayer                 Status                          Time[1;37m
+} T GE arena King status header
+
+KNGTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining. Active sector: [1;37m%d %d[1;37m
+} T GE arena King running status
+
+KNGTIM2 {[1;36mMatch running: [1;37m%dm %02ds[1;36m remaining. Active sector: [1;37m%d %d[1;37m
+} T GE arena King running status minutes
 
 ANNOUN {***
 [0;36m%s[1;36m has entered the arena lobby.[1;37m
@@ -3483,6 +3494,21 @@ HODTIE {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m Hoard ends in a tie with %s gold! [1;36m>[1;37m
 } T GE arena Hoard tie
+
+KNGSECT {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m The active King sector is now [1;34m%d %d[1;37m. [1;36m>[1;37m
+} T GE arena King sector changed
+
+KNGWIN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s wins King with %dm %02ds in the active sector! [1;36m>[1;37m
+} T GE arena King winner
+
+KNGTIE {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m King ends in a tie with %dm %02ds in the active sector! [1;36m>[1;37m
+} T GE arena King tie
 
 HODLEAD {***
 [0;37mHailing message from the Enforcer Planet
