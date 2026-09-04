@@ -19,6 +19,13 @@ Please contact me with thoughts and suggestions.
 * How the "bounce" is calculated when you run into the galactic
   barrier has been slightly modified to work with smaller galaxy
   sizes (necessary for ge-arena).
+* Failed torpedo/missile launches (out of stock, out of range,
+  etc.) no longer lower your shields, and a bug that caused
+  "Shields energizing!" to display in this scenario was fixed.
+* Admins: REGNO is now optional, and if it's set to blank or
+  0 the registration number line will no longer show on the
+  console. If you do want to put a number here (perhaps to
+  tell mulitple instances apart) you can still do so.
 
 === 0.3.1 === 2026-06-30:
 
