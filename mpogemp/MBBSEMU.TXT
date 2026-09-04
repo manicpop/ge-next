@@ -8,11 +8,11 @@ MBBSEMU compatibility mitigations enabled and reports its architecture as
 Required MBBSEmu Version
 ------------------------
 
-Use MBBSEmu build 062126-221 or newer.
+Use MBBSEmu build 090426-300 or newer.
 
-062126-221 is the first GitHub Actions build known to fully support the
-ge-next MBBSEmu build. Older MBBSEmu builds may start the module but can have
-runtime differences or missing behavior that ge-next now depends on.
+090426-300 is the first GitHub Actions build known to support the native
+output-buffer and floating-point math behavior required by this ge-next
+build. Older MBBSEmu builds are not supported.
 
 Package Notes
 -------------
@@ -20,9 +20,8 @@ Package Notes
 This build is intended for MBBSEmu only. Use the standard ge-next package for
 16-bit MajorBBS/Worldgroup, and use ge-next32 for MajorBBS v10.
 
-The MBBSEmu build includes compatibility mitigations for behavior that differs
-from real MajorBBS/Worldgroup, including output-buffer handling and a few
-runtime edge cases seen under MBBSEmu.
+The MBBSEmu build includes compatibility mitigations for formatting and
+runtime state-management differences from real MajorBBS/Worldgroup.
 
 Starting MBBSEmu
 ----------------

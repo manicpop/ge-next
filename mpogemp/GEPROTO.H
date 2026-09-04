@@ -85,10 +85,6 @@ int FUNC warrti3 P((void));
 void FUNC warrti3a P((void));
 #endif
 void FUNC outprfge P((int cls , int shpno));
-#ifdef MBBSEMU
-void FUNC save_prf_mbbsemu P((void));
-void FUNC restore_prf_mbbsemu P((void));
-#endif
 void FUNC outsect P((int filter , COORD *coordptr , unsigned exclude));
 void FUNC outrange P((int filter , COORD *coordptr));
 int FUNC ingegame P((int shpno));

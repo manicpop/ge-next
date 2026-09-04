@@ -503,11 +503,7 @@ void FUNC assign_cybs(int usrnum, int call)
 int FUNC cyb_fast(WARSHP *ptr)
 {
 	return ptr->speed != 0.0 &&
-#ifdef MBBSEMU
-		(fabs(ptr->speed - (long)(ptr->speed / FARSPEED) * FARSPEED) < 1e-6);
-#else
 		(fmod(ptr->speed, FARSPEED) == 0.0);
-#endif
 }
 
 /**************************************************************************

@@ -38,7 +38,7 @@
 /* #define FASTPLANET 1 */
 
 /* enable to build with mbbsemu mitigations */
-#define MBBSEMU 1
+/* #define MBBSEMU 1 */
 
 #ifndef GE_ARENA
 #define PROJECT_NAME "ge-next"

@@ -637,14 +637,8 @@ static void arena_broadcast_prf_except(int skip)
 {
 	int i;
 
-#ifdef MBBSEMU
-	save_prf_mbbsemu();
-#endif
 	for (i = 0; i < nterms; ++i) {
 		if (i != skip && arena_player[i].state != ARENA_P_EMPTY) {
-#ifdef MBBSEMU
-			restore_prf_mbbsemu();
-#endif
 			outprfge(FLT_NONE, i);
 		}
 	}

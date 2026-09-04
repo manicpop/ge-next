@@ -109,10 +109,6 @@ static char *geuser,		/* configured user database name */
 
 static char *endmark;		/* startup message/config integrity marker */
 
-#ifdef MBBSEMU
-static char *geprfsav;		/* preserve prfbuf around mbbsemu outprf() */
-#endif
-
 int numwar = 0;		/* number of users in game */
 int decpass = 0;	/* decoy expiry batching pass counter */
 
@@ -139,10 +135,7 @@ static int mnu_admenu1a(void);
 #ifndef GE_ARENA
 static int mnu_menug(void);
 #endif
-#ifdef MBBSEMU
-void FUNC save_prf_mbbsemu(void);
-void FUNC restore_prf_mbbsemu(void);
-#endif
+static int sendprfge(int cls, int shpno);
 
 PLANETAB *ptab;		/* base pointer to per-user planet scan tables */
 
@@ -865,9 +858,6 @@ void FUNC iniwara(void)
 	gechrbuf2 = (char *)alcmem(20);
 	gechrbuf3 = (char *)alcmem(20);
 	warpbuf = (char *)alcmem(40);
-#ifdef MBBSEMU
-	geprfsav = (char *)alcmem(OUTSIZ);
-#endif
 
 	/* init empty mine field */
 	for (n = 0; n < nummines; ++n)
@@ -1524,35 +1514,22 @@ void FUNC outwar(int filter, unsigned exclude, unsigned channel, int mode)
 {
 	int zothusn;
 
-#ifdef MBBSEMU
-	save_prf_mbbsemu();
-#endif
-
 	for (zothusn = 0; zothusn < nships; ++zothusn) {
 		if (zothusn != exclude && ingegame(zothusn)) {
 			if (mode == 0) {
 				/* send to every in-game ship except the excluded one */
-#ifdef MBBSEMU
-				restore_prf_mbbsemu();
-#endif
-				outprfge(filter, zothusn);
+				sendprfge(filter, zothusn);
 			}
 			else if (mode == 1) {
 				/* send only to ships tuned to the requested frequency */
 				if (channel == warshpoff(zothusn)->freq) {
-#ifdef MBBSEMU
-					restore_prf_mbbsemu();
-#endif
-					outprfge(filter, zothusn);
+					sendprfge(filter, zothusn);
 				}
 			}
 			else if (mode == 2) {
 				/* send only to members of the requested team */
 				if (channel == warusroff(zothusn)->teamcode) {
-#ifdef MBBSEMU
-					restore_prf_mbbsemu();
-#endif
-					outprfge(filter, zothusn);
+					sendprfge(filter, zothusn);
 				}
 			}
 		}
@@ -2515,26 +2492,6 @@ void FUNC warrti3a(void)
 ** OUTPRF special, apply filters, don't send to NPCs                     **
 **************************************************************************/
 
-#ifdef MBBSEMU
-void FUNC save_prf_mbbsemu(void)
-{
-	if (geprfsav == NULL)
-		return;
-
-	/* mbbsemu clears prfbuf in outprf(); real MajorBBS leaves it intact. */
-	stzcpy(geprfsav, prfbuf, OUTSIZ);
-}
-
-void FUNC restore_prf_mbbsemu(void)
-{
-	if (geprfsav == NULL)
-		return;
-
-	stzcpy(prfbuf, geprfsav, OUTSIZ);
-	prfptr = prfbuf + strlen(prfbuf);
-}
-#endif
-
 #ifndef GE_ARENA
 static void outprf_metadata(int cls, int shpno)
 {
@@ -2553,18 +2510,17 @@ static void outprf_metadata(int cls, int shpno)
 		memcpy(prfbuf + hlen + len,footer,flen + 1);
 		prfptr = prfbuf + hlen + len + flen;
 		outprf(shpno);
-#ifndef MBBSEMU
 		movmem(prfbuf + hlen,prfbuf,len);
 		prfbuf[len] = 0;
 		prfptr = prfbuf + len;
-#endif
 		return;
 	}
 	outprf(shpno);
 }
 #endif
 
-void FUNC outprfge(int cls, int shpno)
+/* attempt one delivery without clearing the buffer shared by broadcasts */
+static int sendprfge(int cls, int shpno)
 {
 	byte msgfilter;
 
@@ -2574,7 +2530,7 @@ void FUNC outprfge(int cls, int shpno)
 			switch (cls) {
 			case FLT_NONE:
 				outprf(shpno);
-				return;
+				return TRUE;
 			case FLT_CYB_ALL:
 				if ((msgfilter & MSGF_CYBS_MASK) == 0x00) {
 #ifndef GE_ARENA
@@ -2584,7 +2540,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_CYB_BAT:
@@ -2597,7 +2553,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_CYB_APP:
@@ -2609,7 +2565,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_DISTRESS:
@@ -2621,7 +2577,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_BEACON:
@@ -2633,7 +2589,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_HAIL:
@@ -2645,7 +2601,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_ENTRY:
@@ -2657,7 +2613,7 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			case FLT_SHIP:
@@ -2669,13 +2625,19 @@ void FUNC outprfge(int cls, int shpno)
 					else
 #endif
 						outprf(shpno);
-					return;
+					return TRUE;
 				}
 				break;
 			}
 		}
 	}
-	clrprf();
+	return FALSE;
+}
+
+void FUNC outprfge(int cls, int shpno)
+{
+	if (!sendprfge(cls, shpno))
+		clrprf();
 }
 
 
@@ -2692,10 +2654,6 @@ void FUNC outsect(int filter, COORD *coordptr, unsigned exclude)
 
 	src_neb = (byte)innebula(coord1(coordptr->xcoord), coord1(coordptr->ycoord));
 
-#ifdef MBBSEMU
-	save_prf_mbbsemu();
-#endif
-
 	for (zothusn = 0; zothusn < nterms; ++zothusn) {
 		if (ingegame(zothusn) && zothusn != exclude) {
 			wptr = warshpoff(zothusn);
@@ -2708,10 +2666,7 @@ void FUNC outsect(int filter, COORD *coordptr, unsigned exclude)
 					if (!(src_neb && oth_neb && ddist < (double)NEBRNG))
 						continue;
 				}
-#ifdef MBBSEMU
-				restore_prf_mbbsemu();
-#endif
-				outprfge(filter, zothusn);
+				sendprfge(filter, zothusn);
 			}
 		}
 	}
@@ -2731,10 +2686,6 @@ void FUNC outrange(int filter, COORD *coordptr)
 
 	src_neb = (byte)innebula(coord1(coordptr->xcoord), coord1(coordptr->ycoord));
 
-#ifdef MBBSEMU
-	save_prf_mbbsemu();
-#endif
-
 	for (zothusn = 0; zothusn < nships; ++zothusn) {
 		wptr = warshpoff(zothusn);
 		if (ingegame(zothusn) && shipclass[wptr->shpclass].max_type == CLASSTYPE_USER) {
@@ -2744,10 +2695,7 @@ void FUNC outrange(int filter, COORD *coordptr)
 			if ((src_neb || oth_neb) && !(src_neb && oth_neb && ddist < (double)NEBRNG))
 				continue;
 			if (ddist > 1 && ddist < (double)ship_scanrange(wptr)) {
-#ifdef MBBSEMU
-				restore_prf_mbbsemu();
-#endif
-				outprfge(filter, zothusn);
+				sendprfge(filter, zothusn);
 			}
 		}
 	}
@@ -3770,7 +3718,7 @@ void FUNC optdisp(void)
 		if (fseek(hdl, opttbl[usrnum], 0) == 0) {
 			if (fgets(gechrbuf, 85, hdl) != NULL) {
 				logthis(gechrbuf);
-				prf(gechrbuf);
+				prf("%s",gechrbuf);
 				outprfge(FLT_NONE, usrnum);
 			}
 			else {

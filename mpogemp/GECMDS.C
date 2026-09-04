@@ -4423,7 +4423,7 @@ void FUNC cmd_sysop(void)
 				teamtab[i].teamdeldate,
 				teamtab[i].password,
 				teamtab[i].secret);
-			prf(gechrbuf);
+			prf("%s",gechrbuf);
 			outprfge(FLT_NONE, usrnum);
 		}
 		return;
@@ -5361,7 +5361,7 @@ void FUNC cmd_team(void)
 
 			if (next < 0) {
 				prfmsg(TOOMANY,MAXTEAMS);
-				outprf(usrnum);
+				outprfge(FLT_NONE,usrnum);
 				return;
 			}
 		}
