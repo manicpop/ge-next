@@ -68,7 +68,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.2-pre6"
+#define PROJECT_VERSION "0.3.2-pre7"
 
 #ifndef MBBSEMU
 #define PROJECT_ARCH "16-bit"
@@ -358,16 +358,19 @@
 #define ARENA_MODE_BATTLE 1
 #define ARENA_MODE_HOARD 2
 #define ARENA_MODE_KING 3
+#define ARENA_MODE_BASE 4
 
 #define ARENA_WIN_BATTLE 0
 #define ARENA_WIN_HOARD 1
 #define ARENA_WIN_KING 2
+#define ARENA_WIN_BASE 3
 #define ARENA_WIN_SLOTS 8
 
 #define ARENA_SORT_NONE 0
 #define ARENA_SORT_KILLS 1
 #define ARENA_SORT_GOLD 2
 #define ARENA_SORT_TIME 3
+#define ARENA_SORT_BASES 4
 
 #define ARENA_STAGING_TIME 60
 #define ARENA_AUTOSTART_TIME 60
@@ -398,6 +401,7 @@ typedef struct _arenaplayer {
 	int kills;
 	unsigned deaths;
 	unsigned kingtime;
+	unsigned basekills;
 } ARENAPLAYER;
 #endif
 
@@ -625,7 +629,13 @@ typedef struct warshp {
 /*295*/
 	byte holdcourse;		/* hold-course timer/state (NPC-only)      */
 /*296*/
+#ifdef GE_ARENA
+	byte damage_notice;		/* arena NPC damage milestone              */
+/*297*/
+	char filler[204];		/* pad WARSHP to the real 501-byte record  */
+#else
 	char filler[205];		/* pad WARSHP to the real 501-byte record  */
+#endif
 } WARSHP;
 
 typedef struct item {

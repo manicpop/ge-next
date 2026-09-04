@@ -82,6 +82,49 @@ static char cybname[UIDSIZ];
 int cybhaltflg = 0;
 double d_topspeed;
 
+#ifdef GE_ARENA
+/* place a Base objective outside 0 0, nebulas, and occupied base sectors */
+static int cyb_place_arena_base(WARSHP *ptr, int usrn)
+{
+	WARSHP *other;
+	int attempt;
+	int duplicate;
+	int i;
+	int span;
+	int x;
+	int y;
+
+	span = (univmax * 2) + 1;
+	for (attempt = 0; attempt < 200; ++attempt) {
+		x = (int)(gernd() % span) - univmax;
+		y = (int)(gernd() % span) - univmax;
+		if ((x == 0 && y == 0) || innebula(x,y))
+			continue;
+		duplicate = FALSE;
+		for (i = nterms; i < nships; ++i) {
+			if (i == usrn)
+				continue;
+			other = warshpoff(i);
+			if (other->status == GESTAT_AUTO &&
+			    VALID_SHPCLASS(other->shpclass) &&
+			    shipclass[other->shpclass].arena_mode == ARENA_MODE_BASE &&
+			    shipclass[other->shpclass].max_accel == 0 &&
+			    coord1(other->coord.xcoord) == x &&
+			    coord1(other->coord.ycoord) == y) {
+				duplicate = TRUE;
+				break;
+			}
+		}
+		if (duplicate)
+			continue;
+		ptr->coord.xcoord = (double)x + rndm(.9998) + .0001;
+		ptr->coord.ycoord = (double)y + rndm(.9998) + .0001;
+		return TRUE;
+	}
+	return FALSE;
+}
+#endif
+
 /* use arena combat rules without changing ge-next neutral-zone behavior */
 static int cyb_in_neutral(WARSHP *ptr, int usrn)
 {
@@ -275,6 +318,18 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 
 			waruptr->kills = 0;	/* new cyb so clear this */
 
+#ifdef GE_ARENA
+			if (arena_mode == ARENA_MODE_BASE &&
+			    shipclass[ptr->shpclass].arena_mode == ARENA_MODE_BASE &&
+			    shipclass[ptr->shpclass].max_accel == 0) {
+				if (!cyb_place_arena_base(ptr,usrn)) {
+					ptr->status = GESTAT_AVAIL;
+					ptr->where = -1;
+					return;
+				}
+			}
+			else
+#endif
 			if (shipclass[ptr->shpclass].max_accel == 0 && univmax > 100) {
 				/* make sure bases aren't too close to 0 0 */
 				ptr->coord.xcoord = rndm((double)univmax - 60) + 50.0;
@@ -308,6 +363,9 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 			ptr->npcmsg = (byte)255;
 			ptr->holdcourse = 0;
 			ptr->cantexit = 0;
+#ifdef GE_ARENA
+			ptr->damage_notice = 0;
+#endif
 			ptr->shield = 40 + (ptr->shieldtype * 10);
 			ptr->phasr = 100;
 
@@ -556,6 +614,14 @@ static void cyb_annoy(WARSHP *ptr, int usrn, int msgtype)
 	if (cdistance(&ptr->coord, &warshpoff(usrn)->coord) * 10000 >
 		(double)shipclass[warshpoff(usrn)->shpclass].scanrange)
 		return;
+
+#ifdef GE_ARENA
+	/* Base mode suppresses ambient chatter; only its current target hears it. */
+	if (arena_mode == ARENA_MODE_BASE &&
+	    shipclass[ptr->shpclass].max_accel == 0 &&
+	    (msgtype == CYBBASEA || usrn != ptr->cybmine))
+		return;
+#endif
 
 	/* if we are fleeing from this user, don't send other msgs to this user until done */
 	/* allow an explicit flee message to print when transitioning from silent missile avoidance */

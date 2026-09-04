@@ -137,6 +137,7 @@ void FUNC arena_initialize_world P((void));
 int FUNC arena_scan_percent P((void));
 void FUNC arena_ship_destroyed P((WARSHP *ptr , int usrn));
 void FUNC arena_cyb_destroyed P((WARSHP *ptr , int usrn));
+void FUNC arena_cyb_damage_notice P((WARSHP *ptr));
 int FUNC arena_neutral_fire_blocked P((WARSHP *ptr , int usrn));
 int FUNC arena_neutral_protection_active P((void));
 void FUNC arena_enforce_staging_bounds P((WARSHP *ptr , int usrn));

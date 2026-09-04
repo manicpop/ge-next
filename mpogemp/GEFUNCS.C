@@ -804,10 +804,10 @@ void FUNC firep(WARSHP *ptr, int usrn)
 							if (underone == TRUE)	/* hit, but no damage */
 								factor = 0.0;
 							hitone = TRUE;
-							/* prioritize user hits over npcs so users get credit */
-							if (wptr->damage < 100.0
+							/* ineffective contacts do not replace existing kill credit */
+							if (!underone && (wptr->damage < 100.0
 								|| (wptr->lastfired >= 0 && wptr->lastfired < nships && warshpoff(wptr->lastfired)->status == GESTAT_AUTO
-									&& ptr->status == GESTAT_USER))
+									&& ptr->status == GESTAT_USER)))
 								wptr->lastfired = usrn;
 							/* glancing or shielded hits only set half FIRETICKS; real hull hits set the full delay */
 							if (underone || wptr->shieldstat == SHIELDUP) {
@@ -1004,10 +1004,10 @@ void FUNC firehp(WARSHP *ptr, int usrn)
 									else
 										prfmsg(HPHITU,username(ptr),gechrbuf);
 									outprfge(FLT_NONE,othusn);
-									/* prioritize user hits over npcs so users get credit */
-									if (wptr->damage < 100.0
+									/* ineffective contacts do not replace existing kill credit */
+									if (factor >= 1.0 && (wptr->damage < 100.0
 										|| (wptr->lastfired >= 0 && wptr->lastfired < nships && warshpoff(wptr->lastfired)->status == GESTAT_AUTO
-											&& ptr->status == GESTAT_USER))
+											&& ptr->status == GESTAT_USER)))
 										wptr->lastfired = usrn;
 									/* cap npc-on-npc phasers so big ships don't get one shot kills */
 									if (ptr->status == GESTAT_AUTO && wptr->status == GESTAT_AUTO
@@ -2807,6 +2807,11 @@ void FUNC checkdam(WARSHP *ptr, int usrn)
 
 	logthis(spr("GE:Chn %d checkdam %s", usrn, ptr->userid));
 
+#ifdef GE_ARENA
+	if (usrn >= nterms && ptr->status == GESTAT_AUTO)
+		arena_cyb_damage_notice(ptr);
+#endif
+
 	if (ptr->damage >= 100.0) {
 #ifdef GE_ARENA
 		if (usrn < nterms && arena_player[usrn].state == ARENA_P_PLAYING) {
@@ -4001,9 +4006,16 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 	}
 #endif
 
-	/* clear lastfired if npc no longer exists */
-	if (ptr->lastfired >= 0 && ptr->lastfired < nships && warshpoff(ptr->lastfired)->status == GESTAT_AVAIL)
+	/* clear attribution only when its owner no longer participates */
+#ifdef GE_ARENA
+	if (ptr->lastfired >= 0 && ptr->lastfired < nships &&
+	    !arena_weapon_owner_active(ptr->lastfired))
 		ptr->lastfired = -1;
+#else
+	if (ptr->lastfired >= 0 && ptr->lastfired < nships &&
+	    warshpoff(ptr->lastfired)->status == GESTAT_AVAIL)
+		ptr->lastfired = -1;
+#endif
 
 }
 

@@ -105,6 +105,8 @@ static char *arena_mode_name(int mode)
 		return "Hoard";
 	if (mode == ARENA_MODE_KING)
 		return "King";
+	if (mode == ARENA_MODE_BASE)
+		return "Base";
 	return "unknown";
 }
 
@@ -117,7 +119,19 @@ static int arena_mode_win_slot(int mode)
 		return ARENA_WIN_HOARD;
 	if (mode == ARENA_MODE_KING)
 		return ARENA_WIN_KING;
+	if (mode == ARENA_MODE_BASE)
+		return ARENA_WIN_BASE;
 	return -1;
+}
+
+/* identify the stationary Cyber-Base configured for Base mode */
+static int arena_is_base_ship(WARSHP *ptr)
+{
+	if (ptr == NULL || !VALID_SHPCLASS(ptr->shpclass))
+		return FALSE;
+	return shipclass[ptr->shpclass].max_type == CLASSTYPE_CYBORG &&
+	    shipclass[ptr->shpclass].arena_mode == ARENA_MODE_BASE &&
+	    shipclass[ptr->shpclass].max_accel == 0;
 }
 
 /* sum all persistent mode wins for roster sorting and display */
@@ -223,6 +237,17 @@ int FUNC arena_shipclass_for_choice(int choice)
 	return -1;
 }
 
+/* return the sole user class for this mode, or -1 when selection is needed */
+static int arena_single_shipclass(void)
+{
+	int cls;
+
+	cls = arena_shipclass_for_choice(0);
+	if (cls >= 0 && arena_shipclass_for_choice(1) < 0)
+		return cls;
+	return -1;
+}
+
 /* validate a numeric ship choice and return its zero-based menu index */
 int FUNC arena_parse_ship_choice(char *text)
 {
@@ -313,11 +338,51 @@ static void arena_show_choice_item(int *column, int *first, unsigned qty,
 	*column += length;
 }
 
+/* print one wrapped ship loadout generated from the class table */
+static void arena_show_ship_loadout(SHIP *classptr, int choice)
+{
+	int column, first;
+
+	if (choice > 0)
+		prf("  %s%d %s%s%s:",CLR_CYAN2,choice,CLR_CYAN1,
+		    classptr->typename,CLR_WHITE2);
+	else
+		prf("  %s%s%s:",CLR_CYAN1,classptr->typename,CLR_WHITE2);
+	if (classptr->arena_start_shield > 0)
+		prf(" Mark-%d shield",classptr->arena_start_shield);
+	if (classptr->arena_start_phaser > 0) {
+		if (classptr->arena_start_shield > 0)
+			prf(",");
+		prf(" Mark-%d phaser",classptr->arena_start_phaser);
+	}
+	prf("\r");
+	column = 0;
+	first = TRUE;
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_TORPEDO],"torpedo","torpedoes");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_MISSILE],"missile","missiles");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_MINE],"mine","mines");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_DECOYS],"decoy","decoys");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_ZIPPERS],"zipper","zippers");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_JAMMERS],"jammer","jammers");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_FLUXPOD],"flux pod","flux pods");
+	arena_show_choice_item(&column,&first,
+	    classptr->arena_start_items[I_GOLD],"gold","gold");
+	if (!first)
+		prf("\r");
+}
+
 /* print the wrapped ship-selection list generated from the class table */
 void FUNC arena_show_ship_choices(void)
 {
 	SHIP *classptr;
-	int choice, column, first, i;
+	int choice, i;
 
 	prf("\rShips:\r");
 	choice = 0;
@@ -327,42 +392,13 @@ void FUNC arena_show_ship_choices(void)
 		    classptr->arena_mode != arena_mode)
 			continue;
 		++choice;
-		prf("  %s%d %s%s%s:",CLR_CYAN2,choice,CLR_CYAN1,
-		    classptr->typename,CLR_WHITE2);
-		if (classptr->arena_start_shield > 0)
-			prf(" Mark-%d shield",classptr->arena_start_shield);
-		if (classptr->arena_start_phaser > 0) {
-			if (classptr->arena_start_shield > 0)
-				prf(",");
-			prf(" Mark-%d phaser",classptr->arena_start_phaser);
-		}
-		prf("\r");
-		column = 0;
-		first = TRUE;
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_TORPEDO],"torpedo","torpedoes");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_MISSILE],"missile","missiles");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_MINE],"mine","mines");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_DECOYS],"decoy","decoys");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_ZIPPERS],"zipper","zippers");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_JAMMERS],"jammer","jammers");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_FLUXPOD],"flux pod","flux pods");
-		arena_show_choice_item(&column,&first,
-		    classptr->arena_start_items[I_GOLD],"gold","gold");
-		if (!first)
-			prf("\r");
+		arena_show_ship_loadout(classptr,choice);
 	}
 	if (choice > 0)
 		prfmsg(SHPPROM, choice);
 }
 
-/* put a player at the initial ship-selection prompt */
+/* place a player at the initial arena ship prompt */
 static void arena_show_initial_ship_choice(int usrn)
 {
 	user[usrn].substt = FIGHTSUB;
@@ -903,6 +939,8 @@ static int arena_set_mode(char *mode)
 		newmode = ARENA_MODE_HOARD;
 	else if (sameas("3", mode))
 		newmode = ARENA_MODE_KING;
+	else if (sameas("4", mode))
+		newmode = ARENA_MODE_BASE;
 	else {
 		prfmsg(MODUNK);
 		arena_show_modes();
@@ -949,12 +987,15 @@ static int arena_start_countdown(void)
 static int arena_spawn_player(int usrn)
 {
 	int oldusr;
+	int cls;
+	int respawning;
 	struct user *oldusrptr;
 	WARSHP *oldsptr;
 	WARUSR *olduptr;
 	int span;
 
 	oldusr = usrnum;
+	respawning = arena_player[usrn].state == ARENA_P_RESPAWN;
 	oldusrptr = usrptr;
 	oldsptr = warsptr;
 	olduptr = waruptr;
@@ -965,7 +1006,8 @@ static int arena_spawn_player(int usrn)
 	waruptr = warusroff(usrn);
 	waruptr->topshipno = 0;
 	waruptr->noships = 0;
-	if (initshp(waruptr->userid,arena_selected_shipclass(usrn))) {
+	cls = arena_selected_shipclass(usrn);
+	if (cls < 0 || initshp(waruptr->userid,cls)) {
 		usrnum = oldusr;
 		usrptr = oldusrptr;
 		warsptr = oldsptr;
@@ -973,7 +1015,7 @@ static int arena_spawn_player(int usrn)
 		return FALSE;
 	}
 	memcpy(warsptr,&tmpshp,sizeof(WARSHP));
-	arena_apply_loadout(warsptr, arena_selected_shipclass(usrn));
+	arena_apply_loadout(warsptr,cls);
 	if (arena_state == ARENA_RUNNING) {
 		span = (univmax * 2) + 1;
 		do {
@@ -988,7 +1030,7 @@ static int arena_spawn_player(int usrn)
 		    coord1(warsptr->coord.ycoord) == arena_king_y);
 	}
 	warsptr->where = 0;
-	if (arena_state == ARENA_RUNNING) {
+	if (arena_state == ARENA_RUNNING || respawning) {
 		warsptr->status = GESTAT_USER;
 		arena_player[usrn].flags &= ~ARENA_F_NEEDSHIP;
 		update_scantab(warsptr,usrn);
@@ -1001,7 +1043,7 @@ static int arena_spawn_player(int usrn)
 	usrptr->substt = FIGHTSUB;
 	user[usrn].substt = FIGHTSUB;
 	btupmt(usrn,'>');
-	if (arena_state == ARENA_RUNNING) {
+	if (respawning) {
 		prfmsg(RSPAWN, shipclass[arena_selected_shipclass(usrn)].typename,
 		    coord1(warsptr->coord.xcoord), coord1(warsptr->coord.ycoord));
 		outprfge(FLT_NONE,usrn);
@@ -1026,12 +1068,32 @@ static void arena_spawn_failed(int usrn)
 	}
 }
 
+/* advance pending respawns during both staging and active combat */
+static void arena_respawn_tick(void)
+{
+	int i;
+
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_RESPAWN) {
+			if (arena_player[i].respawn > 0)
+				--arena_player[i].respawn;
+			if (arena_player[i].respawn == 0) {
+				if (arena_spawn_player(i))
+					arena_player[i].state = ARENA_P_PLAYING;
+				else
+					arena_spawn_failed(i);
+			}
+		}
+	}
+}
+
 /* convert ready users into staged players and create their hidden ships */
 static void arena_start_match(void)
 {
 	unsigned long newseed;
 	int i;
 	int players;
+	int single_class;
 
 	/* staging has its own countdown; the match clock starts with combat */
 	arena_state = ARENA_STAGING;
@@ -1051,28 +1113,39 @@ static void arena_start_match(void)
 	players = arena_count_ready();
 	if (players > 0)
 		univmax = players * 5;
+	single_class = arena_single_shipclass();
 	for (i = 0; i < nterms; ++i) {
 		arena_player[i].kills = 0;
 		arena_player[i].deaths = 0;
 		arena_player[i].kingtime = 0;
-		if (arena_player[i].state == ARENA_P_READY)
+		arena_player[i].basekills = 0;
+		if (arena_player[i].state == ARENA_P_READY) {
+			if (single_class >= 0)
+				arena_player[i].shipclass = (byte)single_class;
 			arena_show_initial_ship_choice(i);
+		}
 	}
 	/* announce staging before sending each participant the ship list */
 	prfmsg(STGSTART, arena_mode_name(arena_mode), arena_ticks);
 	arena_broadcast_prf();
 	for (i = 0; i < nterms; ++i) {
-		if (arena_player[i].state == ARENA_P_READY) {
+		if (single_class < 0 && arena_player[i].state == ARENA_P_READY) {
 			arena_show_ship_choices();
 			outprfge(FLT_NONE,i);
 		}
 	}
-	/* create hidden staged ships; selecting a class later exposes each ship */
+	/* create staged ships; multi-class ships stay hidden until selected */
 	for (i = 0; i < nterms; ++i) {
 		if (arena_player[i].state == ARENA_P_READY) {
 			arena_player[i].ready = FALSE;
 			if (arena_spawn_player(i)) {
 				arena_player[i].state = ARENA_P_PLAYING;
+				if (single_class >= 0) {
+					arena_select_ship(i,0);
+					prfmsg(SHPLOAD);
+					arena_show_ship_loadout(&shipclass[single_class],0);
+					outprfge(FLT_NONE,i);
+				}
 			}
 			else
 				arena_spawn_failed(i);
@@ -1116,6 +1189,8 @@ int FUNC arena_neutral_fire_blocked(WARSHP *ptr, int usrn)
 {
 	if (arena_player == NULL)
 		return neutral(&ptr->coord);
+	if (arena_state == ARENA_STAGING)
+		return TRUE;
 	if (arena_state == ARENA_RUNNING) {
 		if (usrn >= 0 && usrn < nterms &&
 		    arena_player[usrn].state == ARENA_P_PLAYING)
@@ -1124,11 +1199,6 @@ int FUNC arena_neutral_fire_blocked(WARSHP *ptr, int usrn)
 		    ptr->status == GESTAT_AUTO)
 			return FALSE;
 	}
-	if (usrn < 0 || usrn >= nterms ||
-	    arena_player[usrn].state != ARENA_P_PLAYING)
-		return neutral(&ptr->coord);
-	if (arena_state == ARENA_STAGING)
-		return TRUE;
 	return neutral(&ptr->coord);
 }
 
@@ -1242,6 +1312,7 @@ static void arena_show_results(void)
 	unsigned long gold;
 	unsigned long highgold;
 	unsigned hightime;
+	unsigned highbases;
 	WARUSR *wuptr;
 
 	forfeit = arena_match_ticks > 0 && arena_count_playing() == 1;
@@ -1249,6 +1320,7 @@ static void arena_show_results(void)
 	highscore = 0;
 	highgold = 0UL;
 	hightime = 0;
+	highbases = 0;
 	tied = 0;
 	for (i = 0; i < nterms; ++i) {
 		if (!arena_player_active(i))
@@ -1270,6 +1342,15 @@ static void arena_show_results(void)
 				tied = 1;
 			}
 			else if (arena_player[i].kingtime == hightime)
+				++tied;
+		}
+		else if (arena_mode == ARENA_MODE_BASE) {
+			if (winner < 0 || arena_player[i].basekills > highbases) {
+				winner = i;
+				highbases = arena_player[i].basekills;
+				tied = 1;
+			}
+			else if (arena_player[i].basekills == highbases)
 				++tied;
 		}
 		else {
@@ -1298,6 +1379,8 @@ static void arena_show_results(void)
 		else if (arena_mode == ARENA_MODE_KING)
 			prfmsg(KNGWIN,wuptr->userid,(int)(hightime / 60),
 			    (int)(hightime % 60));
+		else if (arena_mode == ARENA_MODE_BASE)
+			prfmsg(BASWIN,wuptr->userid,(int)highbases);
 		else
 			prfmsg(MATWIN, wuptr->userid, arena_mode_name(arena_mode),
 			    highscore);
@@ -1310,6 +1393,8 @@ static void arena_show_results(void)
 		}
 		else if (arena_mode == ARENA_MODE_KING)
 			prfmsg(KNGTIE,(int)(hightime / 60),(int)(hightime % 60));
+		else if (arena_mode == ARENA_MODE_BASE)
+			prfmsg(BASTIE,(int)highbases);
 		else
 			prfmsg(MATTIE, arena_mode_name(arena_mode), highscore);
 		arena_broadcast_prf();
@@ -1333,6 +1418,8 @@ static int arena_status_sort_mode(void)
 		return ARENA_SORT_GOLD;
 	if (arena_mode == ARENA_MODE_KING)
 		return ARENA_SORT_TIME;
+	if (arena_mode == ARENA_MODE_BASE)
+		return ARENA_SORT_BASES;
 	return ARENA_SORT_NONE;
 }
 
@@ -1364,6 +1451,12 @@ static int arena_status_compare(int left, int right, int sortmode)
 		if (arena_player[left].kingtime > arena_player[right].kingtime)
 			return -1;
 		if (arena_player[left].kingtime < arena_player[right].kingtime)
+			return 1;
+	}
+	else if (sortmode == ARENA_SORT_BASES) {
+		if (arena_player[left].basekills > arena_player[right].basekills)
+			return -1;
+		if (arena_player[left].basekills < arena_player[right].basekills)
 			return 1;
 	}
 	return left - right;
@@ -1449,6 +1542,9 @@ static void arena_print_status_row(int usrn)
 				    seconds);
 			prf("%-22s %-24s %11s\r",wuptr->userid,state,gechrbuf);
 		}
+		else if (arena_mode == ARENA_MODE_BASE)
+			prf("%-22s %-24s %11u\r",wuptr->userid,state,
+			    arena_player[usrn].basekills);
 		else
 			prf("%-22s %-24s %5d %7u\r", wuptr->userid, state,
 			    arena_player[usrn].kills, arena_player[usrn].deaths);
@@ -1457,6 +1553,8 @@ static void arena_print_status_row(int usrn)
 		if (arena_mode == ARENA_MODE_HOARD)
 			prf("%-22s %-24s %12s\r", wuptr->userid, state, "-");
 		else if (arena_mode == ARENA_MODE_KING)
+			prf("%-22s %-24s %11s\r", wuptr->userid, state, "-");
+		else if (arena_mode == ARENA_MODE_BASE)
 			prf("%-22s %-24s %11s\r", wuptr->userid, state, "-");
 		else
 			prf("%-22s %-24s %5s %7s\r", wuptr->userid, state, "-", "-");
@@ -1492,6 +1590,8 @@ void FUNC arena_show_status(void)
 		prfmsg(HODSTAT);
 	else if (arena_mode == ARENA_MODE_KING)
 		prfmsg(KNGSTAT);
+	else if (arena_mode == ARENA_MODE_BASE)
+		prfmsg(BASSTAT);
 	else
 		prfmsg(BATSTAT);
 
@@ -1770,6 +1870,7 @@ static void arena_end_match(void)
 void FUNC arena_ship_destroyed(WARSHP *ptr, int usrn)
 {
 	int who;
+	int single_class;
 	WARSHP *wptr;
 
 	who = ptr->lastfired;
@@ -1796,7 +1897,11 @@ void FUNC arena_ship_destroyed(WARSHP *ptr, int usrn)
 	}
 
 	prfmsg(RSPWAIT, ARENA_RESPAWN_TIME);
-	arena_show_ship_choices();
+	single_class = arena_single_shipclass();
+	if (single_class < 0)
+		arena_show_ship_choices();
+	else
+		arena_player[usrn].shipclass = (byte)single_class;
 	outprfge(FLT_NONE,usrn);
 	++arena_player[usrn].deaths;
 	arena_player[usrn].state = ARENA_P_RESPAWN;
@@ -1818,6 +1923,9 @@ void FUNC arena_cyb_destroyed(WARSHP *ptr, int usrn)
 
 	who = ptr->lastfired;
 	if (arena_credit_last_attacker(ptr,usrn)) {
+		if (arena_mode == ARENA_MODE_BASE && arena_is_base_ship(ptr) &&
+		    arena_player[who].basekills != (unsigned)~0U)
+			++arena_player[who].basekills;
 		wptr = warshpoff(who);
 		prfmsg(KILLDNPC,username(ptr),warusroff(who)->userid);
 		arena_broadcast_prf();
@@ -1836,6 +1944,24 @@ void FUNC arena_cyb_destroyed(WARSHP *ptr, int usrn)
 	else {
 		ptr->status = GESTAT_AVAIL;
 		ptr->where = -1;
+	}
+}
+
+/* announce each Base-mode damage milestone once during a base's lifetime */
+void FUNC arena_cyb_damage_notice(WARSHP *ptr)
+{
+	if (arena_state != ARENA_RUNNING || arena_mode != ARENA_MODE_BASE ||
+	    !arena_is_base_ship(ptr) || ptr->damage >= 100.0)
+		return;
+	if (ptr->damage > 75.5 && ptr->damage_notice < 2) {
+		ptr->damage_notice = 2;
+		prfmsg(BASSEVER,ptr->shipname);
+		arena_broadcast_prf();
+	}
+	else if (ptr->damage > 50.5 && ptr->damage_notice < 1) {
+		ptr->damage_notice = 1;
+		prfmsg(BASHEAVY,ptr->shipname);
+		arena_broadcast_prf();
 	}
 }
 
@@ -1863,6 +1989,26 @@ static unsigned long arena_drop_qty(unsigned int *r, unsigned long base)
 	return qty;
 }
 
+/* create the next staged Base-mode Cyber-Base in its configured slot */
+static void arena_spawn_base(void)
+{
+	WARSHP *ptr;
+	int cls;
+	int i;
+
+	for (i = nterms; i < nships; ++i) {
+		ptr = warshpoff(i);
+		cls = cyb_slot_class(i);
+		if (ptr->status != GESTAT_AVAIL || cls < 0 ||
+		    shipclass[cls].arena_mode != ARENA_MODE_BASE ||
+		    shipclass[cls].max_accel != 0)
+			continue;
+		if (shipclass[cls].init_func != NULL)
+			(*(shipclass[cls].init_func))(ptr,i,cls);
+		return;
+	}
+}
+
 /* add the scheduled item and upgrade drop to Zygor, then announce it */
 static void arena_drop_zygor(void)
 {
@@ -1887,10 +2033,12 @@ static void arena_drop_zygor(void)
 	if (arena_mode == ARENA_MODE_HOARD)
 		arena_add_drop_item(I_GOLD,
 		    300UL + (unsigned long)(gernd() % 201),ULCAP);
-	special = (byte)(2 + (gernd() % 2));
-	planet.arena_shield_boost += special;
-	special = (byte)(2 + (gernd() % 2));
-	planet.arena_phaser_boost += special;
+	if (arena_mode != ARENA_MODE_BASE) {
+		special = (byte)(2 + (gernd() % 2));
+		planet.arena_shield_boost += special;
+		special = (byte)(2 + (gernd() % 2));
+		planet.arena_phaser_boost += special;
+	}
 	switch (gernd() % 5) {
 	case 0:
 		planet.arena_flags |= ARENA_PL_SCAN;
@@ -1919,8 +2067,6 @@ static void arena_drop_zygor(void)
 /* advance queue, staging, match, drop, and respawn timers once per second */
 void FUNC arena_tick(void)
 {
-	int i;
-
 	if (arena_state == ARENA_QUEUE) {
 		if (arena_count_ready() < 2) {
 			if (arena_ticks > 0) {
@@ -1954,8 +2100,13 @@ void FUNC arena_tick(void)
 		return;
 	}
 	if (arena_state == ARENA_STAGING) {
+		arena_respawn_tick();
 		if (arena_ticks > 0)
 			--arena_ticks;
+		if (arena_mode == ARENA_MODE_BASE &&
+		    (arena_ticks == 50 || arena_ticks == 40 || arena_ticks == 30 ||
+		    arena_ticks == 20 || arena_ticks == 10))
+			arena_spawn_base();
 		if (arena_ticks == 45) {
 			if (arena_scan_percent() < 100)
 				prfmsg(STGSIZE2, univmax, arena_scan_percent());
@@ -1980,6 +2131,7 @@ void FUNC arena_tick(void)
 		return;
 	}
 	if (arena_state == ARENA_RUNNING) {
+		arena_respawn_tick();
 		if (arena_mode == ARENA_MODE_KING)
 			arena_king_score_tick();
 		if (arena_match_ticks > 0)
@@ -2002,18 +2154,6 @@ void FUNC arena_tick(void)
 			prfmsg(MATWARN, arena_mode_name(arena_mode));
 			arena_broadcast_prf();
 		}
-		for (i = 0; i < nterms; ++i) {
-			if (arena_player[i].state == ARENA_P_RESPAWN) {
-				if (arena_player[i].respawn > 0)
-					--arena_player[i].respawn;
-				if (arena_player[i].respawn == 0) {
-					if (arena_spawn_player(i))
-						arena_player[i].state = ARENA_P_PLAYING;
-					else
-						arena_spawn_failed(i);
-				}
-			}
-		}
 		if (arena_count_playing() < 2 || arena_match_ticks <= 0)
 			arena_end_match();
 	}
@@ -2035,13 +2175,23 @@ int FUNC mnu_arena_lobby(void)
 	}
 
 	if (arena_player[usrnum].state == ARENA_P_RESPAWN &&
-	    arena_state == ARENA_RUNNING) {
+	    (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING)) {
 		if (margc == 1 && sameas(margv[0], "X")) {
 			arena_exit_match();
 			return 1;
 		}
 		if (margc == 1 && sameas(margv[0], "?")) {
 			arena_show_ship_classes();
+			outprfge(FLT_NONE, usrnum);
+			return 1;
+		}
+		if (margc == 1 && sameto("sta", margv[0])) {
+			arena_show_status();
+			outprfge(FLT_NONE, usrnum);
+			return 1;
+		}
+		if (arena_single_shipclass() >= 0) {
+			prfmsg(RSPHOLD);
 			outprfge(FLT_NONE, usrnum);
 			return 1;
 		}

@@ -3356,9 +3356,10 @@ void FUNC cmd_geroster(void)
 				    tmpusr.arena_wins[ARENA_WIN_BATTLE]);
 				sprintf(gechrbuf3, "%u",
 				    tmpusr.arena_wins[ARENA_WIN_HOARD]);
-				prf("%-29s%7s%8s%7s%6u\r", tmpusr.userid, gechrbuf,
+				prf("%-29s%7s%8s%7s%6u%6u\r", tmpusr.userid, gechrbuf,
 				    gechrbuf2, gechrbuf3,
-				    tmpusr.arena_wins[ARENA_WIN_KING]);
+				    tmpusr.arena_wins[ARENA_WIN_KING],
+				    tmpusr.arena_wins[ARENA_WIN_BASE]);
 #else
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);

@@ -1313,12 +1313,13 @@ void FUNC dump_roster_file(void)
 			gcrbtv(&tmpusr, 1);
 			if (tmpusr.score > 0 && tmpusr.userid[0] != '@') {
 #ifdef GE_ARENA
-				fprintf(hdl, "%-29s%7lu%8u%7u%6u\n",
+				fprintf(hdl, "%-29s%7lu%8u%7u%6u%6u\n",
 					tmpusr.userid,
 					tmpusr.score,
 					tmpusr.arena_wins[ARENA_WIN_BATTLE],
 					tmpusr.arena_wins[ARENA_WIN_HOARD],
-					tmpusr.arena_wins[ARENA_WIN_KING]);
+					tmpusr.arena_wins[ARENA_WIN_KING],
+					tmpusr.arena_wins[ARENA_WIN_BASE]);
 #else
 				sprintf(gechrbuf, "%11lu", tmpusr.score);
 				sprintf(gechrbuf2, " %10.2fm", ((float)tmpusr.population) / 100.0);

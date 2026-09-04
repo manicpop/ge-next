@@ -153,8 +153,14 @@ static void arena_init_planet_loot(void)
 	if (arena_mode == ARENA_MODE_HOARD)
 		planet.items[I_GOLD].qty = arena_planet_gold();
 
-	planet.arena_shield_boost = arena_planet_boost();
-	planet.arena_phaser_boost = arena_planet_boost();
+	if (arena_mode == ARENA_MODE_BASE) {
+		planet.arena_shield_boost = 0;
+		planet.arena_phaser_boost = 0;
+	}
+	else {
+		planet.arena_shield_boost = arena_planet_boost();
+		planet.arena_phaser_boost = arena_planet_boost();
+	}
 	planet.arena_flags = 0;
 	if (arena_chance(6))
 		planet.arena_flags |= ARENA_PL_SCAN;

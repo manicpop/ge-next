@@ -2072,14 +2072,14 @@ IHIT2 {***
 
 ROSTER1 {
 [1;36mArena wins
-[0;31m---------------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard  King[1;37m
+[0;31m---------------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King  Base[1;37m
 } T GE arena wins roster
 
 ROSTER2 {
 [1;36mArena wins
-[0;31m---------------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard  King[1;37m
+[0;31m---------------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King  Base[1;37m
 } T GE arena wins roster
 
 ROSTER3 {
@@ -3296,6 +3296,7 @@ MODLIST {
   1 - Battle: free-for-all combat, no Cybertrons, most kills wins.
   2 - Hoard: collect gold from planets and combat, incl. Cybs, most gold wins.
   3 - King: spend the most total time in the active sector.
+  4 - Base: destroy the most Cyber-Bases.
 
 Current mode: [1;37m%s
 } T GE arena mode list
@@ -3358,6 +3359,10 @@ KNGSTAT {[0;31m-----------------------------------------------------------
 [1;34mPlayer                 Status                          Time[1;37m
 } T GE arena King status header
 
+BASSTAT {[0;31m-----------------------------------------------------------
+[1;34mPlayer                 Status                         Bases[1;37m
+} T GE arena Base status header
+
 KNGTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining. Active sector: [1;37m%d %d[1;37m
 } T GE arena King running status
 
@@ -3407,6 +3412,9 @@ RSPAWN {***
 
 RSPPROM {[1;36mYou are still waiting to respawn. Enter another ship number to change your next ship.[1;37m
 } T GE arena respawn ship selection required
+
+RSPHOLD {[1;36mYou are still waiting to respawn.[1;37m
+} T GE arena single-class respawn wait
 
 MATOBS {[1;36mYou are now observing the current arena match.[1;37m
 } T GE arena switched to observing during match
@@ -3495,6 +3503,26 @@ HODTIE {***
 [1;36m<[1;37m Hoard ends in a tie with %s gold! [1;36m>[1;37m
 } T GE arena Hoard tie
 
+BASWIN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s wins Base with %d Cyber-Base kills! [1;36m>[1;37m
+} T GE arena Base winner
+
+BASTIE {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m Base ends in a tie with %d Cyber-Base kills! [1;36m>[1;37m
+} T GE arena Base tie
+
+BASHEAVY {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s has sustained heavy damage. [1;36m>[1;37m
+} T GE arena Cyber-Base heavy damage
+
+BASSEVER {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s has sustained severe damage. [1;36m>[1;37m
+} T GE arena Cyber-Base severe damage
+
 KNGSECT {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m The active King sector is now [1;34m%d %d[1;37m. [1;36m>[1;37m
@@ -3527,6 +3555,9 @@ HODOPEN {***
 
 LOBCHATH {[1;36mUse [1;37m>[1;36m to chat in the arena lobby.[1;37m
 } T GE arena lobby SEND guidance
+
+SHPLOAD {[1;36mYour ship:[1;37m
+} T GE arena automatic ship loadout
 
 SHPPROM {
 [1;36mSelect [1;37m1-%d[1;36m or [1;37m?[1;36m.[1;37m
