@@ -1393,7 +1393,6 @@ void FUNC warhupa(void)
 		/* if modem hangup */
 			logthis(spr("User Hungup Status = %d", status));
 			if (warsptr->cantexit > 0)
-#ifndef MBBSEMU
 			{
 				/* if we're in cleanup mode, don't killem */
 				if (status == RING && rsmodes[usrnum] != NORMRS) {
@@ -1406,14 +1405,11 @@ void FUNC warhupa(void)
 					geudb(GEUPDATE, waruptr->userid, waruptr);
 				}
 				else
-#endif
 				{
 					killem(warsptr, usrnum);
 					warsptr->where = -1;
 				}
-#ifndef MBBSEMU
 			}
-#endif
 			else {
 				/* broadcast this user's departure to entry-message recipients */
 				exit_entrymsg(usrnum);

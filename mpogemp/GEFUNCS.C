@@ -5579,14 +5579,6 @@ char * FUNC showarp(double speed)
 		sprintf(warpbuf,"??.??");
 	else
 		sprintf(warpbuf,"%.2f",speed/1000.0);
-#ifdef MBBSEMU
-	/* MBBSemu doesn't currently honor %.2f */
-	if (warpbuf[strlen(warpbuf) - 2] == '.')
-		strcat(warpbuf, "0");
-	else
-	if (warpbuf[strlen(warpbuf) - 3] != '.')
-		strcat(warpbuf, ".00");
-#endif
 	return warpbuf;
 }
 
