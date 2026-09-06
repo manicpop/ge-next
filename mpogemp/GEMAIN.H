@@ -37,9 +37,6 @@
 /* if FASTPLANET defined updates happen every 3 seconds */
 /* #define FASTPLANET 1 */
 
-/* enable to build with mbbsemu mitigations */
-/* #define MBBSEMU 1 */
-
 #ifndef GE_ARENA
 #define PROJECT_NAME "ge-next"
 #else
@@ -48,11 +45,7 @@
 
 #define PROJECT_VERSION "0.3.2-pre7"
 
-#ifndef MBBSEMU
 #define PROJECT_ARCH "16-bit"
-#else
-#define PROJECT_ARCH "mbbsemu"
-#endif
 
 #ifndef GE_ARENA
 #define GEHELP  "MPOGEHLP.MCV"

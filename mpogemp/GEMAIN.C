@@ -1477,20 +1477,13 @@ int FUNC galemp(void)
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
 
-#ifdef MBBSEMU
 	if (usrptr->substt >= FIGHTSUB && warsptr->where == -1
 #ifdef GE_ARENA
 	    && (arena_player == NULL || arena_player[usrnum].state == ARENA_P_EMPTY)
 #endif
-	    ) {
-		disp_main_menu();
-		outprfge(FLT_NONE, usrnum);
-		usrptr->substt = 1;
-		btupmt(usrnum, 0);
-		clrprf();
-		return 1;
-	}
-#endif
+	    )
+		/* Recover a stale in-flight state through the normal module entry path. */
+		usrptr->substt = 0;
 
 	for (i = 0; i < MENUNUM; ++i) {
 		if (menu[i].substt == usrptr->substt) {

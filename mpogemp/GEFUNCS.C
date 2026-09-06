@@ -2827,15 +2827,6 @@ void FUNC checkdam(WARSHP *ptr, int usrn)
 			ptr->status = GESTAT_AVAIL;
 
 		if (ptr->status == GESTAT_USER) {
-#ifdef MBBSEMU
-			if (usrn == usrnum) {
-				/* mbbsemu does not follow the shared user[] state change */
-				disp_main_menu();
-				outprfge(FLT_NONE, usrnum);
-				usrptr->substt = 1;
-			}
-			else
-#endif
 			user[usrn].substt = 0;
 			--numwar;
 			ptr->where = -1;
