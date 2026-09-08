@@ -43,7 +43,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.2-pre7"
+#define PROJECT_VERSION "0.3.2"
 
 #define PROJECT_ARCH "16-bit"
 
@@ -325,6 +325,16 @@
 #define ARENA_QUEUE 1
 #define ARENA_STAGING 2
 #define ARENA_RUNNING 3
+#define ARENA_TIE_STAGING 4
+#define ARENA_TIE_RUNNING 5
+
+#define ARENA_MATCH_ACTIVE(s) ((s) == ARENA_STAGING || (s) == ARENA_RUNNING || \
+	(s) == ARENA_TIE_STAGING || (s) == ARENA_TIE_RUNNING)
+#define ARENA_COMBAT_ACTIVE(s) \
+	((s) == ARENA_RUNNING || (s) == ARENA_TIE_RUNNING)
+#define ARENA_CONFINED(s) \
+	((s) == ARENA_STAGING || (s) == ARENA_TIE_STAGING || \
+	(s) == ARENA_TIE_RUNNING)
 
 #define ARENA_MODE_BATTLE 1
 #define ARENA_MODE_HOARD 2
@@ -350,6 +360,8 @@
 #define ARENA_AUTOSTART_TIME 60
 #define ARENA_MATCH_TIME 900
 #define ARENA_RESPAWN_TIME 10
+#define ARENA_TIE_STAGING_TIME 10
+#define ARENA_TIE_TIME 120
 
 #define ARENA_P_EMPTY 0
 #define ARENA_P_READY 1
@@ -358,6 +370,7 @@
 #define ARENA_P_RESPAWN 4
 
 #define ARENA_F_NEEDSHIP 1
+#define ARENA_F_FINALIST 2
 
 #define ARENA_PL_SCAN 0x01
 #define ARENA_PL_ARMOR 0x02

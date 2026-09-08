@@ -2921,7 +2921,7 @@ int FUNC mnu_fightsub(void)
 
 	if (sameas(input, "x")) {
 #ifdef GE_ARENA
-		if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+		if (ARENA_MATCH_ACTIVE(arena_state)) {
 			arena_exit_match();
 			return 1;
 		}

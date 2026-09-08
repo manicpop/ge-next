@@ -286,7 +286,9 @@ struct hlpcmd gehlp[] = {
 		{"lydorians",			HLPLYDO},
 		{"murdonians",			HLPMURD},
 #endif
+#ifdef GE_ARENA
 		{"modes",			HLPMODES},
+#endif
 		{"moving",			HLPNAVIG},
 		{"nebulas",			HLPNEB},
 #ifndef GE_ARENA
@@ -4295,7 +4297,7 @@ void FUNC cmd_sysop(void)
 	    sameas("unjam",margv[1]) || sameas("list",margv[1]) ||
 	    sameas("orbit",margv[1]) || sameas("fill",margv[1]));
 	if (match_only && (arena_player == NULL ||
-	    (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING) ||
+	    !ARENA_MATCH_ACTIVE(arena_state) ||
 	    arena_player[usrnum].state != ARENA_P_PLAYING ||
 	    (arena_player[usrnum].flags & ARENA_F_NEEDSHIP))) {
 		prfmsg(FORMAT,"SYS");
@@ -4627,11 +4629,11 @@ void FUNC cmd_sysop(void)
 			return;
 		}
 #ifndef GE_ARENA
-	} else if (sameas("assigncybs",margv[1]) && margc == 2) {
-		assign_cybs(usrnum,0);
-		prfmsg(SYSACY);
-		outprfge(FLT_NONE,usrnum);
-		return;
+		} else if (sameas("assigncybs",margv[1]) && margc == 2) {
+			assign_cybs(usrnum,0);
+			prfmsg(SYSACY);
+			outprfge(FLT_NONE,usrnum);
+			return;
 #endif
 	} else if (sameas("fill",margv[1])) {
 		if (margc == 2)

@@ -3249,6 +3249,20 @@ STGSTART {***
 [1;36m<[1;37m %s begins in %d seconds. Do not fire or leave the sector until then. [1;36m>[1;37m
 } T GE arena staging started
 
+TIESTART {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s ends in a tie. Tiebreaker combat begins in %d seconds. [1;36m>[1;37m
+} T GE arena tiebreaker staging started
+
+TIEGO {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m Tiebreaker combat has begun. Remain in sector 0 0. [1;36m>[1;37m
+} T GE arena tiebreaker combat started
+
+TIEPOS {***
+[0;37mHelm reports a new position in sector [1;34m0 0[0;37m.[1;37m
+} T GE arena tiebreaker position changed within sector
+
 MATSTART {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m Neutral zone defenses deactivated. %s has begun. [1;36m>[1;37m
@@ -3263,6 +3277,16 @@ MATFORF {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s wins %s by forfeit! [1;36m>[1;37m
 } T GE arena forfeit winner line
+
+TIEWIN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s wins %s in the tiebreaker! [1;36m>[1;37m
+} T GE arena tiebreaker winner
+
+TIETIE {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m The %s tiebreaker ends with no winner. The match is a tie. [1;36m>[1;37m
+} T GE arena tiebreaker true tie
 
 MATEND {***
 [0;37mHailing message from the Enforcer Planet
@@ -3339,8 +3363,17 @@ LOBOBS {[1;36mYou are set to observe the next match.[1;37m
 STGSTAT {[1;36mMatch staging: [1;37m%d[1;36m seconds until combat starts.[1;37m
 } T GE arena staging status
 
+TIESTAT {[1;36mTiebreaker staging: [1;37m%d[1;36m seconds until combat starts.[1;37m
+} T GE arena tiebreaker staging status
+
 MATTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining.[1;37m
 } T GE arena running status
+
+TIERUN {[1;36mTiebreaker running: [1;37m%d[1;36m seconds remaining.[1;37m
+} T GE arena tiebreaker running status
+
+TIERUN2 {[1;36mTiebreaker running: [1;37m%dm %02ds[1;36m remaining.[1;37m
+} T GE arena tiebreaker running status minutes
 
 BATSTAT {[0;31m-------------------------------------------------------------------
 [1;34mPlayer                 Status                         Kills  Killed[1;37m
@@ -3429,6 +3462,13 @@ Engines shut down under emergency procedures.
 Damage control reports [0;31m%s[0;37m damage to all sections due to kinetic shock.[1;37m
 } T GE arena staging perimeter violation
 
+TIEBOUND {***
+[0;37m[[0;31mWARNING![0;37m] Navigation outside sector [1;34m0 0[0;37m is not allowed during a tiebreaker.
+Engines shut down under emergency procedures.
+
+Damage control reports [0;31m%s[0;37m damage to all sections due to kinetic shock.[1;37m
+} T GE arena tiebreaker perimeter violation
+
 STGTIME {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s begins in %d seconds. [1;36m>[1;37m
@@ -3487,40 +3527,20 @@ STGSIZE {***
 
 PLTRANS {[1;36mTransferred from the planet:[1;37m} T GE arena transfer summary
 
-MATTIE {***
-[0;37mHailing message from the Enforcer Planet
-[1;36m<[1;37m %s ends in a tie with %d kills! [1;36m>[1;37m
-} T GE arena tie line
-
 HODWIN {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s wins Hoard with %s gold! [1;36m>[1;37m
 } T GE arena Hoard winner
-
-HODTIE {***
-[0;37mHailing message from the Enforcer Planet
-[1;36m<[1;37m Hoard ends in a tie with %s gold! [1;36m>[1;37m
-} T GE arena Hoard tie
 
 BASWIN {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s wins Base with %d Cyber-Base kills! [1;36m>[1;37m
 } T GE arena Base winner
 
-BASTIE {***
-[0;37mHailing message from the Enforcer Planet
-[1;36m<[1;37m Base ends in a tie with %d Cyber-Base kills! [1;36m>[1;37m
-} T GE arena Base tie
-
 SCOWIN {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s wins Scored with %s points! [1;36m>[1;37m
 } T GE arena Scored winner
-
-SCOTIE {***
-[0;37mHailing message from the Enforcer Planet
-[1;36m<[1;37m Scored ends in a tie with %s points! [1;36m>[1;37m
-} T GE arena Scored tie
 
 BASHEAVY {***
 [0;37mHailing message from the Enforcer Planet
@@ -3541,11 +3561,6 @@ KNGWIN {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m %s wins King with %dm %02ds in the active sector! [1;36m>[1;37m
 } T GE arena King winner
-
-KNGTIE {***
-[0;37mHailing message from the Enforcer Planet
-[1;36m<[1;37m King ends in a tie with %dm %02ds in the active sector! [1;36m>[1;37m
-} T GE arena King tie
 
 HODLEAD {***
 [0;37mHailing message from the Enforcer Planet

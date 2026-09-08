@@ -60,6 +60,9 @@
 static void arena_start_match(void);
 static void arena_end_match(void);
 static void arena_observe_match(int usrn);
+static void arena_wipe_galaxy(void);
+static int arena_start_tiebreak(void);
+static void arena_show_tiebreak_result(void);
 
 static int arena_king_x;
 static int arena_king_y;
@@ -556,7 +559,7 @@ int FUNC arena_scan_percent(void)
 {
 	int players;
 
-	if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING)
+	if (!ARENA_MATCH_ACTIVE(arena_state))
 		return 100;
 	players = univmax / 5;
 	if (players <= 2)
@@ -574,7 +577,7 @@ static void arena_show_mini_status(int align_table)
 
 	present = arena_count_present();
 	mode = arena_mode_name(arena_mode);
-	active = arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING;
+	active = ARENA_MATCH_ACTIVE(arena_state);
 	fieldgap = 2;
 	lastgap = 2;
 	if (align_table) {
@@ -633,7 +636,7 @@ static void arena_choose_host_ex(int skip, int notify)
 		if (i != skip && arena_player[i].state != ARENA_P_EMPTY &&
 		    arena_player[i].state != ARENA_P_OBSERVE) {
 			arena_host = i;
-			if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING) {
+			if (!ARENA_MATCH_ACTIVE(arena_state)) {
 				arena_player[i].state = ARENA_P_READY;
 				arena_player[i].ready = TRUE;
 			}
@@ -646,7 +649,7 @@ static void arena_choose_host_ex(int skip, int notify)
 	for (i = 0; i < nterms; ++i) {
 		if (i != skip && arena_player[i].state != ARENA_P_EMPTY) {
 			arena_host = i;
-			if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING) {
+			if (!ARENA_MATCH_ACTIVE(arena_state)) {
 				arena_player[i].state = ARENA_P_READY;
 				arena_player[i].ready = TRUE;
 			}
@@ -841,6 +844,15 @@ static void arena_show_lobby(void)
 		prfmsg(AUTOTIME, arena_mode_name(arena_mode), arena_ticks);
 	else if (arena_state == ARENA_RUNNING)
 		arena_show_match_time();
+	else if (arena_state == ARENA_TIE_STAGING)
+		prfmsg(TIESTAT, arena_ticks);
+	else if (arena_state == ARENA_TIE_RUNNING) {
+		if (arena_match_ticks < 60)
+			prfmsg(TIERUN, arena_match_ticks);
+		else
+			prfmsg(TIERUN2, arena_match_ticks / 60,
+			    arena_match_ticks % 60);
+	}
 	arena_show_lobby_prompt();
 }
 
@@ -905,7 +917,7 @@ int FUNC arena_enter_lobby(void)
 /* mark the current user ready now or queued for the match after this one */
 static int arena_set_ready(void)
 {
-	if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+	if (ARENA_MATCH_ACTIVE(arena_state)) {
 		if (arena_player_active(usrnum)) {
 			prfmsg(LOBREADY);
 			return TRUE;
@@ -944,7 +956,7 @@ static int arena_set_mode(char *mode)
 		prfmsg(MODHOST);
 		return FALSE;
 	}
-	if (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) {
+	if (ARENA_MATCH_ACTIVE(arena_state)) {
 		prfmsg(MODLOCK);
 		return FALSE;
 	}
@@ -979,11 +991,11 @@ static int arena_start_countdown(void)
 		prfmsg(GOHOST);
 		return FALSE;
 	}
-	if (arena_state == ARENA_STAGING) {
+	if (arena_state == ARENA_STAGING || arena_state == ARENA_TIE_STAGING) {
 		prfmsg(GOSTAGE);
 		return FALSE;
 	}
-	if (arena_state == ARENA_RUNNING) {
+	if (arena_state == ARENA_RUNNING || arena_state == ARENA_TIE_RUNNING) {
 		prfmsg(GORUN);
 		return FALSE;
 	}
@@ -1211,13 +1223,13 @@ int FUNC arena_neutral_fire_blocked(WARSHP *ptr, int usrn)
 {
 	if (arena_player == NULL)
 		return neutral(&ptr->coord);
-	if (arena_state == ARENA_STAGING)
+	if (arena_state == ARENA_STAGING || arena_state == ARENA_TIE_STAGING)
 		return TRUE;
-	if (arena_state == ARENA_RUNNING) {
+	if (ARENA_COMBAT_ACTIVE(arena_state)) {
 		if (usrn >= 0 && usrn < nterms &&
 		    arena_player[usrn].state == ARENA_P_PLAYING)
 			return FALSE;
-		if (usrn >= nterms && usrn < nships &&
+		if (arena_state == ARENA_RUNNING && usrn >= nterms && usrn < nships &&
 		    ptr->status == GESTAT_AUTO)
 			return FALSE;
 	}
@@ -1227,16 +1239,16 @@ int FUNC arena_neutral_fire_blocked(WARSHP *ptr, int usrn)
 /* report whether neutral-zone projectile protection should be enforced */
 int FUNC arena_neutral_protection_active(void)
 {
-	return arena_state != ARENA_RUNNING;
+	return !ARENA_COMBAT_ACTIVE(arena_state);
 }
 
-/* keep staged players inside sector 0 0 using the normal barrier bounce */
+/* keep staging and tiebreaker players inside 0 0 using the normal bounce */
 void FUNC arena_enforce_staging_bounds(WARSHP *ptr, int usrn)
 {
 	COORD center;
 	int bounced;
 
-	if (arena_player == NULL || arena_state != ARENA_STAGING ||
+	if (arena_player == NULL || !ARENA_CONFINED(arena_state) ||
 	    usrn < 0 || usrn >= nterms ||
 	    arena_player[usrn].state != ARENA_P_PLAYING)
 		return;
@@ -1285,7 +1297,8 @@ static unsigned long arena_player_gold(int usrn)
 static int arena_hoard_scores_public(void)
 {
 	return arena_mode == ARENA_MODE_HOARD &&
-	    arena_state == ARENA_RUNNING && arena_match_ticks <= 180;
+	    ((arena_state == ARENA_RUNNING && arena_match_ticks <= 180) ||
+	    arena_state == ARENA_TIE_STAGING || arena_state == ARENA_TIE_RUNNING);
 }
 
 /* move the King objective to a different random sector */
@@ -1323,82 +1336,87 @@ static void arena_king_score_tick(void)
 	}
 }
 
-/* determine and announce the result, persist valid wins, and show final status */
-static void arena_show_results(void)
+/* compare two players using the victory value for the selected mode */
+static int arena_score_compare(int left, int right)
 {
+	if (arena_mode == ARENA_MODE_HOARD) {
+		if (arena_player_gold(left) > arena_player_gold(right))
+			return 1;
+		if (arena_player_gold(left) < arena_player_gold(right))
+			return -1;
+	}
+	else if (arena_mode == ARENA_MODE_KING) {
+		if (arena_player[left].kingtime > arena_player[right].kingtime)
+			return 1;
+		if (arena_player[left].kingtime < arena_player[right].kingtime)
+			return -1;
+	}
+	else if (arena_mode == ARENA_MODE_BASE) {
+		if (arena_player[left].basekills > arena_player[right].basekills)
+			return 1;
+		if (arena_player[left].basekills < arena_player[right].basekills)
+			return -1;
+	}
+	else if (arena_mode == ARENA_MODE_SCORED) {
+		if (arena_player[left].score > arena_player[right].score)
+			return 1;
+		if (arena_player[left].score < arena_player[right].score)
+			return -1;
+	}
+	else {
+		if (arena_player[left].kills > arena_player[right].kills)
+			return 1;
+		if (arena_player[left].kills < arena_player[right].kills)
+			return -1;
+	}
+	return 0;
+}
+
+/* mark every player tied for the regulation lead and return their count */
+static int arena_find_leaders(int *winner)
+{
+	int count;
 	int i;
-	int winner;
-	int highscore;
-	int tied;
+
+	*winner = -1;
+	for (i = 0; i < nterms; ++i) {
+		arena_player[i].flags &= ~ARENA_F_FINALIST;
+		if (arena_player_active(i) &&
+		    (*winner < 0 || arena_score_compare(i,*winner) > 0))
+			*winner = i;
+	}
+	if (*winner < 0)
+		return 0;
+	count = 0;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player_active(i) && arena_score_compare(i,*winner) == 0) {
+			arena_player[i].flags |= ARENA_F_FINALIST;
+			++count;
+		}
+	}
+	return count;
+}
+
+/* announce regulation results, or transfer a tie into sudden combat */
+static int arena_show_results(void)
+{
+	int finalists;
 	int forfeit;
-	unsigned long gold;
-	unsigned long highgold;
-	unsigned hightime;
-	unsigned highbases;
-	long highpoints;
+	int live;
+	int winner;
 	WARUSR *wuptr;
 
 	forfeit = arena_match_ticks > 0 && arena_count_playing() == 1;
-	winner = -1;
-	highscore = 0;
-	highgold = 0UL;
-	hightime = 0;
-	highbases = 0;
-	highpoints = 0L;
-	tied = 0;
-	for (i = 0; i < nterms; ++i) {
-		if (!arena_player_active(i))
-			continue;
-		if (arena_mode == ARENA_MODE_HOARD) {
-			gold = arena_player_gold(i);
-			if (winner < 0 || gold > highgold) {
-				winner = i;
-				highgold = gold;
-				tied = 1;
-			}
-			else if (gold == highgold)
-				++tied;
-		}
-		else if (arena_mode == ARENA_MODE_KING) {
-			if (winner < 0 || arena_player[i].kingtime > hightime) {
-				winner = i;
-				hightime = arena_player[i].kingtime;
-				tied = 1;
-			}
-			else if (arena_player[i].kingtime == hightime)
-				++tied;
-		}
-		else if (arena_mode == ARENA_MODE_BASE) {
-			if (winner < 0 || arena_player[i].basekills > highbases) {
-				winner = i;
-				highbases = arena_player[i].basekills;
-				tied = 1;
-			}
-			else if (arena_player[i].basekills == highbases)
-				++tied;
-		}
-		else if (arena_mode == ARENA_MODE_SCORED) {
-			if (winner < 0 || arena_player[i].score > highpoints) {
-				winner = i;
-				highpoints = arena_player[i].score;
-				tied = 1;
-			}
-			else if (arena_player[i].score == highpoints)
-				++tied;
-		}
-		else {
-			if (winner < 0 || arena_player[i].kills > highscore) {
-				winner = i;
-				highscore = arena_player[i].kills;
-				tied = 1;
-			}
-			else if (arena_player[i].kills == highscore)
-				++tied;
-		}
+	finalists = arena_find_leaders(&winner);
+	if (finalists > 1 && arena_match_ticks <= 0) {
+		live = arena_start_tiebreak();
+		if (live >= 2)
+			return FALSE;
+		arena_show_tiebreak_result();
+		return TRUE;
 	}
-	if (tied == 1) {
+	if (finalists == 1) {
 		wuptr = warusroff(winner);
-		/* the winner hosts the next match; ties leave the current host in place */
 		arena_host = winner;
 		/* completed matches and combat forfeits both earn roster credit */
 		if (arena_match_ticks == 0 || forfeit)
@@ -1406,38 +1424,23 @@ static void arena_show_results(void)
 		if (forfeit)
 			prfmsg(MATFORF, wuptr->userid, arena_mode_name(arena_mode));
 		else if (arena_mode == ARENA_MODE_HOARD) {
-			sprintf(gechrbuf,"%lu",highgold);
+			sprintf(gechrbuf,"%lu",arena_player_gold(winner));
 			prfmsg(HODWIN,wuptr->userid,gechrbuf);
 		}
 		else if (arena_mode == ARENA_MODE_KING)
-			prfmsg(KNGWIN,wuptr->userid,(int)(hightime / 60),
-			    (int)(hightime % 60));
+			prfmsg(KNGWIN,wuptr->userid,
+			    (int)(arena_player[winner].kingtime / 60),
+			    (int)(arena_player[winner].kingtime % 60));
 		else if (arena_mode == ARENA_MODE_BASE)
-			prfmsg(BASWIN,wuptr->userid,(int)highbases);
+			prfmsg(BASWIN,wuptr->userid,
+			    (int)arena_player[winner].basekills);
 		else if (arena_mode == ARENA_MODE_SCORED) {
-			sprintf(gechrbuf,"%ld",highpoints);
+			sprintf(gechrbuf,"%ld",arena_player[winner].score);
 			prfmsg(SCOWIN,wuptr->userid,gechrbuf);
 		}
 		else
-			prfmsg(MATWIN, wuptr->userid, arena_mode_name(arena_mode),
-			    highscore);
-		arena_broadcast_prf();
-	}
-	else if (tied > 1) {
-		if (arena_mode == ARENA_MODE_HOARD) {
-			sprintf(gechrbuf,"%lu",highgold);
-			prfmsg(HODTIE,gechrbuf);
-		}
-		else if (arena_mode == ARENA_MODE_KING)
-			prfmsg(KNGTIE,(int)(hightime / 60),(int)(hightime % 60));
-		else if (arena_mode == ARENA_MODE_BASE)
-			prfmsg(BASTIE,(int)highbases);
-		else if (arena_mode == ARENA_MODE_SCORED) {
-			sprintf(gechrbuf,"%ld",highpoints);
-			prfmsg(SCOTIE,gechrbuf);
-		}
-		else
-			prfmsg(MATTIE, arena_mode_name(arena_mode), highscore);
+			prfmsg(MATWIN,wuptr->userid,arena_mode_name(arena_mode),
+			    arena_player[winner].kills);
 		arena_broadcast_prf();
 	}
 	if (arena_match_ticks > 0) {
@@ -1446,12 +1449,13 @@ static void arena_show_results(void)
 	}
 	arena_show_status();
 	arena_broadcast_prf();
+	return TRUE;
 }
 
 /* select the status sort appropriate to the current mode and phase */
 static int arena_status_sort_mode(void)
 {
-	if (arena_state != ARENA_STAGING && arena_state != ARENA_RUNNING)
+	if (!ARENA_MATCH_ACTIVE(arena_state))
 		return ARENA_SORT_NONE;
 	if (arena_mode == ARENA_MODE_BATTLE)
 		return ARENA_SORT_KILLS;
@@ -1558,6 +1562,8 @@ static void arena_print_status_row(int usrn)
 		state = "playing (host)";
 	else if (usrn == arena_host && arena_player[usrn].state == ARENA_P_RESPAWN)
 		state = "respawn (host)";
+	else if (usrn == arena_host && ARENA_MATCH_ACTIVE(arena_state))
+		state = "observing (host)";
 	else if (usrn == arena_host)
 		state = "ready (host)";
 	else if (arena_player[usrn].state == ARENA_P_PLAYING)
@@ -1565,13 +1571,13 @@ static void arena_print_status_row(int usrn)
 	else if (arena_player[usrn].state == ARENA_P_RESPAWN)
 		state = "respawn";
 	else if (arena_player[usrn].state == ARENA_P_OBSERVE)
-		state = (arena_player[usrn].ready && arena_state != ARENA_STAGING &&
-		    arena_state != ARENA_RUNNING) ? "ready" : "observing";
+		state = (arena_player[usrn].ready && !ARENA_MATCH_ACTIVE(arena_state)) ?
+		    "ready" : "observing";
 	else if (arena_player[usrn].ready)
 		state = "ready";
 	else
 		state = "unknown";
-	if ((arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING) &&
+	if (ARENA_MATCH_ACTIVE(arena_state) &&
 	    arena_player_active(usrn)) {
 		if (arena_mode == ARENA_MODE_HOARD) {
 			if (arena_hoard_scores_public() || usrn == usrnum) {
@@ -1641,6 +1647,15 @@ void FUNC arena_show_status(void)
 		}
 		else
 			arena_show_match_time();
+	}
+	else if (arena_state == ARENA_TIE_STAGING)
+		prfmsg(TIESTAT,arena_ticks);
+	else if (arena_state == ARENA_TIE_RUNNING && arena_match_ticks > 0) {
+		if (arena_match_ticks < 60)
+			prfmsg(TIERUN,arena_match_ticks);
+		else
+			prfmsg(TIERUN2,arena_match_ticks / 60,
+			    arena_match_ticks % 60);
 	}
 	arena_show_mini_status(TRUE);
 	if (arena_state == ARENA_QUEUE && arena_ticks > 0)
@@ -1886,7 +1901,7 @@ static void arena_observe_match(int usrn)
 			}
 		}
 	}
-	if (was_playing && arena_state == ARENA_RUNNING) {
+	if (was_playing && ARENA_MATCH_ACTIVE(arena_state)) {
 		prfmsg(MATLEFT, username(wptr));
 		arena_broadcast_prf_except(usrn);
 	}
@@ -1983,14 +1998,155 @@ void FUNC arena_initialize_world(void)
 	arena_wipe_galaxy();
 }
 
+/* transport one existing finalist to a safe random position in sector 0 0 */
+static void arena_transport_finalist(int usrn)
+{
+	WARSHP *ptr;
+	double dist;
+	int i;
+	int in_hyperspace;
+	int moving;
+	int oldx;
+	int oldy;
+	int too_close;
+
+	ptr = warshpoff(usrn);
+	oldx = coord1(ptr->coord.xcoord);
+	oldy = coord1(ptr->coord.ycoord);
+	in_hyperspace = ptr->where == 1;
+	moving = ptr->speed != 0.0;
+	ptr->speed = 0.0;
+	ptr->speed2b = 0.0;
+	ptr->where = 0;
+	ptr->hostile = 0;
+	ptr->lastfired = -1;
+	if (ptr->lock < 0 || ptr->lock >= nterms || ptr->lock == usrn ||
+	    !(arena_player[ptr->lock].flags & ARENA_F_FINALIST) ||
+	    arena_player[ptr->lock].state != ARENA_P_PLAYING) {
+		ptr->lock = -1;
+		ptr->track_grace = 0;
+	}
+	do {
+		ptr->coord.xcoord = rndm(.9998) + .0001;
+		ptr->coord.ycoord = rndm(.9998) + .0001;
+		refresh(ptr,usrn);
+		too_close = FALSE;
+		for (i = 0; i < MAXPLANETS; ++i) {
+			if (ptab[usrn].planets[i].type == 0)
+				continue;
+			dist = cdistance(&ptr->coord,&ptab[usrn].planets[i].coord) * 10000;
+			if (dist < 1000.0) {
+				too_close = TRUE;
+				break;
+			}
+		}
+	} while (too_close);
+	if (in_hyperspace)
+		prfmsg(HYPEROUT);
+	if (moving)
+		prfmsg(DEADSTOP);
+	if (oldx == 0 && oldy == 0)
+		prfmsg(TIEPOS);
+	else
+		prfmsg(MOVE1,
+		    (innebula(oldx,oldy) ? CLR_GREEN2 "nebula" : "sector"),
+		    oldx,oldy,"sector",0,0);
+	outprfge(FLT_SHIP,usrn);
+	clrprf();
+}
+
+/* remove non-finalists, clear the old field, and stage surviving leaders */
+static int arena_start_tiebreak(void)
+{
+	WARSHP *ptr;
+	int i;
+	int live;
+
+	live = 0;
+	for (i = 0; i < nterms; ++i) {
+		if ((arena_player[i].flags & ARENA_F_FINALIST) &&
+		    arena_player[i].state == ARENA_P_PLAYING &&
+		    warshpoff(i)->status == GESTAT_USER) {
+			arena_player[i].ready = TRUE;
+			++live;
+			continue;
+		}
+		if (arena_player_active(i)) {
+			arena_player[i].state = ARENA_P_OBSERVE;
+			arena_player[i].ready = TRUE;
+			arena_player[i].respawn = 0;
+			arena_player[i].flags &= ~ARENA_F_FINALIST;
+			user[i].substt = ARENASUB;
+			if (i == usrnum)
+				usrptr->substt = ARENASUB;
+			ptr = warshpoff(i);
+			arena_clear_ship(ptr);
+			btupmt(i,'>');
+		}
+	}
+	arena_state = live >= 2 ? ARENA_TIE_STAGING : ARENA_TIE_RUNNING;
+	arena_ticks = live >= 2 ? ARENA_TIE_STAGING_TIME : 0;
+	arena_match_ticks = 0;
+	if (live < 2)
+		return live;
+	prfmsg(TIESTART,arena_mode_name(arena_mode),arena_ticks);
+	arena_broadcast_prf();
+	/* wiping removes Cybs, projectiles, mines, and remaining planet pickups */
+	arena_wipe_galaxy();
+	for (i = 0; i < nterms; ++i)
+		if ((arena_player[i].flags & ARENA_F_FINALIST) &&
+		    arena_player[i].state == ARENA_P_PLAYING)
+			arena_transport_finalist(i);
+	for (i = 0; i < nterms; ++i)
+		if ((arena_player[i].flags & ARENA_F_FINALIST) &&
+		    arena_player[i].state == ARENA_P_PLAYING)
+			update_scantab(warshpoff(i),i);
+	return live;
+}
+
+/* announce the last surviving finalist, or a true tie after two minutes */
+static void arena_show_tiebreak_result(void)
+{
+	int i;
+	int survivors;
+	int winner;
+
+	survivors = 0;
+	winner = -1;
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_PLAYING &&
+		    (arena_player[i].flags & ARENA_F_FINALIST)) {
+			winner = i;
+			++survivors;
+		}
+	}
+	arena_ticks = 0;
+	arena_match_ticks = 0;
+	if (survivors == 1) {
+		arena_host = winner;
+		arena_record_win(winner);
+		prfmsg(TIEWIN,warusroff(winner)->userid,arena_mode_name(arena_mode));
+	}
+	else
+		prfmsg(TIETIE,arena_mode_name(arena_mode));
+	arena_broadcast_prf();
+	arena_show_status();
+	arena_broadcast_prf();
+}
+
 /* return participants to the queue, announce completion, and wipe the galaxy */
 static void arena_end_match(void)
 {
 	int i;
 	WARSHP *wptr;
 
-	if (arena_state == ARENA_RUNNING)
-		arena_show_results();
+	if (arena_state == ARENA_RUNNING) {
+		if (!arena_show_results())
+			return;
+	}
+	else if (arena_state == ARENA_TIE_STAGING ||
+	    arena_state == ARENA_TIE_RUNNING)
+		arena_show_tiebreak_result();
 	arena_state = ARENA_QUEUE;
 	arena_ticks = 0;
 	arena_match_ticks = 0;
@@ -2012,6 +2168,7 @@ static void arena_end_match(void)
 	for (i = 0; i < nterms; ++i) {
 		if (arena_player[i].state == ARENA_P_EMPTY)
 			continue;
+		arena_player[i].flags = 0;
 		if (arena_player[i].ready) {
 			arena_player[i].state = ARENA_P_READY;
 		}
@@ -2025,6 +2182,31 @@ static void arena_end_match(void)
 	arena_wipe_galaxy();
 }
 
+/* eliminate a tiebreaker ship without changing regulation scores or loadouts */
+static void arena_tiebreak_destroyed(WARSHP *ptr, int usrn)
+{
+	int who;
+
+	who = ptr->lastfired;
+	if (who >= 0 && who < nterms && who != usrn &&
+	    (arena_player[who].flags & ARENA_F_FINALIST))
+		prfmsg(KILLEDBY,username(ptr),warusroff(who)->userid);
+	else if (ptr->shipname[0] == 0)
+		prfmsg(DIEDNO,username(ptr));
+	else
+		prfmsg(DIED,ptr->shipname,username(ptr));
+	arena_broadcast_prf();
+	arena_player[usrn].state = ARENA_P_OBSERVE;
+	arena_player[usrn].ready = TRUE;
+	arena_player[usrn].respawn = 0;
+	user[usrn].substt = ARENASUB;
+	if (usrn == usrnum)
+		usrptr->substt = ARENASUB;
+	arena_clear_inbound(ptr);
+	arena_clear_ship(ptr);
+	btupmt(usrn,'>');
+}
+
 /* score a destruction, distribute spoils, and put the victim into respawn */
 void FUNC arena_ship_destroyed(WARSHP *ptr, int usrn)
 {
@@ -2032,6 +2214,11 @@ void FUNC arena_ship_destroyed(WARSHP *ptr, int usrn)
 	int single_class;
 	WARSHP *wptr;
 
+	if (arena_state == ARENA_TIE_STAGING ||
+	    arena_state == ARENA_TIE_RUNNING) {
+		arena_tiebreak_destroyed(ptr,usrn);
+		return;
+	}
 	who = ptr->lastfired;
 	if (arena_credit_last_attacker(ptr,usrn)) {
 		wptr = warshpoff(who);
@@ -2320,6 +2507,36 @@ void FUNC arena_tick(void)
 		}
 		if (arena_count_playing() < 2 || arena_match_ticks <= 0)
 			arena_end_match();
+		return;
+	}
+	if (arena_state == ARENA_TIE_STAGING) {
+		if (arena_ticks > 0)
+			--arena_ticks;
+		if (arena_ticks == 5) {
+			prfmsg(STG5,"Tiebreaker");
+			arena_broadcast_prf();
+		}
+		else if (arena_ticks > 0 && arena_ticks < 5) {
+			prfmsg(STGFIN,arena_ticks);
+			arena_broadcast_prf();
+		}
+		if (arena_ticks <= 0) {
+			arena_state = ARENA_TIE_RUNNING;
+			arena_match_ticks = ARENA_TIE_TIME;
+			prfmsg(TIEGO);
+			arena_broadcast_prf();
+		}
+		return;
+	}
+	if (arena_state == ARENA_TIE_RUNNING) {
+		if (arena_match_ticks > 0)
+			--arena_match_ticks;
+		if (arena_match_ticks == 60) {
+			prfmsg(MATWARN,"Tiebreaker");
+			arena_broadcast_prf();
+		}
+		if (arena_count_playing() < 2 || arena_match_ticks <= 0)
+			arena_end_match();
 	}
 }
 
@@ -2339,7 +2556,7 @@ int FUNC mnu_arena_lobby(void)
 	}
 
 	if (arena_player[usrnum].state == ARENA_P_RESPAWN &&
-	    (arena_state == ARENA_STAGING || arena_state == ARENA_RUNNING)) {
+	    ARENA_MATCH_ACTIVE(arena_state)) {
 		if (margc == 1 && sameas(margv[0], "X")) {
 			arena_exit_match();
 			return 1;

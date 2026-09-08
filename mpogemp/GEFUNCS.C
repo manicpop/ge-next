@@ -65,9 +65,14 @@ static int arena_weapon_owner_active(int channel)
 {
 	if (channel < 0 || channel >= nships)
 		return FALSE;
-	if (channel < nterms)
+	if (channel < nterms) {
+		if ((arena_state == ARENA_TIE_STAGING ||
+		    arena_state == ARENA_TIE_RUNNING) &&
+		    (arena_player[channel].flags & ARENA_F_FINALIST))
+			return TRUE;
 		return arena_player[channel].state == ARENA_P_PLAYING ||
 		    arena_player[channel].state == ARENA_P_RESPAWN;
+	}
 	return cyb_slot_class(channel) >= 0;
 }
 #endif
@@ -2575,9 +2580,13 @@ void FUNC telezip(WARSHP *ptr, int usrn)
 		ptr->damage += TELEDAM;
 		damstr(TELEDAM);
 #ifdef GE_ARENA
-		if (usrn < nterms && arena_state == ARENA_STAGING &&
-		    arena_player[usrn].state == ARENA_P_PLAYING)
-			prfmsg(STGBOUND, gechrbuf);
+		if (usrn < nterms && ARENA_CONFINED(arena_state) &&
+		    arena_player[usrn].state == ARENA_P_PLAYING) {
+			if (arena_state == ARENA_STAGING)
+				prfmsg(STGBOUND,gechrbuf);
+			else
+				prfmsg(TIEBOUND,gechrbuf);
+		}
 		else
 #endif
 		prfmsg(TELEPORT, gechrbuf);
@@ -2677,7 +2686,7 @@ void FUNC proximity(WARSHP *ptr, int usrn)
 				else if (dist < 25) {
 #ifdef GE_ARENA
 					if (ptab[usrn].planets[i].type == PLTYPE_WORM &&
-					    usrn < nterms && arena_state == ARENA_STAGING &&
+					    usrn < nterms && ARENA_CONFINED(arena_state) &&
 					    arena_player[usrn].state == ARENA_P_PLAYING) {
 						arena_wormhole_repulsor(ptr,usrn);
 						continue;

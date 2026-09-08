@@ -26,6 +26,8 @@ Please contact me with thoughts and suggestions.
   0 the registration number line will no longer show on the
   console. If you do want to put a number here (perhaps to
   tell mulitple instances apart) you can still do so.
+* Cyber-bases have been had their DAMF slightly reduced to make
+  them a little easier to destroy.
 
 === 0.3.1 === 2026-06-30:
 
