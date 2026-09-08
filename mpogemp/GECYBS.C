@@ -365,7 +365,11 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 			/* level 2 gets one spin of the wheel, other levels get mulitple */
 			/* higher levels get the best outcome, lowest the worst */
 
+#ifdef GE_ARENA
+			if (arena_mode == ARENA_MODE_HOARD && cyb_gold > 0) {
+#else
 			if (cyb_gold > 0) {
+#endif
 				goldwin = gernd() % cyb_gold;
 				goldtry = abs(shipclass[ptr->shpclass].tough_factor - 2);
 

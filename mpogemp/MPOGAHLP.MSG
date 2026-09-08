@@ -10,7 +10,7 @@ Commands: [1;32madmin  [1;33mcls[1;32m  decoy  [1;33mhelp[1;32m  impulse  j
           [1;33mroster[1;32m  rotate  scan  send  [1;33mset[1;32m  shield  [1;33mstatus[1;32m  stop  torpedo
           transfer  warp  [1;33mwho  x[1;32m  zipper
 
-[1;36mTopics:   [1;32mbattle  class  flux  galaxy  moving  nebulas
+[1;36mTopics:   [1;32mbattle  class  flux  galaxy  modes  moving  nebulas
           scoring  upgrades  wormholes  Cybertrons
 
 [1;33mYellow[1;36m commands are also available in the arena lobby.
@@ -154,6 +154,29 @@ Finally, when you destroy another player's ship, their score also goes down.
 
 Scoring is not used in all game modes.
 [1;37m} T GE help scoring message
+
+HLPMODES {
+[1;36mTopic: Arena modes
+
+Arena matches last 15 minutes unless fewer than two players remain. Each mode
+has its own selection of ships and starting equipment.
+
+  [1;32m1[1;36m - [1;37mBattle[1;36m
+      Free-for-all combat without Cybertrons. The most player kills wins.
+  [1;32m2[1;36m - [1;37mHoard[1;36m
+      Gather gold from planets, Cybertrons, and defeated players. The player
+      carrying the most gold when time expires wins.
+  [1;32m3[1;36m - [1;37mKing[1;36m
+      Spend the most total time in the active sector, which moves every three
+      minutes.
+  [1;32m4[1;36m - [1;37mBase[1;36m
+      Destroy the most Cyber-Bases. Destroying other players does not score.
+  [1;32m5[1;36m - [1;37mScored[1;36m
+      Earn standard Galactic Empire points from player and Cybertron kills.
+      The highest score wins, and scores can fall below zero.
+
+Use [1;37mHELP CLASS[1;36m to see the ships available for the current mode.
+[1;37m} T GE help arena modes message
 
 HLPWORM {
 [1;36mTopic: Wormholes

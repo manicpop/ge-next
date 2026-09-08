@@ -330,11 +330,13 @@
 #define ARENA_MODE_HOARD 2
 #define ARENA_MODE_KING 3
 #define ARENA_MODE_BASE 4
+#define ARENA_MODE_SCORED 5
 
 #define ARENA_WIN_BATTLE 0
 #define ARENA_WIN_HOARD 1
 #define ARENA_WIN_KING 2
 #define ARENA_WIN_BASE 3
+#define ARENA_WIN_SCORED 4
 #define ARENA_WIN_SLOTS 8
 
 #define ARENA_SORT_NONE 0
@@ -342,6 +344,7 @@
 #define ARENA_SORT_GOLD 2
 #define ARENA_SORT_TIME 3
 #define ARENA_SORT_BASES 4
+#define ARENA_SORT_SCORE 5
 
 #define ARENA_STAGING_TIME 60
 #define ARENA_AUTOSTART_TIME 60
@@ -373,6 +376,7 @@ typedef struct _arenaplayer {
 	unsigned deaths;
 	unsigned kingtime;
 	unsigned basekills;
+	long score;
 } ARENAPLAYER;
 #endif
 

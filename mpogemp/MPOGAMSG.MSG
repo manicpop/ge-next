@@ -2072,14 +2072,14 @@ IHIT2 {***
 
 ROSTER1 {
 [1;36mArena wins
-[0;31m---------------------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard  King  Base[1;37m
+[0;31m-----------------------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King  Base  Scored[1;37m
 } T GE arena wins roster
 
 ROSTER2 {
 [1;36mArena wins
-[0;31m---------------------------------------------------------------
-[1;34mPlayer                         Total  Battle  Hoard  King  Base[1;37m
+[0;31m-----------------------------------------------------------------------
+[1;34mPlayer                         Total  Battle  Hoard  King  Base  Scored[1;37m
 } T GE arena wins roster
 
 ROSTER3 {
@@ -3272,10 +3272,10 @@ MATEND {***
 LOBHOST {[1;36mYou are the host.[1;37m
 } T GE arena lobby host state
 
-LOBSTAT {[1;36mPlayers present: [1;37m%2d    [1;36mReady: [1;37m%2d  [1;36mObserving: [1;37m%2d  [1;36mMode: [1;37m%s[1;37m
+LOBSTAT {[1;36mPlayers present: [1;37m%2d%s[1;36mReady: [1;37m%2d%s[1;36mObserving: [1;37m%2d%s[1;36mMode: [1;37m%s[1;37m
 } T GE arena lobby status
 
-MATSTAT {[1;36mPlayers present: [1;37m%2d  [1;36mPlaying: [1;37m%2d  [1;36mObserving: [1;37m%2d  [1;36mMode: [1;37m%s[1;37m
+MATSTAT {[1;36mPlayers present: [1;37m%2d%s[1;36mPlaying: [1;37m%2d%s[1;36mObserving: [1;37m%2d%s[1;36mMode: [1;37m%s[1;37m
 } T GE arena active match status
 
 LOBPOBS {
@@ -3292,13 +3292,8 @@ LOBPHST {
 } T GE arena lobby host prompt
 
 MODLIST {
-[1;36mArena modes:
-  1 - Battle: free-for-all combat, no Cybertrons, most kills wins.
-  2 - Hoard: collect gold from planets and combat, incl. Cybs, most gold wins.
-  3 - King: spend the most total time in the active sector.
-  4 - Base: destroy the most Cyber-Bases.
-
-Current mode: [1;37m%s
+[1;36mCurrent mode: [1;37m%s
+[1;36mUse [1;37mHELP MODES[1;36m for descriptions of the available game modes.[1;37m
 } T GE arena mode list
 
 MODHINT {[1;36mUse [1;37mMODE [1;32m[number][1;36m to select a mode.[1;37m
@@ -3347,21 +3342,25 @@ STGSTAT {[1;36mMatch staging: [1;37m%d[1;36m seconds until combat starts.[1;
 MATTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining.[1;37m
 } T GE arena running status
 
-BATSTAT {[0;31m-------------------------------------------------------------
-[1;34mPlayer                 Status                   Kills  Killed[1;37m
+BATSTAT {[0;31m-------------------------------------------------------------------
+[1;34mPlayer                 Status                         Kills  Killed[1;37m
 } T GE arena Battle status header
 
-HODSTAT {[0;31m------------------------------------------------------------
-[1;34mPlayer                 Status                           Gold[1;37m
+HODSTAT {[0;31m--------------------------------------------------------------------------
+[1;34mPlayer                 Status                          Gold  Kills  Killed[1;37m
 } T GE arena Hoard status header
 
-KNGSTAT {[0;31m-----------------------------------------------------------
-[1;34mPlayer                 Status                          Time[1;37m
+KNGSTAT {[0;31m--------------------------------------------------------------------------
+[1;34mPlayer                 Status                          Time  Kills  Killed[1;37m
 } T GE arena King status header
 
-BASSTAT {[0;31m-----------------------------------------------------------
-[1;34mPlayer                 Status                         Bases[1;37m
+BASSTAT {[0;31m-------------------------------------------------------------------
+[1;34mPlayer                 Status                         Bases  Killed[1;37m
 } T GE arena Base status header
+
+SCOSTAT {[0;31m--------------------------------------------------------------------------
+[1;34mPlayer                 Status                         Score  Kills  Killed[1;37m
+} T GE arena Scored status header
 
 KNGTIME {[1;36mMatch running: [1;37m%d[1;36m seconds remaining. Active sector: [1;37m%d %d[1;37m
 } T GE arena King running status
@@ -3512,6 +3511,16 @@ BASTIE {***
 [0;37mHailing message from the Enforcer Planet
 [1;36m<[1;37m Base ends in a tie with %d Cyber-Base kills! [1;36m>[1;37m
 } T GE arena Base tie
+
+SCOWIN {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m %s wins Scored with %s points! [1;36m>[1;37m
+} T GE arena Scored winner
+
+SCOTIE {***
+[0;37mHailing message from the Enforcer Planet
+[1;36m<[1;37m Scored ends in a tie with %s points! [1;36m>[1;37m
+} T GE arena Scored tie
 
 BASHEAVY {***
 [0;37mHailing message from the Enforcer Planet
