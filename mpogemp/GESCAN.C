@@ -852,10 +852,10 @@ static void arena_scan_item(int item)
 	prf("%s\r",gechrbuf);
 }
 
-static void arena_scan_powerup(char *name, int value)
+static void arena_scan_powerup(char *name, int amount)
 {
-	if (value > 0) {
-		sprintf(gechrbuf,"%d",value);
+	if (amount > 0) {
+		sprintf(gechrbuf,"%d",amount);
 		prf("%s%s%12s\r",name,gedots(26 - (int)strlen(name)),gechrbuf);
 	}
 	else

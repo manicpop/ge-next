@@ -61,19 +61,19 @@ static void	pick_letter(SCANTAB *ptr);
 
 #ifdef GE_ARENA
 /* arena users and configured Cyb slots retain ownership of active weapons */
-static int arena_weapon_owner_active(int channel)
+static int arena_weapon_owner_active(int owner)
 {
-	if (channel < 0 || channel >= nships)
+	if (owner < 0 || owner >= nships)
 		return FALSE;
-	if (channel < nterms) {
+	if (owner < nterms) {
 		if ((arena_state == ARENA_TIE_STAGING ||
 		    arena_state == ARENA_TIE_RUNNING) &&
-		    (arena_player[channel].flags & ARENA_F_FINALIST))
+		    (arena_player[owner].flags & ARENA_F_FINALIST))
 			return TRUE;
-		return arena_player[channel].state == ARENA_P_PLAYING ||
-		    arena_player[channel].state == ARENA_P_RESPAWN;
+		return arena_player[owner].state == ARENA_P_PLAYING ||
+		    arena_player[owner].state == ARENA_P_RESPAWN;
 	}
-	return cyb_slot_class(channel) >= 0;
+	return cyb_slot_class(owner) >= 0;
 }
 #endif
 
