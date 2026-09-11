@@ -764,6 +764,7 @@ void FUNC arena_leave(int usrn)
 
 	if (usrn < 0 || usrn >= nterms || arena_player == NULL)
 		return;
+	data_enabled[usrn] = FALSE;
 	was_playing = arena_player_active(usrn);
 	/* use the normal match-exit path first to score, announce, and clear the ship */
 	if (was_playing)
@@ -898,6 +899,7 @@ int FUNC arena_enter_lobby(void)
 	needs_host = (arena_host < 0);
 	entering = (arena_player[usrnum].state == ARENA_P_EMPTY);
 	if (arena_player[usrnum].state == ARENA_P_EMPTY) {
+		data_enabled[usrnum] = FALSE;
 		arena_player[usrnum].state = (first || needs_host) ? ARENA_P_READY : ARENA_P_OBSERVE;
 		arena_player[usrnum].ready = first || needs_host;
 	}
@@ -1299,6 +1301,80 @@ static int arena_hoard_scores_public(void)
 	return arena_mode == ARENA_MODE_HOARD &&
 	    ((arena_state == ARENA_RUNNING && arena_match_ticks <= 180) ||
 	    arena_state == ARENA_TIE_STAGING || arena_state == ARENA_TIE_RUNNING);
+}
+
+/* emit shared arena phase and mode details for a frontend */
+void FUNC arena_data_status(void)
+{
+	int radius, seconds;
+
+	seconds = 0;
+	if (arena_state == ARENA_QUEUE || arena_state == ARENA_STAGING ||
+	    arena_state == ARENA_TIE_STAGING)
+		seconds = arena_ticks;
+	else if (arena_state == ARENA_RUNNING || arena_state == ARENA_TIE_RUNNING)
+		seconds = arena_match_ticks;
+	radius = ARENA_MATCH_ACTIVE(arena_state) ? univmax : 0;
+
+	prf("ARENA:%d,%d,",arena_state,arena_mode);
+	data_text(arena_mode_name(arena_mode));
+	prf(",");
+	if (arena_host >= 0 && arena_host < nterms &&
+	    arena_player[arena_host].state != ARENA_P_EMPTY)
+		data_text(warusroff(arena_host)->userid);
+	prf(",%d,%d,%d*\r",seconds,radius,arena_scan_percent());
+
+	if (arena_mode == ARENA_MODE_KING && arena_state == ARENA_RUNNING)
+		prf("ARENAK:%d,%d*\r",arena_king_x,arena_king_y);
+	if (arena_mode == ARENA_MODE_HOARD && ARENA_MATCH_ACTIVE(arena_state))
+		prf("ARENAH:%d*\r",arena_hoard_scores_public());
+	prf("STOP:ARENA*\r");
+}
+
+/* emit every present player's current arena role and visible match values */
+void FUNC arena_data_players(void)
+{
+	int i;
+
+	for (i = 0; i < nterms; ++i) {
+		if (arena_player[i].state == ARENA_P_EMPTY)
+			continue;
+		prf("PLAYER:");
+		data_text(warusroff(i)->userid);
+		prf(",%u,%u,%d,",(unsigned)arena_player[i].state,
+			(unsigned)arena_player[i].ready,i == arena_host);
+
+		if (!ARENA_MATCH_ACTIVE(arena_state) || !arena_player_active(i)) {
+			prf(",,*\r");
+			continue;
+		}
+
+		if (arena_mode == ARENA_MODE_HOARD) {
+			if (i == usrnum || arena_hoard_scores_public()) {
+				sprintf(gechrbuf,"%lu",arena_player_gold(i));
+				prf("%s",gechrbuf);
+			}
+			else
+				prf("?");
+		}
+		else if (arena_mode == ARENA_MODE_KING)
+			prf("%u",arena_player[i].kingtime);
+		else if (arena_mode == ARENA_MODE_BASE)
+			prf("%u",arena_player[i].basekills);
+		else if (arena_mode == ARENA_MODE_SCORED) {
+			sprintf(gechrbuf,"%ld",arena_player[i].score);
+			prf("%s",gechrbuf);
+		}
+		else
+			prf("%d",arena_player[i].kills);
+
+		if (arena_mode == ARENA_MODE_BASE)
+			prf(",,%u*\r",arena_player[i].deaths);
+		else
+			prf(",%d,%u*\r",arena_player[i].kills,
+				arena_player[i].deaths);
+	}
+	prf("STOP:PLAYERS*\r");
 }
 
 /* move the King objective to a different random sector */
@@ -2571,6 +2647,10 @@ int FUNC mnu_arena_lobby(void)
 			outprfge(FLT_NONE, usrnum);
 			return 1;
 		}
+		if (margc >= 1 && sameto("dat", margv[0])) {
+			cmd_data();
+			return 1;
+		}
 		if (arena_single_shipclass() >= 0) {
 			prfmsg(RSPHOLD);
 			outprfge(FLT_NONE, usrnum);
@@ -2619,6 +2699,10 @@ int FUNC mnu_arena_lobby(void)
 	}
 	else if (margc >= 1 && sameto("set", margv[0])) {
 		cmd_set();
+		return 1;
+	}
+	else if (margc >= 1 && sameto("dat", margv[0])) {
+		cmd_data();
 		return 1;
 	}
 	else if (margc >= 1 && sameto("sys", margv[0])) {

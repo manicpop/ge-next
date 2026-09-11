@@ -85,6 +85,7 @@ int FUNC warrti3 P((void));
 void FUNC warrti3a P((void));
 #endif
 void FUNC outprfge P((int cls , int shpno));
+void FUNC data_text P((const char *text));
 void FUNC outsect P((int filter , COORD *coordptr , unsigned exclude));
 void FUNC outrange P((int filter , COORD *coordptr));
 int FUNC ingegame P((int shpno));
@@ -104,6 +105,8 @@ void FUNC arena_select_ship P((int usrn , int choice));
 void FUNC arena_show_ship_choices P((void));
 void FUNC arena_show_ship_classes P((void));
 void FUNC arena_show_status P((void));
+void FUNC arena_data_status P((void));
+void FUNC arena_data_players P((void));
 void FUNC arena_exit_match P((void));
 unsigned long FUNC arena_total_wins P((WARUSR *ptr));
 void FUNC arena_refresh_win_scores P((void));

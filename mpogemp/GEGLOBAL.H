@@ -165,16 +165,12 @@ extern int gemaxplrs,
 	   planupd,
 	   passnum;
 
-#ifndef GE_ARENA
 extern char *frontend;		/* configured frontend pairing code */
-#endif
 extern char *opttxt;		/* option-text menu prompt */
 extern char optchr;		/* option-text trigger character */
 
 extern long *opttbl;		/* per-user option-text file offsets */
-#ifndef GE_ARENA
 extern byte *data_enabled;	/* per-session DATA state flags */
-#endif
 
 extern double tor_fact,		/* torpedo hit-distance factor */
 	      tdammax,		/* torpedo max damage factor */

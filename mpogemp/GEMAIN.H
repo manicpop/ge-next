@@ -229,11 +229,9 @@
 #define	FLT_SHIP 7
 #define	FLT_NONE 8
 
-#ifndef GE_ARENA
 /* per-session DATA state flags */
 #define GEDATA_ACCESS 0x01
 #define GEDATA_METADATA 0x02
-#endif
 
 /* how many seconds to delay 'reduced' entry messages */
 #define	ENTRYWAIT 30
