@@ -990,19 +990,19 @@ static int arena_set_mode(char *mode)
 static int arena_start_countdown(void)
 {
 	if (arena_host != usrnum) {
-		prfmsg(GOHOST);
+		prfmsg(BGNHOST);
 		return FALSE;
 	}
 	if (arena_state == ARENA_STAGING || arena_state == ARENA_TIE_STAGING) {
-		prfmsg(GOSTAGE);
+		prfmsg(BGNSTAGE);
 		return FALSE;
 	}
 	if (arena_state == ARENA_RUNNING || arena_state == ARENA_TIE_RUNNING) {
-		prfmsg(GORUN);
+		prfmsg(BGNRUN);
 		return FALSE;
 	}
 	if (arena_count_ready() < 2) {
-		prfmsg(GOMIN);
+		prfmsg(BGNMIN);
 		return FALSE;
 	}
 	arena_ticks = 0;
@@ -2746,7 +2746,7 @@ int FUNC mnu_arena_lobby(void)
 		outprfge(FLT_NONE, usrnum);
 		return 1;
 	}
-	else if (margc == 1 && sameto("go", margv[0])) {
+	else if (margc == 1 && sameto("beg", margv[0])) {
 		if (!arena_start_countdown()) {
 			outprfge(FLT_NONE, usrnum);
 		}

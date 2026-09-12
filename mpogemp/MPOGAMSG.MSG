@@ -1112,7 +1112,7 @@ empire and contemplating what's next, you pass a sign that says Arena Lobby.
 
 Meet up with players in the arena lobby. The first player in is the host, and
 can pick a game a mode. The match starts after two players have been ready for
-60 seconds or the host enters GO. The winner scores a point on the roster
+60 seconds or the host enters BEGIN. The winner scores a point on the roster
 and because the host for the next match.
 
 Good luck!
@@ -3311,7 +3311,7 @@ LOBPRDY {
 } T GE arena lobby ready prompt
 
 LOBPHST {
-[1;36mType [1;37mGO[1;36m to start the match, [1;37mMODE[1;36m to change the game mode,
+[1;36mType [1;37mBEGIN[1;36m to start the match, [1;37mMODE[1;36m to change the game mode,
 [1;37mSTATUS[1;36m for player status, or [1;37mOBSERVE[1;36m to sit this one out.[1;37m
 } T GE arena lobby host prompt
 
@@ -3342,16 +3342,16 @@ MODCHG {***
 MODUNK {[1;36mUnknown arena mode.[1;37m
 } T GE arena unknown mode
 
-GOHOST {[1;36mOnly the arena host can start the match.[1;37m
+BGNHOST {[1;36mOnly the arena host can start the match.[1;37m
 } T GE arena start host only
 
-GOSTAGE {[1;36mAn arena match is already staging.[1;37m
+BGNSTAGE {[1;36mAn arena match is already staging.[1;37m
 } T GE arena already staging
 
-GORUN {[1;36mAn arena match is already running.[1;37m
+BGNRUN {[1;36mAn arena match is already running.[1;37m
 } T GE arena already running
 
-GOMIN {[1;36mAt least two ready players are required to start.[1;37m
+BGNMIN {[1;36mAt least two ready players are required to start.[1;37m
 } T GE arena not enough players
 
 LOBREADY {[1;36mYou are ready to join the next match.[1;37m
