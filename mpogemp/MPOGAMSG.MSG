@@ -1113,7 +1113,7 @@ empire and contemplating what's next, you pass a sign that says Arena Lobby.
 Meet up with players in the arena lobby. The first player in is the host, and
 can pick a game a mode. The match starts after two players have been ready for
 60 seconds or the host enters BEGIN. The winner scores a point on the roster
-and because the host for the next match.
+and becomes the host for the next match.
 
 Good luck!
 } T GE EXPLAIN text
