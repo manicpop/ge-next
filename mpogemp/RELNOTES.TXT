@@ -9,7 +9,7 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
-=== 0.3.2 === in progress:
+=== 0.3.2 === 2026-09-15:
 
 * This is the first build containing ge-arena. ge-arena is a
   separate download from ge-next but is included in the ge-next
@@ -28,6 +28,9 @@ Please contact me with thoughts and suggestions.
   tell mulitple instances apart) you can still do so.
 * Cyber-bases have been had their DAMF slightly reduced to make
   them a little easier to destroy.
+* The separate mbbsemu build is no longer necessary, the
+  standard 16-bit build will run fine on mbbsemu
+  v1.00-alpha-090826 on newer.
 
 === 0.3.1 === 2026-06-30:
 
