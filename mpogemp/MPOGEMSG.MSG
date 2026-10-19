@@ -1607,11 +1607,11 @@ ITMPR10 {Base price for zippers: 99} N 1 32000
 
 This value is the base price of each item.
 
-ITMPR11 {Base price for mines: 21} N 1 32000
+ITMPR11 {Base price for jammers: 21} N 1 32000
 
 This value is the base price of each item.
 
-ITMPR12 {Base price for jammers: 16} N 1 32000
+ITMPR12 {Base price for mines: 16} N 1 32000
 
 This value is the base price of each item.
 
@@ -3125,7 +3125,7 @@ ADMENU2 {
   7 - Set beacon message
   X - Exit to command mode[1;36m
 
-  Please select (1-6):[1;37m } T GE admin menu
+  Please select (1-7):[1;37m } T GE admin menu
 
 ADMENU2B {
 [1;36mTransfer how much tax from the planetary bank to your account?[1;37m } T GE transfer tax question
@@ -3205,8 +3205,8 @@ ADMEN2I4 {
 } T GE not part of a team message
 
 ADMENU2J {
-[1;36mEnter the beacon message or leave blank for no message:
- [46m                                                                           [0m
+[1;36mEnter the beacon message (74 characters max; blank to erase):
+ [46m                                                                          [0m
 [A[1;37m} T GE beacon message question
 
 ADMEN2J1 {
@@ -3282,6 +3282,9 @@ ATTACKF7 {[1;36mYour fighters have crushed their defenses![1;37m
 
 ATTACKF8 {[1;36mYour fighters are being fired upon by planetary troops![1;37m
 } T GE fighters fired upon message
+
+ATTACKF9 {[1;36mPlanetary troops destroyed [1;37m%s[1;36m of your fighters.[1;37m
+} T GE planetary troops destroyed fighters message
 
 ATTACK6 {***
 [0;37mIncoming distress message from [1;34m%s[0;37m in star system [1;34m%d %d[0;37m!
@@ -3949,6 +3952,10 @@ MAINT2 {
 MAINT3 {
 [1;36mThey say the password is not correct.[1;37m
 } T GE no maint if password is wrong message
+
+MAINTTM {
+[1;36mThis is a team planet; maintenance is for team members only.[1;37m
+} T GE no maintenance for nonmembers at team planet
 
 MAINT4 {
 [1;36mThe Enforcer Planet does not have a repair depot.[1;37m

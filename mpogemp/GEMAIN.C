@@ -2568,6 +2568,13 @@ static int sendprfge(int cls, int shpno)
 					return TRUE;
 				}
 				break;
+			case FLT_HAIL_DIRECT:
+				if (data_enabled != NULL
+					&& (data_enabled[shpno] & GEDATA_METADATA))
+					outprf_metadata(FLT_HAIL,shpno);
+				else
+					outprf(shpno);
+				return TRUE;
 			case FLT_ENTRY:
 				if ((msgfilter & MSGF_ENTRY_MASK) != 0x40) {
 					if (data_enabled != NULL

@@ -9,6 +9,39 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
+=== 0.3.3 === 2026-10-18:
+
+* The new Galactic Empire wiki is available at
+  https://manicpop.org/gewiki
+* This release focuses on bugs found while documenting classic GE.
+  The numbers below refer to the wiki's Classic bug database. All
+  of the bugs listed below are present in classic GE and inherited
+  in ge-next until this release.
+* GE-BUG-014: TEAM KICK now clears an online player's cached team
+  membership as well as the saved record.
+* GE-BUG-032: The planet beacon prompt now correctly shows its
+  74-character limit and entry area. The record size is unchanged.
+* GE-BUG-035: Surrendered attacking troops and troop losses during
+  planetary combat are no longer overwritten by stale counts.
+* GE-BUG-037: Planetary troops now fire on attacking fighters with
+  the intended 60% probability rather than 80%.
+* GE-BUG-040: Planetary troops can destroy attacking fighters even
+  when the planet has no defending fighters. The troop-only loss
+  message has been restored.
+* GE-BUG-048: SHIELD DOWN no longer resets a damaged shield system,
+  bypassing the time needed to repair it.
+* GE-BUG-049: Buying a replacement shield leaves it down with zero
+  charge. A newly purchased phaser starts fully charged. Neither
+  system retains the old one's charge.
+* GE-BUG-053: Aborting self-destruct at count 10 now broadcasts the
+  all-clear, just as aborting later in the countdown does.
+* GE-BUG-054: Undeliverable planet mail addressed to **Free** no
+  longer leaves text in the output buffer for someone else to see.
+* GE-BUG-056: MAINT at a team-restricted planet now checks actual
+  membership. Typing TEAM alone cannot bypass the restriction.
+* GE-BUG-059: TEAM KICK revocation mail is now classified as a
+  Distress message rather than inheriting a previous mail type.
+
 === 0.3.2 === 2026-09-15:
 
 * This is the first build containing ge-arena. ge-arena is a
@@ -25,8 +58,8 @@ Please contact me with thoughts and suggestions.
 * Admins: REGNO is now optional, and if it's set to blank or
   0 the registration number line will no longer show on the
   console. If you do want to put a number here (perhaps to
-  tell mulitple instances apart) you can still do so.
-* Cyber-bases have been had their DAMF slightly reduced to make
+  tell multiple instances apart) you can still do so.
+* Cyber-bases have had their DAMF slightly reduced to make
   them a little easier to destroy.
 * The separate mbbsemu build is no longer necessary, the
   standard 16-bit build will run fine on mbbsemu
@@ -110,6 +143,8 @@ The main focus of 0.3 is enhancements for user ships:
   - In classic GE, even-numbered phaser classes are no more
     powerful than the previous odd class (e.g. phaser 6 is just as
     powerful as phaser 5). That missing half step has been added.
+    (UPDATE 2026-09-22: This was not a bug in classic GE, this
+    is a bug introduced in ge-next 0.2.)
   - The routine that determines phaser damage has reworked with
     more floating point math. Phaser range is now smoother and
     no longer "stair steps."

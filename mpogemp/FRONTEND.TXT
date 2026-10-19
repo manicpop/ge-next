@@ -123,11 +123,13 @@ The numeric message types match the game's filter classes:
     7 = general ship activity
     8 = unfiltered/catchall output; never framed
 
-Message types 0 through 7 are framed only after they pass the player's message
-filters. Filtered messages and type 8 unfiltered/catchall output produce
-neither a begin marker nor an end marker. A frontend must consume metadata
-markers from the raw session stream and remove them before displaying the
-enclosed game text.
+Message types 0 through 7 are framed after any applicable player message
+filter. Public user hails are subject to the type 5 HAIL filter; team and
+encoded user messages retain type 5 metadata but are always delivered to
+eligible recipients. Filtered messages and type 8 unfiltered/catchall output
+produce neither a begin marker nor an end marker. A frontend must consume
+metadata markers from the raw session stream and remove them before displaying
+the enclosed game text.
 
 If a message plus both markers would exceed the MajorBBS output-buffer limit,
 the game sends that message without metadata framing rather than truncate it.

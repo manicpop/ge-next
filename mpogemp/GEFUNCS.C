@@ -5093,8 +5093,10 @@ int FUNC sendit(void)
 {
 	/* don't send mail to non-live players */
 
-	if (mail.userid[0] == '*')
+	if (mail.userid[0] == '*') {
+		clrprf();
 		return FALSE;
+	}
 
 	setmem(gemsg,FIXEDMSGSIZ,0);
 

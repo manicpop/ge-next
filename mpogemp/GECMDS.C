@@ -1712,7 +1712,7 @@ void FUNC cmd_send(void)
 						prfmsg(MSGSNT1O,"Team",waruptr->userid,margv[2]);
 					else
 						prfmsg(MSGSNT1,"Team",waruptr->userid,warsptr->shipname,margv[2]);
-					outwar(FLT_HAIL,usrnum,waruptr->teamcode,2);
+					outwar(FLT_HAIL_DIRECT,usrnum,waruptr->teamcode,2);
 					prfmsg(MSGSNT2,"Team");
 				}
 			}
@@ -1728,7 +1728,7 @@ void FUNC cmd_send(void)
 						prfmsg(MSGSNT1O,"Encoded",waruptr->userid,margv[2]);
 					else
 						prfmsg(MSGSNT1,"Encoded",waruptr->userid,warsptr->shipname,margv[2]);
-					outwar(FLT_HAIL,usrnum,warsptr->freq,1);
+					outwar(FLT_HAIL_DIRECT,usrnum,warsptr->freq,1);
 					prfmsg(MSGSNT3,warsptr->freq);
 				}
 			}
@@ -2254,12 +2254,13 @@ void FUNC cmd_shields(void)
 		return;
 	}
 
+	if (warsptr->shieldstat == SHIELDDM) {
+		prfmsg(SHNORPR);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
 	if (sameas(margv[1],"up")) {
-		if (warsptr->shieldstat == SHIELDDM) {
-			prfmsg(SHNORPR);
-			outprfge(FLT_NONE,usrnum);
-			return;
-		}
 		if (fluxstat(warsptr,usrnum,SHENGUSE * warsptr->shieldtype) == 1) {
 			shieldup(warsptr,usrnum);
 			return;
@@ -2974,7 +2975,7 @@ static int attack_men(unsigned long num)
 	if (left1 > 0 && left1 < (left2 / 4)) {
 		sprintf(gechrbuf, "%lu", left1);
 		prfmsg(ATTACKM4, gechrbuf);
-		plptr->items[I_TROOPS].qty += left1;
+		left2 += left1;
 		left1 = 0;
 	}
 
@@ -2983,13 +2984,19 @@ static int attack_men(unsigned long num)
 		for (ii = 1; ii < NUMITEMS; ++ii) {
 			j = (unsigned long)gernd() % 15;
 
-			if (j > plptr->items[ii].qty)
+			if (ii == I_TROOPS) {
+				if (j > left2)
+					j = left2;
+			} else if (j > plptr->items[ii].qty)
 				j = plptr->items[ii].qty;
 
 			if (j >= 1) {
 				sprintf(gechrbuf, "%lu", j);
 				prfmsg(ATTACKM5, gechrbuf, item_name[ii]);
-				plptr->items[ii].qty -= j;
+				if (ii == I_TROOPS)
+					left2 -= j;
+				else
+					plptr->items[ii].qty -= j;
 			}
 		}
 	}
@@ -3081,7 +3088,7 @@ static int attack_fig(unsigned long num)
 	}
 
 	/* If there are more than 500 troops - shoot down some fighters */
-	if (left1 > 0 && plptr->items[I_TROOPS].qty > 500 && (gernd() % 5 - 1) > 0) {
+	if (left1 > 0 && plptr->items[I_TROOPS].qty > 500 && gernd() % 5 >= 2) {
 		prfmsg(ATTACKF8);
 		r = rndm(plattrf1) + .05;
 		kill1 += (unsigned long)((double)left1 * r);
@@ -3104,19 +3111,25 @@ static int attack_fig(unsigned long num)
 			kill2 = 0L;
 		}
 
-		if (kill1 > left1)
-			kill1 = left1;
-
 		if (kill2 > left2)
 			kill2 = left2;
+	}
 
+	if (kill1 > left1)
+		kill1 = left1;
+
+	if (left2 > 0L) {
 		sprintf(gechrbuf, "%lu", kill2);
 		sprintf(gechrbuf2, "%lu", kill1);
 
 		prfmsg(ATTACKF2, gechrbuf, gechrbuf2);
-		left1 -= kill1;
 		left2 -= kill2;
+	} else if (kill1 > 0L) {
+		sprintf(gechrbuf, "%lu", kill1);
+		prfmsg(ATTACKF9, gechrbuf);
 	}
+
+	left1 -= kill1;
 
 	/* must be at least 5% to do damage to items on the planet */
 	if (ratio > 5) {
@@ -3892,13 +3905,18 @@ void FUNC cmd_maint(void)
 	return;
 #else
 
-	if (!sameas(plptr->password, "none") && margc < 2) {
+	fixplanetteam();
+	if (sameas(plptr->password, "team")) {
+		if (plptr->teamcode == 0 || plptr->teamcode != waruptr->teamcode) {
+			prfmsg(MAINTTM);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+	} else if (!sameas(plptr->password, "none") && margc < 2) {
 		prfmsg(MAINT2);
 		outprfge(FLT_NONE, usrnum);
 		return;
-	}
-
-	if (!sameas(plptr->password, "none")
+	} else if (!sameas(plptr->password, "none")
 		&& !sameas(plptr->password, margv[1])) {
 		prfmsg(MAINT3);
 		outprfge(FLT_NONE, usrnum);
@@ -4185,6 +4203,8 @@ void FUNC cmd_new(void)
 					waruptr->cash -= delta;
 					waruptr->cash += credit;
 					warsptr->shieldtype = (byte)type;
+					warsptr->shieldstat = SHIELDDN;
+					warsptr->shield = 0;
 					if (delta == 0) {
 						prfmsg(NEW13, type);
 					} else {
@@ -4241,6 +4261,7 @@ void FUNC cmd_new(void)
 					waruptr->cash -= delta;
 					waruptr->cash += credit;
 					warsptr->phasrtype = (byte)type;
+					warsptr->phasr = 100;
 					if (delta == 0) {
 						prfmsg(NEW14, type);
 					} else {
@@ -4711,7 +4732,7 @@ void FUNC cmd_abort(void)
 void FUNC cmd_abort(void)
 {
 	if (warsptr->destruct > (byte)0) {
-		if (warsptr->destruct < 10) {
+		if (warsptr->destruct <= 10) {
 			if (warsptr->shipname[0] == 0)
 				prfmsg(SELFD4AO, warsptr->userid);
 			else
@@ -5539,6 +5560,12 @@ void FUNC cmd_team(void)
 							tmpusr.teamcode = 0;
 							/* re-write the users record */
 							geudb(GEUPDATE,tmpusr.userid,&tmpusr);
+							/* An online player also has a cached copy of this record. */
+							for (j = 0; j < nterms; ++j) {
+								if (ingegame(j) && sameas(warusroff(j)->userid, tmpusr.userid)
+									&& warusroff(j)->teamcode == (unsigned long)teamtab[i].teamcode)
+									warusroff(j)->teamcode = 0;
+							}
 
 							/* update the team count */
 							teamtab[i].teamcount--;
@@ -5560,6 +5587,7 @@ void FUNC cmd_team(void)
 							prfmsg(TEAMKYOU,oldteamname,warsptr->userid);
 							strcpy(mail.userid,tmpusr.userid);
 							strcpy(mail.topic,"Team Membership Revoked");
+							mail.mailclass = MAIL_CLASS_DISTRESS;
 							sendit();
 							clrprf();
 

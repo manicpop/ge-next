@@ -3910,7 +3910,7 @@ S24ATTK {Has fighter launching capability? NO} (S24TYPE=USER) B
 
 Cloaking capability for class 24.
 
-S24CLOK {Has cloaking capability? YES} (S24TYPE=USER) B
+S24CLOK {Has cloaking capability? NO} (S24TYPE=USER) B
 
 Acceleration rate of class 24.
 1000 means one warp speed increment per ship tick.
