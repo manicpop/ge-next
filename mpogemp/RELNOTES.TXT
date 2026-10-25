@@ -9,6 +9,26 @@ https://github.com/elwynor/elwge  https://www.elwynor.com/
 https://discord.gg/SqhYmZvWsn  anthony@manicpop.org
 Please contact me with thoughts and suggestions.
 
+=== 0.3.4 === 2026-10-24:
+
+* I was obviously a little too anxious to get out a new release
+  before vacation, so here we are.
+* Planet beacon delivery now uses a shared 60-second broadcast
+  round. All eligible ships receive nearby beacons over the three
+  movement passes, rather than the first ship consuming the entire
+  round. Multiple nearby planets can each broadcast their message.
+* Disabling beacon display no longer prevents other players from
+  receiving their beacons.
+* Successfully entering orbit also displays the planet's beacon
+  once, if beacon display is enabled. Ships remaining in orbit
+  still do not receive periodic repeats.
+* Even though it makes no gameplay change with default settings,
+  GE-BUG-061 is fixed, read the wiki for more.
+* Corrected a packaging error in the MajorBBS v10 version of
+  0.3.3: the DLL expected message numbers from an older message
+  header, causing "GE:ERR:MPOGEMSG.MCV Corrupted" on startup with
+  the supplied message files. The 16-bit package was not affected.
+
 === 0.3.3 === 2026-10-18:
 
 * The new Galactic Empire wiki is available at

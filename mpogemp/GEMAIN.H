@@ -43,7 +43,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.3"
+#define PROJECT_VERSION "0.3.4"
 
 #define PROJECT_ARCH "16-bit"
 
@@ -110,6 +110,7 @@
 #define GEGETNOW 8		/* database fetch unconditionally          */
 
 #define MAXPLANETS 9		/* max planets/wormholes per sector        */
+#define MAX_SHIP_SLOTS 125
 
 #define MAXX 30			/* scan map width                          */
 #define MAXY 15			/* scan map height                         */

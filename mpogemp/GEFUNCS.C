@@ -2654,14 +2654,15 @@ void FUNC proximity(WARSHP *ptr, int usrn)
 
 			if (ptab[usrn].planets[i].type == PLTYPE_PLNT
 				&& dist <= 1000
-				&& beacontimer == 0) {
+				&& beacontimer <= 3
+				&& !(warusroff(usrn)->options[MSG_FILTER] & MSGF_BEACON)) {
+				/* Deliver every nearby beacon; no recipient consumes the shared round. */
 				if (getplanet(&ptr->coord,i + 1) && planet.type == PLTYPE_PLNT && planet.beacon[0] != 0) {
 					if (planet.name[0] != 0)
 						prfmsg(BEAC02,i + 1,planet.name,planet.beacon);
 					else
 						prfmsg(BEAC01,i + 1,planet.beacon);
 					outprfge(FLT_BEACON,usrn);
-					beacontimer = 60;
 				}
 			}
 			if (ptr->speed <= 0)
@@ -3060,7 +3061,7 @@ void FUNC killem(WARSHP *ptr, int usrn)
 			/* adjust bonus for taking out more/less powerful ship */
 			if (shipclass[ptr->shpclass].damfact > (shipclass[wptr->shpclass].damfact + 50))
 				bonus2 = scr / 2;
-			else if (shipclass[ptr->shpclass].damfact < (shipclass[wptr->shpclass].damfact - 50))
+			else if (shipclass[ptr->shpclass].damfact + 50 < shipclass[wptr->shpclass].damfact)
 				bonus2 = -((scr * 1L) / 3L);
 
 			amt = scr + bonus1 + bonus2;
@@ -3778,12 +3779,12 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 			}
 			else if (mptr->distance <= mstep) {
 				mptr->distance = 0;
-				/* reduce the energy by the damage factor of this ship */
+				/* Keep amplified impact energy out of the 16-bit flight-energy field. */
 				damfact = mptr->energy;
 				damfact = ton_fact(ptr,damfact);
-				mptr->energy = damfact;
 
 				if (ptr->shieldstat == SHIELDUP) {
+					power = (int)(damfact / 999.0);
 					damfact = damfact / 20000.0;
 					damfact = mdammax * (damfact * rndm(.1));
 					ptr->damage += damfact;
@@ -3807,7 +3808,6 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 						++acc_used;
 					}
 
-					power = mptr->energy / 999;
 					power = power * (rndm(.5) + .5);
 					shres = shieldhit(ptr,power);
 					if (shres == 1 || (shres == 2 && shmsg == 0))
@@ -4343,18 +4343,17 @@ void FUNC destruct(WARSHP *ptr, int usrn)
 							if (ddist < 0)
 								ddist = 0;
 							ddist = ddist * ddist * ddist;
+							/* Keep blast strength fractional until the final damage conversion. */
+							ddist *= minedammax * (shipclass[ptr->shpclass].damfact / 100.0);
 							if (wptr->shieldstat == SHIELDUP) {
-								damage = (unsigned)(ddist * minedammax);
-								damage = damage * (shipclass[ptr->shpclass].damfact / 100);
-								damage = damage / (gernd() % 5 + wptr->shieldtype);
+								damage = (unsigned)(ddist / (gernd() % 5 + wptr->shieldtype));
 								damstr(damage);
 								prfmsg(SELFD6,gechrbuf);
 								outprfge(FLT_NONE,zothusn);
 								shieldhitmsg(shieldhit(wptr,damage + 20),zothusn);
 							}
 							else {
-								damage = (unsigned)(ddist * minedammax);
-								damage = damage * (shipclass[ptr->shpclass].damfact / 100);
+								damage = (unsigned)ddist;
 								damstr(damage);
 								prfmsg(SELFD7,gechrbuf);
 								outprfge(FLT_NONE,zothusn);
@@ -5687,16 +5686,16 @@ void FUNC update_scantab(WARSHP *ptr, int usrn)
 	byte ptr_neb, oth_neb, flag;
 	WARSHP *wptr;
 	SCANTAB tmp;
-	char lettab[300];
+	char lettab[MAX_SHIP_SLOTS];
 
-	setmem(&lettab[0],sizeof(char)*300,0);
+	setmem(lettab, sizeof(lettab), 0);
 
 	ptr_neb = (byte)innebula(coord1(ptr->coord.xcoord),coord1(ptr->coord.ycoord));
 
 	/* save off the old letters */
 	for (i = 0; i < NOSCANTAB; ++i) {
 		j = scantab[usrn].ship[i].shipno;
-		if (j >= 0 && j < 300) {
+		if (j >= 0 && j < MAX_SHIP_SLOTS) {
 			/* only keep A through Z */
 			l = scantab[usrn].ship[i].letter;
 			lettab[j] = (l >= 'A' && l <= 'Z') ? l : 0;

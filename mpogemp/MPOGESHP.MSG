@@ -125,10 +125,10 @@ This is a level from 0 to 4.
 S01TOUGH {Toughness level: 0} (S01TYPE=CYBORG,DROID) N 0 4
 
 Class 01 damage factor, 100 is normal. 200 is twice as
-resilient. 77 is the minimum.
+resilient. 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S01DAMF {Damage effect factor: 100} (S01TYPE#<NONE>) N 77 32767
+S01DAMF {Damage effect factor: 100} (S01TYPE#<NONE>) N 30 32767
 
 Class 01 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -301,10 +301,10 @@ This is a level from 0 to 4.
 S02TOUGH {Toughness level: 0} (S02TYPE=CYBORG,DROID) N 0 4
 
 Class 02 damage factor, 100 is normal. 200 is twice as
-resilient. 77 is the minimum.
+resilient. 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S02DAMF {Damage effect factor: 80} (S02TYPE#<NONE>) N 77 32767
+S02DAMF {Damage effect factor: 80} (S02TYPE#<NONE>) N 30 32767
 
 Class 02 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -478,10 +478,10 @@ This is a level from 0 to 4.
 S03TOUGH {Toughness level: 0} (S03TYPE=CYBORG,DROID) N 0 4
 
 Class 03 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S03DAMF {Damage effect factor: 120} (S03TYPE#<NONE>) N 77 32767
+S03DAMF {Damage effect factor: 120} (S03TYPE#<NONE>) N 30 32767
 
 Class 03 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -653,10 +653,10 @@ This is a level from 0 to 4.
 S04TOUGH {Toughness level: 0} (S04TYPE=CYBORG,DROID) N 0 4
 
 Class 04 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S04DAMF {Damage effect factor: 110} (S04TYPE#<NONE>) N 77 32767
+S04DAMF {Damage effect factor: 110} (S04TYPE#<NONE>) N 30 32767
 
 Class 04 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -829,10 +829,10 @@ This is a level from 0 to 4.
 S05TOUGH {Toughness level: 0} (S05TYPE=CYBORG,DROID) N 0 4
 
 Class 05 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S05DAMF {Damage effect factor: 125} (S05TYPE#<NONE>) N 77 32767
+S05DAMF {Damage effect factor: 125} (S05TYPE#<NONE>) N 30 32767
 
 Class 05 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1002,10 +1002,10 @@ This is a level from 0 to 4.
 S06TOUGH {Toughness level: 0} (S06TYPE=CYBORG,DROID) N 0 4
 
 Class 06 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S06DAMF {Damage effect factor: 130} (S06TYPE#<NONE>) N 77 32767
+S06DAMF {Damage effect factor: 130} (S06TYPE#<NONE>) N 30 32767
 
 Class 06 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1174,10 +1174,10 @@ This is a level from 0 to 4.
 S07TOUGH {Toughness level: 0} (S07TYPE=CYBORG,DROID) N 0 4
 
 Class 07 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S07DAMF {Damage effect factor: 200} (S07TYPE#<NONE>) N 77 32767
+S07DAMF {Damage effect factor: 200} (S07TYPE#<NONE>) N 30 32767
 
 Class 07 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1347,10 +1347,10 @@ This is a level from 0 to 4.
 S08TOUGH {Toughness level: 0} (S08TYPE=CYBORG,DROID) N 0 4
 
 Class 08 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S08DAMF {Damage effect factor: 175} (S08TYPE#<NONE>) N 77 32767
+S08DAMF {Damage effect factor: 175} (S08TYPE#<NONE>) N 30 32767
 
 Class 08 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1520,10 +1520,10 @@ This is a level from 0 to 4.
 S09TOUGH {Toughness level: 0} (S09TYPE=CYBORG,DROID) N 0 4
 
 Class 09 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S09DAMF {Damage effect factor: 200} (S09TYPE#<NONE>) N 77 32767
+S09DAMF {Damage effect factor: 200} (S09TYPE#<NONE>) N 30 32767
 
 Class 09 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1690,10 +1690,10 @@ This is a level from 0 to 4.
 S10TOUGH {Toughness level: 0} (S10TYPE=CYBORG,DROID) N 0 4
 
 Class 10 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S10DAMF {Damage effect factor: 225} (S10TYPE#<NONE>) N 77 32767
+S10DAMF {Damage effect factor: 225} (S10TYPE#<NONE>) N 30 32767
 
 Class 10 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -1862,10 +1862,10 @@ This is a level from 0 to 4.
 S11TOUGH {Toughness level: 0} (S11TYPE=CYBORG,DROID) N 0 4
 
 Class 11 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S11DAMF {Damage effect factor: 250} (S11TYPE#<NONE>) N 77 32767
+S11DAMF {Damage effect factor: 250} (S11TYPE#<NONE>) N 30 32767
 
 Class 11 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2032,10 +2032,10 @@ This is a level from 0 to 4.
 S12TOUGH {Toughness level: 0} (S12TYPE=CYBORG,DROID) N 0 4
 
 Class 12 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S12DAMF {Damage effect factor: 300} (S12TYPE#<NONE>) N 77 32767
+S12DAMF {Damage effect factor: 300} (S12TYPE#<NONE>) N 30 32767
 
 Class 12 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2204,10 +2204,10 @@ This is a level from 0 to 4.
 S13TOUGH {Toughness level: 0} (S13TYPE=CYBORG,DROID) N 0 4
 
 Class 13 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S13DAMF {Damage effect factor: 90} (S13TYPE#<NONE>) N 77 32767
+S13DAMF {Damage effect factor: 90} (S13TYPE#<NONE>) N 30 32767
 
 Class 13 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2374,10 +2374,10 @@ This is a level from 0 to 4.
 S14TOUGH {Toughness level: 0} (S14TYPE=CYBORG,DROID) N 0 4
 
 Class 14 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S14DAMF {Damage effect factor: 900} (S14TYPE#<NONE>) N 77 32767
+S14DAMF {Damage effect factor: 900} (S14TYPE#<NONE>) N 30 32767
 
 Class 14 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2553,10 +2553,10 @@ This is a level from 0 to 4.
 S15TOUGH {Toughness level: 0} (S15TYPE=CYBORG,DROID) N 0 4
 
 Class 15 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S15DAMF {Damage effect factor: 125} (S15TYPE#<NONE>) N 77 32767
+S15DAMF {Damage effect factor: 125} (S15TYPE#<NONE>) N 30 32767
 
 Class 15 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2731,10 +2731,10 @@ This is a level from 0 to 4.
 S16TOUGH {Toughness level: 0} (S16TYPE=CYBORG,DROID) N 0 4
 
 Class 16 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S16DAMF {Damage effect factor: 500} (S16TYPE#<NONE>) N 77 32767
+S16DAMF {Damage effect factor: 500} (S16TYPE#<NONE>) N 30 32767
 
 Class 16 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2906,10 +2906,10 @@ This is a level from 0 to 4.
 S17TOUGH {Toughness level: 0} (S17TYPE=CYBORG,DROID) N 0 4
 
 Class 17 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S17DAMF {Damage effect factor: 100} (S17TYPE#<NONE>) N 77 32767
+S17DAMF {Damage effect factor: 100} (S17TYPE#<NONE>) N 30 32767
 
 Class 17 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3059,10 +3059,10 @@ This is a level from 0 to 4.
 S18TOUGH {Toughness level: 0} (S18TYPE=CYBORG,DROID) N 0 4
 
 Class 18 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S18DAMF {Damage effect factor: 100} (S18TYPE#<NONE>) N 77 32767
+S18DAMF {Damage effect factor: 100} (S18TYPE#<NONE>) N 30 32767
 
 Class 18 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3207,10 +3207,10 @@ This is a level from 0 to 4.
 S19TOUGH {Toughness level: 0} (S19TYPE=CYBORG,DROID) N 0 4
 
 Class 19 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S19DAMF {Damage effect factor: 100} (S19TYPE#<NONE>) N 77 32767
+S19DAMF {Damage effect factor: 100} (S19TYPE#<NONE>) N 30 32767
 
 Class 19 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3360,10 +3360,10 @@ This is a level from 0 to 4.
 S20TOUGH {Toughness level: 0} (S20TYPE=CYBORG,DROID) N 0 4
 
 Class 20 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S20DAMF {Damage effect factor: 100} (S20TYPE#<NONE>) N 77 32767
+S20DAMF {Damage effect factor: 100} (S20TYPE#<NONE>) N 30 32767
 
 Class 20 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3513,10 +3513,10 @@ This is a level from 0 to 4.
 S21TOUGH {Toughness level: 0} (S21TYPE=CYBORG,DROID) N 0 4
 
 Class 21 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S21DAMF {Damage effect factor: 100} (S21TYPE#<NONE>) N 77 32767
+S21DAMF {Damage effect factor: 100} (S21TYPE#<NONE>) N 30 32767
 
 Class 21 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3666,10 +3666,10 @@ This is a level from 0 to 4.
 S22TOUGH {Toughness level: 1} (S22TYPE=CYBORG,DROID) N 0 4
 
 Class 22 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S22DAMF {Damage effect factor: 175} (S22TYPE#<NONE>) N 77 32767
+S22DAMF {Damage effect factor: 175} (S22TYPE#<NONE>) N 30 32767
 
 Class 22 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3819,10 +3819,10 @@ This is a level from 0 to 4.
 S23TOUGH {Toughness level: 4} (S23TYPE=CYBORG,DROID) N 0 4
 
 Class 23 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S23DAMF {Damage effect factor: 475} (S23TYPE#<NONE>) N 77 32767
+S23DAMF {Damage effect factor: 475} (S23TYPE#<NONE>) N 30 32767
 
 Class 23 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -3972,10 +3972,10 @@ This is a level from 0 to 4.
 S24TOUGH {Toughness level: 2} (S24TYPE=CYBORG,DROID) N 0 4
 
 Class 24 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S24DAMF {Damage effect factor: 300} (S24TYPE#<NONE>) N 77 32767
+S24DAMF {Damage effect factor: 300} (S24TYPE#<NONE>) N 30 32767
 
 Class 24 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4125,10 +4125,10 @@ This is a level from 0 to 4.
 S25TOUGH {Toughness level: 3} (S25TYPE=CYBORG,DROID) N 0 4
 
 Class 25 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S25DAMF {Damage effect factor: 425} (S25TYPE#<NONE>) N 77 32767
+S25DAMF {Damage effect factor: 425} (S25TYPE#<NONE>) N 30 32767
 
 Class 25 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4278,10 +4278,10 @@ This is a level from 0 to 4.
 S26TOUGH {Toughness level: 0} (S26TYPE=CYBORG,DROID) N 0 4
 
 Class 26 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S26DAMF {Damage effect factor: 100} (S26TYPE#<NONE>) N 77 32767
+S26DAMF {Damage effect factor: 100} (S26TYPE#<NONE>) N 30 32767
 
 Class 26 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4431,10 +4431,10 @@ This is a level from 0 to 4.
 S27TOUGH {Toughness level: 0} (S27TYPE=CYBORG,DROID) N 0 4
 
 Class 27 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S27DAMF {Damage effect factor: 100} (S27TYPE#<NONE>) N 77 32767
+S27DAMF {Damage effect factor: 100} (S27TYPE#<NONE>) N 30 32767
 
 Class 27 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4584,10 +4584,10 @@ This is a level from 0 to 4.
 S28TOUGH {Toughness level: 0} (S28TYPE=CYBORG,DROID) N 0 4
 
 Class 28 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S28DAMF {Damage effect factor: 100} (S28TYPE#<NONE>) N 77 32767
+S28DAMF {Damage effect factor: 100} (S28TYPE#<NONE>) N 30 32767
 
 Class 28 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4737,10 +4737,10 @@ This is a level from 0 to 4.
 S29TOUGH {Toughness level: 0} (S29TYPE=CYBORG,DROID) N 0 4
 
 Class 29 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S29DAMF {Damage effect factor: 100} (S29TYPE#<NONE>) N 77 32767
+S29DAMF {Damage effect factor: 100} (S29TYPE#<NONE>) N 30 32767
 
 Class 29 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -4890,10 +4890,10 @@ This is a level from 0 to 4.
 S30TOUGH {Toughness level: 0} (S30TYPE=CYBORG,DROID) N 0 4
 
 Class 30 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S30DAMF {Damage effect factor: 100} (S30TYPE#<NONE>) N 77 32767
+S30DAMF {Damage effect factor: 100} (S30TYPE#<NONE>) N 30 32767
 
 Class 30 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5043,10 +5043,10 @@ This is a level from 0 to 4.
 S31TOUGH {Toughness level: 0} (S31TYPE=CYBORG,DROID) N 0 4
 
 Class 31 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S31DAMF {Damage effect factor: 90} (S31TYPE#<NONE>) N 77 32767
+S31DAMF {Damage effect factor: 90} (S31TYPE#<NONE>) N 30 32767
 
 Class 31 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5196,10 +5196,10 @@ This is a level from 0 to 4.
 S32TOUGH {Toughness level: 2} (S32TYPE=CYBORG,DROID) N 0 4
 
 Class 32 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S32DAMF {Damage effect factor: 150} (S32TYPE#<NONE>) N 77 32767
+S32DAMF {Damage effect factor: 150} (S32TYPE#<NONE>) N 30 32767
 
 Class 32 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5349,10 +5349,10 @@ This is a level from 0 to 4.
 S33TOUGH {Toughness level: 1} (S33TYPE=CYBORG,DROID) N 0 4
 
 Class 33 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S33DAMF {Damage effect factor: 100} (S33TYPE#<NONE>) N 77 32767
+S33DAMF {Damage effect factor: 100} (S33TYPE#<NONE>) N 30 32767
 
 Class 33 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5502,10 +5502,10 @@ This is a level from 0 to 4.
 S34TOUGH {Toughness level: 1} (S34TYPE=CYBORG,DROID) N 0 4
 
 Class 34 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S34DAMF {Damage effect factor: 175} (S34TYPE#<NONE>) N 77 32767
+S34DAMF {Damage effect factor: 175} (S34TYPE#<NONE>) N 30 32767
 
 Class 34 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5655,10 +5655,10 @@ This is a level from 0 to 4.
 S35TOUGH {Toughness level: 2} (S35TYPE=CYBORG,DROID) N 0 4
 
 Class 35 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S35DAMF {Damage effect factor: 225} (S35TYPE#<NONE>) N 77 32767
+S35DAMF {Damage effect factor: 225} (S35TYPE#<NONE>) N 30 32767
 
 Class 35 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -5808,10 +5808,10 @@ This is a level from 0 to 4.
 S36TOUGH {Toughness level: 3} (S36TYPE=CYBORG,DROID) N 0 4
 
 Class 36 damage factor, 100 is normal. 200 is twice as
-resilient, 77 is the minimum.
+resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S36DAMF {Damage effect factor: 400} (S36TYPE#<NONE>) N 77 32767
+S36DAMF {Damage effect factor: 400} (S36TYPE#<NONE>) N 30 32767
 
 Class 36 faction code.
 0 for user ships. 1 for Cybertrons.

@@ -929,6 +929,13 @@ void FUNC cmd_orbit(void)
 				warsptr->where = 10 + plnum;
 				warsptr->speed = 0;
 				warsptr->speed2b = 0;
+				/* Orbit entry gets one beacon even outside the periodic broadcast round. */
+				if (plptr->beacon[0] != 0 && !(waruptr->options[MSG_FILTER] & MSGF_BEACON)) {
+					if (plptr->name[0] != 0)
+						prfmsg(BEAC02,plnum,plptr->name,plptr->beacon);
+					else
+						prfmsg(BEAC01,plnum,plptr->beacon);
+				}
 			} else {
 				prfmsg(ORBIT2);
 			}
