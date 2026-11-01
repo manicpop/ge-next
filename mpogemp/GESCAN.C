@@ -232,7 +232,7 @@ static int print_planet_line(int shp)
 	int orbit = (warsptr->where - 11 == shp);
 	int owned = owned_planet[shp];
 
-	if (se_nebula && cdistance(&warsptr->coord,&ptab[usrnum].planets[shp].coord)*10000.0 > (double)NEBRNG && !orbit && !owned)
+	if (se_nebula && !orbit && !owned && cdistance(&warsptr->coord,&ptab[usrnum].planets[shp].coord)*10000.0 > (double)NEBRNG)
 		return FALSE;
 
 	if (warsptr->jam_sev > (byte)2 && !orbit)
@@ -293,8 +293,8 @@ static void print_map_header(int maptype)
 				vispl = (ptab[usrnum].planets[0].type != 0);
 			else {
 				for (i=0; i<MAXPLANETS && ptab[usrnum].planets[i].type != 0; ++i) {
-					if (cdistance(&warsptr->coord,&ptab[usrnum].planets[i].coord)*10000.0 <= (double)NEBRNG
-						|| owned_planet[i]) {
+					if (owned_planet[i]
+						|| cdistance(&warsptr->coord,&ptab[usrnum].planets[i].coord)*10000.0 <= (double)NEBRNG) {
 						vispl = TRUE;
 						break;
 					}
@@ -524,8 +524,8 @@ static void map_planets(void)
 	getsector(&warsptr->coord);
 	for (i = 0; i < sector.numplan; ++i) {
 		if (sector.ptab[i].coord.xcoord != 0) {
-			if (se_nebula && cdistance(&warsptr->coord,&sector.ptab[i].coord)*10000.0 > (double)NEBRNG
-				&& !owned_planet[i])
+			if (se_nebula && !owned_planet[i]
+				&& cdistance(&warsptr->coord,&sector.ptab[i].coord)*10000.0 > (double)NEBRNG)
 				continue;
 			x = coord2(sector.ptab[i].coord.xcoord)+25;
 			y = coord2(sector.ptab[i].coord.ycoord)+25;
@@ -654,7 +654,7 @@ static void scan_sh(void)
 	WARUSR *wuptr;
 	char ltr;
 	unsigned int rseed = 0;
-	long scandist;	/* update_scantab uses ddistance, so we need a local here */
+	long scandist = 0;	/* update_scantab uses ddistance, so we need a local here */
 	int nebmask, target_neb;
 
 	if (margc != 3) {
@@ -720,7 +720,6 @@ static void scan_sh(void)
 
 		wptr = warshpoff(shpnum);
 		wuptr = warusroff(shpnum);
-		scandist = cdistance(&warsptr->coord,&wptr->coord)*10000;
 		if (scandist < ship_scanrange(warsptr)) {
 			bearing = cbearing(&warsptr->coord,&wptr->coord,warsptr->heading);
 			heading = cbearing(&wptr->coord,&warsptr->coord,wptr->heading);
@@ -2279,7 +2278,7 @@ static void data_shipscan(void)
 	WARUSR *wuptr;
 	char *tname;
 	unsigned int rseed = 0;
-	long scandist;
+	long scandist = 0;
 	int scanbrg, gheading, scanhdg, nebmask, shpnum, target_neb;
 
 	if (warsptr->tactical != 0 || warsptr->damage >= 100.0) {
@@ -2368,7 +2367,6 @@ static void data_shipscan(void)
 
 	wptr = warshpoff(shpnum);
 	wuptr = warusroff(shpnum);
-	scandist = (long)(cdistance(&warsptr->coord,&wptr->coord) * 10000);
 	if (scandist >= ship_scanrange(warsptr)) {
 		prf("SHIPSCAN:NOTFOUND*\rSTOP:SHIPSCAN*\r");
 		outprfge(FLT_NONE,usrnum);

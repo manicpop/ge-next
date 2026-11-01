@@ -5739,6 +5739,7 @@ void FUNC damstr(int damage)
 void FUNC update_scantab(WARSHP *ptr, int usrn)
 {
 	int i, j;
+	long scanrange;
 	char l;
 	byte ptr_neb, oth_neb, flag;
 	WARSHP *wptr;
@@ -5748,6 +5749,7 @@ void FUNC update_scantab(WARSHP *ptr, int usrn)
 	setmem(lettab, sizeof(lettab), 0);
 
 	ptr_neb = (byte)innebula(coord1(ptr->coord.xcoord),coord1(ptr->coord.ycoord));
+	scanrange = ship_scanrange(ptr);
 
 	/* save off the old letters */
 	for (i = 0; i < NOSCANTAB; ++i) {
@@ -5770,9 +5772,9 @@ void FUNC update_scantab(WARSHP *ptr, int usrn)
 			if (wptr->status == GESTAT_AVAIL)
 				continue;
 			ddistance = cdistance(&ptr->coord,&wptr->coord) * 10000;
-			oth_neb = (byte)innebula(coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
 			flag = 0;
-			if (ddistance < ship_scanrange(ptr)) {
+			if (ddistance < scanrange) {
+				oth_neb = (byte)innebula(coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
 				if ((ptr_neb || oth_neb) && !(ptr_neb && oth_neb && ddistance < (double)NEBRNG)) {
 					if (othusn == ptr->lock && ptr->track_grace > 0)
 						flag = 2;
