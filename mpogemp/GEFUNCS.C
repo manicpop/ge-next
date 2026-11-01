@@ -60,12 +60,12 @@ static void	shieldhitmsg(int shmsg, int usrn);	/* map shieldhit() result codes t
 static void	pick_letter(SCANTAB *ptr);
 
 /* Parse a complete decimal token without overflowing its destination. */
-static int parse_decimal(const char *text, unsigned long limit, unsigned long *value)
+static int parse_decimal(const char *text, unsigned long limit, unsigned long *parsed_value)
 {
 	unsigned long result = 0UL;
 	unsigned digit;
 
-	if (text == NULL || *text == 0 || value == NULL)
+	if (text == NULL || *text == 0 || parsed_value == NULL)
 		return FALSE;
 
 	for (; *text != 0; ++text) {
@@ -78,16 +78,16 @@ static int parse_decimal(const char *text, unsigned long limit, unsigned long *v
 		result = result * 10UL + digit;
 	}
 
-	*value = result;
+	*parsed_value = result;
 	return TRUE;
 }
 
-int FUNC parse_long(const char *text, long *value)
+int FUNC parse_long(const char *text, long *parsed_value)
 {
 	unsigned long magnitude;
 	int negative;
 
-	if (text == NULL || value == NULL)
+	if (text == NULL || parsed_value == NULL)
 		return FALSE;
 	negative = (*text == '-');
 	if (*text == '+' || *text == '-')
@@ -97,17 +97,17 @@ int FUNC parse_long(const char *text, long *value)
 
 	/* Form LONG_MIN without casting its positive magnitude to a signed long. */
 	if (negative && magnitude != 0UL)
-		*value = -(long)(magnitude - 1UL) - 1L;
+		*parsed_value = -(long)(magnitude - 1UL) - 1L;
 	else
-		*value = (long)magnitude;
+		*parsed_value = (long)magnitude;
 	return TRUE;
 }
 
-int FUNC parse_ulong(const char *text, unsigned long *value)
+int FUNC parse_ulong(const char *text, unsigned long *parsed_value)
 {
 	if (text != NULL && *text == '+')
 		++text;
-	return parse_decimal(text, ULCAP, value);
+	return parse_decimal(text, ULCAP, parsed_value);
 }
 
 #ifdef GE_ARENA
