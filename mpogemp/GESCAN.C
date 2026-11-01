@@ -467,7 +467,7 @@ static void print_range_summary(SCANTAB *sptr, int shp, long dist_filter, int ma
 		if ((long)(sptr->ship[shp].dist) >= dist_filter)
 			continue;
 		/* heavy jamming: random chance to skip ship */
-		if (warsptr->jam_sev > (byte)7 && (gernd() % 2 == 0))
+		if (warsptr->jam_sev > (byte)7 && (ge_rand_bits(1) == 0))
 			continue;
 
 		visible[count++] = shp;
@@ -615,13 +615,13 @@ static void printmap(int maptype, long dist_filter)
 		}
 
 		if (maptype == RANGENAMES || maptype == RANGEEXTRA) {
-			while (ff == 0 && warsptr->jam_sev > (byte)7 && gernd()%2 == 0)
+			while (ff == 0 && warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 				shp++;
 			shp += print_range_line(sptr, shp, &ff, dist_filter);
 		}
 
 		if (maptype == RANGEFULL) {
-			while (ff == 0 && warsptr->jam_sev > (byte)7 && gernd()%2 == 0)
+			while (ff == 0 && warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 				shp++;
 			shp += print_fullrange_line(sptr, shp, dist_filter);
 		}
@@ -1643,7 +1643,7 @@ static void data_scan(void)
 	for (i=0; i<NOSCANTAB; ++i) {
 		if (sptr->ship[i].flag == 0 || (long)sptr->ship[i].dist >= (long)range)
 			continue;
-		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+		if (warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 			continue;
 
 		data_ship_contact_prefix("SCANS",sptr,i);
@@ -1698,7 +1698,7 @@ static void data_scan(void)
 			+ ((double)MAXY)/2.0 + shifty / yfactor;
 		if (xf >= 0.0 && xf < (double)MAXX
 			&& yf >= 0.0 && yf < (double)MAXY) {
-			if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+			if (warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 				continue;
 			minedist = cdistance(&warsptr->coord,&mptr->coord) * 10000.0;
 			minebearing = cbearing(&warsptr->coord,&mptr->coord,warsptr->heading);
@@ -1790,7 +1790,7 @@ static void data_sector(void)
 			continue;
 		if (nebula && sptr->ship[i].dist > (double)NEBRNG)
 			continue;
-		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+		if (warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 			continue;
 
 		data_ship_contact_prefix("SECTORS",sptr,i);
@@ -1815,7 +1815,7 @@ static void data_sector(void)
 		dist = cdistance(&warsptr->coord,&mptr->coord) * 10000.0;
 		if (nebula && dist > (double)NEBRNG)
 			continue;
-		if (warsptr->jam_sev > (byte)7 && gernd() % 2 == 0)
+		if (warsptr->jam_sev > (byte)7 && ge_rand_bits(1) == 0)
 			continue;
 		objbearing = cbearing(&warsptr->coord,&mptr->coord,warsptr->heading);
 		sprintf(gechrbuf,"%ld",(long)dist);

@@ -425,7 +425,7 @@ void FUNC multiply(int final_mult)
 		if (men > qty) {
 			if (gernd() % 10 == 0) {
 				logthis("Revolt!!");
-				cnt = plptr->items[I_TROOPS].qty / ((gernd() % 8) + 2);
+				cnt = plptr->items[I_TROOPS].qty / (ge_rand_bits(3) + 2);
 				plptr->items[I_TROOPS].qty = cnt;
 
 				/* decrement planet counter for this user */

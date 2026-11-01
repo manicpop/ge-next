@@ -343,6 +343,7 @@ void FUNC update_plan_3 P((void));
 unsigned FUNC smallest P((unsigned a1 , unsigned a2));
 double FUNC rndm P((double mod));
 unsigned int FUNC gernd P((void));
+unsigned int FUNC ge_rand_bits P((unsigned int bits));
 int FUNC cbearing P((COORD *ptr1 , COORD *ptr2 , double heading));
 double FUNC cdistance P((COORD *ptr1 , COORD *ptr2));
 double FUNC vector P((COORD *ptr1 , COORD *ptr2));

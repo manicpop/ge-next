@@ -143,9 +143,9 @@ void FUNC droid_init(WARSHP *ptr, int usrn, int cls)
 		ptr->coord.xcoord = rndm((double)univmax);
 		ptr->coord.ycoord = rndm((double)univmax);
 	}
-	if (gernd() % 2 == 0)	/* put in all quadrants */
+	if (ge_rand_bits(1) == 0)	/* put in all quadrants */
 		ptr->coord.xcoord *= -1.0;
-	if (gernd() % 2 == 0)
+	if (ge_rand_bits(1) == 0)
 		ptr->coord.ycoord *= -1.0;
 
 
@@ -256,7 +256,7 @@ static void droid_annoy(WARSHP *ptr, int usrn)
 	} else {
 		/* npcmsg 255 means the ship was just hit, say ouch */
 		if (ptr->npcmsg == 255) {
-			sel = base + (gernd() % 4) + 9;
+			sel = base + ge_rand_bits(2) + 9;
 			if (sel >= DRLASTM) {
 				geshocst(0, "GE:BAD DROID MSG BTL");
 				logthis(spr("droid_annoy:bad msg btl usrn [%d]", usrn));
@@ -350,7 +350,7 @@ static void droid_torp(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 
 	if (!neutral(&ptr->coord) && !neutral(&wptr->coord) && isvisible(ptr, wptr) &&
 		ptr->where == 0 && wptr->where == 0 &&
-		shipclass[ptr->shpclass].max_torps && gernd() % 2 == 0) {
+		shipclass[ptr->shpclass].max_torps && ge_rand_bits(1) == 0) {
 		tden = 5 - shipclass[ptr->shpclass].tough_factor;
 		if (tden < 1)
 			tden = 1;
@@ -708,7 +708,7 @@ static void droid_act_4(WARSHP *ptr, int usrn)
 						if (!isvisible(ptr, wptr) &&
 							innebula(coord1(ptr->coord.xcoord), coord1(ptr->coord.ycoord)))
 							ptr->speed2b = 990;
-						else if (gernd() % 2 == 0)
+						else if (ge_rand_bits(1) == 0)
 							npc_cruise(ptr, usrn, 4);
 						else
 							ptr->speed2b = 990;

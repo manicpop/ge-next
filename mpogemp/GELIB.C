@@ -93,6 +93,32 @@ unsigned int FUNC gernd(void)
 
 
 /**************************************************************************
+** Draw 1 to 15 bits from a shared pool; invalid widths return zero       **
+**************************************************************************/
+
+unsigned int FUNC ge_rand_bits(unsigned int bits)
+{
+	static unsigned int pool = 0;
+	static unsigned int bits_left = 0;
+	unsigned int result;
+
+	if (bits == 0 || bits > 15)
+		return 0;
+
+	if (bits_left < bits) {
+		/* Borland rand() supplies 15 bits; discard any insufficient remainder. */
+		pool = gernd();
+		bits_left = 15;
+	}
+
+	result = pool & ((1U << bits) - 1U);
+	pool >>= bits;
+	bits_left -= bits;
+	return result;
+}
+
+
+/**************************************************************************
 ** Clamp a value into the valid acos() input range                       **
 **************************************************************************/
 

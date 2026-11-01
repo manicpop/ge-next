@@ -2460,9 +2460,9 @@ static void arena_drop_zygor(void)
 		arena_add_drop_item(I_GOLD,
 		    300UL + (unsigned long)(gernd() % 201),ULCAP);
 	if (arena_mode != ARENA_MODE_BASE) {
-		special = (byte)(2 + (gernd() % 2));
+		special = (byte)(2 + ge_rand_bits(1));
 		planet.arena_shield_boost += special;
-		special = (byte)(2 + (gernd() % 2));
+		special = (byte)(2 + ge_rand_bits(1));
 		planet.arena_phaser_boost += special;
 	}
 	switch (gernd() % 5) {
