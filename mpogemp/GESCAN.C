@@ -184,7 +184,7 @@ static int build_ship_name(int othusn)
 static void print_ship_name(int othusn)
 {
 	int len, k;
-	unsigned int rseed = gernd();
+	unsigned int rseed;
 
 	/* user ships show userid, or userid plus ship name if one exists */
 	len = build_ship_name(othusn);
@@ -192,7 +192,8 @@ static void print_ship_name(int othusn)
 	if (warsptr->jam_sev > (byte)7)
 		for (k = 0; k < len; k++)
 			gechrbuf[k] = '?';
-	else if (warsptr->jam_sev > (byte)2)
+	else if (warsptr->jam_sev > (byte)2) {
+		rseed = gernd();
 		for (k = 0; k < len; k++) {
 			rseed ^= rseed << 7;
 			rseed ^= rseed >> 9;
@@ -200,6 +201,7 @@ static void print_ship_name(int othusn)
 			if (rseed%(9 - warsptr->jam_sev) == (byte)0)
 				gechrbuf[k] = '?';
 		}
+	}
 
 	if (warsptr->lock == othusn && warsptr->jam_sev < (byte)3)
 		prf("%s*%s%s%s*", CLR_RED1, CLR_CYAN1, gechrbuf, CLR_RED1);
@@ -226,12 +228,15 @@ static void scramble_tail_digits(char *buf, unsigned int seed)
 
 static int print_planet_line(int shp)
 {
-	unsigned int rseed = gernd();
+	unsigned int rseed = 0;
 	int orbit = (warsptr->where - 11 == shp);
 	int owned = owned_planet[shp];
 
 	if (se_nebula && cdistance(&warsptr->coord,&ptab[usrnum].planets[shp].coord)*10000.0 > (double)NEBRNG && !orbit && !owned)
 		return FALSE;
+
+	if (warsptr->jam_sev > (byte)2 && !orbit)
+		rseed = gernd();
 
 	if (rseed%(warsptr->jam_sev+1) > (byte)6 && !orbit)
 		return FALSE;
@@ -316,7 +321,10 @@ static void print_map_row(int i, int maptype)
 {
 	int j = 0, start;
 	int prev_color = 6, cur_color;
-	unsigned int rseed = gernd();
+	unsigned int rseed = 0;
+
+	if (warsptr->jam_sev > (byte)0)
+		rseed = gernd();
 
 	prf("%s   |", CLR_RED1);
 	while (j < MAXX) {
@@ -645,7 +653,7 @@ static void scan_sh(void)
 	WARSHP *wptr;
 	WARUSR *wuptr;
 	char ltr;
-	unsigned int rseed = gernd();
+	unsigned int rseed = 0;
 	long scandist;	/* update_scantab uses ddistance, so we need a local here */
 	int nebmask, target_neb;
 
@@ -654,6 +662,9 @@ static void scan_sh(void)
 		outprfge(FLT_NONE,usrnum);
 		return;
 	}
+
+	if (warsptr->jam_sev > (byte)2 && warsptr->jam_sev <= (byte)7)
+		rseed = gernd();
 
 	if (warsptr->jam_sev > (byte)7 || (warsptr->jam_sev > (byte)2 && rseed%(9 - (int)warsptr->jam_sev) == 0)) {
 		prfmsg(JAMMER4);
@@ -898,7 +909,7 @@ static void scan_pl(void)
 #ifndef GE_ARENA
 	unsigned i;
 #endif
-	unsigned int rseed = gernd();
+	unsigned int rseed = 0;
 	int nebmask;
 
 	/* SCAN PLANET FUNCTION */
@@ -908,6 +919,9 @@ static void scan_pl(void)
 		outprfge(FLT_NONE,usrnum);
 		return;
 	}
+
+	if (warsptr->jam_sev > (byte)2 && warsptr->jam_sev <= (byte)7)
+		rseed = gernd();
 
 	if (warsptr->jam_sev > (byte)7 || (warsptr->jam_sev > (byte)2 && rseed%(9 - (int)warsptr->jam_sev) == 0)) {
 		prfmsg(JAMMER4);
@@ -1750,7 +1764,7 @@ static void data_sector(void)
 		if (nebula && dist > (double)NEBRNG && !orbit && !owned)
 			continue;
 
-		rseed = gernd();
+		rseed = (warsptr->jam_sev > (byte)2 && !orbit) ? gernd() : 0;
 		if (rseed % (warsptr->jam_sev + 1) > (byte)6 && !orbit)
 			continue;
 		if (rseed % (warsptr->jam_sev + 1) > (byte)3 && !orbit)
@@ -2078,9 +2092,13 @@ static void data_systems(void)
 		phaserstate,cloakstate);
 
 	active = TRUE;
-	fuzz = gernd();
-	shfuzz = (fuzz % 5) - 2;
-	fuzz = ((fuzz / 5) % 5) - 2;
+	fuzz = 0;
+	shfuzz = 0;
+	if (warsptr->repair <= 0 && (warsptr->upgrade & DAMCTRL)) {
+		fuzz = gernd();
+		shfuzz = (fuzz % 5) - 2;
+		fuzz = ((fuzz / 5) % 5) - 2;
+	}
 	prf("SYS3:");
 	/* match the subsystem order used by show_rep_sysdam() */
 	need = 0;
@@ -2260,7 +2278,7 @@ static void data_shipscan(void)
 	WARSHP *wptr;
 	WARUSR *wuptr;
 	char *tname;
-	unsigned int rseed;
+	unsigned int rseed = 0;
 	long scandist;
 	int scanbrg, gheading, scanhdg, nebmask, shpnum, target_neb;
 
@@ -2270,7 +2288,8 @@ static void data_shipscan(void)
 		return;
 	}
 
-	rseed = gernd();
+	if (warsptr->jam_sev > (byte)2 && warsptr->jam_sev <= (byte)7)
+		rseed = gernd();
 	if (warsptr->jam_sev > (byte)7
 		|| (warsptr->jam_sev > (byte)2 && rseed % (9 - (int)warsptr->jam_sev) == 0)) {
 		prf("SHIPSCAN:JAMMED*\rSTOP:SHIPSCAN*\r");

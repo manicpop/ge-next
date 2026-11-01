@@ -2162,13 +2162,15 @@ void FUNC show_rep_sysdam(WARSHP *ptr, int showeta)
 {
 	int need;
 	int active;
-	int fuzz;
-	int shfuzz;
+	int fuzz = 0;
+	int shfuzz = 0;
 
 	active = TRUE;
-	fuzz = gernd();
-	shfuzz = (fuzz % 5) - 2;
-	fuzz = ((fuzz / 5) % 5) - 2;
+	if (showeta && ptr->repair <= 0 && (ptr->upgrade & DAMCTRL)) {
+		fuzz = gernd();
+		shfuzz = (fuzz % 5) - 2;
+		fuzz = ((fuzz / 5) % 5) - 2;
+	}
 
 	/* in order of how they're repaired */
 	if (ptr->shieldstat == SHIELDDM) {

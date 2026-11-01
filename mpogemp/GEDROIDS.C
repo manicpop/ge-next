@@ -355,7 +355,7 @@ static void droid_torp(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 		if (tden < 1)
 			tden = 1;
 		for (i = 0; i < shipclass[ptr->shpclass].max_torps; ++i) {
-			if (ptr->items[I_TORPEDO] > 0 && gernd() % tden == 0)
+			if (ptr->items[I_TORPEDO] > 0 && (tden == 1 || gernd() % tden == 0))
 				torp(ptr, usrn, zothusn);
 		}
 	}

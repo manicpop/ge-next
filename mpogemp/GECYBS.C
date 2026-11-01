@@ -738,7 +738,7 @@ static void cyb_attack(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 	if (tden < 1)
 		tden = 1;
 	for (j = 0; j < shipclass[ptr->shpclass].max_torps; ++j) {
-		if (ptr->items[I_TORPEDO] > 0 && gernd() % tden == 0 &&
+		if (ptr->items[I_TORPEDO] > 0 && (tden == 1 || gernd() % tden == 0) &&
 			torp(ptr, usrn, zothusn) == 1)
 			acted = 2;
 	}
@@ -747,9 +747,10 @@ static void cyb_attack(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 	zipden = 12 - (shipclass[ptr->shpclass].tough_factor * 2);
 	if (zipden < 3)
 		zipden = 3;
-	if (gernd() % zipden == 0 && shipclass[ptr->shpclass].has_zip &&
+	if (shipclass[ptr->shpclass].has_zip &&
 		ptr->items[I_ZIPPERS] > 0 && ptr->zipload == 0 &&
-		shipclass[ptr->shpclass].max_accel > 0 && wptr->minesnear == TRUE) {
+		shipclass[ptr->shpclass].max_accel > 0 && wptr->minesnear == TRUE &&
+		gernd() % zipden == 0) {
 		zip(ptr);
 		acted = 1;
 		/* get the hell out of here ...then come back */

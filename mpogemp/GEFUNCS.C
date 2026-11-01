@@ -2566,13 +2566,13 @@ void FUNC moveship(WARSHP *ptr, int usrn)
 		}
 #endif
 		if (ptr->speed > 0.0 && ptr->status == GESTAT_USER) {
-			unsigned int r = gernd();
-
 			intspeed = ptr->speed / 1000.0;
 
 			/* track long-term overwarp abuse separately from the per-tick movement energy drain */
 			/* if this ship is exceeding top cruising speed and not in the process of going under it */
 			if (intspeed > ptr->topspeed && (int)(ptr->speed2b / 1000.0) > ptr->topspeed) {
+				unsigned int r = gernd();
+
 				newtop = shipclass[ptr->shpclass].max_warp * (1.0f - (float)ptr->overspeed / 10000.0f);
 				if (newtop < 1.0f) {
 					prfmsg(WARPBRK);
