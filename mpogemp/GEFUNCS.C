@@ -59,6 +59,57 @@ static long	deathdeduct;		/* death penalty amount to report after kill processin
 static void	shieldhitmsg(int shmsg, int usrn);	/* map shieldhit() result codes to output messages */
 static void	pick_letter(SCANTAB *ptr);
 
+/* Parse a complete decimal token without overflowing its destination. */
+static int parse_decimal(const char *text, unsigned long limit, unsigned long *value)
+{
+	unsigned long result = 0UL;
+	unsigned digit;
+
+	if (text == NULL || *text == 0 || value == NULL)
+		return FALSE;
+
+	for (; *text != 0; ++text) {
+		if (*text < '0' || *text > '9')
+			return FALSE;
+		digit = (unsigned)(*text - '0');
+		if (result > limit / 10UL ||
+		    (result == limit / 10UL && digit > limit % 10UL))
+			return FALSE;
+		result = result * 10UL + digit;
+	}
+
+	*value = result;
+	return TRUE;
+}
+
+int FUNC parse_long(const char *text, long *value)
+{
+	unsigned long magnitude;
+	int negative;
+
+	if (text == NULL || value == NULL)
+		return FALSE;
+	negative = (*text == '-');
+	if (*text == '+' || *text == '-')
+		++text;
+	if (!parse_decimal(text, (unsigned long)SLCAP + (negative ? 1UL : 0UL), &magnitude))
+		return FALSE;
+
+	/* Form LONG_MIN without casting its positive magnitude to a signed long. */
+	if (negative && magnitude != 0UL)
+		*value = -(long)(magnitude - 1UL) - 1L;
+	else
+		*value = (long)magnitude;
+	return TRUE;
+}
+
+int FUNC parse_ulong(const char *text, unsigned long *value)
+{
+	if (text != NULL && *text == '+')
+		++text;
+	return parse_decimal(text, ULCAP, value);
+}
+
 #ifdef GE_ARENA
 /* arena users and configured Cyb slots retain ownership of active weapons */
 static int arena_weapon_owner_active(int owner)

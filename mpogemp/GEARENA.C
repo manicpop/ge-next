@@ -244,8 +244,7 @@ int FUNC arena_parse_ship_choice(char *text)
 	for (ptr = text; *ptr != 0; ++ptr)
 		if (!isdigit((unsigned char)*ptr))
 			return -1;
-	choice = atol(text);
-	if (choice < 1L || choice > 32767L ||
+	if (!parse_long(text, &choice) || choice < 1L || choice > 32767L ||
 	    arena_shipclass_for_choice((int)choice - 1) < 0)
 		return -1;
 	return (int)choice - 1;

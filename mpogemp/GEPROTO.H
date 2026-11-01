@@ -214,6 +214,8 @@ void FUNC fireion P((WARSHP *ptr , int usrn));
 void FUNC destruct P((WARSHP *ptr , int usrn));
 int FUNC valpcnt P((char *ptr , unsigned minnum , unsigned maxnum));
 int FUNC valdegree P((char *ptr));
+int FUNC parse_long P((const char *text , long *value));
+int FUNC parse_ulong P((const char *text , unsigned long *value));
 void FUNC randamage P((WARSHP *ptr , int usrn , double hitdam));
 double FUNC pdamage P((WARSHP *wptr , double dist , int foc));
 void FUNC setsect P((WARSHP *ptr));

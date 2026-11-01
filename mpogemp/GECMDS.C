@@ -1104,6 +1104,7 @@ void FUNC cmd_missl(void)
 	int shpnum;
 	WARSHP *wptr;
 	unsigned energy;
+	long requested_energy;
 	byte nebmask;
 
 	if (shipclass[warsptr->shpclass].max_missl == 0) {
@@ -1133,12 +1134,17 @@ void FUNC cmd_missl(void)
 	if (margc == 2)
 		energy = 5000;
 	else {
-		if (atol(margv[2]) > 20000L)
+		if (!parse_long(margv[2], &requested_energy)) {
+			prfmsg(FORMAT,"MISSILE");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
+		if (requested_energy > 20000L)
 			energy = 20000;
-		else if (atol(margv[2]) < 2000L)
+		else if (requested_energy < 2000L)
 			energy = 2000;
 		else
-			energy = (unsigned)(atol(margv[2]));
+			energy = (unsigned)requested_energy;
 	}
 
 	nebmask = (byte)innebula(coord1(warsptr->coord.xcoord),coord1(warsptr->coord.ycoord));
@@ -1647,7 +1653,7 @@ void FUNC cmd_send(void)
 {
 	int i;
 	int validteam = FALSE;
-	long val;
+	unsigned long val;
 	char *msgptr;
 
 	if (sameas(margv[0],">") && margc < 2) {
@@ -1663,8 +1669,7 @@ void FUNC cmd_send(void)
 			else
 				prfmsg(MSGSNT4,warsptr->freq);
 		} else if (margc == 3) {
-			val = atol(margv[2]);
-			if (val >= 0L && val <= 65535L) {
+			if (parse_ulong(margv[2], &val) && val <= 65535UL) {
 				warsptr->freq = (unsigned)val;
 				if (warsptr->freq == 0)
 					prfmsg(MSGSNT4N);
@@ -2530,7 +2535,8 @@ static void arena_transfer_up(void)
 
 static void trans_down(int item)
 {
-	long amt;
+	unsigned long amt;
+	int keep;
 
 	if (neutral(&warsptr->coord)) {
 		prfmsg(TRANSFR2);
@@ -2541,55 +2547,51 @@ static void trans_down(int item)
 		return;
 
 	if (trans_opt || sameas(plptr->userid,warsptr->userid)) {
+		keep = (margv[2][0] == '-');
 		if (sameas("ALL",margv[2])) {
-			if (warsptr->items[item] > (unsigned long)SLCAP)
-				amt = SLCAP;
-			else
-				amt = (long)warsptr->items[item];
-			if (amt == 0L) {
+			amt = warsptr->items[item];
+			if (amt == 0UL) {
 				/* user wants all down but there are none */
-				sprintf(gechrbuf,"%lu",(unsigned long)amt);
+				sprintf(gechrbuf,"%lu",amt);
 				prfmsg(TRANSFR5,gechrbuf,item_name[item]);
 				return;
 			}
-		} else
-			amt = atol(margv[2]);
-
-		if (amt == 0L) {
-			/* user specified 0 or non-number */
+		} else if ((keep && margv[2][1] == '+') ||
+		    !parse_ulong(keep ? margv[2] + 1 : margv[2], &amt)) {
 			prfmsg(FORMAT,"TRANSFER");
 			return;
 		}
 
-		if (amt < 0L) {
-			unsigned long hold = (unsigned long)(-(amt + 1L)) + 1UL;
-			unsigned long left;
+		if (amt == 0UL) {
+			/* user specified zero */
+			prfmsg(FORMAT,"TRANSFER");
+			return;
+		}
+
+		if (keep) {
+			unsigned long hold = amt;
 			/* user wants all but specified amount */
 			if (hold > warsptr->items[item]) {
 				/* the amount to withhold is more than the total */
 				prfmsg(TRANSFR1);
 				return;
 			}
-			left = warsptr->items[item] - hold;
-			if (left > (unsigned long)SLCAP)
-				amt = SLCAP;
-			else
-				amt = (long)left;
+			amt = warsptr->items[item] - hold;
 		}
 
-		if (warsptr->items[item] >= (unsigned long)amt) {
+		if (warsptr->items[item] >= amt) {
 			unsigned long room;
-			if (plptr->items[item].qty > ULCAP - (unsigned long)amt) {
+			if (plptr->items[item].qty > ULCAP - amt) {
 				room = ULCAP - plptr->items[item].qty;
 				if (room == 0UL) {
 					prfmsg(TRANSFR6,item_name[item]);
 					return;
 				}
-				amt = (long)room;
+				amt = room;
 			}
-			warsptr->items[item] -= (unsigned long)amt;
-			plptr->items[item].qty += (unsigned long)amt;
-			sprintf(gechrbuf,"%lu",(unsigned long)amt);
+			warsptr->items[item] -= amt;
+			plptr->items[item].qty += amt;
+			sprintf(gechrbuf,"%lu",amt);
 			prfmsg(TRANSFR5,gechrbuf,item_name[item]);
 			setsect(warsptr); /* build PKEY */
 			pkey.plnum = plnum;
@@ -2610,66 +2612,60 @@ static void trans_down(int item)
 
 static void trans_up(int item)
 {
-	long amt;
+	unsigned long amt;
+	int keep;
 
 	if (!load_orbit_planet(usrnum))
 		return;
 
 	/* you must own this planet or NOBODY must own it to xfer up */
 	if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0) {
+		keep = (margv[2][0] == '-');
 		if (sameas("MAX",margv[2])) {
 			unsigned long room;
 			room = cargo_room_for_item(warsptr,item);
-			if (room > (unsigned long)SLCAP)
-				amt = SLCAP;
-			else
-				amt = (long)room;
-			if (amt <= 0L) {
+			amt = room;
+			if (amt == 0UL) {
 				/* user wants max but not even one will fit */
 				prfmsg(TRANSUP6);
 				return;
 			}
 		} else if (sameas("ALL",margv[2])) {
-			if (plptr->items[item].qty > (unsigned long)SLCAP)
-				amt = SLCAP;
-			else
-				amt = (long)plptr->items[item].qty;
-			if (amt == 0L) {
+			amt = plptr->items[item].qty;
+			if (amt == 0UL) {
 				/* user wants all up but there are none */
-				sprintf(gechrbuf,"%lu",(unsigned long)amt);
+				sprintf(gechrbuf,"%lu",amt);
 				prfmsg(TRANSUP5,gechrbuf,item_name[item]);
 				return;
 			}
-		} else
-			amt = atol(margv[2]);
-
-		if (amt == 0L) {
-			/* user specified 0 or non-number */
+		} else if ((keep && margv[2][1] == '+') ||
+		    !parse_ulong(keep ? margv[2] + 1 : margv[2], &amt)) {
 			prfmsg(FORMAT,"TRANSFER");
 			return;
 		}
 
-		if (amt < 0L) {
-			unsigned long hold = (unsigned long)(-(amt + 1L)) + 1UL;
-			unsigned long left;
+		if (amt == 0UL) {
+			/* user specified zero */
+			prfmsg(FORMAT,"TRANSFER");
+			return;
+		}
+
+		if (keep) {
+			unsigned long hold = amt;
 			/* user wants all but specified amount */
 			if (hold > plptr->items[item].qty) {
 				/* the amount to withhold is more than the total */
 				prfmsg(TRANSUP1);
 				return;
 			}
-			left = plptr->items[item].qty - hold;
-			if (left > (unsigned long)SLCAP)
-				amt = SLCAP;
-			else
-				amt = (long)left;
+			amt = plptr->items[item].qty - hold;
 		}
 
 		if (chkweight(warsptr,item,amt)) {
-			if (plptr->items[item].qty >= (unsigned long)amt) {
-				plptr->items[item].qty -= (unsigned long)amt;
-				warsptr->items[item] += (unsigned long)amt;
-				sprintf(gechrbuf,"%lu",(unsigned long)amt);
+			if (plptr->items[item].qty >= amt) {
+				plptr->items[item].qty -= amt;
+				warsptr->items[item] += amt;
+				sprintf(gechrbuf,"%lu",amt);
 				prfmsg(TRANSUP5,gechrbuf,item_name[item]);
 				setsect(warsptr); /* load PKEY */
 				pkey.plnum = plnum;
@@ -3257,8 +3253,11 @@ void FUNC cmd_attack(void)
 		if (sameto("tro",margv[2])) {
 			if (sameas("ALL",margv[1]))
 				num = warsptr->items[I_TROOPS];
-			else
-				num = atol(margv[1]);
+			else if (!parse_ulong(margv[1], &num)) {
+				prfmsg(FORMAT,"ATTACK");
+				outprfge(FLT_NONE,usrnum);
+				return;
+			}
 			if (num > 0L && num <= warsptr->items[I_TROOPS]) {
 				warsptr->hostile = warsptr->where;
 				warsptr->cantexit = FIRETICKS;
@@ -3279,8 +3278,11 @@ void FUNC cmd_attack(void)
 			if (shipclass[warsptr->shpclass].max_attk > 0) {
 				if (sameas("ALL",margv[1]))
 					num = warsptr->items[I_FIGHTER];
-				else
-					num = atol(margv[1]);
+				else if (!parse_ulong(margv[1], &num)) {
+					prfmsg(FORMAT,"ATTACK");
+					outprfge(FLT_NONE,usrnum);
+					return;
+				}
 				if (num > 0 && num <= warsptr->items[I_FIGHTER]) {
 					warsptr->hostile = warsptr->where;
 					warsptr->cantexit = FIRETICKS;
@@ -3475,7 +3477,7 @@ static void sell(int item)
 {
 	unsigned long amt, gross, fee, net;
 	byte toorich, toomuch;
-	long req;
+	int keep;
 
 	toorich = FALSE;
 	toomuch = FALSE;
@@ -3487,20 +3489,19 @@ static void sell(int item)
 		}
 		amt = warsptr->items[item];
 	} else {
-		req = atol(margv[1]);
-		if (req == 0L) {
+		keep = (margv[1][0] == '-');
+		if ((keep && margv[1][1] == '+') ||
+		    !parse_ulong(keep ? margv[1] + 1 : margv[1], &amt) || amt == 0UL) {
 			prfmsg(FORMAT, "SELL");
 			return;
 		}
-		if (req < 0L) {
-			unsigned long hold = (unsigned long)(-(req + 1L)) + 1UL;
+		if (keep) {
+			unsigned long hold = amt;
 			if (hold > warsptr->items[item]) {
 				prfmsg(SELL3, item_name[item]);
 				return;
 			}
 			amt = warsptr->items[item] - hold;
-		} else {
-			amt = (unsigned long)req;
 		}
 	}
 
@@ -3530,7 +3531,7 @@ static void sell(int item)
 			hi = amt;
 
 			while (lo < hi) {
-				mid = lo + ((hi - lo + 1UL) >> 1);
+				mid = lo + ((hi - lo) >> 1) + ((hi - lo) & 1UL);
 				gross = (unsigned long)baseprice[item] * mid;
 				fee = 1UL + (gross / 1000UL);
 				if (gross <= fee || gross - fee <= room)
@@ -3651,14 +3652,14 @@ static unsigned long amt4sale(int item)
 ** Calculate the purchase price for a planet item                        **
 **************************************************************************/
 
-static long price(unsigned item, unsigned long amt)
+static unsigned long price(unsigned item, unsigned long amt)
 {
-	long tot;
+	unsigned long tot;
 
 	if (sameas(plptr->userid, warsptr->userid))
-		tot = ((long)baseprice[item]) * amt;
+		tot = ((unsigned long)baseprice[item]) * amt;
 	else
-		tot = ((long)plptr->items[item].markup2a) * amt;
+		tot = ((unsigned long)plptr->items[item].markup2a) * amt;
 
 	return tot;
 }
@@ -3672,16 +3673,16 @@ static void buy(int item)
 	unsigned long amt, avail, tot, ptot;
 
 	if (plptr->userid[0] != 0) {
-		if ((amt = atol(margv[1])) > 0 || sameas("MAX", margv[1]) || sameas("ALL", margv[1])) {
+		if ((parse_ulong(margv[1], &amt) && amt > 0UL) || sameas("MAX", margv[1]) || sameas("ALL", margv[1])) {
 			if (sameas(plptr->userid, warsptr->userid) || plptr->items[item].sell == 'Y') {
 				if (sameas("MAX", margv[1]))
 					amt = cargo_room_for_item(warsptr,item);
 				if (sameas("ALL", margv[1]))
 					amt = amt4sale(item);
-				if ((sameas(plptr->userid, warsptr->userid) && amt > (unsigned long)(SLCAP / baseprice[item]))
+				if ((sameas(plptr->userid, warsptr->userid) && amt > ULCAP / (unsigned long)baseprice[item])
 					|| (!sameas(plptr->userid, warsptr->userid)
 						&& plptr->items[item].markup2a > 0
-						&& amt > (unsigned long)(SLCAP / (long)plptr->items[item].markup2a))) {
+						&& amt > ULCAP / (unsigned long)plptr->items[item].markup2a)) {
 					prfmsg(TOOMUCH);
 					return;
 				}
@@ -3738,7 +3739,7 @@ static void buy(int item)
 						prfmsg(BUY8);
 					else {
 						sprintf(gechrbuf2, "%lu", amt);
-						sprintf(gechrbuf, "%ld", price(item, amt));
+						sprintf(gechrbuf, "%lu", price(item, amt));
 						if (sameas(plptr->userid, warsptr->userid)) {
 							prfmsg(PRICE2, gechrbuf2, item_name[item], baseprice[item], gechrbuf);
 						} else {
@@ -4384,7 +4385,9 @@ void FUNC cmd_sysop(void)
 		if (margc == 4) {
 			for (i=0; i < NUMITEMS; ++i) {
 				if (sameto(kwrd[i],margv[3])) {
-					if ((amt = atol(margv[2])) > 0) {
+					if (parse_ulong(margv[2], &amt) && amt > 0UL) {
+						if (amt > ULCAP - warsptr->items[i])
+							amt = ULCAP - warsptr->items[i];
 						warsptr->items[i] += amt;
 						sprintf(gechrbuf,"%lu",amt);
 						prfmsg(SYSGET,gechrbuf,item_name[i]);
@@ -4412,15 +4415,20 @@ void FUNC cmd_sysop(void)
 		return;
 #ifndef GE_ARENA
 	} else if (sameas("cash",margv[1]) && (margc == 2 || margc == 3)) {
-		long delta;
+		int subtract;
 		unsigned long amount;
 
 		if (margc == 2) {
 			amount = ULCAP;
 		} else {
-			delta = atol(margv[2]);
-			if (delta < 0L) {
-				amount = (unsigned long)(-(delta + 1L)) + 1UL;
+			subtract = (margv[2][0] == '-');
+			if ((subtract && margv[2][1] == '+') ||
+			    !parse_ulong(subtract ? margv[2] + 1 : margv[2], &amount)) {
+				prfmsg(FORMAT,"SYS");
+				outprfge(FLT_NONE, usrnum);
+				return;
+			}
+			if (subtract && amount != 0UL) {
 				if (amount > waruptr->cash)
 					waruptr->cash = 0;
 				else
@@ -4430,7 +4438,6 @@ void FUNC cmd_sysop(void)
 				outprfge(FLT_NONE, usrnum);
 				return;
 			}
-			amount = (unsigned long)delta;
 		}
 
 		if (waruptr->cash > ULCAP - amount)
@@ -4666,8 +4673,11 @@ void FUNC cmd_sysop(void)
 	} else if (sameas("fill",margv[1])) {
 		if (margc == 2)
 			amt = ULCAP;
-		if (margc == 3)
-			amt = atol(margv[2]);
+		else if (margc != 3 || !parse_ulong(margv[2], &amt)) {
+			prfmsg(FORMAT,"SYS");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
 		for (i = 0; i < NUMITEMS; ++i)
 			warsptr->items[i] = amt;
 		return;
@@ -5813,7 +5823,6 @@ void FUNC cmd_spy(void)
 static void jettison(int item)
 {
 	unsigned long amt;
-	long req;
 	int defuse = FALSE;
 
 	if (item == I_MEN || item == I_TROOPS || item == I_SPY) {
@@ -5837,8 +5846,7 @@ static void jettison(int item)
 		gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
 #endif
 		return;
-	} else if ((req = atol(margv[1])) > 0L) {
-		amt = (unsigned long)req;
+	} else if (parse_ulong(margv[1], &amt) && amt > 0UL) {
 		if (warsptr->items[item] >= amt) {
 			warsptr->items[item] -= amt;
 			if (defuse == TRUE)
