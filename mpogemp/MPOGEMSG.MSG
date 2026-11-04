@@ -41,20 +41,6 @@ FRONTEND {OFF} S 8 Frontend pairing code
 
 LEVEL4 {}
 
-This Option is maintained for backward compatibility and
-has no effect in Version 6+ of MajorBBS. If you are using
-a 5.xx version set this to the descriptive name on the
-main menu you wish associated with GE.
-
-GEMNU {Galactic Empire} S 30 Main menu description
-
-This Option is maintained for backward compatibility and
-has no effect in Version 6+ of MajorBBS. If you are using
-a 5.xx version set this to the Selection Letter associated
-with GE.
-
-GESEL {The main menu selection: G} C
-
 Set this option on if you wish to enable the optional menu
 text page.
  
@@ -80,16 +66,6 @@ response.  The more players in the game the more CPU
 resources the game consumes.
 
 MAXPLRS {The maximum players in the game at once: 32} N 1 256
-
-This option controls if non-paying players can enter the
-game.  Set to 1 to allow non-paying players to pay, 0 to
-restrict.
-
-NOTE: In release 6.0 this field has no effect. Please
-control this feature with the PLAYKEY field in the
-Level 3 Security Options.
-
-FREEBIES {If 1 non-payers can play, otherwise set to 0: 0} N 0 1
 
 Set this value to control the number of TOP PLAYERS
 displayed in the roster.
@@ -2059,20 +2035,10 @@ option is to evade or destroy them.
 Good luck!
 } T GE EXPLAIN text
 
-FORLIVE {
-[1;33mSorry, only "Live" users can play Galactic Empire.[1;37m
-For information on this exciting game select 2. For more information
-on becoming a live user contact your SYSOP.
-} T GE only live users
-
 FORPLAY {
 [1;33mSorry, only authorized users can play Galactic Empire.[1;37m
 Contact your SYSOP for more information.
 } T GE only authorized users
-
-NOCANDO {
-[1;33mYou have to have credits to do that![1;37m
-} T GE no credits
 
 GECALLS {
 [36mRULE THE GALAXY!!! If you can.......

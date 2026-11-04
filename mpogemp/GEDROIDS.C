@@ -1,7 +1,7 @@
 /*****************************************************************************
  * ge-next GEDROIDS.C                                                        *
  *                                                                           *
- * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt       *
+ * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt        *
  * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
  *                                                                           *
  * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
@@ -27,23 +27,8 @@
  *                                                                           *
  *****************************************************************************/
 
-#ifdef PHARLAP
-
 #include "gcomm.h"
 #include "string.h"
-
-#else
-
-#include "stdio.h"
-#include "ctype.h"
-#include "dos.h"
-#include "usracc.h"
-#include "btvstf.h"
-#include "stdlib.h"
-#include "math.h"
-#include "portable.h"
-#include "dosface.h"
-#endif
 
 #include "majorbbs.h"
 

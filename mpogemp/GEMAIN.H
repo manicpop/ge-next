@@ -869,7 +869,6 @@ typedef struct _ship {
 struct cmd {
 	char *command;			/* command keyword                         */
 	void (*func)(void);		/* command handler                         */
-	byte cando;			/* 0 = payers only, 1 = all players        */
 };
 
 typedef struct _shiptab {

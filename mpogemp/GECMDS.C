@@ -1,7 +1,7 @@
 /*****************************************************************************
  * ge-next GECMDS.C                                                          *
  *                                                                           *
- * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt       *
+ * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt        *
  * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
  *                                                                           *
  * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
@@ -27,22 +27,8 @@
  *                                                                           *
  *****************************************************************************/
 
-#ifdef PHARLAP
-
 #include "gcomm.h"
 #include "string.h"
-
-#else
-#include "stdio.h"
-#include "ctype.h"
-#include "dos.h"
-#include "usracc.h"
-#include "btvstf.h"
-#include "stdlib.h"
-#include "portable.h"
-#include "dosface.h"
-
-#endif
 
 #include "math.h"
 #include "majorbbs.h"
@@ -120,53 +106,51 @@ void FUNC cmd_gehelp(void), cmd_cloak(void), cmd_impulse(void), cmd_phas(void),
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
 /* these must be in order for gesearch() to work */
-struct	cmd	gecmds[]={
-		/*	command	function	0=payers only */
-		/*	-------	----------- 	------------- */
-			{"?",	cmd_gehelp,	1},
-			{"aba",	cmd_abandon,	0},
-			{"abo",	cmd_abort,	1},
-			{"adm",	cmd_admin,	0},
-			{"att",	cmd_attack,	0},
-			{"buy",	cmd_buy,	0},
-			{"clo",	cmd_cloak,	1},
-			{"cls",	cmd_clear,	0},
-			{"dat",	cmd_data,	0},
-			{"dec",	cmd_decoy,	1},
-			{"des",	cmd_destruct,	1},
-			{"flu",	cmd_flux,	1},
-			{"hel",	cmd_gehelp,	1},
-			{"imp",	cmd_impulse,	1},
-			{"jam",	cmd_jammer,	1},
-			{"jet",	cmd_jettison,	1},
-			{"loc",	cmd_lock,	1},
-			{"mai",	cmd_maint,	1},
-			{"min",	cmd_mine,	1},
-			{"mis",	cmd_missl,	1},
-			{"nav",	cmd_navigate,	1},
-			{"new",	cmd_new,	1},
-			{"orb",	cmd_orbit,	1},
-			{"pha",	cmd_phas,	1},
-			{"pla",	cmd_planet,	0},
-			{"pri",	cmd_price,	0},
-			{"ren",	cmd_rename,	0},
-			{"rep",	cmd_report,	1},
-			{"ros",	cmd_geroster,	1},
-			{"rot",	cmd_rotate,	1},
-			{"sca",	cmd_scan,	1},
-			{"sel", cmd_sell,	1},
-			{"sen",	cmd_send,	0},
-			{"set",	cmd_set,	1},
-			{"shi",	cmd_shields,	1},
-			{"spy",	cmd_spy,	1},
-			{"sto", cmd_stop,	1},
-			{"sys",	cmd_sysop,	1},
-			{"tea", cmd_team,	1},
-			{"tor",	cmd_torp,	1},
-			{"tra",	cmd_transfer,	0},
-			{"war",	cmd_warp,	1},
-			{"who",	cmd_who,	1},
-			{"zip",	cmd_zipper,	1}
+struct cmd gecmds[] = {
+	{"?", cmd_gehelp},
+	{"aba", cmd_abandon},
+	{"abo", cmd_abort},
+	{"adm", cmd_admin},
+	{"att", cmd_attack},
+	{"buy", cmd_buy},
+	{"clo", cmd_cloak},
+	{"cls", cmd_clear},
+	{"dat", cmd_data},
+	{"dec", cmd_decoy},
+	{"des", cmd_destruct},
+	{"flu", cmd_flux},
+	{"hel", cmd_gehelp},
+	{"imp", cmd_impulse},
+	{"jam", cmd_jammer},
+	{"jet", cmd_jettison},
+	{"loc", cmd_lock},
+	{"mai", cmd_maint},
+	{"min", cmd_mine},
+	{"mis", cmd_missl},
+	{"nav", cmd_navigate},
+	{"new", cmd_new},
+	{"orb", cmd_orbit},
+	{"pha", cmd_phas},
+	{"pla", cmd_planet},
+	{"pri", cmd_price},
+	{"ren", cmd_rename},
+	{"rep", cmd_report},
+	{"ros", cmd_geroster},
+	{"rot", cmd_rotate},
+	{"sca", cmd_scan},
+	{"sel", cmd_sell},
+	{"sen", cmd_send},
+	{"set", cmd_set},
+	{"shi", cmd_shields},
+	{"spy", cmd_spy},
+	{"sto", cmd_stop},
+	{"sys", cmd_sysop},
+	{"tea", cmd_team},
+	{"tor", cmd_torp},
+	{"tra", cmd_transfer},
+	{"war", cmd_warp},
+	{"who", cmd_who},
+	{"zip", cmd_zipper}
 };
 
 #ifdef GE_ARENA
@@ -384,31 +368,11 @@ void FUNC gwar(void)
 			*mv0ptr = (char)tolower((unsigned char)*mv0ptr);
 		}
 		if (sameas(margv[0], ">")) {
-#ifdef PHARLAP
-			if (!hasmkey(PLAYKEY))
-#else
-			if (usrptr->class < PAYING)
-#endif
-			{
-				prfmsg(NOCANDO);
-				outprfge(FLT_NONE, usrnum);
-			} else {
-				cmd_send();
-			}
+			cmd_send();
 			return;
 		}
 		if ((cmdptr = gesearch(margv[0], gecmds, GECMDSIZ)) != NULL) {
-#ifdef PHARLAP
-			if (!hasmkey(PLAYKEY) && cmdptr->cando == 0)
-#else
-			if (usrptr->class < PAYING && cmdptr->cando == 0)
-#endif
-			{
-				prfmsg(NOCANDO);
-				outprfge(FLT_NONE, usrnum);
-			} else {
-				(*(cmdptr->func))();
-			}
+			(*(cmdptr->func))();
 		} else {
 			prfmsg(INVCMD);
 			outprfge(FLT_NONE, usrnum);
@@ -438,11 +402,7 @@ void FUNC cmd_gehelp(void)
 	char gechrbuf8[12], gechrbuf9[12];
 #endif
 
-#ifdef PHARLAP
 	if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY))))
-#else
-	if ((!syscmds) || (sysonly && !(usrptr->flags & ISYSOP)))
-#endif
 		syshelp = FALSE;
 	else
 		syshelp = TRUE;
@@ -2798,11 +2758,7 @@ void FUNC cmd_admin(void)
 		usrptr->substt = ADMENU1;
 	}
 	else
-#ifdef PHARLAP
 	if (sameas(plptr->userid,warsptr->userid) || (syscmds && !sysonly) || (sysonly && (hasmkey(SYSKEY))))
-#else
-	if (sameas(plptr->userid,warsptr->userid) || (syscmds && !sysonly) || (sysonly && (usrptr->flags&ISYSOP)))
-#endif
 	{
 		prfmsg(ADMENU2);
 		outprfge(FLT_NONE,usrnum);
@@ -4309,11 +4265,7 @@ void FUNC cmd_sysop(void)
 #endif
 	WARSHP *ptr;
 
-#ifdef PHARLAP
 	if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY)))) {
-#else
-	if ((!syscmds) || (sysonly && !(usrptr->flags&ISYSOP))) {
-#endif
 		prfmsg(INVCMD);
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -4450,7 +4402,7 @@ void FUNC cmd_sysop(void)
 		outprfge(FLT_NONE, usrnum);
 		return;
 	} else if (sameas("midnight",margv[1]) && margc == 2) {
-		gemidnighta();
+		gemidnight();
 		return;
 	} else if (sameas("teamdump",margv[1]) && margc == 2) {
 		prfmsg(SYSTEAM);

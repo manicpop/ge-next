@@ -1,7 +1,7 @@
 /*****************************************************************************
  * ge-next GEMAIN.C                                                          *
  *                                                                           *
- * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt       *
+ * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt        *
  * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
  *                                                                           *
  * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
@@ -27,23 +27,8 @@
  *                                                                           *
  *****************************************************************************/
 
-#ifdef PHARLAP
-
 #include "gcomm.h"
 #include "string.h"
-
-#else
-
-#include "stdio.h"
-#include "ctype.h"
-#include "mem.h"
-#include "dos.h"
-#include "usracc.h"
-#include "btvstf.h"
-#include "portable.h"
-#include "dosface.h"
-
-#endif
 
 #include "math.h"
 #include "stdlib.h"
@@ -58,15 +43,15 @@
 /* LOCAL GLOBAL DEFS *****************************************************/
 
 #ifdef GE_ARENA
-#define GE_MODULE_BLOCK mpoga
-#define GE_ROSTER_FILE  "MPOGAROS.TXT"
-#define GE_MENU_FILE    "MPOGAMNU.TXT"
-#define GE_MESSAGE_FILE "MPOGAMSG.MCV"
+#define GE_MODULE_BLOCK	mpoga
+#define GE_ROSTER_FILE	"MPOGAROS.TXT"
+#define GE_MENU_FILE	"MPOGAMNU.TXT"
+#define GE_MESSAGE_FILE	"MPOGAMSG.MCV"
 #else
-#define GE_MODULE_BLOCK mpoge
-#define GE_ROSTER_FILE  "MPOGEROS.TXT"
-#define GE_MENU_FILE    "MPOGEMNU.TXT"
-#define GE_MESSAGE_FILE "MPOGEMSG.MCV"
+#define GE_MODULE_BLOCK	mpoge
+#define GE_ROSTER_FILE	"MPOGEROS.TXT"
+#define GE_MENU_FILE	"MPOGEMNU.TXT"
+#define GE_MESSAGE_FILE	"MPOGEMSG.MCV"
 #endif
 
 int gestt;			/* module number */
@@ -77,11 +62,11 @@ struct module GE_MODULE_BLOCK = {	/* module interface block		*/
 	galemp,			/* input routine if selected		*/
 	stshdlr,		/* status-input routine if selected	*/
 	NULL,			/* "injoth" routine for this module	*/
-	pwarlof,		/* user logoff supplemental routine	*/
-	pwarhup,		/* hangup (lost carrier) routine	*/
-	pgemidnight,		/* midnight cleanup routine		*/
-	pgedelete,		/* delete-account routine		*/
-	pclswar			/* finish-up (sys shutdown) routine	*/
+	warlof,			/* user logoff supplemental routine	*/
+	warhup,			/* hangup (lost carrier) routine	*/
+	gemidnight,		/* midnight cleanup routine		*/
+	gedelete,		/* delete-account routine		*/
+	clswar			/* finish-up (sys shutdown) routine	*/
 };
 
 #ifndef GE_ARENA
@@ -97,17 +82,17 @@ FILE *gemb,		/* MPOGEMSG.MSG or MPOGAMSG.MSG: main GE messages */
 	*gehlpmb,	/* MPOGEHLP.MSG or MPOGAHLP.MSG: GE help messages */
 	*geshmb;	/* MPOGESHP.MSG or MPOGASHP.MSG: ship class messages */
 
-static char *geuser,		/* configured user database name */
+static char *geuser,	/* configured user database name */
 #ifndef GE_ARENA
-	*geship,		/* configured ship database name */
+	*geship,	/* configured ship database name */
 #endif
-	*geplnt,		/* configured planet database name */
+	*geplnt,	/* configured planet database name */
 #ifndef GE_ARENA
-	*gemail,		/* configured mail database name */
+	*gemail,	/* configured mail database name */
 #endif
-	*geshipcl;		/* configured ship class message name */
+	*geshipcl;	/* configured ship class message name */
 
-static char *endmark;		/* startup message/config integrity marker */
+static char *endmark;	/* startup message/config integrity marker */
 
 int numwar = 0;		/* number of users in game */
 int decpass = 0;	/* decoy expiry batching pass counter */
@@ -137,7 +122,7 @@ static int mnu_menug(void);
 #endif
 static int sendprfge(int cls, int shpno);
 
-PLANETAB *ptab;		/* base pointer to per-user planet scan tables */
+PLANETAB *ptab;			/* base pointer to per-user planet scan tables */
 
 char map[MAXY][MAXX + 1];	/* scan map character buffer */
 char mapc[MAXY][MAXX + 1];	/* scan map color buffer */
@@ -197,7 +182,6 @@ unsigned			plantime;	/* time between planet updates */
 unsigned long			nebseed;	/* nebula random seed */
 
 int				gemaxplrs,	/* max simultaneous GE players */
-				gefreebies,	/* free-account/newbie access toggle */
 				gemaxlist,	/* max roster/list output count */
 				gerostxt,	/* nightly roster text-file export toggle */
 				maxships,	/* max ships per user */
@@ -250,7 +234,7 @@ int				gemaxplrs,	/* max simultaneous GE players */
 
 
 char				*opttxt,	/* option-text menu prompt */
-					optchr;		/* option-text trigger character */
+				optchr;		/* option-text trigger character */
 char				*frontend;	/* configured frontend pairing code */
 
 long				*opttbl;	/* per-user option-text file offsets */
@@ -312,31 +296,31 @@ typedef struct _menu {
 #define MENUNUM (sizeof(menu) / sizeof(MENU))
 
 MENU menu[] = {
-	{0,        mnu_main},       /* selected GE from the MajorBBS main menu */
-	{1,        mnu_main_ans},   /* choosing an option from the GE main menu */
+	{0,        mnu_main},		/* selected GE from the MajorBBS main menu */
+	{1,        mnu_main_ans},	/* choosing an option from the GE main menu */
 #ifdef GE_ARENA
-	{ARENASUB, mnu_arena_lobby},/* waiting at the arena help desk */
+	{ARENASUB, mnu_arena_lobby},	/* waiting at the arena help desk */
 #endif
-	{FIGHTSUB, mnu_fightsub},   /* entering commands while in flight */
+	{FIGHTSUB, mnu_fightsub},	/* entering commands while in flight */
 #ifndef GE_ARENA
-	{ADMENU1,  mnu_admenu1},    /* do you wish to claim this planet */
+	{ADMENU1,  mnu_admenu1},	/* do you wish to claim this planet */
 #endif
-	{ADMENU1A, mnu_admenu1a},   /* enter the new planet name */
+	{ADMENU1A, mnu_admenu1a},	/* enter the new planet name */
 #ifndef GE_ARENA
-	{ADMENU2,  mnu_admenu2},    /* choose an option from the planet admin menu */
-	{ADMENU2B, mnu_admenu2b},   /* enter the amount of tax cash to transfer */
-	{ADMENU2E, mnu_admenu2e},   /* choose which planet item to modify */
-	{ADMEN2F1, mnu_admenu2f1},  /* enter production effort for the selected item */
-	{ADMEN2F2, mnu_admenu2f2},  /* enter the sale price for the selected item */
-	{ADMEN2F3, mnu_admenu2f3},  /* choose whether to sell the selected item */
-	{ADMEN2F4, mnu_admenu2f4},  /* enter the reserve stockpile for the selected item */
-	{ADMENU2H, mnu_admenu2h},   /* enter the planet tax rate */
-	{ADMENU2I, mnu_admenu2i},   /* enter the planet trade password */
-	{ADMENU2J, mnu_admenu2j},   /* enter the planet beacon message */
-	{CHOOSESH, mnu_choosesh},   /* choose which ship to enter */
-	{MENUG,    mnu_menug},      /* choose an option from the mail menu */
-	{MENUG1,   mnu_menug1},     /* advance or exit distress messages */
-	{MENUG2,   mnu_menug2}      /* advance or exit production reports */
+	{ADMENU2,  mnu_admenu2},	/* choose an option from the planet admin menu */
+	{ADMENU2B, mnu_admenu2b},	/* enter the amount of tax cash to transfer */
+	{ADMENU2E, mnu_admenu2e},	/* choose which planet item to modify */
+	{ADMEN2F1, mnu_admenu2f1},	/* enter production effort for the selected item */
+	{ADMEN2F2, mnu_admenu2f2},	/* enter the sale price for the selected item */
+	{ADMEN2F3, mnu_admenu2f3},	/* choose whether to sell the selected item */
+	{ADMEN2F4, mnu_admenu2f4},	/* enter the reserve stockpile for the selected item */
+	{ADMENU2H, mnu_admenu2h},	/* enter the planet tax rate */
+	{ADMENU2I, mnu_admenu2i},	/* enter the planet trade password */
+	{ADMENU2J, mnu_admenu2j},	/* enter the planet beacon message */
+	{CHOOSESH, mnu_choosesh},	/* choose which ship to enter */
+	{MENUG,    mnu_menug},		/* choose an option from the mail menu */
+	{MENUG1,   mnu_menug1},		/* advance or exit distress messages */
+	{MENUG2,   mnu_menug2}		/* advance or exit production reports */
 #endif
 };
 
@@ -345,24 +329,12 @@ MENU menu[] = {
 ** System start up function                                              **
 **************************************************************************/
 
-#ifdef PHARLAP
 void EXPORT init__galemp(void)
 {
 	stzcpy(GE_MODULE_BLOCK.descrp, gmdnam(GEMDF), MNMSIZ);
 
 	iniwara();
 	gestt = register_module(&GE_MODULE_BLOCK);
-}
-#else
-int FUNC iniwar(void)
-{
-	iniwara();
-	return 0;
-}
-#endif
-
-void FUNC dummy(void)
-{
 }
 
 void FUNC iniwara(void)
@@ -393,7 +365,6 @@ void FUNC iniwara(void)
 #ifndef GE_ARENA
 	gemaxplrs = numopt(MAXPLRS, 1, 256);	/* max simultaneous GE players */
 #endif
-	gefreebies = numopt(FREEBIES, 0, 1);	/* allow non-paying/freebie access */
 	gemaxlist = numopt(MAXLIST, 3, 50);	/* max entries shown in GE lists */
 	gerostxt = ynopt(GEROSTXT);		/* nightly roster text-file export enabled */
 #ifndef GE_ARENA
@@ -565,10 +536,10 @@ void FUNC iniwara(void)
 	setmem(opttbl, n, 0);
 
 #ifndef GE_ARENA
-	gebb1 = opnbtv(geship, sizeof(WARSHP));			/* open ship database */
+	gebb1 = opnbtv(geship, sizeof(WARSHP));				/* open ship database */
 	gebb4 = opnbtv(gemail, sizeof(struct message) + GEMSGSIZ);	/* open mail database */
 #endif
-	gebb2 = opnbtv(geplnt, sizeof(GALSECT));		/* open planet database */
+	gebb2 = opnbtv(geplnt, sizeof(GALSECT));			/* open planet database */
 
 	nebseed = 1L;
 #ifndef GE_ARENA
@@ -664,10 +635,8 @@ void FUNC iniwara(void)
 		shipclass[i].has_zip = ynopt(++classbase);
 		shipclass[i].has_mine = ynopt(++classbase);
 #ifdef GE_ARENA
-		shipclass[i].arena_start_phaser = (byte)numopt(++classbase, 0,
-		    shipclass[i].max_phasr);
-		shipclass[i].arena_start_shield = (byte)numopt(++classbase, 0,
-		    shipclass[i].max_shlds);
+		shipclass[i].arena_start_phaser = (byte)numopt(++classbase, 0, shipclass[i].max_phasr);
+		shipclass[i].arena_start_shield = (byte)numopt(++classbase, 0, shipclass[i].max_shlds);
 #else
 		shipclass[i].max_attk = ynopt(++classbase);
 		shipclass[i].max_cloak = ynopt(++classbase);
@@ -748,7 +717,7 @@ void FUNC iniwara(void)
 		n = 0;
 		for (j = 0; j < tot_classes; ++j)
 			if (shipclass[j].max_type == CLASSTYPE_CYBORG &&
-			    shipclass[j].arena_mode == shipclass[i].arena_mode)
+				shipclass[j].arena_mode == shipclass[i].arena_mode)
 				n += shipclass[j].tot_to_create;
 		if (n > numships)
 			numships = n;
@@ -910,28 +879,15 @@ void FUNC iniwara(void)
 	if (*regno != '\0' && strcmp(regno, "0") != 0)
 		geshocst(0, spr("Registration # %s", regno));
 
-	#ifdef PHARLAP
-	rtkick(TICKTIME, pwarrti);
-	rtkick(TICKTIME2, pwarrti2);
-#ifndef GE_ARENA
-	rtkick(60, pwarrti3);
-#endif
-#ifndef GE_ARENA
-	rtkick(30, pplarti);
-#endif
-	rtkick(1, pautorti);
-	#else
-
 	rtkick(TICKTIME, warrti);
 	rtkick(TICKTIME2, warrti2);
 #ifndef GE_ARENA
 	rtkick(60, warrti3);
 #endif
 #ifndef GE_ARENA
-	rtkick(10, plarti);
+	rtkick(30, plarti);
 #endif
 	rtkick(1, autorti);
-	#endif
 
 	/* find the module number (state) of the FSE for later use */
 	fse_state = -1;
@@ -984,21 +940,8 @@ int FUNC gelogon(void)
 ** User deleted routine                                                  **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pgedelete(char *uid)
-{
-	gedeletea(uid);
-}
-#else
-static int gedelete(char *uid)
-{
-	gedeletea(uid);
-	return 0;
-}
-#endif
-
 /* delete GE data for a user account that MajorBBS is removing */
-void FUNC gedeletea(char *uid)
+void FUNC gedelete(char *uid)
 {
 	if (geudb(GELOOKUP, uid, &tmpusr)) {
 		geudb(GEGET, uid, &tmpusr);
@@ -1022,20 +965,7 @@ void FUNC gedeletea(char *uid)
 ** Midnight cleanup routine                                              **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pgemidnight(void)
-{
-	gemidnighta();
-}
-#else
-int FUNC gemidnight(void)
-{
-	gemidnighta();
-	return 0;
-}
-#endif
-
-void FUNC gemidnighta(void)
+void FUNC gemidnight(void)
 {
 #ifndef GE_ARENA
 	int i;
@@ -1330,7 +1260,7 @@ unsigned FUNC long value_pl(void)
 ** User logged off                                                       **
 **************************************************************************/
 
-int FUNC pwarlof(void)
+int FUNC warlof(void)
 {
 	warsptr = warshpoff(usrnum);
 	waruptr = warusroff(usrnum);
@@ -1347,21 +1277,7 @@ int FUNC pwarlof(void)
 ** User hungup routine                                                   **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pwarhup(void)
-{
-	warhupa();
-}
-
-#else
-int FUNC warhup(void)
-{
-	warhupa();
-	return 0;
-}
-#endif
-
-void FUNC warhupa(void)
+void FUNC warhup(void)
 {
 #ifndef GE_ARENA
 	setbtv(gebb1);
@@ -1421,20 +1337,7 @@ void FUNC warhupa(void)
 ** System shutdown message                                               **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pclswar(void)
-{
-	clswara();
-}
-#else
-int FUNC clswar(void)
-{
-	clswara();
-	return 0;
-}
-#endif
-
-void FUNC clswara(void)
+void FUNC clswar(void)
 {
 	if (gemb != NULL) {
 		clsmsg(gemb);
@@ -1468,9 +1371,9 @@ int FUNC galemp(void)
 
 	if (usrptr->substt >= FIGHTSUB && warsptr->where == -1
 #ifdef GE_ARENA
-	    && (arena_player == NULL || arena_player[usrnum].state == ARENA_P_EMPTY)
+		&& (arena_player == NULL || arena_player[usrnum].state == ARENA_P_EMPTY)
 #endif
-	    )
+	)
 		/* Recover a stale in-flight state through the normal module entry path. */
 		usrptr->substt = 0;
 
@@ -1538,11 +1441,7 @@ int FUNC gepdb(int func, char *usrname, int shipnum, WARSHP *geptr)
 		break;
 
 	case GEADD:
-#ifdef PHARLAP
 		if (!dinsbtv(geptr))
-#else
-		if (!insbtv(geptr))
-#endif
 			geshocst(0, spr("GE:ERR:Ship ins Fail %s", usrname));
 		else
 			rtn = 1;
@@ -1612,11 +1511,7 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr)
 		break;
 
 	case GEADD:
-#ifdef PHARLAP
 		if (!dinsbtv(geptr))
-#else
-		if (!insbtv(geptr))
-#endif
 			geshocst(0, spr("GE:ERR:User ins Fail %s", usrname));
 		else
 			rtn = 1;
@@ -1661,7 +1556,7 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr)
 
 
 /**************************************************************************
-** sector Database functions                                             **
+** Sector Database functions                                             **
 **************************************************************************/
 
 int FUNC gesdb(int func, PKEY *sect, GALSECT *geptr)
@@ -1695,11 +1590,7 @@ int FUNC gesdb(int func, PKEY *sect, GALSECT *geptr)
 	case GEADD:
 		logthis(spr("GE:DBG:Ins Sect %d %d %d", geptr->xsect, geptr->ysect, geptr->plnum));
 
-#ifdef PHARLAP
 		if (!dinsbtv(geptr))
-#else
-		if (!insbtv(geptr))
-#endif
 			geshocst(0, "GE:ERR:Sect/plt ins Fail");
 		else {
 			logthis("GE:DBG:Ins Sect suceeded");
@@ -1911,20 +1802,7 @@ void FUNC update_team_tab(void)
 ** Planet economic processing                                            **
 **************************************************************************/
 #ifndef GE_ARENA
-#ifdef PHARLAP
-void FUNC pplarti(void)
-{
-	plartia();
-}
-#else
-int FUNC plarti(void)
-{
-	plartia();
-	return 0;
-}
-#endif
-
-void FUNC plartia(void)
+void FUNC plarti(void)
 {
 	static int foundpl = TRUE;
 	static long fpos = 0;
@@ -1945,7 +1823,7 @@ void FUNC plartia(void)
 	numrecs = cntrbtv();	/* how many total records? sectors, planets, wormholes */
 
 	sprintf(gechrbuf, "%ld", numrecs);
-	logthis(spr("plartia entered, numrecs %s, passnum %d, plantime %u", gechrbuf, passnum, plantime));
+	logthis(spr("plarti entered, numrecs %s, passnum %d, plantime %u", gechrbuf, passnum, plantime));
 
 	++tocks;	/* how many times routine has run this passnum */
 
@@ -2112,7 +1990,7 @@ void FUNC plartia(void)
 				foundpl = TRUE;
 				sprintf(gechrbuf, "%lu", fpos);
 				++plown;
-				logthis(spr("plartia: found next owned planet at %s", gechrbuf));
+				logthis(spr("plarti: found next owned planet at %s", gechrbuf));
 				break;
 			}
 			else {
@@ -2128,13 +2006,9 @@ void FUNC plartia(void)
 	}
 
 	if (foundpl == FALSE)
-		logthis("plartia: no planet this tock");
+		logthis("plarti: no planet this tock");
 
-#ifdef PHARLAP
-	rtkick(plantime, pplarti);
-#else
 	rtkick(plantime, plarti);
-#endif
 }
 #endif
 
@@ -2142,26 +2016,13 @@ void FUNC plartia(void)
 ** Real time kick routine                                                **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pwarrti(void)
-{
-	warrtia();
-}
-#else
-int FUNC warrti(void)
-{
-	warrtia();
-	return 0;
-}
-#endif
-
-void FUNC warrtia(void)
+void FUNC warrti(void)
 {
 	int zothusn;		/* general purpose other-user channel number */
 	WARSHP *wptr;
 	int cntr;
 
-	logthis("TICK:Warrtia entered");
+	logthis("TICK:Warrti entered");
 
 	cntr = 0;
 
@@ -2198,41 +2059,14 @@ void FUNC warrtia(void)
 	}
 	/* keep the global in-game user count in sync with this tick's live user scan */
 	numwar = cntr;
-#ifdef PHARLAP
-	rtkick(TICKTIME, pwarrti);
-#else
 	rtkick(TICKTIME, warrti);
-#endif
 }
 
 /**************************************************************************
 ** Real time kick routine for all automatons                             **
 **************************************************************************/
 
-/* schedule the next automaton tick for the active MajorBBS platform */
-static void schedule_autorti(void)
-{
-#ifdef PHARLAP
-	rtkick(1, pautorti);
-#else
-	rtkick(1, autorti);
-#endif
-}
-
-#ifdef PHARLAP
-void FUNC pautorti(void)
-{
-	autortia();
-}
-#else
-int FUNC autorti(void)
-{
-	autortia();
-	return 0;
-}
-#endif
-
-void FUNC autortia(void)
+void FUNC autorti(void)
 {
 	int zothusn;		/* general purpose other-user channel number */
 	WARSHP *wptr;
@@ -2244,7 +2078,7 @@ void FUNC autortia(void)
 #ifdef GE_ARENA
 	/* arena automatons exist only while a match is actively running */
 	if (arena_state != ARENA_RUNNING) {
-		schedule_autorti();
+		rtkick(1, autorti);
 		return;
 	}
 #endif
@@ -2279,7 +2113,7 @@ void FUNC autortia(void)
 			for (i = 0; i < tot_classes; ++i) {
 #ifdef GE_ARENA
 				if (shipclass[i].max_type == CLASSTYPE_CYBORG &&
-				    shipclass[i].arena_mode == arena_mode) {
+					shipclass[i].arena_mode == arena_mode) {
 #else
 				if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
 					shipclass[i].max_type == CLASSTYPE_DROID) {
@@ -2350,35 +2184,21 @@ void FUNC autortia(void)
 
 	logthis("Exiting AUTORTI");
 
-	schedule_autorti();
+	rtkick(1, autorti);
 }
 
 /**************************************************************************
 ** Real time kick routine #2                                             **
 **************************************************************************/
 
-#ifdef PHARLAP
-void FUNC pwarrti2(void)
-{
-	warrti2a();
-}
-
-#else
-int FUNC warrti2(void)
-{
-	warrti2a();
-	return 0;
-}
-#endif
-
-void FUNC warrti2a(void)
+void FUNC warrti2(void)
 {
 	int zothusn;		/* general purpose other-user channel number */
 	WARSHP *wptr;
 
 	static int clicker = 0;
 
-	logthis("TICK:PWarrti2 entered");
+	logthis("TICK:Warrti2 entered");
 
 	/* Open each beacon round for three passes so every ship group gets a turn. */
 	if (++beacontimer > 60)
@@ -2414,11 +2234,7 @@ void FUNC warrti2a(void)
 	/* spread ship movement over three sub-passes to smooth out per-tick work */
 	clicker = (clicker + 1) % 3;
 
-#ifdef PHARLAP
-	rtkick(TICKTIME2, pwarrti2);
-#else
 	rtkick(TICKTIME2, warrti2);
-#endif
 }
 
 /**************************************************************************
@@ -2426,25 +2242,11 @@ void FUNC warrti2a(void)
 **************************************************************************/
 
 #ifndef GE_ARENA
-#ifdef PHARLAP
-void FUNC pwarrti3(void)
-{
-	warrti3a();
-}
-
-#else
-int FUNC warrti3(void)
-{
-	warrti3a();
-	return 0;
-}
-#endif
-
-void FUNC warrti3a(void)
+void FUNC warrti3(void)
 {
 	COORD tmpcoord;
 
-	logthis("TICK:Warrti3a entered");
+	logthis("TICK:Warrti3 entered");
 
 	setmbk(gemb);
 	prfmsg(ZAPHIM2);
@@ -2453,11 +2255,7 @@ void FUNC warrti3a(void)
 	tmpcoord.xcoord = 0.0;
 	tmpcoord.ycoord = 0.0;
 	outsect(FLT_BEACON, &tmpcoord, 99);
-#ifdef PHARLAP
-	rtkick(120, pwarrti3);
-#else
 	rtkick(120, warrti3);
-#endif
 }
 #endif
 
@@ -2706,26 +2504,18 @@ void FUNC geshocst(int opt, char *str)
 		/* opt 0 always displays, regardless of showopt */
 		tmp_usrnum = usrnum;
 		usrnum = -1;
-#ifdef PHARLAP
 		strncpy(tmpbuf, str, 32);
 		tmpbuf[31] = 0;
 		shocst(tmpbuf, str);
-#else
-		shocst(0, str);
-#endif
 		usrnum = tmp_usrnum;
 	}
 	else if (opt <= showopt) {
 		/* other messages display only when their level is within showopt */
 		tmp_usrnum = usrnum;
 		usrnum = -1;
-#ifdef PHARLAP
 		strncpy(tmpbuf, str, 32);
 		tmpbuf[31] = 0;
 		shocst(tmpbuf, str);
-#else
-		shocst(0, str);
-#endif
 		usrnum = tmp_usrnum;
 	}
 	/* optional console logging mirrors what was sent through shocst */
@@ -2771,21 +2561,12 @@ int FUNC mnu_main_ans(void)
 			outprfge(FLT_NONE, usrnum);
 			return 1;
 #else
-#ifdef PHARLAP
 			if (!hasmkey(PLAYKEY)) {
 				prfmsg(FORPLAY);
 				outprfge(FLT_NONE, usrnum);
 				prfmsg(REPRMT);
 				outprfge(FLT_NONE, usrnum);
 			}
-#else
-			if (usrptr->class < PAYING && gefreebies == 0) {
-				prfmsg(FORLIVE);
-				outprfge(FLT_NONE, usrnum);
-				prfmsg(REPRMT);
-				outprfge(FLT_NONE, usrnum);
-			}
-#endif
 			else {
 				if (numwar < gemaxplrs) {
 					lookupshp();

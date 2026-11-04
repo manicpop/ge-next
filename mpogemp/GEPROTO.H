@@ -1,7 +1,7 @@
 /*****************************************************************************
  * ge-next GEPROTO.H                                                         *
  *                                                                           *
- * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt       *
+ * ge-next modifications ONLY copyright (C) 2024-2026 Anthony Schmidt        *
  * Based on Galactic Empire (c) 2025 Elwynor Technologies                    *
  *                                                                           *
  * https://manicpop.org/ge-next/  https://github.com/manicpop/ge-next        *
@@ -35,25 +35,16 @@
 
 /* gemain.c */
 void EXPORT init__galemp P((void));
-int FUNC iniwar P((void));
-void FUNC dummy P((void));
 void FUNC iniwara P((void));
 int FUNC gelogon P((void));
-void FUNC pgedelete P((char *uid));
-void FUNC gedeletea P((char *uid));
-void FUNC pgemidnight P((void));
-int FUNC gemidnight P((void));
-void FUNC gemidnighta P((void));
+void FUNC gedelete P((char *uid));
+void FUNC gemidnight P((void));
 void FUNC dump_roster_file P((void));
 void FUNC calc_networth P((void));
 unsigned FUNC long value_pl P((void));
-int FUNC pwarlof P((void));
-void FUNC pwarhup P((void));
-int FUNC warhup P((void));
-void FUNC warhupa P((void));
-void FUNC pclswar P((void));
-int FUNC clswar P((void));
-void FUNC clswara P((void));
+int FUNC warlof P((void));
+void FUNC warhup P((void));
+void FUNC clswar P((void));
 int FUNC galemp P((void));
 void FUNC outwar P((int filter , unsigned exclude , unsigned channel , int mode));
 #ifndef GE_ARENA
@@ -66,23 +57,13 @@ void FUNC fixplanetteam P((void));
 void FUNC load_team_tab P((void));
 void FUNC update_team_tab P((void));
 #ifndef GE_ARENA
-void FUNC pplarti P((void));
-int FUNC plarti P((void));
-void FUNC plartia P((void));
+void FUNC plarti P((void));
 #endif
-void FUNC pwarrti P((void));
-int FUNC warrti P((void));
-void FUNC warrtia P((void));
-void FUNC pautorti P((void));
-int FUNC autorti P((void));
-void FUNC autortia P((void));
-void FUNC pwarrti2 P((void));
-int FUNC warrti2 P((void));
-void FUNC warrti2a P((void));
+void FUNC warrti P((void));
+void FUNC autorti P((void));
+void FUNC warrti2 P((void));
 #ifndef GE_ARENA
-void FUNC pwarrti3 P((void));
-int FUNC warrti3 P((void));
-void FUNC warrti3a P((void));
+void FUNC warrti3 P((void));
 #endif
 void FUNC outprfge P((int cls , int shpno));
 void FUNC data_text P((const char *text));
