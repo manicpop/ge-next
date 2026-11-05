@@ -1043,50 +1043,6 @@ The maximum an M M planet with no cash bonus can sustain.
 
 ITMPL14 {Maximum Spys on a planet: 5} N 0 2147483647
 
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL15 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL16 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL17 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL18 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL19 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL20 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL21 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL22 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL23 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL24 {Reserved for expansion: 0} N 0 2147483647
-
-The maximum an M M planet with no cash bonus can sustain.
-
-ITMPL25 {Reserved for expansion: 0} N 0 2147483647
-
 This option controls the weight of each 100 of an
 item. Adjusting this value adjusts the amount
 all ships can carry.
@@ -1171,72 +1127,6 @@ all ships can carry.
 
 ITMWT14 {Weight of 100 Spy: 100} N 1 1000000
 
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT15 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT16 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT17 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT18 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT19 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT20 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT21 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT22 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT23 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT24 {Weight of 100 Reserved: 0} N 1 1000000
-
-This option controls the weight of each 100 of an
-item. Adjusting this value adjusts the amount
-all ships can carry.
-
-ITMWT25 {Weight of 100 Reserved: 0} N 1 1000000
-
 This option controls the point value of each 
 multiple of PLTVDIV of an item. 
 
@@ -1306,61 +1196,6 @@ This option controls the point value of each
 multiple of PLTVDIV of an item. 
 
 ITMVAL14 {Point Value of spy: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL15 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL16 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL17 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL18 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL19 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL20 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL21 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL22 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL23 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL24 {Point Value of Reserved: 0} N 0 201288837
-
-This option controls the point value of each 
-multiple of PLTVDIV of an item. 
-
-ITMVAL25 {Point Value of Reserved: 0} N 0 201288837
 
 This Value controls the amount of work in 10,000 ManWeeks
 required to create items on a planet. This value is not
@@ -1464,83 +1299,6 @@ planet production at update time.
 
 ITMMH14 {10K ManWeeks of work creates n Spy: 20} N 0 201288837
 
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH15 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH16 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH17 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH18 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH19 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH20 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH21 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH22 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH23 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH24 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
-This Value controls the amount of work in 10,000 ManWeeks
-required to create items on a planet. This value is not
-absolute as it is adjusted by many other factors affecting
-planet production at update time. 
-
-ITMMH25 {10K ManWeeks of work creates n Reserved: 0} N 0 201288837
-
 This value is the base price of each item.
 
 ITMPR01 {Base price for men: 2} N 1 32000
@@ -1596,50 +1354,6 @@ ITMPR13 {Base price for gold: 1000} N 1 32000
 This value is the base price of each item.
 
 ITMPR14 {Base price for spies: 100} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR15 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR16 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR17 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR18 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR19 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR20 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR21 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR22 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR23 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR24 {Base price for <reserved>: 1} N 1 32000
-
-This value is the base price of each item.
-
-ITMPR25 {Base price for <reserved>: 1} N 1 32000
 
 This value is the base price for each type of shield.
 

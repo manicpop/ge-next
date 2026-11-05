@@ -99,11 +99,9 @@ int decpass = 0;	/* decoy expiry batching pass counter */
 
 WARSHP tmpshp;		/* used to temporarily set up a new ship */
 
-WARSHP *warshp,		/* base pointer to ship table */
-	*warsptr;	/* current ship pointer */
+WARSHP *warsptr;		/* current ship pointer */
 
-WARUSR *warusr,		/* base pointer to user table */
-	*waruptr;	/* current user pointer */
+WARUSR *waruptr;		/* current user pointer */
 
 int warusr_ecl,		/* expanded-memory handle for user table */
 	warshp_ecl;	/* expanded-memory handle for ship table */
@@ -166,7 +164,9 @@ char				*gechrbuf,*gechrbuf2,*gechrbuf3;	/* shared general-purpose text buffers 
 char				*warpbuf;	/* shared warp-speed formatting buffer */
 int				plnum;		/* current planet number workspace */
 GALPLNT				*plptr;		/* current planet pointer workspace */
+#ifndef GE_ARENA
 ITEM				*titems;	/* per-user temporary item-edit table */
+#endif
 TEAM				*teamtab;	/* base pointer to team table */
 
 int				tmp_usrnum;	/* temporary user-number workspace */
@@ -277,16 +277,20 @@ int				arena_match_ticks;	/* remaining match time */
 int				arena_mode;	/* selected arena game mode */
 #endif
 
+#ifndef GE_ARENA
 long shieldprice[TOPSHIELD];		/* shield upgrade prices */
 long phaserprice[TOPPHASOR];		/* phaser upgrade prices */
 long upgrprice[8];			/* general ship upgrade prices */
 unsigned baseprice[NUMITEMS];		/* base item prices */
 
 double maxpl[NUMITEMS];			/* max items a planet can hold (adjusted later) */
+#endif
 
 long weight[NUMITEMS];			/* net weight of each item */
+#ifndef GE_ARENA
 long value[NUMITEMS];			/* net score value of each item on a planet */
 long manhours[NUMITEMS];		/* items produced per 1000 men per day */
+#endif
 
 typedef struct _menu {
 	int	substt;
@@ -740,7 +744,6 @@ void FUNC iniwara(void)
 
 	/* allocate memory for user data table */
 	warusr_ecl = pltile(nships * (long)sizeof(WARUSR), 0, sizeof(WARUSR), sizeof(WARUSR));
-	warusr = MK_FP(warusr_ecl, 0);
 
 	for (j = 0; j < nships; j++) {
 		setmem((void *)warusroff(j), sizeof(WARUSR), 0);
@@ -749,7 +752,6 @@ void FUNC iniwara(void)
 
 	/* allocate memory for ship data table */
 	warshp_ecl = pltile(nships * (long)sizeof(WARSHP), 0, sizeof(WARSHP), sizeof(WARSHP));
-	warshp = MK_FP(warshp_ecl, 0);
 
 	for (j = 0; j < nships; j++) {
 		setmem((void *)warshpoff(j), sizeof(WARSHP), 0);
@@ -762,10 +764,12 @@ void FUNC iniwara(void)
 	setmem(ptab, n, 0);
 	geshocst(1, spr("GE:INF:Planet Table Mem: %d", n));
 
+#ifndef GE_ARENA
 	/* allocate memory for a temporary item table */
 	titems = (ITEM *)alcmem(n = nships * sizeof(ITEM));
 	setmem(titems, n, 0);
 	geshocst(1, spr("GE:INF:Temp Items Mem: %d", n));
+#endif
 
 	/* allocate memory for a team table */
 	teamtab = (TEAM *)alcmem(n = MAXTEAMS * sizeof(TEAM));
