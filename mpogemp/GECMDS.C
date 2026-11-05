@@ -3561,7 +3561,7 @@ void FUNC cmd_sell(void)
 		return;
 	}
 
-	if (waruptr->factions[gcnum] > 100) { /* don't buy from jerks */
+	if (gcnum < 8 && waruptr->factions[gcnum] > 100) { /* don't buy from jerks */
 		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -3741,7 +3741,7 @@ void FUNC cmd_buy(void)
 		return;
 	fixplanetteam();
 
-	if (neutral(&warsptr->coord) && plnum == 1 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't sell to jerks */
+	if (neutral(&warsptr->coord) && plnum == 1 && gcnum < 8 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't sell to jerks */
 		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -3806,7 +3806,7 @@ void FUNC cmd_price(void)
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	if (neutral(&warsptr->coord) && plnum == 1 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't price to jerks */
+	if (neutral(&warsptr->coord) && plnum == 1 && gcnum < 8 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't price to jerks */
 		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -3998,7 +3998,7 @@ void FUNC cmd_new(void)
 		return;
 
 	if (neutral(&warsptr->coord) && plnum == 1) { /* must be Zygor */
-		if (waruptr->factions[gcnum] > 100) { /* don't sell to jerks */
+		if (gcnum < 8 && waruptr->factions[gcnum] > 100) { /* don't sell to jerks */
 			prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
 			outprfge(FLT_NONE, usrnum);
 			return;

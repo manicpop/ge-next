@@ -228,9 +228,12 @@ int				gemaxplrs,	/* max simultaneous GE players */
 				meneat,		/* do men eat? (they don't in classic) */
 				showdoc,	/* how often to give winner planet list from loser */
 				cattkd,		/* how often do cybs attack droids */
-				gcnum,		/* which faction does the neutral zone belong to */
 				planupd,	/* planet updates per day */
 				passnum;	/* current planet-update pass number */
+
+#ifndef GE_ARENA
+int gcnum;			/* neutral-zone trading faction; 8 disables bans */
+#endif
 
 
 char				*opttxt,	/* option-text menu prompt */
@@ -398,7 +401,7 @@ void FUNC iniwara(void)
 	meneat = ynopt(MENEAT);			/* do men eat */
 	showdoc = numopt(SHOWDOC, 0, 10);	/* how often to give winner planet list from loser */
 	cattkd = numopt(CATTKD, 0, 10);		/* how often do cybs attack droids */
-	gcnum = numopt(GCNUM, 0, 8);		/* which faction does the neutral zone belong to*/
+	gcnum = numopt(GCNUM, 0, 8);		/* neutral-zone trading faction; 8 disables bans */
 #endif
 
 	profon = ynopt(PROFON);			/* profiling output enabled */
