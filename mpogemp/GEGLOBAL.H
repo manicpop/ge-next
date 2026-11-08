@@ -167,6 +167,7 @@ extern int gemaxplrs,
 
 #ifndef GE_ARENA
 extern int gcnum;
+extern char *faction_names[8];
 #endif
 
 extern char *frontend;		/* configured frontend pairing code */
@@ -199,8 +200,11 @@ extern MAILKEY mailkey;
 
 extern SHIP *shipclass;
 
-extern S00 *s00;
+extern PLANETDEF *s00;
 extern int s00plnum;
+#ifndef GE_ARENA
+extern PLANETLAYOUT outpost_layouts[NUM_OUTPOST_LAYOUTS];
+#endif
 
 extern SCANTAB *scantab;
 

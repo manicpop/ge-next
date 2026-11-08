@@ -306,7 +306,10 @@ void FUNC droid_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 #endif
 
 /* geplanet.c */
+char *FUNC planet_owner_name P((GALPLNT *pl));
 #ifndef GE_ARENA
+void FUNC init_galaxy P((void));
+void FUNC update_outpost P((void));
 void FUNC check_spy P((void ));
 void FUNC multiply P((int final_mult ));
 #endif

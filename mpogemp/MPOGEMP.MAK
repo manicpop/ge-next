@@ -13,7 +13,7 @@
 #####                           Build DLL's                               #####
 ###############################################################################
 mpogemp.dll: \
-     mpogemsg.h    mpogehlp.h    mpogeshp.h                            \
+     mpogemsg.h    mpogehlp.h    mpogeshp.h    mpogeplt.h                            \
      gemain.obj     gefuncs.obj   gecmds.obj    gecybs.obj   geplanet.obj \
      gelib.obj      gedroids.obj  gescan.obj\
      \wgserv\dlib\galimp.lib        \wgserv\dlib\gsblimp.lib                 \
@@ -57,4 +57,9 @@ mpogehlp.h: mpogehlp.msg
 mpogeshp.h: mpogeshp.msg
      cd \wgserv
      wgsmsx mpogeshp -osrc
+     cd \wgserv\src
+
+mpogeplt.h: mpogeplt.msg
+     cd \wgserv
+     wgsmsx mpogeplt -osrc
      cd \wgserv\src

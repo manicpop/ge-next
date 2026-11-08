@@ -1,0 +1,161 @@
+Galactic Empire Planet Configuration Table
+Version ge-next 0.4
+
+LEVEL4 {}
+
+Creation templates for the neutral zone and faction outposts.
+Changing a template does not change objects already saved in the database.
+
+Format PLANETS1: each section has a stable section tag, one to nine object
+definitions, and an END marker. DONE terminates the file. Section tags identify
+layouts, not their displayed planet names. Each of the six sections is required.
+
+Each object has exactly eight options, in this order:
+TYP, NM, OWN, X, Y, ENV, RES, OUT. Do not insert other options within an object.
+Add or remove complete object blocks before the section END marker; there are
+no DEF switches, explicit counts or reserved object slots. Keep option names
+unique. The game reads section/type values and option order, not option names.
+Keep PLTSTART first and do not change its name. Recreate MPOGEPLT.MCV after
+editing; adding objects does not require recompiling the DLL.
+
+TYP: PLANET or WORMHOLE. END has no following object fields.
+NM: displayed name, up to 19 characters. OWN: legacy owner display text.
+Faction ownership comes from the section, not OWN or the displayed name.
+X/Y: local coordinates, 100 through 9900 (5000 is the sector center).
+ENV/RES: 0 = Poor, 1 = Marginal, 2 = Good, 3 = Very good.
+OUT: 0 = None, 1 = Zygor, 2 = Tahanian, 3 = Enforcer, 4 = Lydoria,
+5 = Sarten, 6 = Murdonia, 7 = Vakory, 8 = Zygor Express. Wormholes use 0.
+
+Sector 0 0 object 1 must be the Zygor planet (role 1). Each other section
+must start with its primary outpost planet and matching role. Objects receive
+consecutive numbers in file order. Express uses the same layout at all four
+locations and is not created when UNIVMAX is below 50.
+
+PLTSTART {PLANETS1} E PLANETS1
+
+S00SECT {NEUTRAL} E NEUTRAL
+
+S00P1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+S00P1NM {Zygor} S 19 Planet #1 Name
+S00P1OWN {*Galactic Command*} S 29 Owner of Planet #1
+S00P1X {X Coordinate of Planet: 5000} N 100 9900
+S00P1Y {Y Coordinate of Planet: 5000} N 100 9900
+S00P1ENV {Environment for planet: 3} N 0 3
+S00P1RES {Resources for planet: 3} N 0 3
+S00P1OUT {Outpost role: 1} N 0 8
+
+S00P2TYP {Object kind: PLANET} E PLANET WORMHOLE END
+S00P2NM {Tahanian Station} S 19 Planet #2 Name
+S00P2OWN {*Galactic Command*} S 29 Owner of Planet #2
+S00P2X {X Coordinate of Planet: 7000} N 100 9900
+S00P2Y {Y Coordinate of Planet: 7000} N 100 9900
+S00P2ENV {Environment for planet: 3} N 0 3
+S00P2RES {Resources for planet: 3} N 0 3
+S00P2OUT {Outpost role: 2} N 0 8
+
+S00P3TYP {Object kind: PLANET} E PLANET WORMHOLE END
+S00P3NM {Enforcer Planet} S 19 Planet #3 Name
+S00P3OWN {*Galactic Command*} S 29 Owner of Planet #3
+S00P3X {X Coordinate of Planet: 2000} N 100 9900
+S00P3Y {Y Coordinate of Planet: 2000} N 100 9900
+S00P3ENV {Environment for planet: 1} N 0 3
+S00P3RES {Resources for planet: 0} N 0 3
+S00P3OUT {Outpost role: 3} N 0 8
+
+S00P4TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+S00P4NM {Kayriez Portal} S 19 Planet #4 Name
+S00P4OWN {*Galactic Command*} S 29 Owner of Planet #4
+S00P4X {X Coordinate of Planet: 1100} N 100 9900
+S00P4Y {Y Coordinate of Planet: 6700} N 100 9900
+S00P4ENV {Environment for planet: 0} N 0 3
+S00P4RES {Resources for planet: 0} N 0 3
+S00P4OUT {Outpost role: 0} N 0 8
+
+S00P5TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+S00P5NM {Lydorian Portal} S 19 Planet #5 Name
+S00P5OWN {*Galactic Command*} S 29 Owner of Planet #5
+S00P5X {X Coordinate of Planet: 6700} N 100 9900
+S00P5Y {Y Coordinate of Planet: 1500} N 100 9900
+S00P5ENV {Environment for planet: 0} N 0 3
+S00P5RES {Resources for planet: 0} N 0 3
+S00P5OUT {Outpost role: 0} N 0 8
+
+S00P6TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+S00P6NM {Tryklon Portal} S 19 Planet #6 Name
+S00P6OWN {*Galactic Command*} S 29 Owner of Planet #6
+S00P6X {X Coordinate of Planet: 5500} N 100 9900
+S00P6Y {Y Coordinate of Planet: 7800} N 100 9900
+S00P6ENV {Environment for planet: 0} N 0 3
+S00P6RES {Resources for planet: 0} N 0 3
+S00P6OUT {Outpost role: 0} N 0 8
+
+S00END {END} E END
+
+LYDSECT {LYDORIA} E LYDORIA
+
+LYDP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+LYDP1NM {Lydoria} S 19 Planet name
+LYDP1OWN {} S 29 Legacy owner text
+LYDP1X {Local X coordinate: 5000} N 100 9900
+LYDP1Y {Local Y coordinate: 5000} N 100 9900
+LYDP1ENV {Environment: 3} N 0 3
+LYDP1RES {Resources: 3} N 0 3
+LYDP1OUT {Outpost role: 4} N 0 8
+
+LYDEND {END} E END
+
+SARSECT {SARTEN} E SARTEN
+
+SARP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+SARP1NM {Sarten} S 19 Planet name
+SARP1OWN {} S 29 Legacy owner text
+SARP1X {Local X coordinate: 5000} N 100 9900
+SARP1Y {Local Y coordinate: 5000} N 100 9900
+SARP1ENV {Environment: 3} N 0 3
+SARP1RES {Resources: 3} N 0 3
+SARP1OUT {Outpost role: 5} N 0 8
+
+SAREND {END} E END
+
+MURSECT {MURDONIA} E MURDONIA
+
+MURP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+MURP1NM {Murdonia} S 19 Planet name
+MURP1OWN {} S 29 Legacy owner text
+MURP1X {Local X coordinate: 5000} N 100 9900
+MURP1Y {Local Y coordinate: 5000} N 100 9900
+MURP1ENV {Environment: 3} N 0 3
+MURP1RES {Resources: 3} N 0 3
+MURP1OUT {Outpost role: 6} N 0 8
+
+MUREND {END} E END
+
+VAKSECT {VAKORY} E VAKORY
+
+VAKP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+VAKP1NM {Vakory} S 19 Planet name
+VAKP1OWN {} S 29 Legacy owner text
+VAKP1X {Local X coordinate: 5000} N 100 9900
+VAKP1Y {Local Y coordinate: 5000} N 100 9900
+VAKP1ENV {Environment: 3} N 0 3
+VAKP1RES {Resources: 3} N 0 3
+VAKP1OUT {Outpost role: 7} N 0 8
+
+VAKEND {END} E END
+
+ZEXSECT {EXPRESS} E EXPRESS
+
+ZEXP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
+ZEXP1NM {Zygor Express} S 19 Planet name
+ZEXP1OWN {} S 29 Legacy owner text
+ZEXP1X {Local X coordinate: 5000} N 100 9900
+ZEXP1Y {Local Y coordinate: 5000} N 100 9900
+ZEXP1ENV {Environment: 3} N 0 3
+ZEXP1RES {Resources: 3} N 0 3
+ZEXP1OUT {Outpost role: 8} N 0 8
+
+ZEXEND {END} E END
+
+PLTEND {DONE} E DONE
+
+

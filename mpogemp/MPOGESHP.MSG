@@ -1,5 +1,5 @@
 Galactic Empire Ship Configuration Table
-Version ge-next 0.3
+Version ge-next 0.4
 
 LEVEL4 {}
 

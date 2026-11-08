@@ -43,7 +43,7 @@
 #define PROJECT_NAME "ge-arena"
 #endif
 
-#define PROJECT_VERSION "0.3.4"
+#define PROJECT_VERSION "0.4-pre1"
 
 #define PROJECT_ARCH "16-bit"
 
@@ -61,6 +61,7 @@
 #include "mpogemsg.h"
 #include "mpogehlp.h"
 #include "mpogeshp.h"
+#include "mpogeplt.h"
 #else
 #include "mpogamsg.h"
 #include "mpogahlp.h"
@@ -180,6 +181,39 @@
 #define SECTYPE_NORMAL 1	/* normal sector record                    */
 #define PLTYPE_PLNT 2		/* planet record                           */
 #define PLTYPE_WORM 3		/* wormhole record                         */
+
+#ifndef GE_ARENA
+#define PL_OWNER_NONE 0		/* unowned planet                          */
+#define PL_OWNER_PLAYER 1	/* owned by the player in userid           */
+#define PL_OWNER_FACTION 2	/* owned by the faction in owner_faction   */
+#define PL_OWNER_FREE 3		/* independent populated or revolted planet */
+
+#define FACTION_SARTEN 2
+#define FACTION_LYDORIAN 3
+#define FACTION_MURDONIAN 4
+#define FACTION_VAKORY 5
+#define FACTION_ZYGORIAN 7	/* Zygor and its affiliated outposts       */
+
+#define OUTPOST_NONE 0		/* no special outpost behavior             */
+#define OUTPOST_ZYGOR 1		/* main trading planet                     */
+#define OUTPOST_TAHANIAN 2	/* Tahanian Station                        */
+#define OUTPOST_ENFORCER 3	/* Enforcer Planet                         */
+#define OUTPOST_LYDORIA 4
+#define OUTPOST_SARTEN 5
+#define OUTPOST_MURDONIA 6
+#define OUTPOST_VAKORY 7
+#define OUTPOST_ZYGOR_EXPRESS 8
+
+#define LAYOUT_LYDORIA 0
+#define LAYOUT_SARTEN 1
+#define LAYOUT_MURDONIA 2
+#define LAYOUT_VAKORY 3
+#define LAYOUT_ZYGOR_EXPRESS 4
+#define NUM_FACTION_HOMES 4
+#define NUM_OUTPOST_LAYOUTS 5
+
+#define PLANETDEF_OPTIONS 8	/* type, name, owner, X, Y, env, res, role */
+#endif
 
 #define GESTAT_AVAIL 0		/* unused ship slot                        */
 #define GESTAT_USER 1		/* live user-controlled ship               */
@@ -660,6 +694,13 @@ typedef struct galsect {
 	char filler[321];		/* pad GALSECT to the real 493-byte record */
 } GALSECT;
 
+#ifndef GE_ARENA
+typedef struct _sectorpos {
+	int xsect;
+	int ysect;
+} SECTORPOS;
+#endif
+
 typedef struct _galplnt {
 	int xsect;			/* sector x coord; Btrieve key 0           */
 /*2*/
@@ -708,7 +749,17 @@ typedef struct _galplnt {
 	byte arena_flags;
 	char filler[64];		/* keep arena fields + filler at 67 bytes  */
 #else
-	char filler[67];		/* pad GALPLNT to the real 493-byte record */
+	byte owner_type;		/* PL_OWNER_* ownership category           */
+/*427*/
+	byte owner_faction;		/* faction id; used only for faction owners */
+/*428*/
+	byte outpost_type;		/* planet-specific outpost behavior id     */
+/*429*/
+	byte home_locations_set;	/* saved home-sector plan exists (Zygor)   */
+/*430*/
+	SECTORPOS home_sectors[NUM_FACTION_HOMES]; /* saved faction sectors (Zygor) */
+/*446*/
+	char filler[47];		/* pad GALPLNT to the real 493-byte record */
 #endif
 } GALPLNT;
 
@@ -892,15 +943,26 @@ typedef struct _entrytab {
 	byte ticks;			/* ticks since entry state began           */
 } ENTRYTAB;
 
-typedef struct _s00 {
+typedef struct _planetdef {
 	char *name;			/* predefined object name                  */
 	char *owner;			/* predefined owner userid                 */
 	int type;			/* predefined object type                  */
-	double xcoord;			/* x coordinate within sector 0,0          */
-	double ycoord;			/* y coordinate within sector 0,0          */
+	double xcoord;			/* x coordinate within the defined sector  */
+	double ycoord;			/* y coordinate within the defined sector  */
 	int env;			/* environment setting                     */
 	int res;			/* resource setting                        */
-} S00;
+#ifndef GE_ARENA
+	byte faction;			/* owning faction supplied by sector layout */
+	byte outpost_type;		/* OUTPOST_* role, independent of name/kind */
+#endif
+} PLANETDEF;
+
+#ifndef GE_ARENA
+typedef struct _planetlayout {
+	PLANETDEF *objects;
+	int count;
+} PLANETLAYOUT;
+#endif
 
 typedef struct _team {
 	long teamcode;			/* team identifier                         */

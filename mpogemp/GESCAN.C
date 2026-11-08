@@ -896,6 +896,7 @@ static void scan_pl(void)
 #endif
 	unsigned int rseed = 0;
 	int nebmask;
+	char *owner;
 
 	/* SCAN PLANET FUNCTION */
 
@@ -957,8 +958,9 @@ static void scan_pl(void)
 			prfmsg(SCAN10,plnum,gechrbuf);
 			prfmsg(DASHES);
 
-			if (plptr->userid[0] != 0 && (warsptr->jam_sev < (byte)3 || warsptr->where - 10 == plnum))
-				prfmsg(SCAN11,plptr->userid);
+			owner = planet_owner_name(plptr);
+			if (owner[0] != 0 && (warsptr->jam_sev < (byte)3 || warsptr->where - 10 == plnum))
+				prfmsg(SCAN11, owner);
 
 			memset(gechrbuf2, 0, 20);
 			memset(gechrbuf3, 0, 20);

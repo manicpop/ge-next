@@ -82,6 +82,10 @@ FILE *gemb,		/* MPOGEMSG.MSG or MPOGAMSG.MSG: main GE messages */
 	*gehlpmb,	/* MPOGEHLP.MSG or MPOGAHLP.MSG: GE help messages */
 	*geshmb;	/* MPOGESHP.MSG or MPOGASHP.MSG: ship class messages */
 
+#ifndef GE_ARENA
+static FILE *geplmb;	/* MPOGEPLT.MSG: predefined planet layouts */
+#endif
+
 static char *geuser,	/* configured user database name */
 #ifndef GE_ARENA
 	*geship,	/* configured ship database name */
@@ -233,6 +237,7 @@ int				gemaxplrs,	/* max simultaneous GE players */
 
 #ifndef GE_ARENA
 int gcnum;			/* neutral-zone trading faction; 8 disables bans */
+char *faction_names[8];		/* configured faction display text */
 #endif
 
 
@@ -266,8 +271,11 @@ MAILKEY				mailkey;	/* mail database key workspace */
 
 SHIP				*shipclass;	/* base pointer to ship class table */
 
-S00				*s00;		/* sector 0,0 predefined object table */
+PLANETDEF			*s00;		/* sector 0,0 predefined object table */
 int				s00plnum;	/* number of predefined sector 0,0 objects */
+#ifndef GE_ARENA
+PLANETLAYOUT outpost_layouts[NUM_OUTPOST_LAYOUTS];
+#endif
 
 SCANTAB				*scantab;	/* base pointer to per-user scan tables */
 
@@ -344,6 +352,103 @@ void EXPORT init__galemp(void)
 	gestt = register_module(&GE_MODULE_BLOCK);
 }
 
+#ifndef GE_ARENA
+static void check_planet_option(int opt)
+{
+	/* Use only public message APIs; MBBSEmu does not expose a native msgblk. */
+	if (opt < PLTSTART || opt > PLTSTART + 1
+		+ (NUM_OUTPOST_LAYOUTS + 1) * (MAXPLANETS * PLANETDEF_OPTIONS + 2))
+		catastro("GE:ERR:MPOGEPLT.MSG has a missing field or terminator");
+}
+
+static int planet_object_type(int opt)
+{
+	int kind;
+
+	check_planet_option(opt);
+	kind = tokopt(opt, "END", "PLANET", "WORMHOLE", NULL);
+	if (kind == 1)
+		return 0;
+	if (kind == 2)
+		return PLTYPE_PLNT;
+	if (kind == 3)
+		return PLTYPE_WORM;
+	catastro(spr("GE:ERR:MPOGEPLT.MSG option %d must be PLANET, WORMHOLE or END", opt));
+	return 0;
+}
+
+static void load_planet_layout(int *next, PLANETDEF **objects, int *count, byte faction)
+{
+	int i, opt = *next;
+	PLANETDEF *def;
+
+	/* Count only real definitions, then allocate exactly the space required. */
+	*count = 0;
+	while (planet_object_type(opt) != 0) {
+		if (*count >= MAXPLANETS)
+			catastro("GE:ERR:MPOGEPLT.MSG section exceeds nine objects or is missing END");
+		++(*count);
+		opt += PLANETDEF_OPTIONS;
+	}
+	if (*count == 0)
+		catastro("GE:ERR:MPOGEPLT.MSG sections must contain at least one object");
+	*objects = (PLANETDEF *)alcmem(*count * sizeof(PLANETDEF));
+	opt = *next;
+	for (i = 0; i < *count; ++i) {
+		def = &(*objects)[i];
+		def->type = planet_object_type(opt++);
+		def->name = stgopt(opt++);
+		def->owner = stgopt(opt++);
+		def->xcoord = (double)numopt(opt++, 100, 9900) / 10000.0;
+		def->ycoord = (double)numopt(opt++, 100, 9900) / 10000.0;
+		def->env = numopt(opt++, 0, 3);
+		def->res = numopt(opt++, 0, 3);
+		def->outpost_type = (byte)numopt(opt++, OUTPOST_NONE, OUTPOST_ZYGOR_EXPRESS);
+		def->faction = faction;
+		if (strlen(def->name) > 19 || strlen(def->owner) >= UIDSIZ)
+			catastro("GE:ERR:MPOGEPLT.MSG object name or owner is too long");
+		if (def->type == PLTYPE_WORM && def->outpost_type != OUTPOST_NONE)
+			catastro(spr("GE:ERR:Wormhole %d cannot have an outpost role", i + 1));
+	}
+	*next = opt + 1;	/* skip this section's END marker */
+}
+
+static void load_planet_layouts(void)
+{
+	static byte factions[NUM_OUTPOST_LAYOUTS] = {
+		FACTION_LYDORIAN, FACTION_SARTEN, FACTION_MURDONIAN,
+		FACTION_VAKORY, FACTION_ZYGORIAN
+	};
+	int opt = PLTSTART, i, section;
+	unsigned seen = 0;
+
+	if (tokopt(opt++, "PLANETS1", NULL) != 1)
+		catastro("GE:ERR:MPOGEPLT.MSG requires the PLANETS1 layout format");
+	for (;;) {
+		check_planet_option(opt);
+		section = tokopt(opt++, "NEUTRAL", "LYDORIA", "SARTEN", "MURDONIA",
+			"VAKORY", "EXPRESS", "DONE", NULL);
+		if (section == NUM_OUTPOST_LAYOUTS + 2)
+			break;
+		if (section == 0)
+			catastro(spr("GE:ERR:Unknown planet layout section at option %d", opt - 1));
+		--section;
+		if (seen & (1U << section))
+			catastro(spr("GE:ERR:Duplicate planet layout section at option %d", opt - 1));
+		seen |= 1U << section;
+		if (section == 0)
+			load_planet_layout(&opt, &s00, &s00plnum, FACTION_ZYGORIAN);
+		else {
+			i = section - 1;
+			load_planet_layout(&opt, &outpost_layouts[i].objects,
+				&outpost_layouts[i].count, factions[i]);
+		}
+	}
+	if (seen != (1U << (NUM_OUTPOST_LAYOUTS + 1)) - 1U)
+		catastro("GE:ERR:MPOGEPLT.MSG is missing a required layout section");
+}
+#endif
+
 void FUNC iniwara(void)
 {
 	int i, n, type, classbase;
@@ -393,7 +498,14 @@ void FUNC iniwara(void)
 	univmax = numopt(UNIVMAX, 10, 32767);	/* radius of galaxy outside of 0 0 */
 #endif
 	univwrap = ynopt(UNIVWRAP);		/* universe wraparound enabled */
+#ifndef GE_ARENA
+	geplmb = opnmsg("MPOGEPLT.MCV");
+	setmbk(geplmb);
+	load_planet_layouts();
+	setmbk(gemb);
+#else
 	s00plnum = numopt(S00PLNUM, 3, 9);	/* number of sector 0,0 predefined objects */
+#endif
 	maxplanets = numopt(MAXPLSE, 1, 9);	/* max planets allowed per sector */
 #ifndef GE_ARENA
 	teambonus = numopt(TEAMBONU, 0, 32000) * 100L;	/* team score/cash bonus factor */
@@ -402,6 +514,8 @@ void FUNC iniwara(void)
 	showdoc = numopt(SHOWDOC, 0, 10);	/* how often to give winner planet list from loser */
 	cattkd = numopt(CATTKD, 0, 10);		/* how often do cybs attack droids */
 	gcnum = numopt(GCNUM, 0, 8);		/* neutral-zone trading faction; 8 disables bans */
+	for (i = 0; i < 8; ++i)
+		faction_names[i] = stgopt(FACNAME0 + i);
 #endif
 
 	profon = ynopt(PROFON);			/* profiling output enabled */
@@ -804,10 +918,12 @@ void FUNC iniwara(void)
 	arena_mode = ARENA_MODE_BATTLE;
 #endif
 
-	/* allocate memory for S00 table */
-	s00 = (S00 *)alcmem(n = s00plnum * sizeof(S00));
+#ifdef GE_ARENA
+	/* allocate memory for ge-arena's sector-0 object definitions */
+	s00 = (PLANETDEF *)alcmem(n = s00plnum * sizeof(PLANETDEF));
 	setmem(s00, n, 0);
 	geshocst(1, spr("GE:INF:S00 Mem: %d", n));
+#endif
 
 	beacontimer = 0;
 
@@ -851,6 +967,7 @@ void FUNC iniwara(void)
 
 	setmbk(gemb);
 
+#ifdef GE_ARENA
 #define NPL 8	/* number of parameters per planet entry */
 
 	/* read in the neutral planets */
@@ -876,6 +993,11 @@ void FUNC iniwara(void)
 
 		geshocst(1, spr("GE:INF:I/S00 %d %s", s00[i].type, s00[i].name));
 	}
+#endif
+
+#ifndef GE_ARENA
+	init_galaxy();
+#endif
 
 	/* Load the team table from disk */
 	load_team_tab();
@@ -1031,7 +1153,7 @@ void FUNC gemidnight(void)
 			gcrbtv(&planet, 0);
 			setbtv(gebb5);
 			if (planet.type == PLTYPE_PLNT) {
-				if (planet.userid[0] != 0) {
+				if (planet.owner_type == PL_OWNER_PLAYER && planet.userid[0] != 0) {
 					/* roll each owned planet's value and population back into its owner */
 					if (qeqbtv(planet.userid, 0)) {
 						gcrbtv(&tmpusr, 0);
@@ -1346,6 +1468,12 @@ void FUNC warhup(void)
 
 void FUNC clswar(void)
 {
+#ifndef GE_ARENA
+	if (geplmb != NULL) {
+		clsmsg(geplmb);
+		geplmb = NULL;
+	}
+#endif
 	if (gemb != NULL) {
 		clsmsg(gemb);
 		gemb = NULL;
@@ -1895,21 +2023,12 @@ void FUNC plarti(void)
 			sprintf(gechrbuf, "%lu", fpos);
 
 			/* foundpl/fpos point at the planet selected on the prior search pass */
-			if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1) {
-				logthis(spr("updating Zygor (%s)", gechrbuf));
+			if (planet.owner_type == PL_OWNER_FACTION) {
+				logthis(spr("updating outpost %s (%s)", planet.name, gechrbuf));
 				plptr = &planet;
-				update_plan_1();
-				planet.plantimesave = plantime;
-			}
-			else if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 2) {
-				logthis(spr("updating T-Station (%s)", gechrbuf));
-				plptr = &planet;
-				update_plan_2();
-			}
-			else if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 3) {
-				logthis(spr("updating Enforcer Planet (%s)", gechrbuf));
-				plptr = &planet;
-				update_plan_3();
+				update_outpost();
+				if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1)
+					planet.plantimesave = plantime;
 			}
 			else {
 				logthis(spr("updating Planet %s (%s, %s)...", gechrbuf, planet.name, planet.userid));
@@ -1991,8 +2110,8 @@ void FUNC plarti(void)
 			}
 
 			gcrbtv(&planet, 2);
-			if (planet.userid[0] != 0 && ((planet.items[I_MEN].qty > 0 || planet.items[I_TROOPS].qty > 0)
-				|| (planet.xsect == 0 && planet.ysect == 0))) {	/* owned and populated or in neut */
+			if (planet.owner_type == PL_OWNER_FACTION
+				|| (planet.userid[0] != 0 && (planet.items[I_MEN].qty > 0 || planet.items[I_TROOPS].qty > 0))) {
 				fpos = absbtv();
 				foundpl = TRUE;
 				sprintf(gechrbuf, "%lu", fpos);
@@ -2745,8 +2864,17 @@ int FUNC mnu_admenu1(void)
 			if (!load_admin_planet())
 				return 1;
 
+			if (plptr->owner_type == PL_OWNER_FACTION) {
+				prfmsg(ADMIN2);
+				outprfge(FLT_NONE, usrnum);
+				usrptr->substt = FIGHTSUB;
+				return 1;
+			}
+
 			strncpy(plptr->userid, warsptr->userid, UIDSIZ);
 			plptr->userid[UIDSIZ - 1] = 0;
+			plptr->owner_type = PL_OWNER_PLAYER;
+			plptr->owner_faction = 0;
 			++waruptr->planets;
 			geudb(GEUPDATE, waruptr->userid, waruptr);
 

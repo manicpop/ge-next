@@ -2710,6 +2710,8 @@ void FUNC cmd_abandon(void)
 
 	if (sameas(plptr->userid,warsptr->userid)) {
 		plptr->userid[0] = 0;
+		plptr->owner_type = PL_OWNER_NONE;
+		plptr->owner_faction = 0;
 		plptr->password[0] = 0;
 		plptr->teamcode = 0;
 		if (waruptr->planets > 0)
@@ -2747,7 +2749,7 @@ void FUNC cmd_admin(void)
 #ifdef GE_ARENA
 	arena_admin_rename();
 #else
-	if (plptr->userid[0] == 0) {
+	if (plptr->owner_type != PL_OWNER_FACTION && plptr->userid[0] == 0) {
 		if (waruptr->planets >= max_plnts) {
 			prfmsg(ADMIN4,max_plnts);
 			outprfge(FLT_NONE,usrnum);
@@ -2838,6 +2840,8 @@ static void wonplnt(void)
 	/* assign planet to new owner */
 	strncpy(plptr->userid, warsptr->userid, UIDSIZ);
 	plptr->userid[UIDSIZ - 1] = 0;
+	plptr->owner_type = PL_OWNER_PLAYER;
+	plptr->owner_faction = 0;
 	if (sameas(plptr->password, "team")) {
 		plptr->password[0] = 0;
 		plptr->teamcode = 0;
@@ -3194,7 +3198,7 @@ void FUNC cmd_attack(void)
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	if (sameas(plptr->userid,warsptr->userid)) {
+	if (plptr->owner_type != PL_OWNER_FACTION && sameas(plptr->userid,warsptr->userid)) {
 		prfmsg(ATTACK0);
 		outprfge(FLT_NONE,usrnum);
 		return;
@@ -3202,6 +3206,13 @@ void FUNC cmd_attack(void)
 
 	if (neutral(&warsptr->coord)) {
 		zaphim(warsptr,usrnum);
+		prfmsg(ATTKER);
+		outprfge(FLT_NONE,usrnum);
+		return;
+	}
+
+	if (plptr->owner_type == PL_OWNER_FACTION) {
+		/* Planet-specific retaliation will replace this refusal outside the neutral zone. */
 		prfmsg(ATTKER);
 		outprfge(FLT_NONE,usrnum);
 		return;

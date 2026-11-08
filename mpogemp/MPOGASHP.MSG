@@ -1,5 +1,5 @@
 Galactic Empire Ship Configuration Table
-Version ge-arena 0.3
+Version ge-arena 0.4
 
 LEVEL4 {}
 
