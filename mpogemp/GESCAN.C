@@ -327,6 +327,7 @@ static void print_map_row(int i, int maptype)
 				prev_color = 6;
 			}
 			prf("%s", gedots(j - start));
+			continue;
 		} else if (warsptr->jam_sev > (byte)0) {
 			if (!(map[i][j] == '.' && mapc[i][j] == '4') && map[i][j] != '*') /* don't overwrite out of bounds or player indicator */
 			{
