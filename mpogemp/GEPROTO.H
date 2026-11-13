@@ -126,6 +126,12 @@ void FUNC optdisp P((void));
 void FUNC stshdlr P((void));
 
 /* gefuncs.c */
+#ifndef GE_ARENA
+int FUNC player_has_unlock P((WARUSR *player_record, int unlock));
+int FUNC grant_unlock P((WARUSR *player_record, int unlock));
+int FUNC planet_has_shipyard P((GALPLNT *pl));
+int FUNC ship_class_available P((WARUSR *player_record, int cls, GALPLNT *vendor));
+#endif
 int FUNC lockon P((WARSHP *ptr , int type , int ship , int usrn));
 int FUNC repair_needed P((WARSHP *ptr));
 unsigned FUNC repair_eta P((WARSHP *ptr));
@@ -306,10 +312,19 @@ void FUNC droid_died P((WARSHP *ptr , int usrn , WARSHP *wptr));
 #endif
 
 /* geplanet.c */
+int FUNC planet_has_owner P((GALPLNT *pl));
 char *FUNC planet_owner_name P((GALPLNT *pl));
 #ifndef GE_ARENA
+int FUNC planet_stock_unlimited P((GALPLNT *pl, int item));
+unsigned long FUNC planet_stock_room P((GALPLNT *pl, int item));
+char *FUNC planet_description P((GALPLNT *pl));
+int FUNC planet_equipment_limit P((GALPLNT *pl, int shields));
+unsigned int FUNC planet_upgrade_mask P((GALPLNT *pl));
+int FUNC sync_outpost_config P((GALPLNT *pl));
+void FUNC show_faction_sectors P((void));
 void FUNC init_galaxy P((void));
 void FUNC update_outpost P((void));
+void FUNC restock_outpost P((void));
 void FUNC check_spy P((void ));
 void FUNC multiply P((int final_mult ));
 #endif
@@ -317,11 +332,6 @@ void FUNC getsector P((COORD *sect));
 int FUNC getplanet P((COORD *sect , int plnt));
 int FUNC neutral P((COORD *coord));
 int FUNC innebula P((int x , int y));
-#ifndef GE_ARENA
-void FUNC update_plan_1 P((void));
-void FUNC update_plan_2 P((void));
-void FUNC update_plan_3 P((void));
-#endif
 
 /* gelib.c */
 unsigned FUNC smallest P((unsigned a1 , unsigned a2));

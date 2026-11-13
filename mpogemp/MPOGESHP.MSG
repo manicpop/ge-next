@@ -8,6 +8,21 @@ USER for player-controlled ships.
 CYBORG for Cybertrons.
 DROID for all other NPC ships.
 
+Torpedo and missile launcher counts are configurable from 0 to 255 per class.
+Each limits launches of that weapon per ship tick across all targets. Each
+target can track three incoming torpedoes and three incoming missiles at once.
+
+Player ship sales settings are independent of the NPC faction code.
+SELLF: selling faction 0-7, or 8 for not sold.
+SELLR: selling outpost role, using MPOGEPLT roles; 0 = any eligible shipyard.
+Current shipyard roles are 1, 4, 6-8 and 10; roles 0, 2, 3, 5 and 9 do not provide one.
+UNLK: permanent player achievement required; 0 = immediately available.
+Achievement IDs: 1 Fleet Command, 2 MBM Dreadnought, 3 Planetary Transport,
+4 Obliterator; 5-32 reserved for future achievements.
+IDs identify achievements, not ship names or class numbers. Sysops may assign
+any achievement to any player class. Earning conditions are defined in code.
+These three fields are ignored for NPC and inactive classes.
+
 S01TYPE {Class 01 type of ship: USER} E USER CYBORG DROID <NONE>
 
 Name of class of ship for class 01.
@@ -35,11 +50,11 @@ S01PHSR {Maximum phaser type: 8} (S01TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 01.
 
-S01TORP {Number of torpedo launchers: 1} (S01TYPE#<NONE>) N 0 3
+S01TORP {Number of torpedo launchers: 1} (S01TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 01.
 
-S01MISL {Number of missile launchers: 0} (S01TYPE#<NONE>) N 0 3
+S01MISL {Number of missile launchers: 0} (S01TYPE#<NONE>) N 0 255
 
 Decoy capability for class 01.
 
@@ -148,6 +163,10 @@ upgrades.
 
 S01LOUT {Loadout code: 24} (S01TYPE=USER,DROID) N 0 255
 
+S01SELLF {Selling faction: 7} (S01TYPE=USER) N 0 8
+S01SELLR {Selling outpost role: 1} (S01TYPE=USER) N 0 10
+S01UNLK {Required achievement: 0} (S01TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 01.
 Press F2 to edit.
 
@@ -211,11 +230,11 @@ S02PHSR {Maximum phaser type: 0} (S02TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 02.
 
-S02TORP {Number of torpedo launchers: 0} (S02TYPE#<NONE>) N 0 3
+S02TORP {Number of torpedo launchers: 0} (S02TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 02.
 
-S02MISL {Number of missile launchers: 0} (S02TYPE#<NONE>) N 0 3
+S02MISL {Number of missile launchers: 0} (S02TYPE#<NONE>) N 0 255
 
 Decoy capability for class 02.
 
@@ -324,6 +343,10 @@ upgrades.
 
 S02LOUT {Loadout code: 16} (S02TYPE=USER,DROID) N 0 255
 
+S02SELLF {Selling faction: 7} (S02TYPE=USER) N 0 8
+S02SELLR {Selling outpost role: 1} (S02TYPE=USER) N 0 10
+S02UNLK {Required achievement: 0} (S02TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 02.
 Press F2 to edit.
 
@@ -388,11 +411,11 @@ S03PHSR {Maximum phaser type: 2} (S03TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 03.
 
-S03TORP {Number of torpedo launchers: 0} (S03TYPE#<NONE>) N 0 3
+S03TORP {Number of torpedo launchers: 0} (S03TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 03.
 
-S03MISL {Number of missile launchers: 0} (S03TYPE#<NONE>) N 0 3
+S03MISL {Number of missile launchers: 0} (S03TYPE#<NONE>) N 0 255
 
 Decoy capability for class 03.
 
@@ -501,6 +524,10 @@ upgrades.
 
 S03LOUT {Loadout code: 10} (S03TYPE=USER,DROID) N 0 255
 
+S03SELLF {Selling faction: 7} (S03TYPE=USER) N 0 8
+S03SELLR {Selling outpost role: 1} (S03TYPE=USER) N 0 10
+S03UNLK {Required achievement: 0} (S03TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 03.
 Press F2 to edit.
 
@@ -563,11 +590,11 @@ S04PHSR {Maximum phaser type: 10} (S04TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 04.
 
-S04TORP {Number of torpedo launchers: 1} (S04TYPE#<NONE>) N 0 3
+S04TORP {Number of torpedo launchers: 1} (S04TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 04.
 
-S04MISL {Number of missile launchers: 1} (S04TYPE#<NONE>) N 0 3
+S04MISL {Number of missile launchers: 1} (S04TYPE#<NONE>) N 0 255
 
 Decoy capability for class 04.
 
@@ -676,6 +703,10 @@ upgrades.
 
 S04LOUT {Loadout code: 89} (S04TYPE=USER,DROID) N 0 255
 
+S04SELLF {Selling faction: 7} (S04TYPE=USER) N 0 8
+S04SELLR {Selling outpost role: 1} (S04TYPE=USER) N 0 10
+S04UNLK {Required achievement: 0} (S04TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 04.
 Press F2 to edit.
 
@@ -739,11 +770,11 @@ S05PHSR {Maximum phaser type: 3} (S05TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 05.
 
-S05TORP {Number of torpedo launchers: 0} (S05TYPE#<NONE>) N 0 3
+S05TORP {Number of torpedo launchers: 0} (S05TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 05.
 
-S05MISL {Number of missile launchers: 0} (S05TYPE#<NONE>) N 0 3
+S05MISL {Number of missile launchers: 0} (S05TYPE#<NONE>) N 0 255
 
 Decoy capability for class 05.
 
@@ -852,6 +883,10 @@ upgrades.
 
 S05LOUT {Loadout code: 34} (S05TYPE=USER,DROID) N 0 255
 
+S05SELLF {Selling faction: 7} (S05TYPE=USER) N 0 8
+S05SELLR {Selling outpost role: 1} (S05TYPE=USER) N 0 10
+S05UNLK {Required achievement: 0} (S05TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 05.
 Press F2 to edit.
 
@@ -912,11 +947,11 @@ S06PHSR {Maximum phaser type: 15} (S06TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 06.
 
-S06TORP {Number of torpedo launchers: 2} (S06TYPE#<NONE>) N 0 3
+S06TORP {Number of torpedo launchers: 2} (S06TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 06.
 
-S06MISL {Number of missile launchers: 0} (S06TYPE#<NONE>) N 0 3
+S06MISL {Number of missile launchers: 0} (S06TYPE#<NONE>) N 0 255
 
 Decoy capability for class 06.
 
@@ -1025,6 +1060,10 @@ upgrades.
 
 S06LOUT {Loadout code: 177} (S06TYPE=USER,DROID) N 0 255
 
+S06SELLF {Selling faction: 7} (S06TYPE=USER) N 0 8
+S06SELLR {Selling outpost role: 1} (S06TYPE=USER) N 0 10
+S06UNLK {Required achievement: 0} (S06TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 06.
 Press F2 to edit.
 
@@ -1084,11 +1123,11 @@ S07PHSR {Maximum phaser type: 4} (S07TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 07.
 
-S07TORP {Number of torpedo launchers: 0} (S07TYPE#<NONE>) N 0 3
+S07TORP {Number of torpedo launchers: 0} (S07TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 07.
 
-S07MISL {Number of missile launchers: 0} (S07TYPE#<NONE>) N 0 3
+S07MISL {Number of missile launchers: 0} (S07TYPE#<NONE>) N 0 255
 
 Decoy capability for class 07.
 
@@ -1197,6 +1236,10 @@ upgrades.
 
 S07LOUT {Loadout code: 238} (S07TYPE=USER,DROID) N 0 255
 
+S07SELLF {Selling faction: 7} (S07TYPE=USER) N 0 8
+S07SELLR {Selling outpost role: 1} (S07TYPE=USER) N 0 10
+S07UNLK {Required achievement: 0} (S07TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 07.
 Press F2 to edit.
 
@@ -1257,11 +1300,11 @@ S08PHSR {Maximum phaser type: 10} (S08TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 08.
 
-S08TORP {Number of torpedo launchers: 2} (S08TYPE#<NONE>) N 0 3
+S08TORP {Number of torpedo launchers: 2} (S08TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 08.
 
-S08MISL {Number of missile launchers: 1} (S08TYPE#<NONE>) N 0 3
+S08MISL {Number of missile launchers: 1} (S08TYPE#<NONE>) N 0 255
 
 Decoy capability for class 08.
 
@@ -1370,6 +1413,10 @@ upgrades.
 
 S08LOUT {Loadout code: 251} (S08TYPE=USER,DROID) N 0 255
 
+S08SELLF {Selling faction: 7} (S08TYPE=USER) N 0 8
+S08SELLR {Selling outpost role: 1} (S08TYPE=USER) N 0 10
+S08UNLK {Required achievement: 0} (S08TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 08.
 Press F2 to edit.
 
@@ -1430,11 +1477,11 @@ S09PHSR {Maximum phaser type: 6} (S09TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 09.
 
-S09TORP {Number of torpedo launchers: 1} (S09TYPE#<NONE>) N 0 3
+S09TORP {Number of torpedo launchers: 1} (S09TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 09.
 
-S09MISL {Number of missile launchers: 1} (S09TYPE#<NONE>) N 0 3
+S09MISL {Number of missile launchers: 1} (S09TYPE#<NONE>) N 0 255
 
 Decoy capability for class 09.
 
@@ -1543,6 +1590,10 @@ upgrades.
 
 S09LOUT {Loadout code: 255} (S09TYPE=USER,DROID) N 0 255
 
+S09SELLF {Selling faction: 7} (S09TYPE=USER) N 0 8
+S09SELLR {Selling outpost role: 1} (S09TYPE=USER) N 0 10
+S09UNLK {Required achievement: 0} (S09TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 09.
 Press F2 to edit.
 
@@ -1600,11 +1651,11 @@ S10PHSR {Maximum phaser type: 16} (S10TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 10.
 
-S10TORP {Number of torpedo launchers: 2} (S10TYPE#<NONE>) N 0 3
+S10TORP {Number of torpedo launchers: 2} (S10TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 10.
 
-S10MISL {Number of missile launchers: 2} (S10TYPE#<NONE>) N 0 3
+S10MISL {Number of missile launchers: 2} (S10TYPE#<NONE>) N 0 255
 
 Decoy capability for class 10.
 
@@ -1713,6 +1764,10 @@ upgrades.
 
 S10LOUT {Loadout code: 255} (S10TYPE=USER,DROID) N 0 255
 
+S10SELLF {Selling faction: 7} (S10TYPE=USER) N 0 8
+S10SELLR {Selling outpost role: 1} (S10TYPE=USER) N 0 10
+S10UNLK {Required achievement: 0} (S10TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 10.
 Press F2 to edit.
 
@@ -1772,11 +1827,11 @@ S11PHSR {Maximum phaser type: 19} (S11TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 11.
 
-S11TORP {Number of torpedo launchers: 3} (S11TYPE#<NONE>) N 0 3
+S11TORP {Number of torpedo launchers: 3} (S11TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 11.
 
-S11MISL {Number of missile launchers: 3} (S11TYPE#<NONE>) N 0 3
+S11MISL {Number of missile launchers: 3} (S11TYPE#<NONE>) N 0 255
 
 Decoy capability for class 11.
 
@@ -1885,6 +1940,10 @@ upgrades.
 
 S11LOUT {Loadout code: 247} (S11TYPE=USER,DROID) N 0 255
 
+S11SELLF {Selling faction: 7} (S11TYPE=USER) N 0 8
+S11SELLR {Selling outpost role: 1} (S11TYPE=USER) N 0 10
+S11UNLK {Required achievement: 0} (S11TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 11.
 Press F2 to edit.
 
@@ -1942,11 +2001,11 @@ S12PHSR {Maximum phaser type: 3} (S12TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 12.
 
-S12TORP {Number of torpedo launchers: 0} (S12TYPE#<NONE>) N 0 3
+S12TORP {Number of torpedo launchers: 0} (S12TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 12.
 
-S12MISL {Number of missile launchers: 0} (S12TYPE#<NONE>) N 0 3
+S12MISL {Number of missile launchers: 0} (S12TYPE#<NONE>) N 0 255
 
 Decoy capability for class 12.
 
@@ -2055,6 +2114,10 @@ upgrades.
 
 S12LOUT {Loadout code: 255} (S12TYPE=USER,DROID) N 0 255
 
+S12SELLF {Selling faction: 7} (S12TYPE=USER) N 0 8
+S12SELLR {Selling outpost role: 1} (S12TYPE=USER) N 0 10
+S12UNLK {Required achievement: 0} (S12TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 12.
 Press F2 to edit.
 
@@ -2114,11 +2177,11 @@ S13PHSR {Maximum phaser type: 0} (S13TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 13.
 
-S13TORP {Number of torpedo launchers: 0} (S13TYPE#<NONE>) N 0 3
+S13TORP {Number of torpedo launchers: 0} (S13TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 13.
 
-S13MISL {Number of missile launchers: 0} (S13TYPE#<NONE>) N 0 3
+S13MISL {Number of missile launchers: 0} (S13TYPE#<NONE>) N 0 255
 
 Decoy capability for class 13.
 
@@ -2227,6 +2290,10 @@ upgrades.
 
 S13LOUT {Loadout code: 113} (S13TYPE=USER,DROID) N 0 255
 
+S13SELLF {Selling faction: 7} (S13TYPE=USER) N 0 8
+S13SELLR {Selling outpost role: 1} (S13TYPE=USER) N 0 10
+S13UNLK {Required achievement: 0} (S13TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 13.
 Press F2 to edit.
 
@@ -2284,11 +2351,11 @@ S14PHSR {Maximum phaser type: 0} (S14TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 14.
 
-S14TORP {Number of torpedo launchers: 1} (S14TYPE#<NONE>) N 0 3
+S14TORP {Number of torpedo launchers: 1} (S14TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 14.
 
-S14MISL {Number of missile launchers: 0} (S14TYPE#<NONE>) N 0 3
+S14MISL {Number of missile launchers: 0} (S14TYPE#<NONE>) N 0 255
 
 Decoy capability for class for class 14.
 
@@ -2397,6 +2464,10 @@ upgrades.
 
 S14LOUT {Loadout code: 57} (S14TYPE=USER,DROID) N 0 255
 
+S14SELLF {Selling faction: 3} (S14TYPE=USER) N 0 8
+S14SELLR {Selling outpost role: 4} (S14TYPE=USER) N 0 10
+S14UNLK {Required achievement: 3} (S14TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 14.
 Press F2 to edit.
 
@@ -2463,11 +2534,11 @@ S15PHSR {Maximum phaser type: 19} (S15TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 15.
 
-S15TORP {Number of torpedo launchers: 3} (S15TYPE#<NONE>) N 0 3
+S15TORP {Number of torpedo launchers: 3} (S15TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 15.
 
-S15MISL {Number of missile launchers: 3} (S15TYPE#<NONE>) N 0 3
+S15MISL {Number of missile launchers: 3} (S15TYPE#<NONE>) N 0 255
 
 Decoy capability for class 15.
 
@@ -2576,6 +2647,10 @@ upgrades.
 
 S15LOUT {Loadout code: 0} (S15TYPE=USER,DROID) N 0 255
 
+S15SELLF {Selling faction: 7} (S15TYPE=USER) N 0 8
+S15SELLR {Selling outpost role: 8} (S15TYPE=USER) N 0 10
+S15UNLK {Required achievement: 2} (S15TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 15.
 Press F2 to edit.
 
@@ -2641,11 +2716,11 @@ S16PHSR {Maximum phaser type: 17} (S16TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 16.
 
-S16TORP {Number of torpedo launchers: 3} (S16TYPE#<NONE>) N 0 3
+S16TORP {Number of torpedo launchers: 3} (S16TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 16.
 
-S16MISL {Number of missile launchers: 3} (S16TYPE#<NONE>) N 0 3
+S16MISL {Number of missile launchers: 3} (S16TYPE#<NONE>) N 0 255
 
 Decoy capability for class 16.
 
@@ -2754,6 +2829,10 @@ upgrades.
 
 S16LOUT {Loadout code: 115} (S16TYPE=USER,DROID) N 0 255
 
+S16SELLF {Selling faction: 7} (S16TYPE=USER) N 0 8
+S16SELLR {Selling outpost role: 1} (S16TYPE=USER) N 0 10
+S16UNLK {Required achievement: 1} (S16TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 16.
 Press F2 to edit.
 
@@ -2789,11 +2868,11 @@ USER for player-controlled ships.
 CYBORG for Cybertrons.
 DROID for all other NPC ships.
 
-S17TYPE {Class 17 type of ship: <NONE>} E USER CYBORG DROID <NONE> 
+S17TYPE {Class 17 type of ship: USER} E USER CYBORG DROID <NONE>
 
 Name of class of ship for class 17.
 
-S17NAME {} (S17TYPE#<NONE>) S 29 Class 17 name
+S17NAME {Obliterator} (S17TYPE#<NONE>) S 29 Class 17 name
 
 Name of ship of class 17 (NPCs only).
 This will be appended with a numerical identifier.
@@ -2805,26 +2884,26 @@ For users, ships start with a Mark-1 shield and can purchase
 up to this value. For NPCs, this will be a random value
 between 1 and this class.
 
-S17SHLD {Maximum shield type: 0} (S17TYPE#<NONE>) N 0 19
+S17SHLD {Maximum shield type: 5} (S17TYPE#<NONE>) N 0 19
 
 Maximum phaser type for class 17. 0 for no phasers at all.
 For users, ships start with a Mark-1 shield and can purchase
 up to this value. For NPCs, this will be a random value
 between 1 and this class.
 
-S17PHSR {Maximum phaser type: 0} (S17TYPE#<NONE>) N 0 19
+S17PHSR {Maximum phaser type: 16} (S17TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 17.
 
-S17TORP {Number of torpedo launchers: 0} (S17TYPE#<NONE>) N 0 3
+S17TORP {Number of torpedo launchers: 6} (S17TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 17.
 
-S17MISL {Number of missile launchers: 0} (S17TYPE#<NONE>) N 0 3
+S17MISL {Number of missile launchers: 0} (S17TYPE#<NONE>) N 0 255
 
 Decoy capability for class 17.
 
-S17DECY {Has decoy capability? NO} (S17TYPE#<NONE>) B
+S17DECY {Has decoy capability? YES} (S17TYPE#<NONE>) B
 
 Jammer capability for class 17.
 
@@ -2852,7 +2931,7 @@ Immobile NPCs (e.g. Cyber-Base) should have this set to 0,
 which will exclude them from all routines that involve
 pursuing other ships.
 
-S17ACCL {Acceleration rate: 0} (S17TYPE#<NONE>) N 0 32767
+S17ACCL {Acceleration rate: 200} (S17TYPE#<NONE>) N 0 32767
 
 Maximum warp cruising speed of class 17.
 For user ships, actual top speed is 1.5x this value, but
@@ -2860,23 +2939,23 @@ causes engine damage over time. A value of 0 means impulse
 only. To make a class completely immobile, set SXXACCL to 0
 as well.
 
-S17WARP {Maximum warp cruising speed: 0} (S17TYPE#<NONE>) N 0 255
+S17WARP {Maximum warp cruising speed: 15} (S17TYPE#<NONE>) N 0 255
 
 Maximum cargo capacity of class 17 in tons.
 
-S17TONS {Maximum tonnage: 1} (S17TYPE#<NONE>) L 1 2000000000
+S17TONS {Maximum tonnage: 250000} (S17TYPE#<NONE>) L 1 2000000000
 
 Price of a class 17 ship (user ships only).
 
-S17PRIC {Price of ship: 1} (S17TYPE=USER) L 1 2000000000
+S17PRIC {Price of ship: 4000000} (S17TYPE=USER) L 1 2000000000
 
 Points awarded for destroying a class 17 ship.
 
-S17PNTS {Points awarded: 1} (S17TYPE#<NONE>) N 1 32767
+S17PNTS {Points awarded: 5000} (S17TYPE#<NONE>) N 1 32767
 
 Scanner range of a class 17 ship in subsectors.
 
-S17SRNG {Scanner range: 1} (S17TYPE#<NONE>) L 1 10000000
+S17SRNG {Scanner range: 400000} (S17TYPE#<NONE>) L 1 10000000
 
 Will Cybertrons fire on a class 17 ship unprovoked?
 If YES, Cybertrons will pursue and fire upon this class.
@@ -2885,12 +2964,12 @@ For USER ships, Cybertrons will pursue this class but not
 fire on unprovoked.
 For DROID ships, Cybertrons will ignore this class.
 
-S17CATK {Cybs will fire on this ship: NO} (S17TYPE=USER,DROID) B
+S17CATK {Cybs will fire on this ship: YES} (S17TYPE=USER,DROID) B
 
 How many Cybertrons will pursue a class 17 ship?
 Cybertrons will only pursue DROID ships if SXXCATK is YES.
 
-S17NATK {Number of Cybs to pursue this ship: 0} (S17TYPE=USER,DROID) N 0 5
+S17NATK {Number of Cybs to pursue this ship: 2} (S17TYPE=USER,DROID) N 0 5
 
 Lowest class of user ship a class 17 Cybertron will pursue?
 
@@ -2909,7 +2988,7 @@ Class 17 damage factor, 100 is normal. 200 is twice as
 resilient, 30 is the minimum.
 Damage = damage / (SnnDAMF / 100)
 
-S17DAMF {Damage effect factor: 100} (S17TYPE#<NONE>) N 30 32767
+S17DAMF {Damage effect factor: 750} (S17TYPE#<NONE>) N 30 32767
 
 Class 17 faction code.
 0 for user ships. 1 for Cybertrons.
@@ -2929,11 +3008,32 @@ upgrades.
 
 S17LOUT {Loadout code: 0} (S17TYPE=USER,DROID) N 0 255
 
+S17SELLF {Selling faction: 2} (S17TYPE=USER) N 0 8
+S17SELLR {Selling outpost role: 10} (S17TYPE=USER) N 0 10
+S17UNLK {Required achievement: 4} (S17TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 17.
 Press F2 to edit.
 
 S17HELP {
-[1;36mType [1;37mHELP CLASS[1;36m for a list of valid ship classes.
+[1;36mDetailed Class Specification
+[0;31m-----------------------------------------------------------------------------
+[1;37mShip class: [1;32mObliterator
+[1;37mMission profile: [1;32mHeavy battle aggressor
+[1;37mShields: [1;32mMark-5 maximum   [1;37mPhasers: [1;32mMark-16 maximum   [1;37mTorpedo launchers: [1;32m6
+[1;37mMissile launchers: [0;31mNone   [1;37mDecoy launcher: [0;31mNo   [1;37mJammer launcher: [0;31mNo
+[1;37mZipper launcher: [0;31mNo   [1;37mMine launcher: [0;31mNo   [1;37mFighter launcher: [0;31mNo   [1;37mCloak: [0;31mNo
+[1;37mAcceleration rate: [1;32m200 Su/T   [1;37mTop rated speed: [1;32mWarp 15   [1;37mKill points: [1;32m5,000
+[1;37mScanner range: [1;32m400,000 subsectors (40 sectors)   [1;37mCargo capacity: [1;32m250,000 Tons
+
+[1;36mThis player-operated version of the Sarten heavy battle aggressor pairs a
+resilient hull and powerful phasers with limited shields and slow engines.
+It carries six torpedo launchers, but has no fighter or missile system,
+defensive launchers, cloaking device or optional upgrades.
+
+Available from the Sarten shipyard after its permanent achievement is unlocked.
+Price: [0;33m4,000,000[1;36m. New ships start with Mark-1 shields and phasers; the listed
+weapon and shield marks are the maximum upgrades the hull supports.
 [1;37m
 } (S17TYPE=USER) T   Help screen for class 17
 
@@ -2969,11 +3069,11 @@ S18PHSR {Maximum phaser type: 0} (S18TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 18.
 
-S18TORP {Number of torpedo launchers: 0} (S18TYPE#<NONE>) N 0 3
+S18TORP {Number of torpedo launchers: 0} (S18TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 18.
 
-S18MISL {Number of missile launchers: 0} (S18TYPE#<NONE>) N 0 3
+S18MISL {Number of missile launchers: 0} (S18TYPE#<NONE>) N 0 255
 
 Decoy capability for class 18.
 
@@ -3082,6 +3182,10 @@ upgrades.
 
 S18LOUT {Loadout code: 0} (S18TYPE=USER,DROID) N 0 255
 
+S18SELLF {Selling faction: 8} (S18TYPE=USER) N 0 8
+S18SELLR {Selling outpost role: 0} (S18TYPE=USER) N 0 10
+S18UNLK {Required achievement: 0} (S18TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 18.
 Press F2 to edit.
 
@@ -3117,11 +3221,11 @@ S19PHSR {Maximum phaser type: 0} (S19TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 19.
 
-S19TORP {Number of torpedo launchers: 0} (S19TYPE#<NONE>) N 0 3
+S19TORP {Number of torpedo launchers: 0} (S19TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 19.
 
-S19MISL {Number of missile launchers: 0} (S19TYPE#<NONE>) N 0 3
+S19MISL {Number of missile launchers: 0} (S19TYPE#<NONE>) N 0 255
 
 Decoy capability for class 19.
 
@@ -3230,6 +3334,10 @@ upgrades.
 
 S19LOUT {Loadout code: 0} (S19TYPE=USER,DROID) N 0 255
 
+S19SELLF {Selling faction: 8} (S19TYPE=USER) N 0 8
+S19SELLR {Selling outpost role: 0} (S19TYPE=USER) N 0 10
+S19UNLK {Required achievement: 0} (S19TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 19.
 Press F2 to edit.
 
@@ -3270,11 +3378,11 @@ S20PHSR {Maximum phaser type: 0} (S20TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 20.
 
-S20TORP {Number of torpedo launchers: 0} (S20TYPE#<NONE>) N 0 3
+S20TORP {Number of torpedo launchers: 0} (S20TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 20.
 
-S20MISL {Number of missile launchers: 0} (S20TYPE#<NONE>) N 0 3
+S20MISL {Number of missile launchers: 0} (S20TYPE#<NONE>) N 0 255
 
 Decoy capability for class 20.
 
@@ -3383,6 +3491,10 @@ upgrades.
 
 S20LOUT {Loadout code: 0} (S20TYPE=USER,DROID) N 0 255
 
+S20SELLF {Selling faction: 8} (S20TYPE=USER) N 0 8
+S20SELLR {Selling outpost role: 0} (S20TYPE=USER) N 0 10
+S20UNLK {Required achievement: 0} (S20TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 20.
 Press F2 to edit.
 
@@ -3423,11 +3535,11 @@ S21PHSR {Maximum phaser type: 4} (S21TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 21.
 
-S21TORP {Number of torpedo launchers: 1} (S21TYPE#<NONE>) N 0 3
+S21TORP {Number of torpedo launchers: 1} (S21TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 21.
 
-S21MISL {Number of missile launchers: 0} (S21TYPE#<NONE>) N 0 3
+S21MISL {Number of missile launchers: 0} (S21TYPE#<NONE>) N 0 255
 
 Decoy capability for class 21.
 
@@ -3536,6 +3648,10 @@ upgrades.
 
 S21LOUT {Loadout code: 0} (S21TYPE=USER,DROID) N 0 255
 
+S21SELLF {Selling faction: 8} (S21TYPE=USER) N 0 8
+S21SELLR {Selling outpost role: 0} (S21TYPE=USER) N 0 10
+S21UNLK {Required achievement: 0} (S21TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 21.
 Press F2 to edit.
 
@@ -3576,11 +3692,11 @@ S22PHSR {Maximum phaser type: 6} (S22TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 22.
 
-S22TORP {Number of torpedo launchers: 2} (S22TYPE#<NONE>) N 0 3
+S22TORP {Number of torpedo launchers: 2} (S22TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 22.
 
-S22MISL {Number of missile launchers: 0} (S22TYPE#<NONE>) N 0 3
+S22MISL {Number of missile launchers: 0} (S22TYPE#<NONE>) N 0 255
 
 Decoy capability for class 22.
 
@@ -3689,6 +3805,10 @@ upgrades.
 
 S22LOUT {Loadout code: 0} (S22TYPE=USER,DROID) N 0 255
 
+S22SELLF {Selling faction: 8} (S22TYPE=USER) N 0 8
+S22SELLR {Selling outpost role: 0} (S22TYPE=USER) N 0 10
+S22UNLK {Required achievement: 0} (S22TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 22.
 Press F2 to edit.
 
@@ -3729,11 +3849,11 @@ S23PHSR {Maximum phaser type: 16} (S23TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 23.
 
-S23TORP {Number of torpedo launchers: 3} (S23TYPE#<NONE>) N 0 3
+S23TORP {Number of torpedo launchers: 3} (S23TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 23.
 
-S23MISL {Number of missile launchers: 3} (S23TYPE#<NONE>) N 0 3
+S23MISL {Number of missile launchers: 3} (S23TYPE#<NONE>) N 0 255
 
 Decoy capability for class 23.
 
@@ -3842,6 +3962,10 @@ upgrades.
 
 S23LOUT {Loadout code: 0} (S23TYPE=USER,DROID) N 0 255
 
+S23SELLF {Selling faction: 8} (S23TYPE=USER) N 0 8
+S23SELLR {Selling outpost role: 0} (S23TYPE=USER) N 0 10
+S23UNLK {Required achievement: 0} (S23TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 23.
 Press F2 to edit.
 
@@ -3882,11 +4006,11 @@ S24PHSR {Maximum phaser type: 8} (S24TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 24.
 
-S24TORP {Number of torpedo launchers: 3} (S24TYPE#<NONE>) N 0 3
+S24TORP {Number of torpedo launchers: 3} (S24TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 24.
 
-S24MISL {Number of missile launchers: 1} (S24TYPE#<NONE>) N 0 3
+S24MISL {Number of missile launchers: 1} (S24TYPE#<NONE>) N 0 255
 
 Decoy capability for class 24.
 
@@ -3995,6 +4119,10 @@ upgrades.
 
 S24LOUT {Loadout code: 0} (S24TYPE=USER,DROID) N 0 255
 
+S24SELLF {Selling faction: 8} (S24TYPE=USER) N 0 8
+S24SELLR {Selling outpost role: 0} (S24TYPE=USER) N 0 10
+S24UNLK {Required achievement: 0} (S24TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 24.
 Press F2 to edit.
 
@@ -4035,11 +4163,11 @@ S25PHSR {Maximum phaser type: 10} (S25TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 25.
 
-S25TORP {Number of torpedo launchers: 3} (S25TYPE#<NONE>) N 0 3
+S25TORP {Number of torpedo launchers: 3} (S25TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 25.
 
-S25MISL {Number of missile launchers: 3} (S25TYPE#<NONE>) N 0 3
+S25MISL {Number of missile launchers: 3} (S25TYPE#<NONE>) N 0 255
 
 Decoy capability for class 25.
 
@@ -4148,6 +4276,10 @@ upgrades.
 
 S25LOUT {Loadout code: 0} (S25TYPE=USER,DROID) N 0 255
 
+S25SELLF {Selling faction: 8} (S25TYPE=USER) N 0 8
+S25SELLR {Selling outpost role: 0} (S25TYPE=USER) N 0 10
+S25UNLK {Required achievement: 0} (S25TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 25.
 Press F2 to edit.
 
@@ -4188,11 +4320,11 @@ S26PHSR {Maximum phaser type: 0} (S26TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 26.
 
-S26TORP {Number of torpedo launchers: 0} (S26TYPE#<NONE>) N 0 3
+S26TORP {Number of torpedo launchers: 0} (S26TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 26.
 
-S26MISL {Number of missile launchers: 0} (S26TYPE#<NONE>) N 0 3
+S26MISL {Number of missile launchers: 0} (S26TYPE#<NONE>) N 0 255
 
 Decoy capability for class 26.
 
@@ -4301,6 +4433,10 @@ upgrades.
 
 S26LOUT {Loadout code: 0} (S26TYPE=USER,DROID) N 0 255
 
+S26SELLF {Selling faction: 8} (S26TYPE=USER) N 0 8
+S26SELLR {Selling outpost role: 0} (S26TYPE=USER) N 0 10
+S26UNLK {Required achievement: 0} (S26TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 26.
 Press F2 to edit.
 
@@ -4341,11 +4477,11 @@ S27PHSR {Maximum phaser type: 0} (S27TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 27.
 
-S27TORP {Number of torpedo launchers: 0} (S27TYPE#<NONE>) N 0 3
+S27TORP {Number of torpedo launchers: 0} (S27TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 27.
 
-S27MISL {Number of missile launchers: 0} (S27TYPE#<NONE>) N 0 3
+S27MISL {Number of missile launchers: 0} (S27TYPE#<NONE>) N 0 255
 
 Decoy capability for class 27.
 
@@ -4454,6 +4590,10 @@ upgrades.
 
 S27LOUT {Loadout code: 0} (S27TYPE=USER,DROID) N 0 255
 
+S27SELLF {Selling faction: 8} (S27TYPE=USER) N 0 8
+S27SELLR {Selling outpost role: 0} (S27TYPE=USER) N 0 10
+S27UNLK {Required achievement: 0} (S27TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 27.
 Press F2 to edit.
 
@@ -4494,11 +4634,11 @@ S28PHSR {Maximum phaser type: 0} (S28TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 28.
 
-S28TORP {Number of torpedo launchers: 0} (S28TYPE#<NONE>) N 0 3
+S28TORP {Number of torpedo launchers: 0} (S28TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 28.
 
-S28MISL {Number of missile launchers: 0} (S28TYPE#<NONE>) N 0 3
+S28MISL {Number of missile launchers: 0} (S28TYPE#<NONE>) N 0 255
 
 Decoy capability for class 28.
 
@@ -4607,6 +4747,10 @@ upgrades.
 
 S28LOUT {Loadout code: 0} (S28TYPE=USER,DROID) N 0 255
 
+S28SELLF {Selling faction: 8} (S28TYPE=USER) N 0 8
+S28SELLR {Selling outpost role: 0} (S28TYPE=USER) N 0 10
+S28UNLK {Required achievement: 0} (S28TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 28.
 Press F2 to edit.
 
@@ -4647,11 +4791,11 @@ S29PHSR {Maximum phaser type: 0} (S29TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 29.
 
-S29TORP {Number of torpedo launchers: 0} (S29TYPE#<NONE>) N 0 3
+S29TORP {Number of torpedo launchers: 0} (S29TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 29.
 
-S29MISL {Number of missile launchers: 0} (S29TYPE#<NONE>) N 0 3
+S29MISL {Number of missile launchers: 0} (S29TYPE#<NONE>) N 0 255
 
 Decoy capability for class 29.
 
@@ -4760,6 +4904,10 @@ upgrades.
 
 S29LOUT {Loadout code: 0} (S29TYPE=USER,DROID) N 0 255
 
+S29SELLF {Selling faction: 8} (S29TYPE=USER) N 0 8
+S29SELLR {Selling outpost role: 0} (S29TYPE=USER) N 0 10
+S29UNLK {Required achievement: 0} (S29TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 29.
 Press F2 to edit.
 
@@ -4800,11 +4948,11 @@ S30PHSR {Maximum phaser type: 0} (S30TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 30.
 
-S30TORP {Number of torpedo launchers: 0} (S30TYPE#<NONE>) N 0 3
+S30TORP {Number of torpedo launchers: 0} (S30TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 30.
 
-S30MISL {Number of missile launchers: 0} (S30TYPE#<NONE>) N 0 3
+S30MISL {Number of missile launchers: 0} (S30TYPE#<NONE>) N 0 255
 
 Decoy capability for class 30.
 
@@ -4913,6 +5061,10 @@ upgrades.
 
 S30LOUT {Loadout code: 0} (S30TYPE=USER,DROID) N 0 255
 
+S30SELLF {Selling faction: 8} (S30TYPE=USER) N 0 8
+S30SELLR {Selling outpost role: 0} (S30TYPE=USER) N 0 10
+S30UNLK {Required achievement: 0} (S30TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 30.
 Press F2 to edit.
 
@@ -4953,11 +5105,11 @@ S31PHSR {Maximum phaser type: 0} (S31TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 31.
 
-S31TORP {Number of torpedo launchers: 0} (S31TYPE#<NONE>) N 0 3
+S31TORP {Number of torpedo launchers: 0} (S31TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 31.
 
-S31MISL {Number of missile launchers: 0} (S31TYPE#<NONE>) N 0 3
+S31MISL {Number of missile launchers: 0} (S31TYPE#<NONE>) N 0 255
 
 Decoy capability for class 31.
 
@@ -5066,6 +5218,10 @@ upgrades.
 
 S31LOUT {Loadout code: 1} (S31TYPE=USER,DROID) N 0 255
 
+S31SELLF {Selling faction: 8} (S31TYPE=USER) N 0 8
+S31SELLR {Selling outpost role: 0} (S31TYPE=USER) N 0 10
+S31UNLK {Required achievement: 0} (S31TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 31.
 Press F2 to edit.
 
@@ -5106,11 +5262,11 @@ S32PHSR {Maximum phaser type: 10} (S32TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 32.
 
-S32TORP {Number of torpedo launchers: 0} (S32TYPE#<NONE>) N 0 3
+S32TORP {Number of torpedo launchers: 0} (S32TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 32.
 
-S32MISL {Number of missile launchers: 0} (S32TYPE#<NONE>) N 0 3
+S32MISL {Number of missile launchers: 0} (S32TYPE#<NONE>) N 0 255
 
 Decoy capability for class 32.
 
@@ -5219,6 +5375,10 @@ upgrades.
 
 S32LOUT {Loadout code: 2} (S32TYPE=USER,DROID) N 0 255
 
+S32SELLF {Selling faction: 8} (S32TYPE=USER) N 0 8
+S32SELLR {Selling outpost role: 0} (S32TYPE=USER) N 0 10
+S32UNLK {Required achievement: 0} (S32TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 32.
 Press F2 to edit.
 
@@ -5259,11 +5419,11 @@ S33PHSR {Maximum phaser type: 1} (S33TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 33.
 
-S33TORP {Number of torpedo launchers: 2} (S33TYPE#<NONE>) N 0 3
+S33TORP {Number of torpedo launchers: 2} (S33TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 33.
 
-S33MISL {Number of missile launchers: 0} (S33TYPE#<NONE>) N 0 3
+S33MISL {Number of missile launchers: 0} (S33TYPE#<NONE>) N 0 255
 
 Decoy capability for class 33.
 
@@ -5372,6 +5532,10 @@ upgrades.
 
 S33LOUT {Loadout code: 3} (S33TYPE=USER,DROID) N 0 255
 
+S33SELLF {Selling faction: 8} (S33TYPE=USER) N 0 8
+S33SELLR {Selling outpost role: 0} (S33TYPE=USER) N 0 10
+S33UNLK {Required achievement: 0} (S33TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 33.
 Press F2 to edit.
 
@@ -5412,11 +5576,11 @@ S34PHSR {Maximum phaser type: 6} (S34TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 34.
 
-S34TORP {Number of torpedo launchers: 0} (S34TYPE#<NONE>) N 0 3
+S34TORP {Number of torpedo launchers: 0} (S34TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 34.
 
-S34MISL {Number of missile launchers: 0} (S34TYPE#<NONE>) N 0 3
+S34MISL {Number of missile launchers: 0} (S34TYPE#<NONE>) N 0 255
 
 Decoy capability for class 34.
 
@@ -5525,6 +5689,10 @@ upgrades.
 
 S34LOUT {Loadout code: 4} (S34TYPE=USER,DROID) N 0 255
 
+S34SELLF {Selling faction: 8} (S34TYPE=USER) N 0 8
+S34SELLR {Selling outpost role: 0} (S34TYPE=USER) N 0 10
+S34UNLK {Required achievement: 0} (S34TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 34.
 Press F2 to edit.
 
@@ -5565,11 +5733,11 @@ S35PHSR {Maximum phaser type: 10} (S35TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 35.
 
-S35TORP {Number of torpedo launchers: 3} (S35TYPE#<NONE>) N 0 3
+S35TORP {Number of torpedo launchers: 3} (S35TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 35.
 
-S35MISL {Number of missile launchers: 0} (S35TYPE#<NONE>) N 0 3
+S35MISL {Number of missile launchers: 0} (S35TYPE#<NONE>) N 0 255
 
 Decoy capability for class 35.
 
@@ -5678,6 +5846,10 @@ upgrades.
 
 S35LOUT {Loadout code: 5} (S35TYPE=USER,DROID) N 0 255
 
+S35SELLF {Selling faction: 8} (S35TYPE=USER) N 0 8
+S35SELLR {Selling outpost role: 0} (S35TYPE=USER) N 0 10
+S35UNLK {Required achievement: 0} (S35TYPE=USER) N 0 32
+
 This is the in-game help that is displayed for class 35.
 Press F2 to edit.
 
@@ -5718,11 +5890,11 @@ S36PHSR {Maximum phaser type: 10} (S36TYPE#<NONE>) N 0 19
 
 Number of torpedo launchers for class 36.
 
-S36TORP {Number of torpedo launchers: 3} (S36TYPE#<NONE>) N 0 3
+S36TORP {Number of torpedo launchers: 3} (S36TYPE#<NONE>) N 0 255
 
 Number of missile launchers for class 36.
 
-S36MISL {Number of missile launchers: 0} (S36TYPE#<NONE>) N 0 3
+S36MISL {Number of missile launchers: 0} (S36TYPE#<NONE>) N 0 255
 
 Decoy capability for class 36.
 
@@ -5830,6 +6002,10 @@ For user ships, set to the byte value of available
 upgrades.
 
 S36LOUT {Loadout code: 6} (S36TYPE=USER,DROID) N 0 255
+
+S36SELLF {Selling faction: 8} (S36TYPE=USER) N 0 8
+S36SELLR {Selling outpost role: 0} (S36TYPE=USER) N 0 10
+S36UNLK {Required achievement: 0} (S36TYPE=USER) N 0 32
 
 This is the in-game help that is displayed for class 36.
 Press F2 to edit.

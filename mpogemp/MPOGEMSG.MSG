@@ -506,14 +506,6 @@ members to be selective on who they let join the team.
 
 TEAMMAX {Maximum members on a team: 10} N 0 32000
 
-This is the faction number of the planets in the neutral
-zone. If you attack ships of this faction, you will
-not be allowed to conduct business in the neutral zone
-for a few days. If you want to disable this behavior,
-set to 8. The default is 7.
-
-GCNUM {Faction number of neutral zone: 7} N 0 8
-
 The maximum an M M planet with no cash bonus can sustain.
 The true maximum is three times this amount (VG VG with bonus).
 
@@ -2863,6 +2855,9 @@ SCAN10 {
 SCAN11 {[0;37mCommanded by: [1;34m%s[0;37m
 } T GE scan 09
 
+SCAN11A {[0;34m%.38s[0;37m
+} T Faction planet description
+
 SCAN12 {[0;37mBearing: [1;37m%s[0;37m  Distance: [1;37m%s[0;37m
 } T GE scan 10
 
@@ -2920,10 +2915,10 @@ SCAN29 {[0;37m%s stockpile of missiles.
 SCAN30 {[0;37m%s stockpile of torpedoes.
 } T GE scan 30
 
-SCAN31 {[0;37mNo sign of fighters anywhere.
+SCAN31 {[0;37mNo planetary defenses detected.
 } T GE scan 31
 
-SCAN32 {[0;37mThere are indications of fighters.
+SCAN32 {[0;37mLight planetary defenses detected.
 } T GE scan 32
 
 SCAN33 {[0;37m%s stockpile of flux pods.
@@ -3389,8 +3384,8 @@ TPOND5 {[1;36mValid transponder values are [1;37mNORMAL[1;36m, [1;37mHIGH[1
 } T GE transponder wrong
 
 SELL1 {
-[1;36mYou must go to Zygor in sector [1;34m0 0[1;36m to sell items.[1;37m
-} T GE no selling unless at Zygor message
+[1;36mYou must orbit a faction market to sell items.[1;37m
+} T GE faction market orbit required
 
 SELL2 {
 [1;36mAfter the transfer tax of [0;33m%s[1;36m, you have netted [0;33m%s[1;36m for the [1;37m%s %s[1;36m.[1;37m
@@ -4869,6 +4864,92 @@ DRDISMSG {***
   Requesting immediate assistance to sector [1;34m%d %d[1;37m! [1;36m>[1;37m
 } T GE Droid distress message
 
+
+SHIPORBT {[1;36mYou must be orbiting a faction shipyard to buy a ship.[1;37m
+} T Ship purchase requires orbit
+
+SHIPSVC {[1;36m%s does not offer shipyard services.[1;37m
+} T No shipyard at this planet
+
+SHIPBAN {[1;36m%s refuses shipyard service because of your faction standing.[1;37m
+} T Faction shipyard access refused
+
+SHIPUNAV {[1;36mThat ship class is not available to you at this planet.[1;37m
+} T Ship class unavailable at this vendor
+
+SHIPNONE {[1;36mNo unlocked ship classes are available in this catalog.[1;37m
+} T Empty ship catalog
+
+UPGORBT {[1;36mYou must be orbiting an upgrade service planet to buy or adjust upgrades.[1;37m
+} T Upgrade service requires orbit
+
+UPGSVC {[1;36m%s does not offer upgrade services.[1;37m
+} T No upgrade service at this planet
+
+UPGBAN {[1;36m%s refuses upgrade service because of your faction standing.[1;37m
+} T Faction upgrade access refused
+
+UPGUNAV {[1;36mThat upgrade is not available to you at this planet.[1;37m
+} T Upgrade unavailable at this vendor
+
+UPGNONE {[1;36mNo unlocked upgrades compatible with this ship are offered here.[1;37m
+} T Empty local upgrade catalog
+
+EQPORBT {[1;36mYou must orbit a faction equipment vendor to buy shields or phasers.[1;37m
+} T Equipment purchase requires orbit
+
+EQPSVC {[1;36m%s does not sell %s.[1;37m
+} T Equipment service unavailable
+
+EQPBAN {[1;36m%s refuses equipment service because of your faction standing.[1;37m
+} T Equipment service refused
+
+EQPLIM {[1;36m%s sells this equipment only up to Mark-%d.[1;37m
+} T Equipment Mark exceeds planet sales limit
+
+TRDENONE {[1;36m%s does not offer trading services.[1;37m
+} T No faction trading service
+
+TRDEBAN {[1;36m%s refuses trade because of your faction standing.[1;37m
+} T Faction market refuses trade
+
+SELLPPL {[1;36mYou cannot sell %s.[1;37m
+} T People cannot be sold
+
+SELLNO {[1;36m%s does not accept %s for sale.[1;37m
+} T Market does not offer or accept item
+
+SELLFULL {[1;36mThe planet has no room for more %s.[1;37m
+} T Finite planet stock limit reached
+
+BUYPPL {[1;36m%s cannot be purchased here.[1;37m
+} T People purchase restriction
+
+SCNSALE {[0;37m%s and %s for sale.
+} T Faction planet scan paired goods
+
+SCNSAL1 {[0;37m%s for sale.
+} T Faction planet scan single good
+
+SCNPEOP {[0;37mMen and troops available.
+} T Tahanian people available separately from goods for sale
+
+SCNAVAL {[0;37m%s available.
+} T Tahanian single people category available
+
+BUYMEN {
+[1;37m%s %s[1;36m embarked. Relocation fee: [0;33m%u[1;36m each, totaling [0;33m%s[1;36m.[1;37m
+} T Men embarkation and relocation fee
+
+BUYTRO {
+[1;37m%s %s[1;36m embarked. Transport fee: [0;33m%u[1;36m each, totaling [0;33m%s[1;36m.[1;37m
+} T Troop embarkation and transport fee
+
+SCNDEFM {[0;37mModerate planetary defenses detected.
+} T Scan combined planetary defenses below 200000
+
+SCNDEFH {[0;37mHeavy planetary defenses detected.
+} T Scan combined planetary defenses at least 200000
 
 ENDMARK {ENDMARK} T Endmark - do not remove
 

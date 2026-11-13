@@ -520,14 +520,20 @@ ship's systems will remember its location in sector scans.
 HLPUPG {
 [1;36mTopic: Ship upgrades
 
-Various upgrades for your ship's systems are available at Zygor. Each class of
-ship has different upgrades that are applicable to that class of ship. The
-prices for these upgrades also vary from class to class, with more powerful
-ships generally requiring pricier upgrades.
+Upgrades for your ship's systems are offered by specific faction planets. Each
+class of ship supports different upgrades. Prices also vary from class to
+class, with more powerful ships generally requiring pricier upgrades.
 
-To see what upgrades are available for your ship class, go to Zygor and enter
-[1;37mNEW UPGRADE[1;36m. To purchase an upgrade, enter [1;37mNEW UPGRADE [1;32mx[1;36m, where [1;32mx[1;36m is the
-number of the upgrade.
+To see unlocked upgrades offered here for your ship, orbit a service planet
+and enter [1;37mNEW UPGRADE[1;36m. To purchase one, enter [1;37mNEW UPGRADE [1;32mx[1;36m, where [1;32mx[1;36m is
+the number of the upgrade.
+
+By default, enhanced scanners are offered at Vakory, armor plating at Sarten,
+and transponder control at Lydoria; other upgrades are offered at Zygor.
+Offerings can differ from planet to planet and may be configured by the sysop.
+Changing transponder mode requires orbiting a planet offering transponder
+control. Faction standing may temporarily bar service without removing
+unlocks or installed upgrades.
 
 Upgrades are for the ship in which they are installed only, and they can't be
 transferred or returned once installed. Be careful to not put a lot of money
@@ -604,9 +610,14 @@ follows:
     [1;37mtor[1;36m = buy torpedoes    [1;37mjam[1;36m = buy jammers
     [1;37mion[1;36m = buy ion cannons  [1;37mzip[1;36m = buy zippers
     [1;37mflu[1;36m = buy flux pods    [1;37mgol[1;36m = buy gold
-    [1;37mfoo[1;36m = buy food         [1;37mspy[1;36m = buy spies
+    [1;37mfoo[1;36m = buy food
 
   [1;32mpassword[1;36m = optional trade password may be required by planet
+
+Men and troops can only be purchased at Tahanian Station. Spies cannot be
+purchased; produce them on your planets instead. Use TRANSFER, not BUY, to
+collect people from your own planets. Market goods depend on available stock.
+Faction standing may prevent trading at a faction market.
 
 Examples: [1;37mbuy 1000 men
           buy max ion
@@ -809,7 +820,7 @@ used. Issue the command as follows:
 
 HLPNEW {
 [1;36mThe [1;37mNEW[1;36m command is used to purchase a new ship, a new phaser or shield
-system for your current ship, or a ship upgrade at Zygor.
+system for your current ship, or a ship upgrade.
 
 Issue the command as follows:
 
@@ -817,9 +828,17 @@ Issue the command as follows:
 
   [1;32mtype [1;36m= the type of shield, phaser, ship, or upgrade you wish to purchase.
 
-You must be orbiting around Zygor in Sector 0 0 to issue this command. A
-complete list of ship classes and prices can be obtained from the [1;37mHELP CLASS[1;36m
-command. For phaser and shield prices, use the [1;37mHELP NEWPRICE[1;36m command.
+Use [1;37mNEW SHIP[1;36m without a class number to list unlocked ships sold by the
+orbited faction shipyard. Use [1;37mNEW SHIP [1;32m[class number][1;36m to purchase one.
+Your faction standing can temporarily prevent shipyard service.
+
+[1;37mHELP CLASS[1;36m lists unlocked classes regardless of your current location.
+Faction equipment vendors may sell shields and phasers up to different Mark
+limits. A requested Mark must be supported by both the planet and your ship
+class. Faction standing may temporarily prevent equipment service.
+Use [1;37mNEW UPGRADE[1;36m to list locally offered, unlocked upgrades for your ship.
+Use [1;37mHELP UPGRADE[1;36m for upgrade service locations.
+For phaser and shield prices, use [1;37mHELP NEWPRICE[1;36m.
 [1;37m} T GE help new message
 
 HLPNEW2 {
@@ -1045,28 +1064,22 @@ the command as follows:
 } T GE help scan message
 
 HLPSEL {
-[1;36mUse the [1;37mSELL[1;36m command to sell items to Zygor. The Galactic Command will charge a
-small transfer tax on each transaction.
+[1;36mUse [1;37mSELL[1;36m to sell goods to a faction market. A small transfer tax applies.
+The market accepts only goods it offers for sale, even if its stock is empty.
+Men, troops and spies cannot be sold. Faction standing may prevent service.
 
-Issue the command as follows:
+  [1;37msell [1;32m[[1;37mall[1;32m/amount] [item]
 
-[1;37m  sell [1;32m[[1;37mall[1;32m/amount] [item]
+Use [1;37mall[1;36m to sell all onboard, or a negative amount to keep that many aboard.
 
-  amount[1;36m = the amount you want to sell (or [1;37mall[1;36m to sell all onboard)
+Items: [1;37mmis[1;36m missiles, [1;37mtor[1;36m torpedoes, [1;37mion[1;36m ion cannons, [1;37mflu[1;36m flux pods,
+       [1;37mfoo[1;36m food, [1;37mfig[1;36m fighters, [1;37mdec[1;36m decoys, [1;37mzip[1;36m zippers, [1;37mjam[1;36m jammers,
+       [1;37mmin[1;36m mines, [1;37mgol[1;36m gold.
 
-  [1;32mitem[1;36m:
-[1;37m    men[1;36m = sell men          [1;37mfig[1;36m = sell fighters
-[1;37m    tro[1;36m = sell troops       [1;37mdec[1;36m = sell decoys
-[1;37m    mis[1;36m = sell missiles     [1;37mmin[1;36m = sell mines
-[1;37m    tor[1;36m = sell torpedoes    [1;37mjam[1;36m = sell jammers
-[1;37m    ion[1;36m = sell ion cannons  [1;37mzip[1;36m = sell zippers
-[1;37m    flu[1;36m = sell flux pods    [1;37mgol[1;36m = sell gold
-[1;37m    foo[1;36m = sell food         [1;37mspy[1;36m = sell spies
-
-Examples:[1;37m sell 1000 men
+Examples: [1;37msell 1000 tor
           sel 3 ion
-          sell all gol 
-} T GE help set message
+          sell all gol
+[1;37m} T GE help sell message
 
 HLPSEN {
 [1;36mUse the [1;37mSEND[1;36m command to communicate with other ships and team members. Issue
@@ -1186,8 +1199,14 @@ opponent's own ship.
 [1;37m} T GE help zipper message
 
 HLPCLS1 {
-[1;36mThese are the classes of ships manufactured at Zygor and their capabilities: [0;37m
-                                P  W  S  P T M M F D J Z C   A    S    T     P
+[1;36mThese are all the ships currently available and their capabilities: [0;37m
+} T Global unlocked ship catalog heading
+
+HLPCLSP {
+[1;36mThese are the classes of ships manufactured at %s and their capabilities: [0;37m
+} T Planet-specific ship catalog heading
+
+HLPCLSH {                                P  W  S  P T M M F D J Z C   A    S    T     P
                                 r  r  h  h o i i i e a i l   c    c    o     t
                                 c  p  i  a r s n g c m p o   l    n    n     s
 } T GE help class header
@@ -1229,7 +1248,8 @@ Team founder commands are:
 
 HLPSPY {
 [1;36mThe [1;37mSPY[1;36m command will transport a spy (provided you have one on board) to the
-planet you are currently orbiting. If the spy survives and is not caught you
+planet you are currently orbiting. Spies must be produced on planets rather
+than purchased. If the spy survives and is not caught you
 will from time to time get intelligence reports on the planet.
 
 You can defend from spies by having your own spies on your planets. The more
@@ -1274,6 +1294,8 @@ available for the use of sysops, game administrators, or their designees:
 [1;37m  sys unjam[1;36m -- clear jamming
 [1;37m  sys list [1;32m[number][1;36m -- list 50 ships in game beginning with specified number
 [1;37m  sys classlist[1;36m -- show complete list of ship classes, including NPCs
+[1;37m  sys unlock [1;32m[id][1;36m -- permanently grant your player achievement 1-32
+[1;37m  sys outposts[1;36m -- list faction sectors outside the neutral zone
 [1;37m  sys cybpause [1;32m[number][1;36m -- pause the Cybertrons for the specified seconds
 [1;37m  sys multiply [1;32m[number][1;36m -- run the planetary update cycle of the orbited planet
 [1;37m  sys orbit [1;32m[number][1;36m -- orbit planet in the current sector, even if not close

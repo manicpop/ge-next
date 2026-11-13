@@ -166,7 +166,6 @@ extern int gemaxplrs,
 	   passnum;
 
 #ifndef GE_ARENA
-extern int gcnum;
 extern char *faction_names[8];
 #endif
 

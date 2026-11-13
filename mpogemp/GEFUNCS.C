@@ -1720,6 +1720,55 @@ int FUNC initusr(char *userid)
 	return 0;
 }
 
+#ifndef GE_ARENA
+int FUNC player_has_unlock(WARUSR *player_record, int unlock)
+{
+	return unlock == 0 || (unlock > 0 && unlock <= NUM_UNLOCKS
+		&& (player_record->unlocks & (1UL << (unlock - 1))) != 0);
+}
+
+int FUNC grant_unlock(WARUSR *player_record, int unlock)
+{
+	if (unlock <= 0 || unlock > NUM_UNLOCKS || player_has_unlock(player_record, unlock))
+		return FALSE;
+	player_record->unlocks |= 1UL << (unlock - 1);
+	if (!geudb(GEUPDATE, player_record->userid, player_record))
+		catastro("GE:ERR:Cannot save player achievement");
+	return TRUE;
+}
+
+int FUNC planet_has_shipyard(GALPLNT *pl)
+{
+	if (pl->owner_type != PL_OWNER_FACTION || pl->owner_faction >= FACTION_NO_SELLER)
+		return FALSE;
+	switch (pl->outpost_type) {
+	case OUTPOST_ZYGOR:
+	case OUTPOST_LYDORIA:
+	case OUTPOST_SARTEN_SHIPYARD:
+	case OUTPOST_MURDONIA:
+	case OUTPOST_VAKORY:
+	case OUTPOST_ZYGOR_EXPRESS:
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/* A NULL vendor selects the global unlocked catalog, not local service access. */
+int FUNC ship_class_available(WARUSR *player_record, int cls, GALPLNT *vendor)
+{
+	if (cls < 0 || cls >= tot_classes || shipclass[cls].max_type != CLASSTYPE_USER
+		|| shipclass[cls].sell_faction >= FACTION_NO_SELLER
+		|| !player_has_unlock(player_record, shipclass[cls].unlock))
+		return FALSE;
+	if (vendor == NULL)
+		return TRUE;
+	return planet_has_shipyard(vendor)
+		&& vendor->owner_faction == shipclass[cls].sell_faction
+		&& (shipclass[cls].sell_role == OUTPOST_NONE
+			|| vendor->outpost_type == shipclass[cls].sell_role);
+}
+#endif
+
 /**************************************************************************
 ** Validate that a loaded ship record is a legal user ship              **
 **************************************************************************/

@@ -327,6 +327,7 @@ static void print_map_row(int i, int maptype)
 				prev_color = 6;
 			}
 			prf("%s", gedots(j - start));
+			continue;
 		} else if (warsptr->jam_sev > (byte)0) {
 			if (!(map[i][j] == '.' && mapc[i][j] == '4') && map[i][j] != '*') /* don't overwrite out of bounds or player indicator */
 			{
@@ -889,6 +890,63 @@ static void arena_scan_planet_contents(void)
 }
 #endif
 
+#ifndef GE_ARENA
+static void scan_planet_sales(void)
+{
+	static const byte order[NUMITEMS] = {
+		I_MISSILE, I_TORPEDO, I_MINE, I_ZIPPERS, I_DECOYS, I_JAMMERS,
+		I_FLUXPOD, I_GOLD, I_IONCANNON, I_FIGHTER, I_FOOD, I_MEN, I_TROOPS, I_SPY
+	};
+	int pos, i, pending = -1, people = 0;
+
+	for (pos = 0; pos < NUMITEMS; ++pos) {
+		i = order[pos];
+		if (plptr->items[i].sell != 'Y' || plptr->items[i].qty == 0UL)
+			continue;
+		if (plptr->outpost_type == OUTPOST_TAHANIAN && (i == I_MEN || i == I_TROOPS)) {
+			people |= i == I_MEN ? 1 : 2;
+			continue;
+		}
+		if (pending < 0) {
+			pending = i;
+			strcpy(gechrbuf, item_name[i]);
+			gechrbuf[0] = (char)toupper((unsigned char)gechrbuf[0]);
+		} else {
+			prfmsg(SCNSALE, gechrbuf, item_name[i]);
+			pending = -1;
+		}
+	}
+	if (pending >= 0)
+		prfmsg(SCNSAL1, gechrbuf);
+	if (people == 3)
+		prfmsg(SCNPEOP);
+	else if (people)
+		prfmsg(SCNAVAL, people == 1 ? "Men" : "Troops");
+}
+
+static void scan_planet_defenses(void)
+{
+	static const byte defenses[] = {I_TROOPS, I_FIGHTER, I_IONCANNON};
+	unsigned long total = 0UL;
+	int i;
+
+	for (i = 0; i < 3; ++i) {
+		/* Stop at the highest category before adding possibly unlimited stock. */
+		if (plptr->items[defenses[i]].qty >= 200000UL - total) {
+			prfmsg(SCNDEFH);
+			return;
+		}
+		total += plptr->items[defenses[i]].qty;
+	}
+	if (total == 0UL)
+		prfmsg(SCAN31);
+	else if (total < 20000UL)
+		prfmsg(SCAN32);
+	else
+		prfmsg(SCNDEFM);
+}
+#endif
+
 static void scan_pl(void)
 {
 #ifndef GE_ARENA
@@ -958,9 +1016,20 @@ static void scan_pl(void)
 			prfmsg(SCAN10,plnum,gechrbuf);
 			prfmsg(DASHES);
 
-			owner = planet_owner_name(plptr);
-			if (owner[0] != 0 && (warsptr->jam_sev < (byte)3 || warsptr->where - 10 == plnum))
-				prfmsg(SCAN11, owner);
+			if (warsptr->jam_sev < (byte)3 || warsptr->where - 10 == plnum) {
+#ifndef GE_ARENA
+				if (plptr->owner_type == PL_OWNER_FACTION) {
+					owner = planet_description(plptr);
+					if (owner[0] != 0)
+						prfmsg(SCAN11A, owner);
+				} else
+#endif
+				{
+					owner = planet_owner_name(plptr);
+					if (owner[0] != 0)
+						prfmsg(SCAN11, owner);
+				}
+			}
 
 			memset(gechrbuf2, 0, 20);
 			memset(gechrbuf3, 0, 20);
@@ -998,7 +1067,7 @@ static void scan_pl(void)
 				else if (plptr->resource == 3)
 					prfmsg(SCAN17);
 
-				if (sameas(plptr->userid,warsptr->userid) || (plptr->userid[0] == 0 && warsptr->where - 10 == plnum)) {
+				if (sameas(plptr->userid,warsptr->userid) || (!planet_has_owner(plptr) && warsptr->where - 10 == plnum)) {
 					for (i=0; i<NUMITEMS; ++i) {
 						if (plptr->items[i].qty > 0) {
 							sprintf(gechrbuf,"%s%s%12lu",item_name[i],gedots(26-strlen(item_name[i])),plptr->items[i].qty);
@@ -1023,50 +1092,51 @@ static void scan_pl(void)
 						strcpy(gechrbuf,"Millions");
 					prfmsg(SCAN28,gechrbuf);
 
-					if (plptr->items[I_MISSILE].qty == 0)
-						strcpy(gechrbuf,"No");
-					else if (plptr->items[I_MISSILE].qty < 250)
-						strcpy(gechrbuf,"Small");
-					else if (plptr->items[I_MISSILE].qty < 1000)
-						strcpy(gechrbuf,"Moderate");
-					else
-						strcpy(gechrbuf,"Large");
-					prfmsg(SCAN29,gechrbuf);
+					if (plptr->owner_type == PL_OWNER_FACTION)
+						scan_planet_sales();
+					else {
+						if (plptr->items[I_MISSILE].qty == 0)
+							strcpy(gechrbuf,"No");
+						else if (plptr->items[I_MISSILE].qty < 250)
+							strcpy(gechrbuf,"Small");
+						else if (plptr->items[I_MISSILE].qty < 1000)
+							strcpy(gechrbuf,"Moderate");
+						else
+							strcpy(gechrbuf,"Large");
+						prfmsg(SCAN29,gechrbuf);
 
-					if (plptr->items[I_TORPEDO].qty == 0)
-						strcpy(gechrbuf,"No");
-					else if (plptr->items[I_TORPEDO].qty < 250)
-						strcpy(gechrbuf,"Small");
-					else if (plptr->items[I_TORPEDO].qty < 1000)
-						strcpy(gechrbuf,"Moderate");
-					else
-						strcpy(gechrbuf,"Large");
-					prfmsg(SCAN30,gechrbuf);
+						if (plptr->items[I_TORPEDO].qty == 0)
+							strcpy(gechrbuf,"No");
+						else if (plptr->items[I_TORPEDO].qty < 250)
+							strcpy(gechrbuf,"Small");
+						else if (plptr->items[I_TORPEDO].qty < 1000)
+							strcpy(gechrbuf,"Moderate");
+						else
+							strcpy(gechrbuf,"Large");
+						prfmsg(SCAN30,gechrbuf);
 
-					if (plptr->items[I_FLUXPOD].qty == 0)
-						strcpy(gechrbuf,"No");
-					else if (plptr->items[I_FLUXPOD].qty < 250)
-						strcpy(gechrbuf,"Small");
-					else if (plptr->items[I_FLUXPOD].qty < 1000)
-						strcpy(gechrbuf,"Moderate");
-					else
-						strcpy(gechrbuf,"Large");
-					prfmsg(SCAN33,gechrbuf);
+						if (plptr->items[I_FLUXPOD].qty == 0)
+							strcpy(gechrbuf,"No");
+						else if (plptr->items[I_FLUXPOD].qty < 250)
+							strcpy(gechrbuf,"Small");
+						else if (plptr->items[I_FLUXPOD].qty < 1000)
+							strcpy(gechrbuf,"Moderate");
+						else
+							strcpy(gechrbuf,"Large");
+						prfmsg(SCAN33,gechrbuf);
 
-					if (plptr->items[I_MINE].qty == 0)
-						strcpy(gechrbuf,"No");
-					else if (plptr->items[I_MINE].qty < 250)
-						strcpy(gechrbuf,"Small");
-					else if (plptr->items[I_MINE].qty < 1000)
-						strcpy(gechrbuf,"Moderate");
-					else
-						strcpy(gechrbuf,"Large");
-					prfmsg(SCAN34,gechrbuf);
+						if (plptr->items[I_MINE].qty == 0)
+							strcpy(gechrbuf,"No");
+						else if (plptr->items[I_MINE].qty < 250)
+							strcpy(gechrbuf,"Small");
+						else if (plptr->items[I_MINE].qty < 1000)
+							strcpy(gechrbuf,"Moderate");
+						else
+							strcpy(gechrbuf,"Large");
+						prfmsg(SCAN34,gechrbuf);
+					}
 
-					if (plptr->items[I_FIGHTER].qty == 0)
-						prfmsg(SCAN31);
-					else
-						prfmsg(SCAN32);
+					scan_planet_defenses();
 				}
 			}
 #endif

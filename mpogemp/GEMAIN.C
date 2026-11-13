@@ -236,7 +236,6 @@ int				gemaxplrs,	/* max simultaneous GE players */
 				passnum;	/* current planet-update pass number */
 
 #ifndef GE_ARENA
-int gcnum;			/* neutral-zone trading faction; 8 disables bans */
 char *faction_names[8];		/* configured faction display text */
 #endif
 
@@ -379,7 +378,7 @@ static int planet_object_type(int opt)
 
 static void load_planet_layout(int *next, PLANETDEF **objects, int *count, byte faction)
 {
-	int i, opt = *next;
+	int i, j, opt = *next;
 	PLANETDEF *def;
 
 	/* Count only real definitions, then allocate exactly the space required. */
@@ -398,15 +397,22 @@ static void load_planet_layout(int *next, PLANETDEF **objects, int *count, byte 
 		def = &(*objects)[i];
 		def->type = planet_object_type(opt++);
 		def->name = stgopt(opt++);
-		def->owner = stgopt(opt++);
+		def->description = stgopt(opt++);
 		def->xcoord = (double)numopt(opt++, 100, 9900) / 10000.0;
 		def->ycoord = (double)numopt(opt++, 100, 9900) / 10000.0;
 		def->env = numopt(opt++, 0, 3);
 		def->res = numopt(opt++, 0, 3);
-		def->outpost_type = (byte)numopt(opt++, OUTPOST_NONE, OUTPOST_ZYGOR_EXPRESS);
+		def->outpost_type = (byte)numopt(opt++, OUTPOST_NONE, OUTPOST_SARTEN_SHIPYARD);
+		def->max_shield = (byte)numopt(opt++, 0, TOPSHIELD);
+		def->max_phaser = (byte)numopt(opt++, 0, TOPPHASOR);
+		def->upgrades = (byte)numopt(opt++, 0, 255);
+		for (j = 0; j < NUMITEMS; ++j)
+			def->preferred[j] = (unsigned long)lngopt(opt++, 0L, MAX_RESTOCK_TARGET);
 		def->faction = faction;
-		if (strlen(def->name) > 19 || strlen(def->owner) >= UIDSIZ)
-			catastro("GE:ERR:MPOGEPLT.MSG object name or owner is too long");
+		if (strlen(def->name) > 19)
+			catastro("GE:ERR:MPOGEPLT.MSG object name exceeds 19 characters");
+		if (strlen(def->description) >= PLANETDESCSZ)
+			catastro("GE:ERR:MPOGEPLT.MSG description exceeds 38 characters");
 		if (def->type == PLTYPE_WORM && def->outpost_type != OUTPOST_NONE)
 			catastro(spr("GE:ERR:Wormhole %d cannot have an outpost role", i + 1));
 	}
@@ -422,8 +428,8 @@ static void load_planet_layouts(void)
 	int opt = PLTSTART, i, section;
 	unsigned seen = 0;
 
-	if (tokopt(opt++, "PLANETS1", NULL) != 1)
-		catastro("GE:ERR:MPOGEPLT.MSG requires the PLANETS1 layout format");
+	if (tokopt(opt++, "PLANETS6", NULL) != 1)
+		catastro("GE:ERR:MPOGEPLT.MSG requires the PLANETS6 layout format");
 	for (;;) {
 		check_planet_option(opt);
 		section = tokopt(opt++, "NEUTRAL", "LYDORIA", "SARTEN", "MURDONIA",
@@ -513,7 +519,6 @@ void FUNC iniwara(void)
 	meneat = ynopt(MENEAT);			/* do men eat */
 	showdoc = numopt(SHOWDOC, 0, 10);	/* how often to give winner planet list from loser */
 	cattkd = numopt(CATTKD, 0, 10);		/* how often do cybs attack droids */
-	gcnum = numopt(GCNUM, 0, 8);		/* neutral-zone trading faction; 8 disables bans */
 	for (i = 0; i < 8; ++i)
 		faction_names[i] = stgopt(FACNAME0 + i);
 #endif
@@ -695,7 +700,7 @@ void FUNC iniwara(void)
 #ifdef GE_ARENA
 #define NCL 36		/* arena ship class table entries per class slot */
 #else
-#define NCL 28		/* ship class table entries per class slot */
+#define NCL 31		/* ship class table entries per class slot */
 #endif
 
 	/* first audit the table */
@@ -749,8 +754,8 @@ void FUNC iniwara(void)
 
 		shipclass[i].max_shlds = numopt(++classbase, 0, 19);
 		shipclass[i].max_phasr = numopt(++classbase, 0, 19);
-		shipclass[i].max_torps = numopt(++classbase, 0, 3);
-		shipclass[i].max_missl = numopt(++classbase, 0, 3);
+		shipclass[i].max_torps = numopt(++classbase, 0, MAX_TORP_LAUNCHERS);
+		shipclass[i].max_missl = numopt(++classbase, 0, MAX_MISSILE_LAUNCHERS);
 		shipclass[i].has_decoy = ynopt(++classbase);
 		shipclass[i].has_jam = ynopt(++classbase);
 		shipclass[i].has_zip = ynopt(++classbase);
@@ -787,6 +792,11 @@ void FUNC iniwara(void)
 		shipclass[i].damfact = numopt(++classbase, 30, 32767);
 		shipclass[i].faction = numopt(++classbase, 0, 32767);
 		shipclass[i].loadout = numopt(++classbase, 0, 32767);
+#ifndef GE_ARENA
+		shipclass[i].sell_faction = (byte)numopt(++classbase, 0, FACTION_NO_SELLER);
+		shipclass[i].sell_role = (byte)numopt(++classbase, OUTPOST_NONE, OUTPOST_SARTEN_SHIPYARD);
+		shipclass[i].unlock = (byte)numopt(++classbase, 0, NUM_UNLOCKS);
+#endif
 #ifdef GE_ARENA
 		shipclass[i].arena_mode = (byte)numopt(++classbase, 1, 255);
 #endif
@@ -2024,9 +2034,11 @@ void FUNC plarti(void)
 
 			/* foundpl/fpos point at the planet selected on the prior search pass */
 			if (planet.owner_type == PL_OWNER_FACTION) {
-				logthis(spr("updating outpost %s (%s)", planet.name, gechrbuf));
 				plptr = &planet;
+				sync_outpost_config(plptr);
+				logthis(spr("updating outpost %s (%s)", planet.name, gechrbuf));
 				update_outpost();
+				restock_outpost();
 				if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1)
 					planet.plantimesave = plantime;
 			}

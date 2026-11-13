@@ -98,6 +98,7 @@
 #define PI 3.1415927		/* pi                                      */
 #define SLCAP 2147483647L	/* maximum value of signed long            */
 #define ULCAP 4294967295UL	/* maximum value of unsigned long          */
+#define PLANET_STOCK_CAP (ULCAP - 1UL) /* finite stock cannot become unlimited */
 #define FARSPEED 54321L		/* speed constant for cyb long pursuit     */
 #define VEC_EPS 1e-9		/* epsilon for vector()                    */
 
@@ -112,6 +113,9 @@
 
 #define MAXPLANETS 9		/* max planets/wormholes per sector        */
 #define MAX_SHIP_SLOTS 125
+
+#define MAX_TORP_LAUNCHERS 255	/* byte-sized per-tick launch counter      */
+#define MAX_MISSILE_LAUNCHERS 255	/* byte-sized per-tick launch counter      */
 
 #define MAXX 30			/* scan map width                          */
 #define MAXY 15			/* scan map height                         */
@@ -193,6 +197,13 @@
 #define FACTION_MURDONIAN 4
 #define FACTION_VAKORY 5
 #define FACTION_ZYGORIAN 7	/* Zygor and its affiliated outposts       */
+#define FACTION_NO_SELLER 8	/* no faction offers this ship class      */
+
+#define NUM_UNLOCKS 32
+#define UNLOCK_FLEET_COMMAND 1
+#define UNLOCK_MBM_DREADNOUGHT 2
+#define UNLOCK_PLANETARY_TRANSPORT 3
+#define UNLOCK_OBLITERATOR 4	/* Obliterator purchase access            */
 
 #define OUTPOST_NONE 0		/* no special outpost behavior             */
 #define OUTPOST_ZYGOR 1		/* main trading planet                     */
@@ -203,6 +214,8 @@
 #define OUTPOST_MURDONIA 6
 #define OUTPOST_VAKORY 7
 #define OUTPOST_ZYGOR_EXPRESS 8
+#define OUTPOST_TRANS_GAL 9	/* hauling services headquarters           */
+#define OUTPOST_SARTEN_SHIPYARD 10
 
 #define LAYOUT_LYDORIA 0
 #define LAYOUT_SARTEN 1
@@ -212,7 +225,9 @@
 #define NUM_FACTION_HOMES 4
 #define NUM_OUTPOST_LAYOUTS 5
 
-#define PLANETDEF_OPTIONS 8	/* type, name, owner, X, Y, env, res, role */
+#define PLANETDESCSZ 39		/* 38 display characters plus terminator  */
+#define PLANETDEF_OPTIONS (11 + NUMITEMS) /* identity, services and preferred stock */
+#define MAX_RESTOCK_TARGET 2000000000L /* signed MSG long option range       */
 #endif
 
 #define GESTAT_AVAIL 0		/* unused ship slot                        */
@@ -522,7 +537,9 @@ typedef struct warusr {
 /*154*/
 	char filler[92];		/* pad WARUSR to the real 246-byte record  */
 #else
-	char filler[108];		/* pad WARUSR to the real 246-byte record  */
+	unsigned long unlocks;		/* permanent player achievements          */
+/*142*/
+	char filler[104];		/* pad WARUSR to the real 246-byte record  */
 #endif
 } WARUSR;
 
@@ -909,6 +926,11 @@ typedef struct _ship {
 	unsigned int damfact;		/* damage/price scaling factor             */
 	unsigned int faction;		/* faction id used for NPC relations       */
 	unsigned int loadout;		/* upgrade/loadout profile                 */
+#ifndef GE_ARENA
+	byte sell_faction;		/* selling faction, separate from NPC allegiance */
+	byte sell_role;			/* required outpost role; 0 = any shipyard */
+	byte unlock;			/* required achievement; 0 = unrestricted */
+#endif
 
 	int hlpmsg;			/* help message id                         */
 	void (*init_func)(WARSHP *, int, int);		/* class initialization hook */
@@ -945,15 +967,22 @@ typedef struct _entrytab {
 
 typedef struct _planetdef {
 	char *name;			/* predefined object name                  */
+#ifdef GE_ARENA
 	char *owner;			/* predefined owner userid                 */
+#endif
 	int type;			/* predefined object type                  */
 	double xcoord;			/* x coordinate within the defined sector  */
 	double ycoord;			/* y coordinate within the defined sector  */
 	int env;			/* environment setting                     */
 	int res;			/* resource setting                        */
 #ifndef GE_ARENA
+	char *description;		/* predefined faction planet description  */
 	byte faction;			/* owning faction supplied by sector layout */
 	byte outpost_type;		/* OUTPOST_* role, independent of name/kind */
+	byte max_shield;		/* highest shield Mark offered; 0 = none   */
+	byte max_phaser;		/* highest phaser Mark offered; 0 = none   */
+	byte upgrades;			/* offered upgrade bits, like ship loadout */
+	unsigned long preferred[NUMITEMS]; /* finite stock targets; 0 drains toward zero */
 #endif
 } PLANETDEF;
 

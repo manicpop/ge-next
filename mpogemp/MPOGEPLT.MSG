@@ -3,91 +3,228 @@ Version ge-next 0.4
 
 LEVEL4 {}
 
-Creation templates for the neutral zone and faction outposts.
-Changing a template does not change objects already saved in the database.
+Configuration for the neutral zone and faction outposts.
+Names and outpost roles are synchronized to saved faction planets at startup
+and on planetary updates. Descriptions come from the loaded MSG definitions.
+Object kinds, coordinates, environment and resources are creation-only.
+Changing object counts or order does not rebuild existing sectors.
+Configuration synchronization does not reset stock, prices or refresh state.
 
-Format PLANETS1: each section has a stable section tag, one to nine object
+Format PLANETS6: each section has a stable section tag, one to nine object
 definitions, and an END marker. DONE terminates the file. Section tags identify
 layouts, not their displayed planet names. Each of the six sections is required.
 
-Each object has exactly eight options, in this order:
-TYP, NM, OWN, X, Y, ENV, RES, OUT. Do not insert other options within an object.
+Each object has exactly twenty-five options, in this order:
+TYP, NM, DSC, X, Y, ENV, RES, OUT, SHD, PHS, UPG, then R01 through R14.
+Do not insert other options within an object.
 Add or remove complete object blocks before the section END marker; there are
 no DEF switches, explicit counts or reserved object slots. Keep option names
 unique. The game reads section/type values and option order, not option names.
 Keep PLTSTART first and do not change its name. Recreate MPOGEPLT.MCV after
-editing; adding objects does not require recompiling the DLL.
+editing and restart the module; adding objects does not require recompiling.
 
 TYP: PLANET or WORMHOLE. END has no following object fields.
-NM: displayed name, up to 19 characters. OWN: legacy owner display text.
-Faction ownership comes from the section, not OWN or the displayed name.
-X/Y: local coordinates, 100 through 9900 (5000 is the sector center).
-ENV/RES: 0 = Poor, 1 = Marginal, 2 = Good, 3 = Very good.
+NM: displayed name, up to 19 characters; synchronized to saved faction planets.
+Faction ownership comes from the section, not the displayed name.
+Faction planets have no player user ID in their saved records.
+DSC: faction planet description, up to 38 characters; blank for wormholes.
+It replaces the owner line on planet scans and is read from this file at startup.
+Description edits do not require recreating saved planets.
+SHD/PHS: highest shield/phaser Mark sold here, 0-19; 0 disables that service.
+These limits are read from the loaded definitions, not saved planet records.
+Changing a limit requires reloading the MSG at module restart, not a DB reset.
+They apply independently of the ship class equipment limits and faction standing.
+Use 0 for wormholes. Trade-in credit, fees and global equipment prices are unchanged.
+UPG: offered upgrades, using the same bit values as ship loadouts. Add the
+values for each offered upgrade; 0 = none, 255 = all eight upgrades.
+1 = enhanced scanners, 2 = armor, 4 = acceleration boost, 8 = scanner boost,
+16 = enhanced lock, 32 = damage control, 64 = transponder control,
+128 = neutron core. Ship compatibility and player unlocks still apply.
+Any planet offering transponder control can install it or adjust its mode.
+UPG is loaded from this file at restart, not saved in planet records.
+Wormholes use 0. Multiple planets may offer the same upgrades.
+R01-R14: preferred stock, 0-2000000000. Zero gradually drains stock to zero.
+A zero target never generates new stock; an empty zero-target item stays empty.
+01 men, 02 missiles, 03 torpedoes, 04 ion cannons, 05 flux pods, 06 food,
+07 fighters, 08 decoys, 09 troops, 10 zippers, 11 jammers, 12 mines,
+13 gold, 14 spies. These values are in item units, not tons.
+Each planetary pass moves finite, offered stock partway toward its preferred
+level with random variation. Stock near preferred continues to fluctuate.
+Unlimited items and items not offered for sale ignore their preferred values.
+New planets start offered finite stock at preferred levels, then immediately
+run one randomized restock pass. Unlimited and unsold stock are not reseeded.
+Changing preferred values requires a module restart, not a database reset.
+Use zero for all wormhole targets. Preferred values are not storage caps.
+X/Y: creation coordinates, 100 through 9900 (5000 is the sector center).
+ENV/RES: creation values: 0 = Poor, 1 = Marginal, 2 = Good, 3 = Very good.
 OUT: 0 = None, 1 = Zygor, 2 = Tahanian, 3 = Enforcer, 4 = Lydoria,
-5 = Sarten, 6 = Murdonia, 7 = Vakory, 8 = Zygor Express. Wormholes use 0.
+5 = Sarten, 6 = Murdonia, 7 = Vakory, 8 = Zygor Express, 9 = Trans-Gal HQ, 10 = Sarten shipyard. Wormholes use 0.
+The outpost role is synchronized; the selected refresh routine manages live stock.
 
 Sector 0 0 object 1 must be the Zygor planet (role 1). Each other section
 must start with its primary outpost planet and matching role. Objects receive
 consecutive numbers in file order. Express uses the same layout at all four
 locations and is not created when UNIVMAX is below 50.
 
-PLTSTART {PLANETS1} E PLANETS1
+PLTSTART {PLANETS6} E PLANETS6
 
 S00SECT {NEUTRAL} E NEUTRAL
 
 S00P1TYP {Object kind: PLANET} E PLANET WORMHOLE END
 S00P1NM {Zygor} S 19 Planet #1 Name
-S00P1OWN {*Galactic Command*} S 29 Owner of Planet #1
+S00P1DSC {Zygorian homeworld / Galactic Command} S 38 Planet description
 S00P1X {X Coordinate of Planet: 5000} N 100 9900
 S00P1Y {Y Coordinate of Planet: 5000} N 100 9900
 S00P1ENV {Environment for planet: 3} N 0 3
 S00P1RES {Resources for planet: 3} N 0 3
-S00P1OUT {Outpost role: 1} N 0 8
+S00P1OUT {Outpost role: 1} N 0 10
+S00P1SHD {Maximum shield Mark sold: 19} N 0 19
+S00P1PHS {Maximum phaser Mark sold: 19} N 0 19
+S00P1UPG {Offered upgrade mask: 180} N 0 255
+S00P1R01 {Preferred men: 0} L 0 2000000000
+S00P1R02 {Preferred missiles: 300} L 0 2000000000
+S00P1R03 {Preferred torpedoes: 300} L 0 2000000000
+S00P1R04 {Preferred ion cannons: 1} L 0 2000000000
+S00P1R05 {Preferred flux pods: 0} L 0 2000000000
+S00P1R06 {Preferred food: 0} L 0 2000000000
+S00P1R07 {Preferred fighters: 0} L 0 2000000000
+S00P1R08 {Preferred decoys: 100} L 0 2000000000
+S00P1R09 {Preferred troops: 0} L 0 2000000000
+S00P1R10 {Preferred zippers: 100} L 0 2000000000
+S00P1R11 {Preferred jammers: 100} L 0 2000000000
+S00P1R12 {Preferred mines: 500} L 0 2000000000
+S00P1R13 {Preferred gold: 0} L 0 2000000000
+S00P1R14 {Preferred spies: 0} L 0 2000000000
 
 S00P2TYP {Object kind: PLANET} E PLANET WORMHOLE END
 S00P2NM {Tahanian Station} S 19 Planet #2 Name
-S00P2OWN {*Galactic Command*} S 29 Owner of Planet #2
+S00P2DSC {Embarking station for colonists} S 38 Planet description
 S00P2X {X Coordinate of Planet: 7000} N 100 9900
 S00P2Y {Y Coordinate of Planet: 7000} N 100 9900
 S00P2ENV {Environment for planet: 3} N 0 3
 S00P2RES {Resources for planet: 3} N 0 3
-S00P2OUT {Outpost role: 2} N 0 8
+S00P2OUT {Outpost role: 2} N 0 10
+S00P2SHD {Maximum shield Mark sold: 0} N 0 19
+S00P2PHS {Maximum phaser Mark sold: 0} N 0 19
+S00P2UPG {Offered upgrade mask: 0} N 0 255
+S00P2R01 {Preferred men: 0} L 0 2000000000
+S00P2R02 {Preferred missiles: 0} L 0 2000000000
+S00P2R03 {Preferred torpedoes: 0} L 0 2000000000
+S00P2R04 {Preferred ion cannons: 0} L 0 2000000000
+S00P2R05 {Preferred flux pods: 0} L 0 2000000000
+S00P2R06 {Preferred food: 0} L 0 2000000000
+S00P2R07 {Preferred fighters: 0} L 0 2000000000
+S00P2R08 {Preferred decoys: 0} L 0 2000000000
+S00P2R09 {Preferred troops: 0} L 0 2000000000
+S00P2R10 {Preferred zippers: 0} L 0 2000000000
+S00P2R11 {Preferred jammers: 0} L 0 2000000000
+S00P2R12 {Preferred mines: 0} L 0 2000000000
+S00P2R13 {Preferred gold: 0} L 0 2000000000
+S00P2R14 {Preferred spies: 0} L 0 2000000000
 
 S00P3TYP {Object kind: PLANET} E PLANET WORMHOLE END
 S00P3NM {Enforcer Planet} S 19 Planet #3 Name
-S00P3OWN {*Galactic Command*} S 29 Owner of Planet #3
+S00P3DSC {Neutral-zone defense headquarters} S 38 Planet description
 S00P3X {X Coordinate of Planet: 2000} N 100 9900
 S00P3Y {Y Coordinate of Planet: 2000} N 100 9900
 S00P3ENV {Environment for planet: 1} N 0 3
 S00P3RES {Resources for planet: 0} N 0 3
-S00P3OUT {Outpost role: 3} N 0 8
+S00P3OUT {Outpost role: 3} N 0 10
+S00P3SHD {Maximum shield Mark sold: 0} N 0 19
+S00P3PHS {Maximum phaser Mark sold: 0} N 0 19
+S00P3UPG {Offered upgrade mask: 0} N 0 255
+S00P3R01 {Preferred men: 0} L 0 2000000000
+S00P3R02 {Preferred missiles: 0} L 0 2000000000
+S00P3R03 {Preferred torpedoes: 0} L 0 2000000000
+S00P3R04 {Preferred ion cannons: 0} L 0 2000000000
+S00P3R05 {Preferred flux pods: 0} L 0 2000000000
+S00P3R06 {Preferred food: 0} L 0 2000000000
+S00P3R07 {Preferred fighters: 0} L 0 2000000000
+S00P3R08 {Preferred decoys: 0} L 0 2000000000
+S00P3R09 {Preferred troops: 0} L 0 2000000000
+S00P3R10 {Preferred zippers: 0} L 0 2000000000
+S00P3R11 {Preferred jammers: 0} L 0 2000000000
+S00P3R12 {Preferred mines: 0} L 0 2000000000
+S00P3R13 {Preferred gold: 0} L 0 2000000000
+S00P3R14 {Preferred spies: 0} L 0 2000000000
 
 S00P4TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
 S00P4NM {Kayriez Portal} S 19 Planet #4 Name
-S00P4OWN {*Galactic Command*} S 29 Owner of Planet #4
+S00P4DSC {} S 38 Planet description
 S00P4X {X Coordinate of Planet: 1100} N 100 9900
 S00P4Y {Y Coordinate of Planet: 6700} N 100 9900
 S00P4ENV {Environment for planet: 0} N 0 3
 S00P4RES {Resources for planet: 0} N 0 3
-S00P4OUT {Outpost role: 0} N 0 8
+S00P4OUT {Outpost role: 0} N 0 10
+S00P4SHD {Maximum shield Mark sold: 0} N 0 19
+S00P4PHS {Maximum phaser Mark sold: 0} N 0 19
+S00P4UPG {Offered upgrade mask: 0} N 0 255
+S00P4R01 {Preferred men: 0} L 0 2000000000
+S00P4R02 {Preferred missiles: 0} L 0 2000000000
+S00P4R03 {Preferred torpedoes: 0} L 0 2000000000
+S00P4R04 {Preferred ion cannons: 0} L 0 2000000000
+S00P4R05 {Preferred flux pods: 0} L 0 2000000000
+S00P4R06 {Preferred food: 0} L 0 2000000000
+S00P4R07 {Preferred fighters: 0} L 0 2000000000
+S00P4R08 {Preferred decoys: 0} L 0 2000000000
+S00P4R09 {Preferred troops: 0} L 0 2000000000
+S00P4R10 {Preferred zippers: 0} L 0 2000000000
+S00P4R11 {Preferred jammers: 0} L 0 2000000000
+S00P4R12 {Preferred mines: 0} L 0 2000000000
+S00P4R13 {Preferred gold: 0} L 0 2000000000
+S00P4R14 {Preferred spies: 0} L 0 2000000000
 
 S00P5TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
 S00P5NM {Lydorian Portal} S 19 Planet #5 Name
-S00P5OWN {*Galactic Command*} S 29 Owner of Planet #5
+S00P5DSC {} S 38 Planet description
 S00P5X {X Coordinate of Planet: 6700} N 100 9900
 S00P5Y {Y Coordinate of Planet: 1500} N 100 9900
 S00P5ENV {Environment for planet: 0} N 0 3
 S00P5RES {Resources for planet: 0} N 0 3
-S00P5OUT {Outpost role: 0} N 0 8
+S00P5OUT {Outpost role: 0} N 0 10
+S00P5SHD {Maximum shield Mark sold: 0} N 0 19
+S00P5PHS {Maximum phaser Mark sold: 0} N 0 19
+S00P5UPG {Offered upgrade mask: 0} N 0 255
+S00P5R01 {Preferred men: 0} L 0 2000000000
+S00P5R02 {Preferred missiles: 0} L 0 2000000000
+S00P5R03 {Preferred torpedoes: 0} L 0 2000000000
+S00P5R04 {Preferred ion cannons: 0} L 0 2000000000
+S00P5R05 {Preferred flux pods: 0} L 0 2000000000
+S00P5R06 {Preferred food: 0} L 0 2000000000
+S00P5R07 {Preferred fighters: 0} L 0 2000000000
+S00P5R08 {Preferred decoys: 0} L 0 2000000000
+S00P5R09 {Preferred troops: 0} L 0 2000000000
+S00P5R10 {Preferred zippers: 0} L 0 2000000000
+S00P5R11 {Preferred jammers: 0} L 0 2000000000
+S00P5R12 {Preferred mines: 0} L 0 2000000000
+S00P5R13 {Preferred gold: 0} L 0 2000000000
+S00P5R14 {Preferred spies: 0} L 0 2000000000
 
 S00P6TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
 S00P6NM {Tryklon Portal} S 19 Planet #6 Name
-S00P6OWN {*Galactic Command*} S 29 Owner of Planet #6
+S00P6DSC {} S 38 Planet description
 S00P6X {X Coordinate of Planet: 5500} N 100 9900
 S00P6Y {Y Coordinate of Planet: 7800} N 100 9900
 S00P6ENV {Environment for planet: 0} N 0 3
 S00P6RES {Resources for planet: 0} N 0 3
-S00P6OUT {Outpost role: 0} N 0 8
+S00P6OUT {Outpost role: 0} N 0 10
+S00P6SHD {Maximum shield Mark sold: 0} N 0 19
+S00P6PHS {Maximum phaser Mark sold: 0} N 0 19
+S00P6UPG {Offered upgrade mask: 0} N 0 255
+S00P6R01 {Preferred men: 0} L 0 2000000000
+S00P6R02 {Preferred missiles: 0} L 0 2000000000
+S00P6R03 {Preferred torpedoes: 0} L 0 2000000000
+S00P6R04 {Preferred ion cannons: 0} L 0 2000000000
+S00P6R05 {Preferred flux pods: 0} L 0 2000000000
+S00P6R06 {Preferred food: 0} L 0 2000000000
+S00P6R07 {Preferred fighters: 0} L 0 2000000000
+S00P6R08 {Preferred decoys: 0} L 0 2000000000
+S00P6R09 {Preferred troops: 0} L 0 2000000000
+S00P6R10 {Preferred zippers: 0} L 0 2000000000
+S00P6R11 {Preferred jammers: 0} L 0 2000000000
+S00P6R12 {Preferred mines: 0} L 0 2000000000
+S00P6R13 {Preferred gold: 0} L 0 2000000000
+S00P6R14 {Preferred spies: 0} L 0 2000000000
 
 S00END {END} E END
 
@@ -95,25 +232,111 @@ LYDSECT {LYDORIA} E LYDORIA
 
 LYDP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
 LYDP1NM {Lydoria} S 19 Planet name
-LYDP1OWN {} S 29 Legacy owner text
-LYDP1X {Local X coordinate: 5000} N 100 9900
-LYDP1Y {Local Y coordinate: 5000} N 100 9900
-LYDP1ENV {Environment: 3} N 0 3
+LYDP1DSC {Lydorian homeworld / waste processing} S 38 Planet description
+LYDP1X {Local X coordinate: 3200} N 100 9900
+LYDP1Y {Local Y coordinate: 6200} N 100 9900
+LYDP1ENV {Environment: 2} N 0 3
 LYDP1RES {Resources: 3} N 0 3
-LYDP1OUT {Outpost role: 4} N 0 8
+LYDP1OUT {Outpost role: 4} N 0 10
+LYDP1SHD {Maximum shield Mark sold: 0} N 0 19
+LYDP1PHS {Maximum phaser Mark sold: 0} N 0 19
+LYDP1UPG {Offered upgrade mask: 64} N 0 255
+LYDP1R01 {Preferred men: 0} L 0 2000000000
+LYDP1R02 {Preferred missiles: 0} L 0 2000000000
+LYDP1R03 {Preferred torpedoes: 0} L 0 2000000000
+LYDP1R04 {Preferred ion cannons: 0} L 0 2000000000
+LYDP1R05 {Preferred flux pods: 0} L 0 2000000000
+LYDP1R06 {Preferred food: 0} L 0 2000000000
+LYDP1R07 {Preferred fighters: 0} L 0 2000000000
+LYDP1R08 {Preferred decoys: 0} L 0 2000000000
+LYDP1R09 {Preferred troops: 0} L 0 2000000000
+LYDP1R10 {Preferred zippers: 0} L 0 2000000000
+LYDP1R11 {Preferred jammers: 0} L 0 2000000000
+LYDP1R12 {Preferred mines: 0} L 0 2000000000
+LYDP1R13 {Preferred gold: 0} L 0 2000000000
+LYDP1R14 {Preferred spies: 0} L 0 2000000000
 
 LYDEND {END} E END
 
 SARSECT {SARTEN} E SARTEN
 
 SARP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
-SARP1NM {Sarten} S 19 Planet name
-SARP1OWN {} S 29 Legacy owner text
-SARP1X {Local X coordinate: 5000} N 100 9900
-SARP1Y {Local Y coordinate: 5000} N 100 9900
-SARP1ENV {Environment: 3} N 0 3
-SARP1RES {Resources: 3} N 0 3
-SARP1OUT {Outpost role: 5} N 0 8
+SARP1NM {Sarten I} S 19 Planet name
+SARP1DSC {Ruins of the Sarten homeworld} S 38 Planet description
+SARP1X {Local X coordinate: 2300} N 100 9900
+SARP1Y {Local Y coordinate: 2800} N 100 9900
+SARP1ENV {Environment: 1} N 0 3
+SARP1RES {Resources: 0} N 0 3
+SARP1OUT {Outpost role: 5} N 0 10
+SARP1SHD {Maximum shield Mark sold: 0} N 0 19
+SARP1PHS {Maximum phaser Mark sold: 0} N 0 19
+SARP1UPG {Offered upgrade mask: 0} N 0 255
+SARP1R01 {Preferred men: 0} L 0 2000000000
+SARP1R02 {Preferred missiles: 0} L 0 2000000000
+SARP1R03 {Preferred torpedoes: 0} L 0 2000000000
+SARP1R04 {Preferred ion cannons: 0} L 0 2000000000
+SARP1R05 {Preferred flux pods: 0} L 0 2000000000
+SARP1R06 {Preferred food: 0} L 0 2000000000
+SARP1R07 {Preferred fighters: 0} L 0 2000000000
+SARP1R08 {Preferred decoys: 0} L 0 2000000000
+SARP1R09 {Preferred troops: 0} L 0 2000000000
+SARP1R10 {Preferred zippers: 0} L 0 2000000000
+SARP1R11 {Preferred jammers: 0} L 0 2000000000
+SARP1R12 {Preferred mines: 0} L 0 2000000000
+SARP1R13 {Preferred gold: 0} L 0 2000000000
+SARP1R14 {Preferred spies: 0} L 0 2000000000
+
+SARP2TYP {Object kind: PLANET} E PLANET WORMHOLE END
+SARP2NM {Sarten II} S 19 Planet name
+SARP2DSC {Shipyard and transportation depot} S 38 Planet description
+SARP2X {Local X coordinate: 7300} N 100 9900
+SARP2Y {Local Y coordinate: 6500} N 100 9900
+SARP2ENV {Environment: 2} N 0 3
+SARP2RES {Resources: 3} N 0 3
+SARP2OUT {Outpost role: 10} N 0 10
+SARP2SHD {Maximum shield Mark sold: 0} N 0 19
+SARP2PHS {Maximum phaser Mark sold: 0} N 0 19
+SARP2UPG {Offered upgrade mask: 2} N 0 255
+SARP2R01 {Preferred men: 0} L 0 2000000000
+SARP2R02 {Preferred missiles: 30} L 0 2000000000
+SARP2R03 {Preferred torpedoes: 30} L 0 2000000000
+SARP2R04 {Preferred ion cannons: 0} L 0 2000000000
+SARP2R05 {Preferred flux pods: 0} L 0 2000000000
+SARP2R06 {Preferred food: 0} L 0 2000000000
+SARP2R07 {Preferred fighters: 0} L 0 2000000000
+SARP2R08 {Preferred decoys: 10} L 0 2000000000
+SARP2R09 {Preferred troops: 0} L 0 2000000000
+SARP2R10 {Preferred zippers: 10} L 0 2000000000
+SARP2R11 {Preferred jammers: 10} L 0 2000000000
+SARP2R12 {Preferred mines: 50} L 0 2000000000
+SARP2R13 {Preferred gold: 0} L 0 2000000000
+SARP2R14 {Preferred spies: 0} L 0 2000000000
+
+SARP3TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+SARP3NM {Sarten Portal} S 19 Planet name
+SARP3DSC {} S 38 Planet description
+SARP3X {Local X coordinate: 2200} N 100 9900
+SARP3Y {Local Y coordinate: 7800} N 100 9900
+SARP3ENV {Environment: 0} N 0 3
+SARP3RES {Resources: 0} N 0 3
+SARP3OUT {Outpost role: 0} N 0 10
+SARP3SHD {Maximum shield Mark sold: 0} N 0 19
+SARP3PHS {Maximum phaser Mark sold: 0} N 0 19
+SARP3UPG {Offered upgrade mask: 0} N 0 255
+SARP3R01 {Preferred men: 0} L 0 2000000000
+SARP3R02 {Preferred missiles: 0} L 0 2000000000
+SARP3R03 {Preferred torpedoes: 0} L 0 2000000000
+SARP3R04 {Preferred ion cannons: 0} L 0 2000000000
+SARP3R05 {Preferred flux pods: 0} L 0 2000000000
+SARP3R06 {Preferred food: 0} L 0 2000000000
+SARP3R07 {Preferred fighters: 0} L 0 2000000000
+SARP3R08 {Preferred decoys: 0} L 0 2000000000
+SARP3R09 {Preferred troops: 0} L 0 2000000000
+SARP3R10 {Preferred zippers: 0} L 0 2000000000
+SARP3R11 {Preferred jammers: 0} L 0 2000000000
+SARP3R12 {Preferred mines: 0} L 0 2000000000
+SARP3R13 {Preferred gold: 0} L 0 2000000000
+SARP3R14 {Preferred spies: 0} L 0 2000000000
 
 SAREND {END} E END
 
@@ -121,25 +344,134 @@ MURSECT {MURDONIA} E MURDONIA
 
 MURP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
 MURP1NM {Murdonia} S 19 Planet name
-MURP1OWN {} S 29 Legacy owner text
-MURP1X {Local X coordinate: 5000} N 100 9900
-MURP1Y {Local Y coordinate: 5000} N 100 9900
+MURP1DSC {Murdonian homeworld and trade port} S 38 Planet description
+MURP1X {Local X coordinate: 6500} N 100 9900
+MURP1Y {Local Y coordinate: 7500} N 100 9900
 MURP1ENV {Environment: 3} N 0 3
 MURP1RES {Resources: 3} N 0 3
-MURP1OUT {Outpost role: 6} N 0 8
+MURP1OUT {Outpost role: 6} N 0 10
+MURP1SHD {Maximum shield Mark sold: 0} N 0 19
+MURP1PHS {Maximum phaser Mark sold: 0} N 0 19
+MURP1UPG {Offered upgrade mask: 0} N 0 255
+MURP1R01 {Preferred men: 0} L 0 2000000000
+MURP1R02 {Preferred missiles: 300} L 0 2000000000
+MURP1R03 {Preferred torpedoes: 300} L 0 2000000000
+MURP1R04 {Preferred ion cannons: 0} L 0 2000000000
+MURP1R05 {Preferred flux pods: 0} L 0 2000000000
+MURP1R06 {Preferred food: 0} L 0 2000000000
+MURP1R07 {Preferred fighters: 0} L 0 2000000000
+MURP1R08 {Preferred decoys: 100} L 0 2000000000
+MURP1R09 {Preferred troops: 0} L 0 2000000000
+MURP1R10 {Preferred zippers: 100} L 0 2000000000
+MURP1R11 {Preferred jammers: 100} L 0 2000000000
+MURP1R12 {Preferred mines: 500} L 0 2000000000
+MURP1R13 {Preferred gold: 0} L 0 2000000000
+MURP1R14 {Preferred spies: 0} L 0 2000000000
 
+MURP2TYP {Object kind: PLANET} E PLANET WORMHOLE END
+MURP2NM {Trans-Gal HQ} S 19 Planet name
+MURP2DSC {Trans-galactic hauling headquarters} S 38 Planet description
+MURP2X {Local X coordinate: 2500} N 100 9900
+MURP2Y {Local Y coordinate: 6000} N 100 9900
+MURP2ENV {Environment: 3} N 0 3
+MURP2RES {Resources: 0} N 0 3
+MURP2OUT {Outpost role: 9} N 0 10
+MURP2SHD {Maximum shield Mark sold: 0} N 0 19
+MURP2PHS {Maximum phaser Mark sold: 0} N 0 19
+MURP2UPG {Offered upgrade mask: 0} N 0 255
+MURP2R01 {Preferred men: 0} L 0 2000000000
+MURP2R02 {Preferred missiles: 0} L 0 2000000000
+MURP2R03 {Preferred torpedoes: 0} L 0 2000000000
+MURP2R04 {Preferred ion cannons: 0} L 0 2000000000
+MURP2R05 {Preferred flux pods: 0} L 0 2000000000
+MURP2R06 {Preferred food: 0} L 0 2000000000
+MURP2R07 {Preferred fighters: 0} L 0 2000000000
+MURP2R08 {Preferred decoys: 0} L 0 2000000000
+MURP2R09 {Preferred troops: 0} L 0 2000000000
+MURP2R10 {Preferred zippers: 0} L 0 2000000000
+MURP2R11 {Preferred jammers: 0} L 0 2000000000
+MURP2R12 {Preferred mines: 0} L 0 2000000000
+MURP2R13 {Preferred gold: 0} L 0 2000000000
+MURP2R14 {Preferred spies: 0} L 0 2000000000
+MURP3TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+MURP3NM {Murdonian Portal} S 19 Planet name
+MURP3DSC {} S 38 Planet description
+MURP3X {Local X coordinate: 1800} N 100 9900
+MURP3Y {Local Y coordinate: 2000} N 100 9900
+MURP3ENV {Environment: 0} N 0 3
+MURP3RES {Resources: 0} N 0 3
+MURP3OUT {Outpost role: 0} N 0 10
+MURP3SHD {Maximum shield Mark sold: 0} N 0 19
+MURP3PHS {Maximum phaser Mark sold: 0} N 0 19
+MURP3UPG {Offered upgrade mask: 0} N 0 255
+MURP3R01 {Preferred men: 0} L 0 2000000000
+MURP3R02 {Preferred missiles: 0} L 0 2000000000
+MURP3R03 {Preferred torpedoes: 0} L 0 2000000000
+MURP3R04 {Preferred ion cannons: 0} L 0 2000000000
+MURP3R05 {Preferred flux pods: 0} L 0 2000000000
+MURP3R06 {Preferred food: 0} L 0 2000000000
+MURP3R07 {Preferred fighters: 0} L 0 2000000000
+MURP3R08 {Preferred decoys: 0} L 0 2000000000
+MURP3R09 {Preferred troops: 0} L 0 2000000000
+MURP3R10 {Preferred zippers: 0} L 0 2000000000
+MURP3R11 {Preferred jammers: 0} L 0 2000000000
+MURP3R12 {Preferred mines: 0} L 0 2000000000
+MURP3R13 {Preferred gold: 0} L 0 2000000000
+MURP3R14 {Preferred spies: 0} L 0 2000000000
+MURP4TYP {Object kind: WORMHOLE} E PLANET WORMHOLE END
+MURP4NM {Freighter Portal} S 19 Planet name
+MURP4DSC {} S 38 Planet description
+MURP4X {Local X coordinate: 8200} N 100 9900
+MURP4Y {Local Y coordinate: 3000} N 100 9900
+MURP4ENV {Environment: 0} N 0 3
+MURP4RES {Resources: 0} N 0 3
+MURP4OUT {Outpost role: 0} N 0 10
+MURP4SHD {Maximum shield Mark sold: 0} N 0 19
+MURP4PHS {Maximum phaser Mark sold: 0} N 0 19
+MURP4UPG {Offered upgrade mask: 0} N 0 255
+MURP4R01 {Preferred men: 0} L 0 2000000000
+MURP4R02 {Preferred missiles: 0} L 0 2000000000
+MURP4R03 {Preferred torpedoes: 0} L 0 2000000000
+MURP4R04 {Preferred ion cannons: 0} L 0 2000000000
+MURP4R05 {Preferred flux pods: 0} L 0 2000000000
+MURP4R06 {Preferred food: 0} L 0 2000000000
+MURP4R07 {Preferred fighters: 0} L 0 2000000000
+MURP4R08 {Preferred decoys: 0} L 0 2000000000
+MURP4R09 {Preferred troops: 0} L 0 2000000000
+MURP4R10 {Preferred zippers: 0} L 0 2000000000
+MURP4R11 {Preferred jammers: 0} L 0 2000000000
+MURP4R12 {Preferred mines: 0} L 0 2000000000
+MURP4R13 {Preferred gold: 0} L 0 2000000000
+MURP4R14 {Preferred spies: 0} L 0 2000000000
 MUREND {END} E END
 
 VAKSECT {VAKORY} E VAKORY
 
 VAKP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
 VAKP1NM {Vakory} S 19 Planet name
-VAKP1OWN {} S 29 Legacy owner text
-VAKP1X {Local X coordinate: 5000} N 100 9900
-VAKP1Y {Local Y coordinate: 5000} N 100 9900
+VAKP1DSC {Vakory homeworld / intelligence center} S 38 Planet description
+VAKP1X {Local X coordinate: 3500} N 100 9900
+VAKP1Y {Local Y coordinate: 4500} N 100 9900
 VAKP1ENV {Environment: 3} N 0 3
 VAKP1RES {Resources: 3} N 0 3
-VAKP1OUT {Outpost role: 7} N 0 8
+VAKP1OUT {Outpost role: 7} N 0 10
+VAKP1SHD {Maximum shield Mark sold: 0} N 0 19
+VAKP1PHS {Maximum phaser Mark sold: 0} N 0 19
+VAKP1UPG {Offered upgrade mask: 1} N 0 255
+VAKP1R01 {Preferred men: 0} L 0 2000000000
+VAKP1R02 {Preferred missiles: 15} L 0 2000000000
+VAKP1R03 {Preferred torpedoes: 50} L 0 2000000000
+VAKP1R04 {Preferred ion cannons: 0} L 0 2000000000
+VAKP1R05 {Preferred flux pods: 0} L 0 2000000000
+VAKP1R06 {Preferred food: 0} L 0 2000000000
+VAKP1R07 {Preferred fighters: 0} L 0 2000000000
+VAKP1R08 {Preferred decoys: 15} L 0 2000000000
+VAKP1R09 {Preferred troops: 0} L 0 2000000000
+VAKP1R10 {Preferred zippers: 15} L 0 2000000000
+VAKP1R11 {Preferred jammers: 15} L 0 2000000000
+VAKP1R12 {Preferred mines: 15} L 0 2000000000
+VAKP1R13 {Preferred gold: 0} L 0 2000000000
+VAKP1R14 {Preferred spies: 0} L 0 2000000000
 
 VAKEND {END} E END
 
@@ -147,12 +479,29 @@ ZEXSECT {EXPRESS} E EXPRESS
 
 ZEXP1TYP {Object kind: PLANET} E PLANET WORMHOLE END
 ZEXP1NM {Zygor Express} S 19 Planet name
-ZEXP1OWN {} S 29 Legacy owner text
+ZEXP1DSC {Zygorian trading and supply outpost} S 38 Planet description
 ZEXP1X {Local X coordinate: 5000} N 100 9900
 ZEXP1Y {Local Y coordinate: 5000} N 100 9900
 ZEXP1ENV {Environment: 3} N 0 3
 ZEXP1RES {Resources: 3} N 0 3
-ZEXP1OUT {Outpost role: 8} N 0 8
+ZEXP1OUT {Outpost role: 8} N 0 10
+ZEXP1SHD {Maximum shield Mark sold: 8} N 0 19
+ZEXP1PHS {Maximum phaser Mark sold: 8} N 0 19
+ZEXP1UPG {Offered upgrade mask: 8} N 0 255
+ZEXP1R01 {Preferred men: 0} L 0 2000000000
+ZEXP1R02 {Preferred missiles: 100} L 0 2000000000
+ZEXP1R03 {Preferred torpedoes: 100} L 0 2000000000
+ZEXP1R04 {Preferred ion cannons: 0} L 0 2000000000
+ZEXP1R05 {Preferred flux pods: 0} L 0 2000000000
+ZEXP1R06 {Preferred food: 0} L 0 2000000000
+ZEXP1R07 {Preferred fighters: 0} L 0 2000000000
+ZEXP1R08 {Preferred decoys: 40} L 0 2000000000
+ZEXP1R09 {Preferred troops: 0} L 0 2000000000
+ZEXP1R10 {Preferred zippers: 40} L 0 2000000000
+ZEXP1R11 {Preferred jammers: 40} L 0 2000000000
+ZEXP1R12 {Preferred mines: 200} L 0 2000000000
+ZEXP1R13 {Preferred gold: 0} L 0 2000000000
+ZEXP1R14 {Preferred spies: 0} L 0 2000000000
 
 ZEXEND {END} E END
 

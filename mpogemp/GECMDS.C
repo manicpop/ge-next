@@ -394,13 +394,99 @@ void FUNC warnop(void)
 ** Display command and topic help                                        **
 **************************************************************************/
 
+#ifndef GE_ARENA
+static void show_ship_catalog(GALPLNT *vendor)
+{
+	int i, listed = 0;
+	char gechrbuf4[12], gechrbuf5[12], gechrbuf6[12], gechrbuf7[12];
+	char gechrbuf8[12], gechrbuf9[12];
+
+	setmbk(gehlpmb);
+	if (vendor != NULL)
+		prfmsg(HLPCLSP, vendor->name);
+	else
+		prfmsg(HLPCLS1);
+	prfmsg(HLPCLSH);
+	for (i=0; i<tot_classes; ++i) {
+		if (ship_class_available(waruptr, i, vendor)) {
+			++listed;
+			if (shipclass[i].max_tons >999999L)
+				sprintf(gechrbuf,"%ldm",shipclass[i].max_tons/1000000L);
+			else if (shipclass[i].max_tons >999)
+				sprintf(gechrbuf,"%ldk",shipclass[i].max_tons/1000);
+			else
+				sprintf(gechrbuf,"%ld",shipclass[i].max_tons);
+
+			if (shipclass[i].max_price >999999L)
+				sprintf(gechrbuf2,"%ldm",shipclass[i].max_price/1000000L);
+			else if (shipclass[i].max_price >999)
+				sprintf(gechrbuf2,"%ldk",shipclass[i].max_price/1000);
+			else
+				sprintf(gechrbuf2,"%ld",shipclass[i].max_price);
+
+			if (shipclass[i].scanrange >999999L)
+				sprintf(gechrbuf3,"%ldm",shipclass[i].scanrange/1000000L);
+			else if (shipclass[i].scanrange >999)
+				sprintf(gechrbuf3,"%ldk",shipclass[i].scanrange/1000);
+			else
+				sprintf(gechrbuf3,"%ld",shipclass[i].scanrange);
+
+			if (shipclass[i].max_warp == 0)
+				strcpy(gechrbuf4,CLR_RED1 " N");
+			else
+				sprintf(gechrbuf4,"%s%2d",CLR_WHITE2,shipclass[i].max_warp);
+			if (shipclass[i].max_shlds == 0)
+				strcpy(gechrbuf5,CLR_RED1 " N");
+			else
+				sprintf(gechrbuf5,"%s%2d",CLR_WHITE2,shipclass[i].max_shlds);
+			if (shipclass[i].max_phasr == 0)
+				strcpy(gechrbuf6,CLR_RED1 " N");
+			else
+				sprintf(gechrbuf6,"%s%2d",CLR_WHITE2,shipclass[i].max_phasr);
+			if (shipclass[i].max_torps == 0)
+				strcpy(gechrbuf7,CLR_RED1 "N");
+			else
+				sprintf(gechrbuf7,"%s%1d",CLR_GREEN2,shipclass[i].max_torps);
+			if (shipclass[i].max_missl == 0)
+				strcpy(gechrbuf8,CLR_RED1 "N");
+			else
+				sprintf(gechrbuf8,"%s%1d",CLR_GREEN2,shipclass[i].max_missl);
+			if (shipclass[i].max_accel >999)
+				sprintf(gechrbuf9,"%s%2dk",CLR_WHITE2,shipclass[i].max_accel/1000);
+			else
+				sprintf(gechrbuf9,"%s%3d",CLR_WHITE2,shipclass[i].max_accel);
+			prf("%s%2d %s%-24s %s%5s %s %s %s %s %s %s %s %s %s %s %s %4s %4s %4s %5d\r",
+				CLR_CYAN2, i+1,
+				CLR_CYAN1, shipclass[i].typename,
+				CLR_YELLOW1, gechrbuf2,
+				gechrbuf4,
+				gechrbuf5,
+				gechrbuf6,
+				gechrbuf7,
+				gechrbuf8,
+				shipclass[i].has_mine ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				shipclass[i].max_attk ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				shipclass[i].has_decoy ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				shipclass[i].has_jam ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				shipclass[i].has_zip ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				shipclass[i].max_cloak ? CLR_GREEN2 "Y" : CLR_RED1 "N",
+				gechrbuf9,
+				gechrbuf3,
+				gechrbuf,
+				shipclass[i].max_points
+			);
+		}
+	}
+	prfmsg(HLPCLS2);
+	setmbk(gemb);
+	if (!listed)
+		prfmsg(SHIPNONE);
+}
+#endif
+
 void FUNC cmd_gehelp(void)
 {
 	int ndx, i, syshelp;
-#ifndef GE_ARENA
-	char gechrbuf4[12], gechrbuf5[12], gechrbuf6[12], gechrbuf7[12];
-	char gechrbuf8[12], gechrbuf9[12];
-#endif
 
 	if ((!syscmds) || (sysonly && !(hasmkey(SYSKEY))))
 		syshelp = FALSE;
@@ -433,77 +519,7 @@ void FUNC cmd_gehelp(void)
 #ifdef GE_ARENA
 			arena_show_ship_classes();
 #else
-			prfmsg(HLPCLS1);
-			for (i=0; i<tot_classes; ++i) {
-				if (shipclass[i].max_type == CLASSTYPE_USER) {
-					if (shipclass[i].max_tons >999999L)
-						sprintf(gechrbuf,"%ldm",shipclass[i].max_tons/1000000L);
-					else if (shipclass[i].max_tons >999)
-						sprintf(gechrbuf,"%ldk",shipclass[i].max_tons/1000);
-					else
-						sprintf(gechrbuf,"%ld",shipclass[i].max_tons);
-
-					if (shipclass[i].max_price >999999L)
-						sprintf(gechrbuf2,"%ldm",shipclass[i].max_price/1000000L);
-					else if (shipclass[i].max_price >999)
-						sprintf(gechrbuf2,"%ldk",shipclass[i].max_price/1000);
-					else
-						sprintf(gechrbuf2,"%ld",shipclass[i].max_price);
-
-					if (shipclass[i].scanrange >999999L)
-						sprintf(gechrbuf3,"%ldm",shipclass[i].scanrange/1000000L);
-					else if (shipclass[i].scanrange >999)
-						sprintf(gechrbuf3,"%ldk",shipclass[i].scanrange/1000);
-					else
-						sprintf(gechrbuf3,"%ld",shipclass[i].scanrange);
-
-					if (shipclass[i].max_warp == 0)
-						strcpy(gechrbuf4,CLR_RED1 " N");
-					else
-						sprintf(gechrbuf4,"%s%2d",CLR_WHITE2,shipclass[i].max_warp);
-					if (shipclass[i].max_shlds == 0)
-						strcpy(gechrbuf5,CLR_RED1 " N");
-					else
-						sprintf(gechrbuf5,"%s%2d",CLR_WHITE2,shipclass[i].max_shlds);
-					if (shipclass[i].max_phasr == 0)
-						strcpy(gechrbuf6,CLR_RED1 " N");
-					else
-						sprintf(gechrbuf6,"%s%2d",CLR_WHITE2,shipclass[i].max_phasr);
-					if (shipclass[i].max_torps == 0)
-						strcpy(gechrbuf7,CLR_RED1 "N");
-					else
-						sprintf(gechrbuf7,"%s%1d",CLR_GREEN2,shipclass[i].max_torps);
-					if (shipclass[i].max_missl == 0)
-						strcpy(gechrbuf8,CLR_RED1 "N");
-					else
-						sprintf(gechrbuf8,"%s%1d",CLR_GREEN2,shipclass[i].max_missl);
-					if (shipclass[i].max_accel >999)
-						sprintf(gechrbuf9,"%s%2dk",CLR_WHITE2,shipclass[i].max_accel/1000);
-					else
-						sprintf(gechrbuf9,"%s%3d",CLR_WHITE2,shipclass[i].max_accel);
-					prf("%s%2d %s%-24s %s%5s %s %s %s %s %s %s %s %s %s %s %s %4s %4s %4s %5d\r",
-						CLR_CYAN2, i+1,
-						CLR_CYAN1, shipclass[i].typename,
-						CLR_YELLOW1, gechrbuf2,
-						gechrbuf4,
-						gechrbuf5,
-						gechrbuf6,
-						gechrbuf7,
-						gechrbuf8,
-						shipclass[i].has_mine ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						shipclass[i].max_attk ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						shipclass[i].has_decoy ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						shipclass[i].has_jam ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						shipclass[i].has_zip ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						shipclass[i].max_cloak ? CLR_GREEN2 "Y" : CLR_RED1 "N",
-						gechrbuf9,
-						gechrbuf3,
-						gechrbuf,
-						shipclass[i].max_points
-					);
-				}
-			}
-			prfmsg(HLPCLS2);
+			show_ship_catalog(NULL);
 #endif
 			outprfge(FLT_NONE,usrnum);
 			return;
@@ -515,7 +531,11 @@ void FUNC cmd_gehelp(void)
 #else
 			i = atoi(margv[2])-1;
 #endif
-			if (i >= 0 && i < tot_classes && shipclass[i].max_type == CLASSTYPE_USER) {
+			if (i >= 0 && i < tot_classes && shipclass[i].max_type == CLASSTYPE_USER
+#ifndef GE_ARENA
+				&& ship_class_available(waruptr, i, NULL)
+#endif
+			) {
 				setmbk(geshmb);
 				prfmsg(shipclass[i].hlpmsg);
 				outprfge(FLT_NONE,usrnum);
@@ -2543,8 +2563,12 @@ static void trans_down(int item)
 
 		if (warsptr->items[item] >= amt) {
 			unsigned long room;
-			if (plptr->items[item].qty > ULCAP - amt) {
-				room = ULCAP - plptr->items[item].qty;
+#ifndef GE_ARENA
+			room = planet_stock_unlimited(plptr, item) ? 0UL : planet_stock_room(plptr, item);
+#else
+			room = ULCAP - plptr->items[item].qty;
+#endif
+			if (amt > room) {
 				if (room == 0UL) {
 					prfmsg(TRANSFR6,item_name[item]);
 					return;
@@ -2580,8 +2604,8 @@ static void trans_up(int item)
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	/* you must own this planet or NOBODY must own it to xfer up */
-	if (sameas(plptr->userid,warsptr->userid) || plptr->userid[0] == 0) {
+	/* Faction ownership also prevents unrestricted transfer-up access. */
+	if (sameas(plptr->userid,warsptr->userid) || !planet_has_owner(plptr)) {
 		keep = (margv[2][0] == '-');
 		if (sameas("MAX",margv[2])) {
 			unsigned long room;
@@ -2749,7 +2773,7 @@ void FUNC cmd_admin(void)
 #ifdef GE_ARENA
 	arena_admin_rename();
 #else
-	if (plptr->owner_type != PL_OWNER_FACTION && plptr->userid[0] == 0) {
+	if (!planet_has_owner(plptr)) {
 		if (waruptr->planets >= max_plnts) {
 			prfmsg(ADMIN4,max_plnts);
 			outprfge(FLT_NONE,usrnum);
@@ -3442,14 +3466,38 @@ void FUNC cmd_planet(void)
 **************************************************************************/
 
 #ifndef GE_ARENA
+static int faction_trade_allowed(void)
+{
+	if (plptr->owner_type != PL_OWNER_FACTION || plptr->owner_faction >= 8
+		|| plptr->outpost_type == OUTPOST_ENFORCER) {
+		prfmsg(TRDENONE, plptr->name);
+		return FALSE;
+	}
+	if (waruptr->factions[plptr->owner_faction] > 100) {
+		prfmsg(TRDEBAN, plptr->name);
+		return FALSE;
+	}
+	return TRUE;
+}
+
 static void sell(int item)
 {
-	unsigned long amt, gross, fee, net;
-	byte toorich, toomuch;
+	unsigned long amt, gross, fee, net, room;
+	byte toorich, toomuch, stockfull;
 	int keep;
 
 	toorich = FALSE;
 	toomuch = FALSE;
+	stockfull = FALSE;
+
+	if (item == I_MEN || item == I_TROOPS || item == I_SPY) {
+		prfmsg(SELLPPL, item_name[item]);
+		return;
+	}
+	if (plptr->items[item].sell != 'Y') {
+		prfmsg(SELLNO, plptr->name, item_name[item]);
+		return;
+	}
 
 	if (sameas("ALL", margv[1])) {
 		if (warsptr->items[item] == 0L) {
@@ -3479,6 +3527,15 @@ static void sell(int item)
 		return;
 	}
 	if (warsptr->items[item] >= amt) {
+		room = planet_stock_room(plptr, item);
+		if (amt > room) {
+			if (room == 0UL) {
+				prfmsg(SELLFULL, item_name[item]);
+				return;
+			}
+			amt = room;
+			stockfull = TRUE;
+		}
 		if (amt > ULCAP / (unsigned long)baseprice[item]) {
 			amt = ULCAP / (unsigned long)baseprice[item];
 			toomuch = TRUE;
@@ -3525,6 +3582,12 @@ static void sell(int item)
 
 		warsptr->items[item] -= amt;
 		waruptr->cash += net;
+		if (!planet_stock_unlimited(plptr, item)) {
+			plptr->items[item].qty += amt;
+			setsect(warsptr);
+			pkey.plnum = plnum;
+			gesdb(GEUPDATE, &pkey, (GALSECT *)plptr);
+		}
 
 		gepdb(GEUPDATE, warsptr->userid, warsptr->shipno, warsptr);
 		geudb(GEUPDATE, waruptr->userid, waruptr);
@@ -3537,6 +3600,8 @@ static void sell(int item)
 			prfmsg(TOOMUCH);
 		if (toorich == TRUE)
 			prfmsg(TOORICH, spr("%lu", ULCAP));
+		if (stockfull == TRUE && amt == room)
+			prfmsg(SELLFULL, item_name[item]);
 
 		prfmsg(SELL2, gechrbuf3, gechrbuf2, gechrbuf, item_name[item]);
 		return;
@@ -3566,31 +3631,19 @@ void FUNC cmd_sell(void)
 		return;
 	}
 
-	if (!neutral(&warsptr->coord)) {
-		prfmsg(SELL1);
-		outprfge(FLT_NONE, usrnum);
-		return;
-	}
-
-	if (gcnum < 8 && waruptr->factions[gcnum] > 100) { /* don't buy from jerks */
-		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
-		outprfge(FLT_NONE, usrnum);
-		return;
-	}
-
-	plnum = warsptr->where - 10;
-
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	if (neutral(&warsptr->coord) && plnum == 1) { /* must be Zygor */
-		if (margc == 3) {
-			for (i = 0; i < NUMITEMS; ++i) {
-				if (sameto(kwrd[i], margv[2])) {
-					sell(i);
-					outprfge(FLT_NONE, usrnum);
-					return;
-				}
+	if (!faction_trade_allowed()) {
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	if (margc == 3) {
+		for (i = 0; i < NUMITEMS; ++i) {
+			if (sameto(kwrd[i], margv[2])) {
+				sell(i);
+				outprfge(FLT_NONE, usrnum);
+				return;
 			}
 		}
 	}
@@ -3641,7 +3694,13 @@ static void buy(int item)
 {
 	unsigned long amt, avail, tot, ptot;
 
-	if (plptr->userid[0] != 0) {
+	if (item == I_SPY || ((item == I_MEN || item == I_TROOPS)
+		&& (plptr->owner_type != PL_OWNER_FACTION || plptr->outpost_type != OUTPOST_TAHANIAN))) {
+		prfmsg(BUYPPL, item_name[item]);
+		return;
+	}
+
+	if (planet_has_owner(plptr)) {
 		if ((parse_ulong(margv[1], &amt) && amt > 0UL) || sameas("MAX", margv[1]) || sameas("ALL", margv[1])) {
 			if (sameas(plptr->userid, warsptr->userid) || plptr->items[item].sell == 'Y') {
 				if (sameas("MAX", margv[1]))
@@ -3660,8 +3719,9 @@ static void buy(int item)
 					if (avail > 0 && avail >= amt) {
 						if ((tot = price(item, amt)) <= waruptr->cash) {
 							if (strncmp(margv[0], "buy", 3) == 0) {
-								if (!neutral(&warsptr->coord)) {
+								if (!planet_stock_unlimited(plptr, item))
 									plptr->items[item].qty -= amt;
+								if (plptr->owner_type != PL_OWNER_FACTION) {
 									plptr->items[item].sold2a += amt;
 									if (plptr->cash > ULCAP - tot) {
 										ptot = ULCAP - plptr->cash;
@@ -3669,9 +3729,11 @@ static void buy(int item)
 									} else {
 										plptr->cash += tot;
 									}
+								}
+								if (!planet_stock_unlimited(plptr, item)) {
 									setsect(warsptr);
 									pkey.plnum = plnum;
-									gesdb(GEUPDATE, &pkey, (GALSECT *)&planet);
+									gesdb(GEUPDATE, &pkey, (GALSECT *)plptr);
 								}
 								warsptr->items[item] += amt;
 								waruptr->cash -= tot;
@@ -3682,7 +3744,8 @@ static void buy(int item)
 									prfmsg(BUY9, gechrbuf2, item_name[item], baseprice[item], gechrbuf);
 								} else {
 									sprintf(gechrbuf2, "%lu", amt);
-									prfmsg(BUY9, gechrbuf2, item_name[item], plptr->items[item].markup2a, gechrbuf);
+									prfmsg(item == I_MEN ? BUYMEN : item == I_TROOPS ? BUYTRO : BUY9,
+										gechrbuf2, item_name[item], plptr->items[item].markup2a, gechrbuf);
 								}
 								return;
 							} else {
@@ -3752,8 +3815,7 @@ void FUNC cmd_buy(void)
 		return;
 	fixplanetteam();
 
-	if (neutral(&warsptr->coord) && plnum == 1 && gcnum < 8 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't sell to jerks */
-		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
+	if (plptr->owner_type == PL_OWNER_FACTION && !faction_trade_allowed()) {
 		outprfge(FLT_NONE, usrnum);
 		return;
 	}
@@ -3817,8 +3879,7 @@ void FUNC cmd_price(void)
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	if (neutral(&warsptr->coord) && plnum == 1 && gcnum < 8 && waruptr->factions[gcnum] > 100) { /* if Zygor, don't price to jerks */
-		prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
+	if (plptr->owner_type == PL_OWNER_FACTION && !faction_trade_allowed()) {
 		outprfge(FLT_NONE, usrnum);
 		return;
 	}
@@ -3900,7 +3961,7 @@ void FUNC cmd_maint(void)
 		return;
 	}
 
-	if (plptr->userid[0] == 0 || plptr->items[I_MEN].qty < 25000L) {
+	if (!planet_has_owner(plptr) || plptr->items[I_MEN].qty < 25000L) {
 		prfmsg(MAINT8);
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -3975,6 +4036,154 @@ static long upg_price(WARSHP *ptr, int idx)
 	return((long)(((double)upgrprice[upgdefs[idx].priceidx] *
 		shipclass[ptr->shpclass].damfact) / 100.0));
 }
+/* Permanent achievement requirements are independent of vendor offerings. */
+static byte upgunlocks[NUMUPGRADES] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+static int upg_offered(GALPLNT *vendor, int idx)
+{
+	return (planet_upgrade_mask(vendor) & upgdefs[idx].bit) != 0;
+}
+
+static int upg_available(WARSHP *ptr, unsigned int loadout, int idx)
+{
+	return upg_offered(plptr, idx)
+		&& player_has_unlock(waruptr, upgunlocks[idx])
+		&& upg_allowed(ptr, loadout, idx);
+}
+
+static void new_upgrade(void)
+{
+	int upidx, i, shown = 0;
+	unsigned int loadout, upbit;
+	byte tpmode;
+	long price;
+
+	for (i = 0; i < NUMUPGRADES; ++i) {
+		if (upg_offered(plptr, i))
+			break;
+	}
+	if (i == NUMUPGRADES) {
+		prfmsg(UPGSVC, plptr->name);
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	if (waruptr->factions[plptr->owner_faction] > 100) {
+		prfmsg(UPGBAN, plptr->name);
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	loadout = shipclass[warsptr->shpclass].loadout;
+	if (loadout == 0) {
+		prfmsg(UPGRNO, shipclass[warsptr->shpclass].typename);
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	if (margc == 3) {
+		if (!parse_long(margv[2], &price) || price < 1L || price > NUMUPGRADES) {
+			prfmsg(NEW12);
+		} else {
+			upidx = (int)price - 1;
+			upbit = upgdefs[upidx].bit;
+			if (!upg_allowed(warsptr, loadout, upidx)) {
+				prfmsg(NEW20);
+			} else if (!upg_available(warsptr, loadout, upidx)) {
+				prfmsg(UPGUNAV);
+			} else if (warsptr->upgrade & upbit) {
+				prfmsg(NEW21);
+			} else {
+				price = upg_price(warsptr, upidx);
+				if ((unsigned long)price <= waruptr->cash) {
+					waruptr->cash -= price;
+					warsptr->upgrade |= upbit;
+					if (upbit == TPONDER) {
+						warsptr->tponder = TPONNORM;
+						prfmsg(NEW22, l2as(price));
+						outprfge(FLT_NONE, usrnum);
+						prfmsg(TPOND4);
+						outprfge(FLT_NONE, usrnum);
+						prfmsg(TPOND5);
+					} else {
+						prfmsg(NEW22, l2as(price));
+					}
+				} else {
+					prfmsg(NEW23);
+				}
+			}
+		}
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	if (margc == 4) {
+		if (!parse_long(margv[2], &price) || price != 7L) {
+			prfmsg(NEW12);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (!upg_allowed(warsptr, loadout, 6)) {
+			prfmsg(NEW20);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (!upg_available(warsptr, loadout, 6)) {
+			prfmsg(UPGUNAV);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (sameas(margv[3], "high"))
+			tpmode = TPONHIGH;
+		else if (sameas(margv[3], "normal"))
+			tpmode = TPONNORM;
+		else if (sameas(margv[3], "low"))
+			tpmode = TPONLOW;
+		else {
+			prfmsg(TPOND5);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (!(warsptr->upgrade & TPONDER)) {
+			price = upg_price(warsptr, 6);
+			if ((unsigned long)price <= waruptr->cash) {
+				waruptr->cash -= price;
+				warsptr->upgrade |= TPONDER;
+				warsptr->tponder = tpmode;
+				prfmsg(NEW22, l2as(price));
+				outprfge(FLT_NONE, usrnum);
+			} else {
+				prfmsg(NEW23);
+				outprfge(FLT_NONE, usrnum);
+				return;
+			}
+		} else {
+			warsptr->tponder = tpmode;
+		}
+		if (warsptr->tponder == TPONHIGH)
+			prfmsg(TPOND1);
+		else if (warsptr->tponder == TPONLOW)
+			prfmsg(TPOND3);
+		else
+			prfmsg(TPOND2);
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+	prfmsg(UPGRHEAD, shipclass[warsptr->shpclass].typename);
+	outprfge(FLT_NONE, usrnum);
+	for (i = 0; i < NUMUPGRADES; ++i) {
+		if (!upg_available(warsptr, loadout, i))
+			continue;
+		++shown;
+		prfmsg(upgdefs[i].namemsg);
+		if (warsptr->upgrade & upgdefs[i].bit)
+			prfmsg(upgdefs[i].descmsg, i + 1, "purchased");
+		else
+			prfmsg(upgdefs[i].descmsg, i + 1, l2as(upg_price(warsptr, i)));
+		outprfge(FLT_NONE, usrnum);
+	}
+	if (shown == 0) {
+		prfmsg(UPGNONE);
+		outprfge(FLT_NONE, usrnum);
+	}
+}
+
 #endif
 
 #ifdef GE_ARENA
@@ -3985,22 +4194,24 @@ void FUNC cmd_new(void)
 #else
 void FUNC cmd_new(void)
 {
-	int type, ctype, upidx, i;
-	unsigned int loadout;
-	unsigned int upbit;
-	byte tpmode;
+	int type, ctype, limit;
 	long delta, credit, fee;
 	long price;
 
 	if ((margc != 3 && !(margc == 4 && sameas(margv[1], "upgrade"))) &&
-		!(margc == 2 && sameas(margv[1], "upgrade"))) {
+		!(margc == 2 && (sameas(margv[1], "upgrade") || sameas(margv[1], "ship")))) {
 		prfmsg(FORMAT, "NEW");
 		outprfge(FLT_NONE, usrnum);
 		return;
 	}
 
 	if (warsptr->where < 10) {
-		prfmsg(NEW1);
+		if (sameas(margv[1], "ship"))
+			prfmsg(SHIPORBT);
+		else if (sameas(margv[1], "upgrade"))
+			prfmsg(UPGORBT);
+		else
+			prfmsg(EQPORBT);
 		outprfge(FLT_NONE, usrnum);
 		return;
 	}
@@ -4008,138 +4219,65 @@ void FUNC cmd_new(void)
 	if (!load_orbit_planet(usrnum))
 		return;
 
-	if (neutral(&warsptr->coord) && plnum == 1) { /* must be Zygor */
-		if (gcnum < 8 && waruptr->factions[gcnum] > 100) { /* don't sell to jerks */
-			prfmsg(NOZYG, (int)((waruptr->factions[gcnum] - 61) / 40));
-			outprfge(FLT_NONE, usrnum);
-			return;
-		}
-		if (sameas(margv[1], "upgrade")) {
-			loadout = shipclass[warsptr->shpclass].loadout;
-			if (loadout == 0) {
-				prfmsg(UPGRNO, shipclass[warsptr->shpclass].typename);
-				outprfge(FLT_NONE, usrnum);
-				return;
-			}
-			if (margc == 3) {
-				type = atoi(margv[2]);
-				if (type < 1 || type > NUMUPGRADES) {
-					prfmsg(NEW12);
-				} else {
-					upidx = type - 1;
-					upbit = upgdefs[upidx].bit;
-					if (!upg_allowed(warsptr, loadout, upidx)) {
-						prfmsg(NEW20);
-					} else if (warsptr->upgrade & upbit) {
-						prfmsg(NEW21);
-					} else {
-						price = upg_price(warsptr, upidx);
-						if ((unsigned long)price <= waruptr->cash) {
-							waruptr->cash -= price;
-							warsptr->upgrade |= upbit;
-							if (upbit == TPONDER) {
-								warsptr->tponder = TPONNORM;
-								prfmsg(NEW22, l2as(price));
-								outprfge(FLT_NONE, usrnum);
-								prfmsg(TPOND4);
-								outprfge(FLT_NONE, usrnum);
-								prfmsg(TPOND5);
-							} else {
-								prfmsg(NEW22, l2as(price));
-							}
-						} else {
-							prfmsg(NEW23);
-						}
-					}
-				}
-				outprfge(FLT_NONE, usrnum);
-				return;
-			}
-			if (margc == 4) {
-				type = atoi(margv[2]);
-				if (type != 7) {
-					prfmsg(NEW12);
-					outprfge(FLT_NONE, usrnum);
-					return;
-				}
-				if (!upg_allowed(warsptr, loadout, 6)) {
-					prfmsg(NEW20);
-					outprfge(FLT_NONE, usrnum);
-					return;
-				}
-				if (sameas(margv[3], "high"))
-					tpmode = TPONHIGH;
-				else if (sameas(margv[3], "normal"))
-					tpmode = TPONNORM;
-				else if (sameas(margv[3], "low"))
-					tpmode = TPONLOW;
-				else {
-					prfmsg(TPOND5);
-					outprfge(FLT_NONE, usrnum);
-					return;
-				}
-				if (!(warsptr->upgrade & TPONDER)) {
-					price = upg_price(warsptr, 6);
-					if ((unsigned long)price <= waruptr->cash) {
-						waruptr->cash -= price;
-						warsptr->upgrade |= TPONDER;
-						warsptr->tponder = tpmode;
-						prfmsg(NEW22, l2as(price));
-						outprfge(FLT_NONE, usrnum);
-					} else {
-						prfmsg(NEW23);
-						outprfge(FLT_NONE, usrnum);
-						return;
-					}
-				} else {
-					warsptr->tponder = tpmode;
-				}
-				if (warsptr->tponder == TPONHIGH)
-					prfmsg(TPOND1);
-				else if (warsptr->tponder == TPONLOW)
-					prfmsg(TPOND3);
-				else
-					prfmsg(TPOND2);
-				outprfge(FLT_NONE, usrnum);
-				return;
-			}
-			prfmsg(UPGRHEAD, shipclass[warsptr->shpclass].typename);
-			outprfge(FLT_NONE, usrnum);
-			for (i = 0; i < NUMUPGRADES; ++i) {
-				if (!upg_allowed(warsptr, loadout, i))
-					continue;
-				prfmsg(upgdefs[i].namemsg);
-				if (warsptr->upgrade & upgdefs[i].bit)
-					prfmsg(upgdefs[i].descmsg, i + 1, "purchased");
-				else
-					prfmsg(upgdefs[i].descmsg, i + 1, l2as(upg_price(warsptr, i)));
-				outprfge(FLT_NONE, usrnum);
-			}
-			return;
-		}
-		if (sameas(margv[1], "ship")) {
-			type = atoi(margv[2]) - 1;
-			if (type >= 0 && type < cyb_class && shipclass[type].max_type == CLASSTYPE_USER) {
-				if (waruptr->noships < maxships) {
-					if ((unsigned long)shipclass[type].max_price <= waruptr->cash) {
-						waruptr->cash -= shipclass[type].max_price;
-						prfmsg(NEW3, shipclass[type].typename);
-						initshp(waruptr->userid, type);
-						gepdb(GEADD, tmpshp.userid, tmpshp.shipno, &tmpshp);
-					} else {
-						prfmsg(NEW4, shipclass[type].typename);
-					}
-				} else {
-					prfmsg(NEW16, waruptr->noships);
-				}
+	if (sameas(margv[1], "ship")) {
+		if (!planet_has_shipyard(plptr)) {
+			prfmsg(SHIPSVC, plptr->name);
+		} else if (waruptr->factions[plptr->owner_faction] > 100) {
+			prfmsg(SHIPBAN, plptr->name);
+		} else if (margc == 2) {
+			show_ship_catalog(plptr);
+		} else if (!parse_long(margv[2], &price) || price < 1L || price > (long)tot_classes) {
+			prfmsg(SHIPUNAV);
+		} else {
+			type = (int)price - 1;
+			if (!ship_class_available(waruptr, type, plptr)) {
+				prfmsg(SHIPUNAV);
+			} else if (waruptr->noships >= maxships) {
+				prfmsg(NEW16, waruptr->noships);
+			} else if ((unsigned long)shipclass[type].max_price > waruptr->cash) {
+				prfmsg(NEW4, shipclass[type].typename);
 			} else {
-				prfmsg(NEW2);
+				waruptr->cash -= shipclass[type].max_price;
+				prfmsg(NEW3, shipclass[type].typename);
+				initshp(waruptr->userid, type);
+				gepdb(GEADD, tmpshp.userid, tmpshp.shipno, &tmpshp);
 			}
-		} else if (sameas(margv[1], "shield")) {
-			type = atoi(margv[2]);
-			if (type <= 0 || type > TOPSHIELD) {
-				prfmsg(NEW12);
-			} else if (warsptr->shieldtype == type) {
+		}
+		outprfge(FLT_NONE, usrnum);
+		return;
+	}
+
+	if (sameas(margv[1], "upgrade")) {
+		new_upgrade();
+		return;
+	}
+
+	if (sameas(margv[1], "shield") || sameas(margv[1], "phaser")) {
+		limit = planet_equipment_limit(plptr, sameas(margv[1], "shield"));
+		if (limit == 0) {
+			prfmsg(EQPSVC, plptr->name, sameas(margv[1], "shield") ? "shields" : "phasers");
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (waruptr->factions[plptr->owner_faction] > 100) {
+			prfmsg(EQPBAN, plptr->name);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (!parse_long(margv[2], &price) || price < 1L
+			|| price > (sameas(margv[1], "shield") ? TOPSHIELD : TOPPHASOR)) {
+			prfmsg(NEW12);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		type = (int)price;
+		if (type > limit) {
+			prfmsg(EQPLIM, plptr->name, limit);
+			outprfge(FLT_NONE, usrnum);
+			return;
+		}
+		if (sameas(margv[1], "shield")) {
+			if (warsptr->shieldtype == type) {
 				prfmsg(NEW15S, type);
 			} else if (shipclass[warsptr->shpclass].max_shlds >= type) {
 				ctype = warsptr->shieldtype;
@@ -4194,10 +4332,7 @@ void FUNC cmd_new(void)
 				prfmsg(NEW6, type);
 			}
 		} else if (sameas(margv[1], "phaser")) {
-			type = atoi(margv[2]);
-			if (type <= 0 || type > TOPPHASOR) {
-				prfmsg(NEW12);
-			} else if (warsptr->phasrtype == type) {
+			if (warsptr->phasrtype == type) {
 				prfmsg(NEW15P, type);
 			} else if (shipclass[warsptr->shpclass].max_phasr >= type) {
 				ctype = warsptr->phasrtype;
@@ -4250,11 +4385,9 @@ void FUNC cmd_new(void)
 			} else {
 				prfmsg(NEW9, type);
 			}
-		} else {
-			prfmsg(FORMAT, "NEW");
 		}
 	} else {
-		prfmsg(NEW5);
+		prfmsg(FORMAT, "NEW");
 	}
 	outprfge(FLT_NONE, usrnum);
 }
@@ -4306,6 +4439,20 @@ void FUNC cmd_sysop(void)
 		outprfge(FLT_NONE, usrnum);
 		return;
 #ifndef GE_ARENA
+	} else if (sameas("unlock",margv[1]) && margc == 3) {
+		if (!parse_ulong(margv[2], &amt) || amt == 0UL || amt > NUM_UNLOCKS) {
+			prf("\rSpecify an achievement from 1 through %d.\r", NUM_UNLOCKS);
+		} else if (grant_unlock(waruptr, (int)amt)) {
+			prf("\rAchievement %lu unlocked for this player.\r", amt);
+		} else {
+			prf("\rAchievement %lu was already unlocked.\r", amt);
+		}
+		outprfge(FLT_NONE, usrnum);
+		return;
+	} else if (sameas("outposts",margv[1]) && margc == 2) {
+		show_faction_sectors();
+		outprfge(FLT_NONE, usrnum);
+		return;
 	} else if (sameas("factions",margv[1]) && margc == 2) {
 		for (i = 0; i < 8; ++i) {
 			prfmsg(FACNAME0 + i);
@@ -4569,7 +4716,12 @@ void FUNC cmd_sysop(void)
 		}
 		if (!load_orbit_planet(usrnum))
 			return;
-		if (plptr->items[0].qty > 0 && plptr->userid[0] != 0) {
+		if (plptr->owner_type == PL_OWNER_FACTION) {
+			prf("\rFaction planets use outpost refreshes, not production cycles.\r");
+			outprfge(FLT_NONE,usrnum);
+			return;
+		}
+		if (plptr->items[0].qty > 0 && planet_has_owner(plptr)) {
 			if (margc == 3)
 				j = atoi(margv[2]);
 			else
