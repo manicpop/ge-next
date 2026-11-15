@@ -5076,6 +5076,16 @@ void FUNC mailit(int flag)
 			sendit();
 			break;
 
+		case MESG02O:
+		case MESG03O:
+		case MESG04O:
+		case MESG05O:
+			strcpy(mail.topic,"Distress Message");
+			sprintf(gechrbuf,"%ld",mail.long1);
+			prfmsg(mail.type,mail.name1,mail.int1,mail.int2,mail.string1,gechrbuf);
+			sendit();
+			break;
+
 		case MESG06:
 		case MESG07:
 			strcpy(mail.topic,"Distress Message");
