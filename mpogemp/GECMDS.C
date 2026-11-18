@@ -909,6 +909,9 @@ void FUNC cmd_orbit(void)
 				warsptr->where = 10 + plnum;
 				warsptr->speed = 0;
 				warsptr->speed2b = 0;
+#ifndef GE_ARENA
+				unlock_faction_ships(waruptr, plptr, usrnum);
+#endif
 				/* Orbit entry gets one beacon even outside the periodic broadcast round. */
 				if (plptr->beacon[0] != 0 && !(waruptr->options[MSG_FILTER] & MSGF_BEACON)) {
 					if (plptr->name[0] != 0)
@@ -3473,7 +3476,7 @@ static int faction_trade_allowed(void)
 		prfmsg(TRDENONE, plptr->name);
 		return FALSE;
 	}
-	if (waruptr->factions[plptr->owner_faction] > 100) {
+	if (faction_trade_banned(waruptr, plptr->owner_faction)) {
 		prfmsg(TRDEBAN, plptr->name);
 		return FALSE;
 	}
@@ -3737,6 +3740,8 @@ static void buy(int item)
 								}
 								warsptr->items[item] += amt;
 								waruptr->cash -= tot;
+								if (plptr->owner_type == PL_OWNER_FACTION)
+									credit_purchase_favor(waruptr, plptr->owner_faction, tot, FALSE);
 								sprintf(gechrbuf, "%lu", tot);
 
 								if (sameas(plptr->userid, warsptr->userid)) {
@@ -3747,6 +3752,7 @@ static void buy(int item)
 									prfmsg(item == I_MEN ? BUYMEN : item == I_TROOPS ? BUYTRO : BUY9,
 										gechrbuf2, item_name[item], plptr->items[item].markup2a, gechrbuf);
 								}
+								unlock_faction_ships(waruptr, plptr, usrnum);
 								return;
 							} else {
 								sprintf(gechrbuf, "%lu", tot);
@@ -4067,7 +4073,7 @@ static void new_upgrade(void)
 		outprfge(FLT_NONE, usrnum);
 		return;
 	}
-	if (waruptr->factions[plptr->owner_faction] > 100) {
+	if (faction_trade_banned(waruptr, plptr->owner_faction)) {
 		prfmsg(UPGBAN, plptr->name);
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -4094,6 +4100,7 @@ static void new_upgrade(void)
 				price = upg_price(warsptr, upidx);
 				if ((unsigned long)price <= waruptr->cash) {
 					waruptr->cash -= price;
+					credit_purchase_favor(waruptr, plptr->owner_faction, (unsigned long)price, TRUE);
 					warsptr->upgrade |= upbit;
 					if (upbit == TPONDER) {
 						warsptr->tponder = TPONNORM;
@@ -4105,6 +4112,7 @@ static void new_upgrade(void)
 					} else {
 						prfmsg(NEW22, l2as(price));
 					}
+					unlock_faction_ships(waruptr, plptr, usrnum);
 				} else {
 					prfmsg(NEW23);
 				}
@@ -4144,10 +4152,12 @@ static void new_upgrade(void)
 			price = upg_price(warsptr, 6);
 			if ((unsigned long)price <= waruptr->cash) {
 				waruptr->cash -= price;
+				credit_purchase_favor(waruptr, plptr->owner_faction, (unsigned long)price, TRUE);
 				warsptr->upgrade |= TPONDER;
 				warsptr->tponder = tpmode;
 				prfmsg(NEW22, l2as(price));
 				outprfge(FLT_NONE, usrnum);
+				unlock_faction_ships(waruptr, plptr, usrnum);
 			} else {
 				prfmsg(NEW23);
 				outprfge(FLT_NONE, usrnum);
@@ -4222,7 +4232,7 @@ void FUNC cmd_new(void)
 	if (sameas(margv[1], "ship")) {
 		if (!planet_has_shipyard(plptr)) {
 			prfmsg(SHIPSVC, plptr->name);
-		} else if (waruptr->factions[plptr->owner_faction] > 100) {
+		} else if (faction_trade_banned(waruptr, plptr->owner_faction)) {
 			prfmsg(SHIPBAN, plptr->name);
 		} else if (margc == 2) {
 			show_ship_catalog(plptr);
@@ -4238,7 +4248,10 @@ void FUNC cmd_new(void)
 				prfmsg(NEW4, shipclass[type].typename);
 			} else {
 				waruptr->cash -= shipclass[type].max_price;
+				credit_purchase_favor(waruptr, plptr->owner_faction, (unsigned long)shipclass[type].max_price, TRUE);
 				prfmsg(NEW3, shipclass[type].typename);
+				/* initshp() can reuse the shared planet workspace. */
+				unlock_faction_ships(waruptr, plptr, usrnum);
 				initshp(waruptr->userid, type);
 				gepdb(GEADD, tmpshp.userid, tmpshp.shipno, &tmpshp);
 			}
@@ -4259,7 +4272,7 @@ void FUNC cmd_new(void)
 			outprfge(FLT_NONE, usrnum);
 			return;
 		}
-		if (waruptr->factions[plptr->owner_faction] > 100) {
+		if (faction_trade_banned(waruptr, plptr->owner_faction)) {
 			prfmsg(EQPBAN, plptr->name);
 			outprfge(FLT_NONE, usrnum);
 			return;
@@ -4317,6 +4330,7 @@ void FUNC cmd_new(void)
 				if ((unsigned long)delta <= waruptr->cash) {
 					waruptr->cash -= delta;
 					waruptr->cash += credit;
+					credit_purchase_favor(waruptr, plptr->owner_faction, (unsigned long)delta, TRUE);
 					warsptr->shieldtype = (byte)type;
 					warsptr->shieldstat = SHIELDDN;
 					warsptr->shield = 0;
@@ -4325,6 +4339,7 @@ void FUNC cmd_new(void)
 					} else {
 						prfmsg(NEW7, l2as(delta), type);
 					}
+					unlock_faction_ships(waruptr, plptr, usrnum);
 				} else {
 					prfmsg(NEW8, type);
 				}
@@ -4372,6 +4387,7 @@ void FUNC cmd_new(void)
 				if ((unsigned long)delta <= waruptr->cash) {
 					waruptr->cash -= delta;
 					waruptr->cash += credit;
+					credit_purchase_favor(waruptr, plptr->owner_faction, (unsigned long)delta, TRUE);
 					warsptr->phasrtype = (byte)type;
 					warsptr->phasr = 100;
 					if (delta == 0) {
@@ -4379,6 +4395,7 @@ void FUNC cmd_new(void)
 					} else {
 						prfmsg(NEW10, l2as(delta), type);
 					}
+					unlock_faction_ships(waruptr, plptr, usrnum);
 				} else {
 					prfmsg(NEW11, type);
 				}
@@ -4404,6 +4421,7 @@ void FUNC cmd_sysop(void)
 	int gotone;
 #ifndef GE_ARENA
 	int count, cls, clscnt;
+	long favor;
 #else
 	int match_only;
 #endif
@@ -4453,10 +4471,22 @@ void FUNC cmd_sysop(void)
 		show_faction_sectors();
 		outprfge(FLT_NONE, usrnum);
 		return;
+	} else if (sameas("favor", margv[1]) && margc == 4) {
+		if (!parse_ulong(margv[2], &amt) || amt > 7UL
+			|| !parse_long(margv[3], &favor) || favor < FAVOR_MIN || favor > FAVOR_MAX) {
+			prf("\rUse SYS FAVOR <faction 0-7> <favor %ld to %ld>.\r", FAVOR_MIN, FAVOR_MAX);
+		} else {
+			waruptr->favor[(int)amt] = favor;
+			if (!geudb(GEUPDATE, waruptr->userid, waruptr))
+				catastro("GE:ERR:Cannot save faction favor");
+			prf("\rFaction %lu favor set to %ld.\r", amt, favor);
+		}
+		outprfge(FLT_NONE, usrnum);
+		return;
 	} else if (sameas("factions",margv[1]) && margc == 2) {
 		for (i = 0; i < 8; ++i) {
 			prfmsg(FACNAME0 + i);
-			prf("... %d\r",waruptr->factions[i]);
+			prf("... %ld\r",waruptr->favor[i]);
 		}
 		outprfge(FLT_NONE, usrnum);
 		return;
@@ -4769,6 +4799,9 @@ void FUNC cmd_sysop(void)
 				warsptr->where = 10 + plnum;
 				warsptr->speed = 0;
 				warsptr->speed2b = 0;
+#ifndef GE_ARENA
+				unlock_faction_ships(waruptr, plptr, usrnum);
+#endif
 				return;
 			} else {
 				prfmsg(NOPLNT);

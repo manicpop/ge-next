@@ -875,13 +875,13 @@ void FUNC firep(WARSHP *ptr, int usrn)
 								else
 									wptr->damage += factor;
 								/* faction dislike scales with actual hull damage dealt */
-								set_dislike(uptr,shipclass[wptr->shpclass].faction,(int)factor);
+								faction_hit(uptr, wptr, othusn, usrn, factor, TRUE);
 								randamage(wptr,othusn,factor); /*assess any random damage */
 							}
 							else {
 								shmsg = shieldhit(wptr,(int)factor); /* modify the damage */
 								/* shielded hits still aggravate the faction, but only by a small fixed amount */
-								set_dislike(uptr,shipclass[wptr->shpclass].faction,2);
+								faction_hit(uptr, wptr, othusn, usrn, 2.0, FALSE);
 								if (nebmask) {
 									if (targ_neb)
 										prfmsg(PDEFLECN,coord1(wptr->coord.xcoord),coord1(wptr->coord.ycoord));
@@ -1029,7 +1029,7 @@ void FUNC firehp(WARSHP *ptr, int usrn)
 										wptr->damage += (double)((shipclass[ptr->shpclass].tough_factor + 1) * 5 + (gernd() % 5) + 1);
 									else
 										wptr->damage += factor;
-									set_dislike(uptr,shipclass[wptr->shpclass].faction,(int)factor);
+									faction_hit(uptr, wptr, othusn, usrn, factor, TRUE);
 									if (wptr->status == GESTAT_AUTO) {	/* if npc... */
 										wptr->cybmine = (byte)usrn;	/* engage user */
 										wptr->track_grace = CYBGRACE; /* retain this ship as cybmine even if it disappears briefly */
@@ -1621,6 +1621,9 @@ void FUNC tossingegame(void)
 	outprfge(FLT_NONE,usrnum);
 	usrptr->substt = FIGHTSUB;
 	warsptr->status = GESTAT_USER;
+#ifndef GE_ARENA
+	rescue_reset(usrnum);
+#endif
 
 	for (zothusn = 0; zothusn < nterms; ++zothusn) {
 		if (zothusn == usrnum || !ingegame(zothusn) || entrypend_empty(zothusn))
@@ -1766,6 +1769,24 @@ int FUNC ship_class_available(WARUSR *player_record, int cls, GALPLNT *vendor)
 		&& vendor->owner_faction == shipclass[cls].sell_faction
 		&& (shipclass[cls].sell_role == OUTPOST_NONE
 			|| vendor->outpost_type == shipclass[cls].sell_role);
+}
+
+void FUNC unlock_faction_ships(WARUSR *player_record, GALPLNT *vendor, int usrn)
+{
+	int i;
+
+	if (!planet_has_shipyard(vendor)
+		|| player_record->favor[vendor->owner_faction] < FAVOR_SHIP_UNLOCK)
+		return;
+	for (i = 0; i < tot_classes; ++i)
+		if (shipclass[i].max_type == CLASSTYPE_USER
+			&& shipclass[i].sell_faction == vendor->owner_faction
+			&& (shipclass[i].sell_role == OUTPOST_NONE
+				|| shipclass[i].sell_role == vendor->outpost_type)
+			&& grant_unlock(player_record, shipclass[i].unlock)) {
+			prfmsg(SHIPULCK, vendor->name, shipclass[i].typename);
+			outprfge(FLT_NONE, usrn);
+		}
 }
 #endif
 
@@ -3248,8 +3269,22 @@ void FUNC killem(WARSHP *ptr, int usrn)
 		for (i = nterms; i < nships; ++i) {
 			if (ingegame(i)) {
 				disptr = warshpoff(i);
+#ifdef GE_ARENA
 				if (disptr->distress == usrn) {
+#else
+				if (rescue_matches(i, usrn) && i != who && ingegame(who)) {
+#endif
+#ifdef GE_ARENA
 					amt = (shipclass[disptr->shpclass].max_points) * 4;
+#else
+					amt = (long)shipclass[disptr->shpclass].max_points;
+					if (ptr->status == GESTAT_USER) {
+						if (wptr->status == GESTAT_USER)
+							adjust_favor(wuptr, shipclass[disptr->shpclass].faction, RESCUE_PLAYER_FAVOR);
+					} else {
+						amt *= 4L;
+					}
+#endif
 					sprintf(gechrbuf,"%ld",amt);
 					prfmsg(KILLDIS,gechrbuf,disptr->shipname);
 					prfmsg(FACNAME0+shipclass[disptr->shpclass].faction);
@@ -3257,7 +3292,11 @@ void FUNC killem(WARSHP *ptr, int usrn)
 					outprfge(FLT_NONE,who);
 					wuptr->score += amt;
 					wuptr->klscore += amt;
+#ifdef GE_ARENA
 					wuptr->factions[shipclass[disptr->shpclass].faction] = 0;
+#else
+					rescue_clear(i);
+#endif
 					disptr->distress = 255;
 				}
 			}
@@ -3306,6 +3345,12 @@ void FUNC killem(WARSHP *ptr, int usrn)
 		}
 #endif
 
+#ifndef GE_ARENA
+		if (wptr->status == GESTAT_USER && ptr->status == GESTAT_AUTO
+			&& shipclass[ptr->shpclass].max_type == CLASSTYPE_DROID)
+			faction_destroyed(wuptr, shipclass[ptr->shpclass].faction);
+#endif
+
 		nearby = FALSE;
 		for (i = 0; i < nships; ++i) {
 			if (i != who && i != usrn && ingegame((int)i)) {
@@ -3347,6 +3392,9 @@ void FUNC killem(WARSHP *ptr, int usrn)
 			shipclass[ptr->shpclass].kill_func(ptr,usrn,NULL);
 	}
 
+#ifndef GE_ARENA
+	rescue_reset(usrn);
+#endif
 	cleartm(usrn);	/* change destroyed user's torps and mis to 'no user' */
 
 	if (shipclass[ptr->shpclass].max_type == CLASSTYPE_USER) {
@@ -3566,7 +3614,7 @@ void FUNC checkmines(void)
 									if (zothusn != minechan)
 										wptr->lastfired = minechan;
 									wuptr = warusroff(minechan);
-									set_dislike(wuptr,shipclass[wptr->shpclass].faction,(int)damfact);
+									faction_hit(wuptr, wptr, zothusn, minechan, damfact, TRUE);
 								}
 #else
 								if (minechan >= 0 && minechan < nships && ingegame(minechan)) {
@@ -3576,7 +3624,7 @@ void FUNC checkmines(void)
 										zothusn != minechan)
 										wptr->lastfired = minechan;
 									wuptr = warusroff(minechan);
-									set_dislike(wuptr,shipclass[wptr->shpclass].faction,(int)damfact);
+									faction_hit(wuptr, wptr, zothusn, minechan, damfact, TRUE);
 								}
 #endif
 								wptr->minesnear = FALSE;
@@ -3699,7 +3747,7 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 					ptr->damage += damfact;
 					if ((int)tptr->channel < nships && ingegame((int)tptr->channel)) {
 						wuptr = warusroff((int)tptr->channel);
-						set_dislike(wuptr,shipclass[ptr->shpclass].faction,(int)damfact);
+						faction_hit(wuptr, ptr, usrn, tptr->channel, damfact, TRUE);
 					}
 					if (++sh_cnt == 1)
 						sh_dam = damfact;
@@ -3729,7 +3777,7 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 					ptr->damage += damfact;
 					if ((int)tptr->channel < nships && ingegame((int)tptr->channel)) {
 						wuptr = warusroff((int)tptr->channel);
-						set_dislike(wuptr,shipclass[ptr->shpclass].faction,(int)damfact);
+						faction_hit(wuptr, ptr, usrn, tptr->channel, damfact, TRUE);
 					}
 					if (++un_cnt == 1)
 						un_dam = damfact;
@@ -3886,7 +3934,7 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 						sh_dam += damfact;
 					if ((int)mptr->channel < nships && ingegame((int)mptr->channel)) {
 						wuptr = warusroff((int)mptr->channel);
-						set_dislike(wuptr,shipclass[ptr->shpclass].faction,(int)damfact);
+						faction_hit(wuptr, ptr, usrn, mptr->channel, damfact, TRUE);
 					}
 					for (k = 0; k < acc_used; ++k) {
 						if (acc_chan[k] == mptr->channel)
@@ -3915,7 +3963,7 @@ void FUNC checktm(WARSHP *ptr, int usrn)
 						un_dam += damfact;
 					if ((int)mptr->channel < nships && ingegame((int)mptr->channel)) {
 						wuptr = warusroff((int)mptr->channel);
-						set_dislike(wuptr,shipclass[ptr->shpclass].faction,(int)damfact);
+						faction_hit(wuptr, ptr, usrn, mptr->channel, damfact, TRUE);
 					}
 					for (k = 0; k < acc_used; ++k) {
 						if (acc_chan[k] == mptr->channel)
@@ -5125,6 +5173,16 @@ void FUNC mailit(int flag)
 			sendit();
 			break;
 
+		case MESG02O:
+		case MESG03O:
+		case MESG04O:
+		case MESG05O:
+			strcpy(mail.topic,"Distress Message");
+			sprintf(gechrbuf,"%ld",mail.long1);
+			prfmsg(mail.type,mail.name1,mail.int1,mail.int2,mail.string1,gechrbuf);
+			sendit();
+			break;
+
 		case MESG06:
 		case MESG07:
 			strcpy(mail.topic,"Distress Message");
@@ -5675,21 +5733,233 @@ char * FUNC showarp(double speed)
 	return warpbuf;
 }
 
-/**************************************************************************
-** Set faction dislike status                                            **
-**************************************************************************/
+#ifndef GE_ARENA
+typedef struct rescue_state {
+	unsigned long generation;
+	unsigned grace;
+	unsigned long favor_left;
+	byte attacker;
+} RESCUE_STATE;
 
-void FUNC set_dislike(WARUSR *wuptr, int facnum, int dislike)
+/* Runtime only: a saved ship slot is not an identity across NPC respawns. */
+static RESCUE_STATE rescue_state[MAX_SHIP_SLOTS];
+static unsigned long rescue_generation[MAX_SHIP_SLOTS];
+
+static int valid_faction(int faction)
 {
-	if (facnum < 0 || facnum > 7) {
-		geshocst(0,spr("GE:set_dislike:bad facnum [%d]",facnum));
+	return faction >= 0 && faction < 8;
+}
+
+void FUNC adjust_favor(WARUSR *player, int faction, long amount)
+{
+	long current;
+
+	if (!valid_faction(faction))
+		return;
+	current = player->favor[faction];
+	if (current < FAVOR_MIN)
+		current = FAVOR_MIN;
+	else if (current > FAVOR_MAX)
+		current = FAVOR_MAX;
+	if (amount > FAVOR_MAX - current)
+		current = FAVOR_MAX;
+	else if (amount < FAVOR_MIN - current)
+		current = FAVOR_MIN;
+	else
+		current += amount;
+	player->favor[faction] = current;
+}
+
+void FUNC credit_purchase_favor(WARUSR *player, int faction, unsigned long paid, int new_purchase)
+{
+	if (new_purchase)
+		paid /= FAVOR_NEW_DIVISOR;
+	/* Cash can exceed LONG_MAX; clamp before conversion to a signed delta. */
+	if (paid > (unsigned long)(FAVOR_MAX - FAVOR_MIN))
+		paid = (unsigned long)(FAVOR_MAX - FAVOR_MIN);
+	adjust_favor(player, faction, (long)paid);
+}
+
+int FUNC faction_trade_banned(WARUSR *player, int faction)
+{
+	return !valid_faction(faction) || player->favor[faction] <= FAVOR_TRADE_BAN;
+}
+
+int FUNC faction_hostile(WARUSR *player, int faction)
+{
+	return valid_faction(faction) && player->favor[faction] <= FAVOR_NPC_HOSTILE;
+}
+
+void FUNC recover_favor(WARUSR *player)
+{
+	int i;
+
+	for (i = 0; i < 8; ++i)
+		if (player->favor[i] < 0L) {
+			adjust_favor(player, i, FAVOR_NIGHTLY_RECOVERY);
+			if (player->favor[i] > 0L)
+				player->favor[i] = 0L;
+		}
+}
+
+void FUNC faction_destroyed(WARUSR *player, int faction)
+{
+	if (!valid_faction(faction))
+		return;
+	if (player->favor[faction] >= 0L)
+		player->favor[faction] = FAVOR_KILL_HOSTILE;
+	else
+		adjust_favor(player, faction, -FAVOR_KILL_PENALTY);
+}
+
+void FUNC rescue_clear(int victim)
+{
+	rescue_state[victim].generation = 0UL;
+	rescue_state[victim].attacker = 255;
+	rescue_state[victim].grace = 0;
+	rescue_state[victim].favor_left = 0;
+}
+
+void FUNC rescue_reset(int slot)
+{
+	if (slot < 0 || slot >= nships)
+		return;
+	rescue_clear(slot);
+	if (++rescue_generation[slot] == 0UL)
+		++rescue_generation[slot];
+}
+
+int FUNC rescue_matches(int victim, int attacker)
+{
+	RESCUE_STATE *state;
+	WARSHP *ptr;
+
+	if (victim < nterms || victim >= nships || attacker < 0 || attacker >= nships
+		|| victim == attacker || !ingegame(victim) || !ingegame(attacker))
+		return FALSE;
+	ptr = warshpoff(victim);
+	state = &rescue_state[victim];
+	return ptr->status == GESTAT_AUTO && ptr->damage < 100.0
+		&& shipclass[ptr->shpclass].max_type == CLASSTYPE_DROID
+		&& state->grace > 0 && state->generation != 0UL
+		&& state->attacker == attacker && state->generation == rescue_generation[attacker];
+}
+
+void FUNC rescue_begin(int victim, int attacker, int new_attack)
+{
+	RESCUE_STATE *state;
+	WARSHP *ptr;
+
+	if (victim < nterms || victim >= nships || attacker < 0 || attacker >= nships
+		|| victim == attacker || !ingegame(victim) || !ingegame(attacker))
+		return;
+	ptr = warshpoff(victim);
+	if (ptr->status != GESTAT_AUTO || ptr->damage >= 100.0
+		|| shipclass[ptr->shpclass].max_type != CLASSTYPE_DROID)
+		return;
+	state = &rescue_state[victim];
+	if (rescue_matches(victim, attacker)) {
+		state->grace = RESCUE_GRACE_SECONDS;
 		return;
 	}
+	/* Only a new hit can replace a live encounter; switching keeps its budget. */
+	if (rescue_matches(victim, state->attacker)) {
+		if (!new_attack)
+			return;
+	} else {
+		rescue_clear(victim);
+		state->favor_left = RESCUE_FAVOR_CAP;
+	}
+	state->attacker = (byte)attacker;
+	state->generation = rescue_generation[attacker];
+	state->grace = RESCUE_GRACE_SECONDS;
+}
 
-	if ((unsigned int)(wuptr->factions[facnum]) + dislike > 255)
-		wuptr->factions[facnum] = 255;
+void FUNC rescue_tick(void)
+{
+	int i;
+
+	for (i = nterms; i < nships; ++i)
+		if (rescue_state[i].generation != 0UL) {
+			if (!rescue_matches(i, rescue_state[i].attacker))
+				rescue_clear(i);
+			else if (rescue_state[i].grace <= TICKTIME2)
+				rescue_clear(i);
+			else
+				rescue_state[i].grace -= TICKTIME2;
+		}
+}
+#endif
+
+void FUNC faction_hit(WARUSR *player, WARSHP *victim, int victim_slot, int attacker,
+	double impact, int hull_hit)
+{
+	int faction = shipclass[victim->shpclass].faction;
+#ifdef GE_ARENA
+	int dislike = (int)impact;
+
+	(void)victim_slot;
+	(void)attacker;
+	(void)hull_hit;
+	if (faction < 0 || faction > 7)
+		return;
+	if ((unsigned int)player->factions[faction] + dislike > 255)
+		player->factions[faction] = 255;
 	else
-		wuptr->factions[facnum] += dislike;
+		player->factions[faction] += dislike;
+#else
+	RESCUE_STATE *state;
+	WARSHP *ptr;
+	long amount, reward;
+	int i;
+	double before;
+
+	if (attacker < 0 || attacker >= nships || !ingegame(attacker))
+		return;
+	if (victim->status == GESTAT_AUTO
+		&& shipclass[victim->shpclass].max_type == CLASSTYPE_DROID)
+		rescue_begin(victim_slot, attacker, impact > 0.0);
+	if (attacker >= nterms || warshpoff(attacker)->status != GESTAT_USER)
+		return;
+	if (impact <= 0.0 || victim->status != GESTAT_AUTO)
+		return;
+	if (shipclass[victim->shpclass].max_type != CLASSTYPE_DROID
+		&& (!hull_hit || shipclass[victim->shpclass].max_type != CLASSTYPE_CYBORG))
+		return;
+	/* Count only remaining hull damage, for both penalties and rescue rewards. */
+	if (hull_hit) {
+		before = victim->damage - impact;
+		if (before >= 100.0)
+			return;
+		if (impact > 100.0 - before)
+			impact = 100.0 - before;
+	} else if (victim->damage >= 100.0) {
+		return;
+	}
+	if (shipclass[victim->shpclass].max_type == CLASSTYPE_DROID) {
+		amount = impact >= (double)(FAVOR_MAX / FAVOR_DAMAGE_SCALE)
+			? FAVOR_MAX : (long)(impact * (double)FAVOR_DAMAGE_SCALE);
+		if (amount < FAVOR_MIN_HIT_PENALTY)
+			amount = FAVOR_MIN_HIT_PENALTY;
+		adjust_favor(player, faction, -amount);
+		return;
+	}
+	amount = (long)(impact * (double)FAVOR_DAMAGE_SCALE);
+	if (amount <= 0L)
+		return;
+	for (i = nterms; i < nships; ++i) {
+		if (!rescue_matches(i, victim_slot))
+			continue;
+		state = &rescue_state[i];
+		state->grace = RESCUE_GRACE_SECONDS;
+		if (state->favor_left == 0)
+			continue;
+		ptr = warshpoff(i);
+		reward = amount > (long)state->favor_left ? (long)state->favor_left : amount;
+		adjust_favor(player, shipclass[ptr->shpclass].faction, reward);
+		state->favor_left -= (unsigned long)reward;
+	}
+#endif
 }
 
 /**************************************************************************

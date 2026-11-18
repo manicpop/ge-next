@@ -215,6 +215,9 @@ void FUNC cyb_init(WARSHP *ptr, int usrn, int cls)
 		return;
 	}
 
+#ifndef GE_ARENA
+	rescue_reset(usrn);
+#endif
 	strncpy(cybname, "@Cybrg-", UIDSIZ);
 	sprintf(&cybname[7], "%d", usrn);
 

@@ -4951,6 +4951,9 @@ SCNDEFM {[0;37mModerate planetary defenses detected.
 SCNDEFH {[0;37mHeavy planetary defenses detected.
 } T Scan combined planetary defenses at least 200000
 
+SHIPULCK {[1;36m%s has authorized you to purchase the %s.[1;37m
+} T Permanent ship purchase access earned through faction favor
+
 ENDMARK {ENDMARK} T Endmark - do not remove
 
 

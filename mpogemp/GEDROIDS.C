@@ -84,6 +84,7 @@ void FUNC droid_init(WARSHP *ptr, int usrn, int cls)
 		return;
 	}
 
+	rescue_reset(usrn);
 	strncpy(droidname, "@Droid-", UIDSIZ);
 	sprintf(&droidname[7], "%d", usrn);
 
@@ -230,7 +231,7 @@ static void droid_annoy(WARSHP *ptr, int usrn)
 				logthis(spr("droid_annoy:bad msg ff usrn [%d]", usrn));
 				return;
 			}
-			if (warusroff(usrn)->factions[shipclass[ptr->shpclass].faction] > 50) {
+			if (faction_hostile(warusroff(usrn), shipclass[ptr->shpclass].faction)) {
 				prfmsg(sel + 4, ptr->shipname);
 				outprfge(FLT_BEACON, usrn);
 			} else {
@@ -260,6 +261,7 @@ static void droid_annoy(WARSHP *ptr, int usrn)
 
 static void droid_distress(WARSHP *ptr, int usrn)
 {
+	rescue_begin(usrn, ptr->cybmine, FALSE);
 	if (ptr->distress >= nships || !ingegame(ptr->distress))
 		ptr->distress = 255;
 	if (ptr->distress != ptr->cybmine && ptr->cybmine < nships) {
@@ -763,7 +765,7 @@ static void droid_act_5(WARSHP *ptr, int usrn)
 						wptr->cybmine == 255) ||
 						(wptr->status == GESTAT_USER && isvisible(ptr, wptr) &&
 						lta <= wptr->shpclass &&
-						warusroff(zothusn)->factions[shipclass[ptr->shpclass].faction] > 50 &&
+						faction_hostile(warusroff(zothusn), shipclass[ptr->shpclass].faction) &&
 						notclaimed_d(shipclass[ptr->shpclass].loadout, zothusn))) {
 						if (ddist < low_dist) {
 							low_dist = ddist;

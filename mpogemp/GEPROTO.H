@@ -131,6 +131,7 @@ int FUNC player_has_unlock P((WARUSR *player_record, int unlock));
 int FUNC grant_unlock P((WARUSR *player_record, int unlock));
 int FUNC planet_has_shipyard P((GALPLNT *pl));
 int FUNC ship_class_available P((WARUSR *player_record, int cls, GALPLNT *vendor));
+void FUNC unlock_faction_ships P((WARUSR *player_record, GALPLNT *vendor, int usrn));
 #endif
 int FUNC lockon P((WARSHP *ptr , int type , int ship , int usrn));
 int FUNC repair_needed P((WARSHP *ptr));
@@ -235,7 +236,20 @@ WARSHP *FUNC warshpoff P((int usrn));
 double FUNC ton_fact P((WARSHP *ptr , double damfact));
 char *FUNC showupg P((WARSHP *ptr));
 char *FUNC showarp P((double speed));
-void FUNC set_dislike P((WARUSR *wuptr , int facnum , int dislike));
+void FUNC faction_hit P((WARUSR *player, WARSHP *victim, int victim_slot, int attacker, double impact, int hull_hit));
+#ifndef GE_ARENA
+void FUNC adjust_favor P((WARUSR *player, int faction, long amount));
+void FUNC credit_purchase_favor P((WARUSR *player, int faction, unsigned long paid, int new_purchase));
+void FUNC recover_favor P((WARUSR *player));
+void FUNC faction_destroyed P((WARUSR *player, int faction));
+int FUNC faction_trade_banned P((WARUSR *player, int faction));
+int FUNC faction_hostile P((WARUSR *player, int faction));
+void FUNC rescue_reset P((int slot));
+void FUNC rescue_begin P((int victim, int attacker, int new_attack));
+void FUNC rescue_tick P((void));
+int FUNC rescue_matches P((int victim, int attacker));
+void FUNC rescue_clear P((int victim));
+#endif
 void FUNC rospos P((WARUSR *losptr , WARUSR *winptr , int *lospos , int *winpos));
 void FUNC damstr P((int damage));
 void FUNC update_scantab P((WARSHP *ptr , int usrn));

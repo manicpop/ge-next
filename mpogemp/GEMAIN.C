@@ -1133,12 +1133,7 @@ void FUNC gemidnight(void)
 			tmpusr.score = 0;
 			tmpusr.plscore = 0;
 			tmpusr.population = 0;
-			/* faction dislike goes down by 40 per day */
-			for (i = 0; i < 8; ++i)
-				if (tmpusr.factions[i] > 40)
-					tmpusr.factions[i] = tmpusr.factions[i] - 40;
-				else
-					tmpusr.factions[i] = 0;
+			recover_favor(&tmpusr);
 			updbtv(&tmpusr);
 			gcrbtv(&tmpusr, 0);	/* thank you BTRIEVE 5.00b */
 		} while (qnxbtv());
@@ -2345,6 +2340,9 @@ void FUNC warrti2(void)
 #ifdef GE_ARENA
 	setmbk(gemb);
 	arena_tick();
+#endif
+#ifndef GE_ARENA
+	rescue_tick();
 #endif
 
 	/* advance delayed entry-message deliveries on the movement tick */

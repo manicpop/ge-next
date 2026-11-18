@@ -199,6 +199,25 @@
 #define FACTION_ZYGORIAN 7	/* Zygor and its affiliated outposts       */
 #define FACTION_NO_SELLER 8	/* no faction offers this ship class      */
 
+#ifndef GE_ARENA
+/* Fixed-point favor: one cash spent through BUY earns one internal unit. */
+#define FAVOR_SCALE 50000L
+#define FAVOR_MIN (-5000L * FAVOR_SCALE)
+#define FAVOR_MAX (5000L * FAVOR_SCALE)
+#define FAVOR_SHIP_UNLOCK (5000L * FAVOR_SCALE)
+#define FAVOR_TRADE_BAN (-1000L * FAVOR_SCALE)
+#define FAVOR_NPC_HOSTILE FAVOR_TRADE_BAN
+#define FAVOR_KILL_PENALTY (1000L * FAVOR_SCALE)
+#define FAVOR_KILL_HOSTILE FAVOR_TRADE_BAN
+#define FAVOR_NIGHTLY_RECOVERY (2000L * FAVOR_SCALE)
+#define FAVOR_DAMAGE_SCALE (10L * FAVOR_SCALE)
+#define FAVOR_MIN_HIT_PENALTY FAVOR_SCALE
+#define FAVOR_NEW_DIVISOR 10UL
+#define RESCUE_FAVOR_CAP (1000UL * FAVOR_SCALE)
+#define RESCUE_PLAYER_FAVOR (200L * FAVOR_SCALE)
+#define RESCUE_GRACE_SECONDS 180U
+#endif
+
 #define NUM_UNLOCKS 32
 #define UNLOCK_FLEET_COMMAND 1
 #define UNLOCK_MBM_DREADNOUGHT 2
@@ -524,11 +543,17 @@ typedef struct warusr {
 /*58*/
 	byte options[30];		/* per-user options                        */
 /*88*/
-	byte factions[8];		/* do NPCs like me                         */
-/*96*/
+#ifdef GE_ARENA
+	byte factions[8];		/* arena NPC dislike                      */
+#else
+	long favor[8];			/* signed standing with each faction      */
+#endif
 	unsigned planets;		/* planets owned                           */
-/*98*/
+#ifdef GE_ARENA
 	char key_filler[36];		/* reserved; keeps teamcode at key offset  */
+#else
+	char key_filler[12];		/* reserved; keeps teamcode at key offset  */
+#endif
 /*134*/
 	unsigned long teamcode;		/* current team code; Btrieve key 2        */
 /*138*/

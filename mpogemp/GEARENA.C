@@ -1962,7 +1962,7 @@ static void arena_observe_match(int usrn)
 		}
 	}
 	if (was_playing && ARENA_MATCH_ACTIVE(arena_state)) {
-		prfmsg(MATLEFT, username(wptr));
+		prfmsg(MATLEFT, warusroff(usrn)->userid);
 		arena_broadcast_prf_except(usrn);
 	}
 	arena_player[usrn].state = ARENA_P_OBSERVE;
